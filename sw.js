@@ -58,15 +58,27 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "0fce8b51d1fdcba4c43d7a4f7901ea17"
+        "revision": "73e91caa78427ef1436230599d205e05"
+    },
+    {
+        "url": "manifest.json",
+        "revision": "e883ed010df7760edeb752aa2f6da4be"
     },
     {
         "url": "offline.html",
-        "revision": "7656c61e25225c4fcc77cb000be6d527"
+        "revision": "e44c2a14d302044a1563011533ecb34c"
+    },
+    {
+        "url": "pwa-register.js",
+        "revision": "3ec872e4f752840ad8f85922ff6cebe7"
     },
     {
         "url": "snakes.html",
-        "revision": "11ffc603e0270c94949133d5449ca411"
+        "revision": "1b8ce0bba99df08ac724eea75c842ccc"
+    },
+    {
+        "url": "sw.js",
+        "revision": "d5e1a4f9a30a8e1dc4949bc46852951b"
     },
     {
         "url": "transcript of the vioces.txt",
