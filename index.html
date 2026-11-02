@@ -135,7 +135,7 @@
       box-sizing: border-box;
     }
 
-    /* ADAPTIVE GAMEPLAY ARENA: Portrait (Top/Bottom Bars) vs Widescreen/Landscape (Left/Right Wings + Giant Board!) */
+    /* ADAPTIVE FULL-BLEED GAMEPLAY ARENA: Fills 100% of available height & width with zero wasted empty space */
     #viewPlay {
       width: 100vw;
       height: 100dvh;
@@ -143,9 +143,10 @@
       overflow: hidden !important;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       justify-content: space-between;
-      padding: 4px 6px;
+      padding: 3px 4px;
+      gap: 4px;
       box-sizing: border-box;
     }
     #viewPlay.hidden {
@@ -153,9 +154,9 @@
     }
     #playTopRow {
       width: 100%;
-      max-width: 720px;
-      height: 48px;
-      flex: 0 0 48px;
+      max-width: 100%;
+      height: 46px;
+      flex: 0 0 46px;
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
       gap: 6px;
@@ -164,28 +165,30 @@
     #playBoardRow {
       flex: 1 1 0%;
       min-height: 0;
+      min-width: 0;
       width: 100%;
+      height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: stretch;
+      justify-content: stretch;
       overflow: hidden;
-      padding: 2px 0;
+      padding: 0;
     }
-    /* Larger Board Sizing! Uses almost the entire screen height/width while guaranteeing 0 scrollbars */
+    /* Full-Bleed Board Sizing: Stretches to fill 100% of #playBoardRow width AND height with 0 empty space */
     #boardContainer {
-      width: min(calc(100dvh - 118px), calc(100vw - 10px), 840px);
-      height: min(calc(100dvh - 118px), calc(100vw - 10px), 840px);
-      max-width: 100%;
-      max-height: 100%;
-      aspect-ratio: 1 / 1;
-      padding: 6px;
-      border-radius: 18px;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      flex: 1 1 0%;
+      padding: 4px;
+      border-radius: 14px;
       background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
-      box-shadow: 0 14px 32px rgba(180, 83, 9, 0.25);
+      box-shadow: 0 10px 26px rgba(180, 83, 9, 0.25);
       border: 2px solid #fcd34d;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: stretch;
+      justify-content: stretch;
       box-sizing: border-box;
     }
     #ludoCanvas {
@@ -194,7 +197,7 @@
       max-width: 100%;
       max-height: 100%;
       display: block;
-      border-radius: 12px;
+      border-radius: 10px;
       background: #ffffff;
       touch-action: none;
       cursor: grab;
@@ -204,84 +207,103 @@
     }
     #playBottomRow {
       width: 100%;
-      max-width: 720px;
-      height: 58px;
-      flex: 0 0 58px;
+      max-width: 100%;
+      height: 54px;
+      flex: 0 0 54px;
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
       gap: 6px;
       align-items: center;
     }
 
-    /* WIDESCREEN / DESKTOP LANDSCAPE SIDE-BY-SIDE LAYOUT: Makes the board HUGE by moving pods to the left/right sides! */
-    @media (min-aspect-ratio: 13/10) and (min-width: 820px) {
+    /* DESKTOP SIDE-BY-SIDE FULL-BLEED LAYOUT: Left Wing + Giant Full-Screen Center Board + Right Wing (Zero Empty Space!) */
+    @media (min-width: 820px) {
       #viewPlay {
-        flex-direction: row;
-        justify-content: center;
-        gap: 12px;
-        padding: 8px 14px;
+        flex-direction: row !important;
+        align-items: stretch !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        padding: 6px 8px !important;
       }
       #playTopRow {
-        width: 210px;
-        max-width: 210px;
-        height: calc(100dvh - 20px);
-        flex: 0 0 210px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: stretch;
-        gap: 10px;
+        width: 196px !important;
+        max-width: 196px !important;
+        height: 100% !important;
+        flex: 0 0 196px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        align-items: stretch !important;
+        gap: 8px !important;
       }
       #playTopRow > div {
         width: 100%;
         height: auto !important;
-        padding: 10px !important;
+        padding: 9px !important;
       }
       #playBoardRow {
-        flex: 0 1 auto;
-        width: auto;
-        height: 100%;
-        padding: 0;
+        flex: 1 1 0% !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
       }
       #boardContainer {
-        width: min(calc(100dvh - 16px), calc(100vw - 460px), 900px);
-        height: min(calc(100dvh - 16px), calc(100vw - 460px), 900px);
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
       }
       #playBottomRow {
-        width: 210px;
-        max-width: 210px;
-        height: calc(100dvh - 20px);
-        flex: 0 0 210px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: stretch;
-        gap: 10px;
+        width: 196px !important;
+        max-width: 196px !important;
+        height: 100% !important;
+        flex: 0 0 196px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        align-items: stretch !important;
+        gap: 8px !important;
       }
       #playBottomRow > div {
         width: 100%;
         height: auto !important;
-        padding: 10px !important;
+        padding: 9px !important;
       }
       #centerDiceDock {
         flex-direction: column !important;
-        padding: 12px !important;
+        padding: 10px !important;
         gap: 8px !important;
       }
     }
 
-    /* IMMERSIVE BOARD-ONLY MODE (100% Board, ZERO outer distractions!) */
+    /* IMMERSIVE BOARD-ONLY MODE (100vw x 100dvh Full-Bleed Board, ZERO empty space on Mobile & Desktop!) */
     body.immersive-board-only #playTopRow,
     body.immersive-board-only #playBottomRow {
       display: none !important;
     }
     body.immersive-board-only #viewPlay {
-      padding: 4px !important;
-      justify-content: center !important;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 2px !important;
+      gap: 0 !important;
+      width: 100vw !important;
+      height: 100dvh !important;
+      justify-content: stretch !important;
+      align-items: stretch !important;
+    }
+    body.immersive-board-only #playBoardRow {
+      width: 100% !important;
+      height: 100% !important;
+      flex: 1 1 100% !important;
+      padding: 0 !important;
     }
     body.immersive-board-only #boardContainer {
-      width: min(calc(100dvh - 10px), calc(100vw - 10px)) !important;
-      height: min(calc(100dvh - 10px), calc(100vw - 10px)) !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 10px !important;
+      padding: 3px !important;
     }
     body.immersive-board-only #immersiveFloatingHud {
       display: flex !important;
@@ -406,19 +428,19 @@
         transform: translateY(-1px);
       }
 
-      /* MOBILE PORTRAIT GAMEPLAY ARENA: 5-Row React Native Android Ludo Layout */
+      /* MOBILE PORTRAIT GAMEPLAY ARENA: Ultra-Compact HUD + Full-Bleed Tall & Wide Board (Zero Empty Space!) */
       #viewPlay {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: 38px 54px minmax(0, 1fr) 54px 66px;
+        grid-template-rows: 32px 44px minmax(0, 1fr) 44px 54px;
         grid-template-areas:
           "topbar topbar"
           "p0     p1"
           "board  board"
           "p3     p2"
           "dice   dice";
-        gap: 5px 8px;
-        padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)) 8px !important;
+        gap: 3px 4px;
+        padding: 3px 4px calc(3px + env(safe-area-inset-bottom, 0px)) 4px !important;
         width: 100vw;
         height: 100dvh;
         max-height: 100dvh;
@@ -438,98 +460,79 @@
       #playActionToolbar {
         grid-area: topbar;
         width: 100%;
-        height: 38px !important;
-        max-height: 38px !important;
-        background: rgba(15, 23, 42, 0.92);
+        height: 32px !important;
+        max-height: 32px !important;
+        background: rgba(15, 23, 42, 0.94);
         border: 1px solid rgba(245, 158, 11, 0.45);
-        border-radius: 14px;
-        padding: 3px 6px !important;
+        border-radius: 10px;
+        padding: 2px 5px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         align-items: center;
         justify-content: space-between;
-        gap: 4px;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        gap: 3px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
       }
       #playActionToolbar button {
-        height: 30px;
-        padding: 0 9px !important;
-        border-radius: 10px !important;
-        font-size: 11px !important;
+        height: 26px;
+        padding: 0 8px !important;
+        border-radius: 8px !important;
+        font-size: 10px !important;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
       }
 
-      #playerCard0 {
-        grid-area: p0;
-        height: 54px !important;
-        max-height: 54px !important;
-        padding: 5px 9px !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 10px rgba(180, 83, 9, 0.12);
+      #playerCard0, #playerCard1, #playerCard2, #playerCard3 {
+        height: 44px !important;
+        max-height: 44px !important;
+        padding: 3px 7px !important;
+        border-radius: 11px !important;
+        box-shadow: 0 2px 6px rgba(180, 83, 9, 0.12);
       }
-      #playerCard1 {
-        grid-area: p1;
-        height: 54px !important;
-        max-height: 54px !important;
-        padding: 5px 9px !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 10px rgba(180, 83, 9, 0.12);
-      }
-      #playerCard3 {
-        grid-area: p3;
-        height: 54px !important;
-        max-height: 54px !important;
-        padding: 5px 9px !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 10px rgba(180, 83, 9, 0.12);
-      }
-      #playerCard2 {
-        grid-area: p2;
-        height: 54px !important;
-        max-height: 54px !important;
-        padding: 5px 9px !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 10px rgba(180, 83, 9, 0.12);
-      }
+      #playerCard0 { grid-area: p0; }
+      #playerCard1 { grid-area: p1; }
+      #playerCard3 { grid-area: p3; }
+      #playerCard2 { grid-area: p2; }
 
       #playBoardRow {
         grid-area: board;
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         min-height: 0;
         padding: 0 !important;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: stretch;
+        justify-content: stretch;
       }
 
-      /* Full-width crisp square board on mobile portrait */
+      /* Full-bleed board on mobile portrait: fills 100% width AND 100% height of the middle row with ZERO empty space */
       #boardContainer {
-        width: min(calc(100vw - 14px), calc(100dvh - 242px)) !important;
-        height: min(calc(100vw - 14px), calc(100dvh - 242px)) !important;
-        padding: 5px !important;
-        border-radius: 16px !important;
-        box-shadow: 0 10px 25px rgba(180, 83, 9, 0.28) !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        padding: 3px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 6px 18px rgba(180, 83, 9, 0.25) !important;
       }
 
       /* Full-width Android 3D Dice Controller Dock at bottom of screen */
       #centerDiceDock {
         grid-area: dice;
         width: 100%;
-        height: 66px !important;
-        max-height: 66px !important;
-        padding: 6px 10px !important;
-        border-radius: 18px !important;
+        height: 54px !important;
+        max-height: 54px !important;
+        padding: 4px 8px !important;
+        border-radius: 14px !important;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
         border: 2px solid #f59e0b !important;
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.35) !important;
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.35) !important;
         display: flex !important;
         align-items: center;
         justify-content: space-between;
-        gap: 8px !important;
+        gap: 6px !important;
       }
       #centerDiceDock #turnBannerText {
         color: #fde68a !important;
@@ -542,25 +545,25 @@
       }
       #centerDiceDock #dieSlot0,
       #centerDiceDock #dieSlot1 {
-        width: 48px !important;
-        height: 48px !important;
-        border-radius: 13px !important;
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 11px !important;
       }
       #centerDiceDock #dicePlusDivider {
-        height: 44px;
-        padding: 2px 6px !important;
-        border-radius: 10px !important;
+        height: 38px;
+        padding: 2px 5px !important;
+        border-radius: 9px !important;
       }
       #centerDiceDock #rollDiceBtn {
-        height: 36px;
-        font-size: 13px !important;
-        border-radius: 12px !important;
+        height: 30px;
+        font-size: 12px !important;
+        border-radius: 10px !important;
       }
       #centerDiceDock #toggleEmoteTrayBtn {
-        width: 42px !important;
-        height: 46px !important;
-        border-radius: 13px !important;
-        font-size: 16px !important;
+        width: 38px !important;
+        height: 40px !important;
+        border-radius: 11px !important;
+        font-size: 15px !important;
       }
     }
 
@@ -568,22 +571,24 @@
     @media (max-width: 920px) and (orientation: landscape) and (max-height: 540px) {
       #viewPlay {
         display: grid !important;
-        grid-template-columns: 165px minmax(0, 1fr) 175px !important;
-        grid-template-rows: 34px 1fr 1fr !important;
+        grid-template-columns: 148px minmax(0, 1fr) 158px !important;
+        grid-template-rows: 32px 1fr 1fr !important;
         grid-template-areas:
           "topbar board p1"
           "p0     board p2"
           "p3     board dice" !important;
-        gap: 5px 8px !important;
-        padding: 4px 8px !important;
+        gap: 4px 6px !important;
+        padding: 3px 5px !important;
       }
       #playTopRow,
       #playBottomRow {
         display: contents !important;
       }
       #boardContainer {
-        width: min(calc(100dvh - 10px), calc(100vw - 365px)) !important;
-        height: min(calc(100dvh - 10px), calc(100vw - 365px)) !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
       }
       #playerCard0, #playerCard1, #playerCard2, #playerCard3 {
         height: 100% !important;
@@ -2927,9 +2932,21 @@
       }
 
       function drawBoard() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (rect.width > 30 && rect.height > 30) {
+          const targetW = Math.round(rect.width * dpr);
+          const targetH = Math.round(rect.height * dpr);
+          if (Math.abs(canvas.width - targetW) > 2 || Math.abs(canvas.height - targetH) > 2) {
+            canvas.width = targetW;
+            canvas.height = targetH;
+          }
+        }
         const W = canvas.width;
         const H = canvas.height;
-        const cell = W / 15;
+        const cellW = W / 15;
+        const cellH = H / 15;
+        const cell = Math.min(cellW, cellH);
         ctx.clearRect(0, 0, W, H);
 
         ctx.fillStyle = '#ffffff';
@@ -2941,39 +2958,39 @@
           for (let i = 0; i < 5; i++) {
             const rc = path[i];
             ctx.fillStyle = strongColors[pIdx];
-            ctx.fillRect(rc[1] * cell, rc[0] * cell, cell, cell);
+            ctx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
           }
         });
 
         START_TRACK_INDEX.forEach(function (tIdx, pIdx) {
           const rc = MAIN_TRACK[tIdx];
           ctx.fillStyle = strongColors[pIdx];
-          ctx.fillRect(rc[1] * cell, rc[0] * cell, cell, cell);
+          ctx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
         });
 
         const starIndices = [8, 21, 34, 47];
         starIndices.forEach(function (tIdx) {
           const rc = MAIN_TRACK[tIdx];
           ctx.fillStyle = '#fef3c7';
-          ctx.fillRect(rc[1] * cell, rc[0] * cell, cell, cell);
+          ctx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
         });
 
         ctx.strokeStyle = '#cbd5e1';
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = Math.max(1.2, cell * 0.03);
         for (let r = 0; r < 15; r++) {
           for (let c = 0; c < 15; c++) {
             const inCorner = (r < 6 && c < 6) || (r < 6 && c > 8) || (r > 8 && c < 6) || (r > 8 && c > 8);
             const inCenter = (r >= 6 && r <= 8 && c >= 6 && c <= 8);
             if (!inCorner && !inCenter) {
-              ctx.strokeRect(c * cell, r * cell, cell, cell);
+              ctx.strokeRect(c * cellW, r * cellH, cellW, cellH);
             }
           }
         }
 
         SAFE_TRACK_INDICES.forEach(function (tIdx) {
           const rc = MAIN_TRACK[tIdx];
-          const cx = (rc[1] + 0.5) * cell;
-          const cy = (rc[0] + 0.5) * cell;
+          const cx = (rc[1] + 0.5) * cellW;
+          const cy = (rc[0] + 0.5) * cellH;
           ctx.fillStyle = START_TRACK_INDEX.includes(tIdx) ? '#ffffff' : '#d97706';
           ctx.font = 'bold ' + Math.round(cell * 0.52) + 'px Inter, sans-serif';
           ctx.textAlign = 'center';
@@ -2992,7 +3009,7 @@
           ctx.font = '900 ' + Math.round(cell * 0.44) + 'px Inter, sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(ga.arrow, (ga.rc[1] + 0.5) * cell, (ga.rc[0] + 0.5) * cell);
+          ctx.fillText(ga.arrow, (ga.rc[1] + 0.5) * cellW, (ga.rc[0] + 0.5) * cellH);
         });
 
         // 5. Draw 4 Corner Yards + VISUAL CLUE FOR WHOSE TURN IT IS (Jiski Bari Ho Glowing Yard!)
@@ -3006,15 +3023,16 @@
         renderedYardRollHitbox = null;
 
         yardOrigins.forEach(function (yo) {
-          const x = yo.c * cell;
-          const y = yo.r * cell;
-          const size = 6 * cell;
+          const x = yo.c * cellW;
+          const y = yo.r * cellH;
+          const sizeW = 6 * cellW;
+          const sizeH = 6 * cellH;
           const isCurrentTurnYard = (gameState.currentTurn === yo.pIdx);
           const pl = gameState.players[yo.pIdx];
           const meta = PLAYER_META[yo.pIdx];
 
           ctx.fillStyle = strongColors[yo.pIdx];
-          ctx.fillRect(x, y, size, size);
+          ctx.fillRect(x, y, sizeW, sizeH);
 
           // Glowing Turn Border around the Active Player's Corner Yard (Jiski Bari Ho!)
           ctx.save();
@@ -3024,9 +3042,9 @@
           }
           ctx.fillStyle = isCurrentTurnYard ? '#fffbeb' : '#ffffff';
           ctx.beginPath();
-          ctx.roundRect(x + cell * 0.55, y + cell * 0.55, size - cell * 1.1, size - cell * 1.1, 20);
+          ctx.roundRect(x + cellW * 0.45, y + cellH * 0.45, sizeW - cellW * 0.9, sizeH - cellH * 0.9, 16);
           ctx.fill();
-          ctx.lineWidth = isCurrentTurnYard ? 6 : 3;
+          ctx.lineWidth = isCurrentTurnYard ? 5 : 2.5;
           ctx.strokeStyle = isCurrentTurnYard ? '#f59e0b' : homeColors[yo.pIdx];
           ctx.stroke();
           ctx.restore();
@@ -3035,10 +3053,10 @@
             const teamStr = rulesConfig.teamMode ? (' [' + meta.teamTag + ']') : '';
             const turnPrefix = isCurrentTurnYard ? '⚡ BARI: ' : '';
             const bannerText = turnPrefix + pl.name.slice(0, 11) + teamStr;
-            const bannerW = size - cell * 1.4;
-            const bannerH = cell * 0.5;
-            const bannerX = x + (size - bannerW) / 2;
-            const bannerY = y + cell * 0.68;
+            const bannerW = sizeW - cellW * 1.2;
+            const bannerH = Math.max(cellH * 0.48, cell * 0.48);
+            const bannerX = x + (sizeW - bannerW) / 2;
+            const bannerY = y + cellH * 0.58;
 
             ctx.save();
             ctx.fillStyle = isCurrentTurnYard ? '#0f172a' : '#f1f5f9';
@@ -3053,14 +3071,14 @@
             ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(bannerText, x + size / 2, bannerY + bannerH / 2);
+            ctx.fillText(bannerText, x + sizeW / 2, bannerY + bannerH / 2);
             ctx.restore();
           }
 
           for (let t = 0; t < rulesConfig.tokensPerPlayer; t++) {
             const slot = YARD_SLOTS[yo.pIdx][t];
-            const sx = (slot[1] + 0.5) * cell;
-            const sy = (slot[0] + 0.5) * cell;
+            const sx = (slot[1] + 0.5) * cellW;
+            const sy = (slot[0] + 0.5) * cellH;
             ctx.beginPath();
             ctx.arc(sx, sy, cell * 0.42, 0, Math.PI * 2);
             ctx.fillStyle = homeColors[yo.pIdx];
@@ -3072,10 +3090,10 @@
 
           if (pl && pl.active && rulesConfig.killRequiredForHome) {
             const badgeText = pl.kills > 0 ? '🔓 HOME OPEN (⚔️' + pl.kills + ')' : '🔒 NEED 1 KILL';
-            const badgeW = size - cell * 1.4;
-            const badgeH = cell * 0.52;
-            const badgeX = x + (size - badgeW) / 2;
-            const badgeY = y + size - cell * 1.2;
+            const badgeW = sizeW - cellW * 1.2;
+            const badgeH = Math.max(cellH * 0.48, cell * 0.5);
+            const badgeX = x + (sizeW - badgeW) / 2;
+            const badgeY = y + sizeH - cellH * 0.58 - badgeH;
 
             ctx.save();
             ctx.fillStyle = pl.kills > 0 ? '#065f46' : '#881337';
@@ -3090,16 +3108,16 @@
             ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(badgeText, x + size / 2, badgeY + badgeH / 2);
+            ctx.fillText(badgeText, x + sizeW / 2, badgeY + badgeH / 2);
             ctx.restore();
           }
 
           // On-Board Interactive Dice / Roll Pill in the center of the Active Player's Yard (Especially handy in Immersive Board-Only Mode!)
           if (isCurrentTurnYard && pl && pl.active) {
-            const pillW = cell * 2.5;
-            const pillH = cell * 0.78;
-            const px = x + (size - pillW) / 2;
-            const py = y + (size - pillH) / 2;
+            const pillW = Math.min(sizeW - cellW * 1.1, cell * 2.6);
+            const pillH = Math.max(cellH * 0.65, cell * 0.76);
+            const px = x + (sizeW - pillW) / 2;
+            const py = y + (sizeH - pillH) / 2;
             ctx.save();
             ctx.fillStyle = gameState.phase === 'ROLL' ? '#f59e0b' : '#0f172a';
             ctx.beginPath();
@@ -3114,20 +3132,20 @@
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             if (gameState.phase === 'ROLL') {
-              ctx.fillText('🎲 TAP TO ROLL', x + size / 2, y + size / 2);
+              ctx.fillText('🎲 TAP TO ROLL', x + sizeW / 2, y + sizeH / 2);
               renderedYardRollHitbox = { x: px, y: py, w: pillW, h: pillH };
             } else {
               const dVals = gameState.dicePool.map(function (d) { return d.used ? ('✓' + d.value) : String(d.value); }).join(' + ');
-              ctx.fillText('🎲 ' + dVals, x + size / 2, y + size / 2);
+              ctx.fillText('🎲 ' + dVals, x + sizeW / 2, y + sizeH / 2);
             }
             ctx.restore();
           }
         });
 
         // 6. Center 3x3 Home Goal Triangles
-        const cx = 7.5 * cell;
-        const cy = 7.5 * cell;
-        const x0 = 6 * cell, y0 = 6 * cell, x1 = 9 * cell, y1 = 9 * cell;
+        const cx = 7.5 * cellW;
+        const cy = 7.5 * cellH;
+        const x0 = 6 * cellW, y0 = 6 * cellH, x1 = 9 * cellW, y1 = 9 * cellH;
 
         const triangles = [
           { pts: [[x0, y0], [x0, y1], [cx, cy]], color: strongColors[0] },
@@ -3167,8 +3185,8 @@
           ctx.save();
 
           // Ghost origin circle where the bead started its move
-          const ox = (trail.startRC[1] + 0.5) * cell;
-          const oy = (trail.startRC[0] + 0.5) * cell;
+          const ox = (trail.startRC[1] + 0.5) * cellW;
+          const oy = (trail.startRC[0] + 0.5) * cellH;
           ctx.beginPath();
           ctx.arc(ox, oy, cell * 0.24, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
@@ -3182,7 +3200,7 @@
           ctx.beginPath();
           ctx.moveTo(ox, oy);
           trail.pathCoords.forEach(function (rc) {
-            ctx.lineTo((rc[1] + 0.5) * cell, (rc[0] + 0.5) * cell);
+            ctx.lineTo((rc[1] + 0.5) * cellW, (rc[0] + 0.5) * cellH);
           });
           ctx.strokeStyle = trailMeta.hex;
           ctx.lineWidth = 4;
@@ -3192,8 +3210,8 @@
           // Glowing step breadcrumb dots on each square of the trail
           ctx.setLineDash([]);
           trail.pathCoords.forEach(function (rc, idx) {
-            const px = (rc[1] + 0.5) * cell;
-            const py = (rc[0] + 0.5) * cell;
+            const px = (rc[1] + 0.5) * cellW;
+            const py = (rc[0] + 0.5) * cellH;
             ctx.beginPath();
             ctx.arc(px, py, idx === trail.pathCoords.length - 1 ? cell * 0.42 : cell * 0.13, 0, Math.PI * 2);
             ctx.fillStyle = idx === trail.pathCoords.length - 1 ? 'rgba(250, 204, 21, 0.28)' : trailMeta.hex;
@@ -3231,8 +3249,8 @@
           });
 
           const baseRC = getTokenGridCoords(group[0]);
-          const baseX = (baseRC[1] + 0.5) * cell;
-          const baseY = (baseRC[0] + 0.5) * cell;
+          const baseX = (baseRC[1] + 0.5) * cellW;
+          const baseY = (baseRC[0] + 0.5) * cellH;
           const isSafeStopCell = group[0].state === 'board' && SAFE_TRACK_INDICES.has(getOuterTrackIndex(group[0]));
 
           group.forEach(function (tk, idx) {
@@ -3378,13 +3396,13 @@
           const tokenMoves = getFilteredLegalMovesForToken(selOwner, selTokenId, legalMoves);
 
           const startRC = getTokenGridCoords(tk);
-          const sx = (startRC[1] + 0.5) * cell;
-          const sy = (startRC[0] + 0.5) * cell;
+          const sx = (startRC[1] + 0.5) * cellW;
+          const sy = (startRC[0] + 0.5) * cellH;
 
           tokenMoves.forEach(function (mv) {
             const destRC = mv.destRC;
-            const dx = (destRC[1] + 0.5) * cell;
-            const dy = (destRC[0] + 0.5) * cell;
+            const dx = (destRC[1] + 0.5) * cellW;
+            const dy = (destRC[0] + 0.5) * cellH;
             const outcome = getMoveOutcomePreviewTag(mv);
 
             ctx.save();
@@ -3425,7 +3443,7 @@
               const pillW = Math.max(cell * 1.5, outcome.tag.length * (cell * 0.13));
               const pillH = cell * 0.36;
               const px = Math.min(canvas.width - pillW - 4, Math.max(4, dx - pillW / 2));
-              const py = dy > cell * 2 ? (dy - cell * 0.78) : (dy + cell * 0.46);
+              const py = dy > cellH * 2 ? (dy - cell * 0.78) : (dy + cell * 0.46);
               ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
               ctx.beginPath();
               ctx.roundRect(px, py, pillW, pillH, 6);
@@ -3487,9 +3505,11 @@
 
       function handlePointerStart(e) {
         const pt = getCanvasPoint(e);
-        const cell = canvas.width / 15;
-        const crownX = 7.5 * cell;
-        const crownY = 7.5 * cell;
+        const cellW = canvas.width / 15;
+        const cellH = canvas.height / 15;
+        const cell = Math.min(cellW, cellH);
+        const crownX = 7.5 * cellW;
+        const crownY = 7.5 * cellH;
 
         if (Math.hypot(pt.x - crownX, pt.y - crownY) <= cell * 0.65) {
           if (e.cancelable) e.preventDefault();
@@ -3604,17 +3624,19 @@
         if (info.movedEnoughToDrag) {
           let bestMove = null;
           let bestDist = 999999;
-          const cell = canvas.width / 15;
+          const cellW = canvas.width / 15;
+          const cellH = canvas.height / 15;
+          const cell = Math.min(cellW, cellH);
           info.tokenMoves.forEach(function (mv) {
-            const dx = (mv.destRC[1] + 0.5) * cell;
-            const dy = (mv.destRC[0] + 0.5) * cell;
+            const dx = (mv.destRC[1] + 0.5) * cellW;
+            const dy = (mv.destRC[0] + 0.5) * cellH;
             const d = Math.hypot(pt.x - dx, pt.y - dy);
             if (d < bestDist) {
               bestDist = d;
               bestMove = mv;
             }
           });
-          if (bestMove && (bestDist <= cell * 2.5 || info.tokenMoves.length === 1)) {
+          if (bestMove && (bestDist <= Math.max(cellW, cellH) * 2.5 || info.tokenMoves.length === 1)) {
             executeMove(bestMove);
             return;
           }

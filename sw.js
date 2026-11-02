@@ -58,7 +58,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "73e91caa78427ef1436230599d205e05"
+        "revision": "5ac313a07dc93d880ce9ae812ca6799c"
     },
     {
         "url": "manifest.json",
@@ -66,7 +66,7 @@ if (workbox) {
     },
     {
         "url": "offline.html",
-        "revision": "e44c2a14d302044a1563011533ecb34c"
+        "revision": "ad17d01f02bb01615fbc0509f5aee82a"
     },
     {
         "url": "pwa-register.js",
@@ -78,7 +78,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "d5e1a4f9a30a8e1dc4949bc46852951b"
+        "revision": "5dfb7dc84bf2ed8d33cb1aff196c05d5"
     },
     {
         "url": "transcript of the vioces.txt",
