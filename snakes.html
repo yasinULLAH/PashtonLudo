@@ -1,0 +1,3467 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>Khyber Saanp Seedhi Pro | Pashtun KPK & Classic Snake and Ladder P2P</title>
+<meta name="description" content="Complete mobile-first Snake and Ladder game featuring authentic Pashtun KPK Hujra rules, WebRTC QR Code multiplayer, IndexedDB storage, and analytics.">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Yasin Ullah">
+<meta name="geo.region" content="PK-KP">
+<meta name="geo.placename" content="Peshawar, Khyber Pakhtunkhwa, Pakistan">
+<link rel="canonical" href="https://khybersaanpseedhi.app/play">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Khyber Saanp Seedhi Pro | Pashtun KPK & Classic Snake and Ladder P2P">
+<meta property="og:description" content="Play classic or traditional Pashtun KPK Hujra rules Snake and Ladder with WebRTC QR Code P2P multiplayer and offline IndexedDB support.">
+<meta property="og:url" content="https://khybersaanpseedhi.app/play">
+<meta property="og:image" content="https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&w=1200&h=630&q=80">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Khyber Saanp Seedhi Pro | Pashtun KPK Snake and Ladder">
+<meta name="twitter:description" content="Mobile-first Snake and Ladder with KPK Pashtun rules, WebRTC QR multiplayer, and IndexedDB.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&w=1200&h=630&q=80">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/just-validate@4.3.0/dist/just-validate.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+<style>
+:root {
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-base: 14px;
+  --header-bg: #0f172a;
+  --header-text: #f8fafc;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #e2e8f0;
+  --main-bg: #f1f5f9;
+  --main-text: #0f172a;
+  --footer-bg: #0f172a;
+  --footer-text: #cbd5e1;
+  --accent-primary: #059669;
+}
+html, body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  background-color: var(--main-bg);
+  color: var(--main-text);
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-header {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+}
+.theme-sidebar {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--sidebar-text) !important;
+}
+.theme-main {
+  background-color: var(--main-bg) !important;
+  color: var(--main-text) !important;
+}
+.theme-footer {
+  background-color: var(--footer-bg) !important;
+  color: var(--footer-text) !important;
+}
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 620px;
+  position: relative;
+  border: 4px solid #1e293b;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.25);
+  background: #fffbeb;
+}
+.board-cell {
+  position: relative;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2px 4px;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+.board-cell.cell-even {
+  background-color: #fef3c7;
+}
+.board-cell.cell-odd {
+  background-color: #ffffff;
+}
+.board-cell.cell-safe {
+  background-color: #d1fae5 !important;
+  box-shadow: inset 0 0 0 2px #059669;
+}
+.board-cell.cell-king-snake {
+  background-color: #fee2e2 !important;
+}
+.board-cell.cell-goal {
+  background: linear-gradient(135deg, #fbbf24, #d97706) !important;
+  color: #ffffff !important;
+}
+.token-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 25;
+}
+@media (max-width: 640px) {
+  .token-pin {
+    width: 16px;
+    height: 16px;
+    font-size: 8px;
+    border-width: 1.5px;
+  }
+}
+.dice-cube {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #e2e8f0);
+  border: 2px solid #cbd5e1;
+  box-shadow: 0 8px 20px rgba(15,23,42,0.18), inset 0 2px 4px #ffffff;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 10px;
+  gap: 4px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dice-cube:active {
+  transform: scale(0.92);
+}
+.dice-rolling {
+  animation: diceShake 0.45s infinite ease-in-out;
+}
+@keyframes diceShake {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-18deg) scale(1.08); }
+  50% { transform: rotate(18deg) scale(0.95); }
+  75% { transform: rotate(-12deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: #0f172a;
+  margin: auto;
+  opacity: 0;
+}
+.pip.pip-six {
+  background-color: #dc2626;
+}
+.pip.active {
+  opacity: 1;
+}
+.dataTables_wrapper .dt-buttons {
+  display: inline-flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.dataTables_wrapper .dt-button {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+  color: #334155 !important;
+  min-width: 38px;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.dataTables_wrapper .dt-button:hover {
+  background: #0f172a !important;
+  color: #ffffff !important;
+}
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  min-height: 40px;
+  outline: none;
+}
+table.dataTable tbody tr {
+  transition: background-color 0.15s ease;
+}
+table.dataTable tbody tr:hover {
+  background-color: #e0f2fe !important;
+}
+table.dataTable th {
+  resize: horizontal;
+  overflow: auto;
+}
+.select2-container .select2-selection--single {
+  height: 44px !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid #cbd5e1 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 42px !important;
+}
+.nav-unified {
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (max-width: 767px) {
+  .nav-unified.nav-hidden-mobile {
+    transform: translateY(100%);
+  }
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .print-container {
+    box-shadow: none !important;
+    border: 1px solid #000000 !important;
+    width: 100% !important;
+    padding: 16px !important;
+  }
+}
+</style>
+</head>
+<body class="h-full flex flex-col selection:bg-emerald-600 selection:text-white">
+
+<div id="authOverlay" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto hidden">
+  <div class="bg-white text-slate-900 w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate__animated animate__fadeInUp">
+    <div class="bg-slate-900 text-white p-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-lg font-bold shadow">
+          <i class="fa-solid fa-dice"></i>
+        </div>
+        <div>
+          <h1 class="text-base font-bold tracking-tight">Khyber Saanp Seedhi Pro</h1>
+          <p class="text-xs text-slate-400">Pashtun KPK Hujra & Classic Edition</p>
+        </div>
+      </div>
+      <span class="px-2.5 py-1 text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/30">v3.5 Enterprise</span>
+    </div>
+
+    <div class="p-5">
+      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl mb-4">
+        <button type="button" id="tabLoginBtn" onclick="AppAuth.switchAuthTab('login')" class="min-h-[44px] rounded-lg font-semibold text-xs bg-white text-slate-900 shadow-sm transition">Sign In</button>
+        <button type="button" id="tabRegisterBtn" onclick="AppAuth.switchAuthTab('register')" class="min-h-[44px] rounded-lg font-semibold text-xs text-slate-600 hover:text-slate-900 transition">Create Account</button>
+      </div>
+
+      <div id="throttleBanner" class="hidden mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium"></div>
+
+      <form id="loginForm" class="space-y-3.5" autocomplete="off">
+        <div>
+          <label for="loginUsername" class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
+          <input type="text" id="loginUsername" name="loginUsername" value="admin" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Enter username">
+        </div>
+        <div>
+          <label for="loginPassword" class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+          <input type="password" id="loginPassword" name="loginPassword" value="Admin@123" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Min 8 chars & 1 special char">
+        </div>
+        <div>
+          <label for="loginCaptchaInput" class="block text-xs font-semibold text-slate-700 mb-1">Security Math Captcha</label>
+          <div class="flex items-center gap-2">
+            <canvas id="loginCaptchaCanvas" width="145" height="44" class="rounded-lg border border-slate-300 bg-slate-100 shrink-0"></canvas>
+            <button type="button" onclick="AppAuth.generateCaptcha('login')" class="min-w-[44px] min-h-[44px] rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center justify-center" title="Refresh Captcha">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+            <input type="number" id="loginCaptchaInput" name="loginCaptchaInput" class="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Result">
+          </div>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-[11px] text-emerald-900 flex items-center justify-between">
+          <span><strong>Default Admin:</strong> admin / Admin@123</span>
+          <button type="button" onclick="AppAuth.fillDemoAndSolve()" class="underline font-bold text-emerald-700 hover:text-emerald-900">Auto-Fill Captcha</button>
+        </div>
+        <button type="submit" id="loginSubmitBtn" class="w-full min-h-[44px] bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Enter Hujra Game Suite</span>
+        </button>
+      </form>
+
+      <form id="registerForm" class="space-y-3.5 hidden" autocomplete="off">
+        <div>
+          <label for="regUsername" class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
+          <input type="text" id="regUsername" name="regUsername" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Choose username">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="regRole" class="block text-xs font-semibold text-slate-700 mb-1">Account Role</label>
+            <select id="regRole" name="regRole" class="w-full">
+              <option value="Standard User">Standard User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label for="regRegion" class="block text-xs font-semibold text-slate-700 mb-1">Home District</label>
+            <select id="regRegion" name="regRegion" class="w-full">
+              <option value="Peshawar">Peshawar</option>
+              <option value="Mardan">Mardan</option>
+              <option value="Swat">Swat</option>
+              <option value="Kohat">Kohat</option>
+              <option value="Abbottabad">Abbottabad</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="regPassword" class="block text-xs font-semibold text-slate-700 mb-1">Password (8+ chars, 1 special)</label>
+          <input type="password" id="regPassword" name="regPassword" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="e.g. Khyber@2026">
+        </div>
+        <div>
+          <label for="regCaptchaInput" class="block text-xs font-semibold text-slate-700 mb-1">Security Math Captcha</label>
+          <div class="flex items-center gap-2">
+            <canvas id="regCaptchaCanvas" width="145" height="44" class="rounded-lg border border-slate-300 bg-slate-100 shrink-0"></canvas>
+            <button type="button" onclick="AppAuth.generateCaptcha('register')" class="min-w-[44px] min-h-[44px] rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 flex items-center justify-center">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+            <input type="number" id="regCaptchaInput" name="regCaptchaInput" class="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Result">
+          </div>
+        </div>
+        <button type="submit" id="regSubmitBtn" class="w-full min-h-[44px] bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-semibold rounded-xl shadow transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Register Account</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<header class="theme-header sticky top-0 z-30 border-b border-slate-800/80 shadow-sm no-print">
+  <div class="max-w-[1600px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md">
+        <i class="fa-solid fa-staff-snake text-lg"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-sm sm:text-base tracking-tight">Khyber Saanp Seedhi</span>
+          <span id="activeRuleBadge" class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">KPK Hujra Rules</span>
+        </div>
+        <p class="text-[11px] opacity-75 hidden sm:block">React-Native Feel • WebRTC QR Multiplayer • IndexedDB Engine</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-xs">
+        <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+        <span id="sessionTimerDisplay">Idle: 40:00</span>
+      </div>
+
+      <button type="button" onclick="GameAudio.toggleMute()" id="audioToggleBtn" class="min-w-[44px] min-h-[44px] rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-sm transition" title="Toggle Sound Effects">
+        <i class="fa-solid fa-volume-high" id="audioToggleIcon"></i>
+      </button>
+
+      <button type="button" onclick="AppUI.openPasswordModal()" class="min-w-[44px] min-h-[44px] rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-sm transition" title="Change Password">
+        <i class="fa-solid fa-key"></i>
+      </button>
+
+      <div class="flex items-center gap-2 pl-2 border-l border-slate-700">
+        <div class="text-right hidden sm:block">
+          <div id="headerUserName" class="text-xs font-bold leading-tight">admin</div>
+          <div id="headerUserRole" class="text-[10px] text-emerald-400 font-semibold">Admin</div>
+        </div>
+        <button type="button" onclick="AppAuth.logout()" class="min-w-[44px] min-h-[44px] px-3 rounded-xl bg-red-600/90 hover:bg-red-600 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition" title="Logout">
+          <i class="fa-solid fa-power-off"></i>
+          <span class="hidden md:inline">Exit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="flex-1 flex flex-col md:flex-row max-w-[1600px] w-full mx-auto relative">
+
+  <nav id="unifiedNavigation" class="nav-unified theme-sidebar fixed bottom-0 left-0 right-0 z-40 md:static md:w-64 md:shrink-0 border-t md:border-t-0 md:border-r border-slate-800/80 shadow-2xl md:shadow-none no-print">
+    <div class="flex md:flex-col justify-around md:justify-start p-1.5 md:p-4 gap-1 md:gap-2">
+      <button type="button" data-route="/play" onclick="AppRouter.navigate('/play')" class="nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-semibold transition w-full">
+        <i class="fa-solid fa-gamepad text-base md:w-5 text-center"></i>
+        <span>Game Board</span>
+      </button>
+      <button type="button" data-route="/multiplayer" onclick="AppRouter.navigate('/multiplayer')" class="nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-semibold transition w-full">
+        <i class="fa-solid fa-qrcode text-base md:w-5 text-center"></i>
+        <span>QR & WebRTC</span>
+      </button>
+      <button type="button" data-route="/rules" onclick="AppRouter.navigate('/rules')" class="nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-semibold transition w-full">
+        <i class="fa-solid fa-scroll text-base md:w-5 text-center"></i>
+        <span>KPK Rules</span>
+      </button>
+      <button type="button" data-route="/players" onclick="AppRouter.navigate('/players')" class="nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-semibold transition w-full">
+        <i class="fa-solid fa-users text-base md:w-5 text-center"></i>
+        <span>Players & History</span>
+      </button>
+      <button type="button" data-route="/settings" onclick="AppRouter.navigate('/settings')" class="nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-semibold transition w-full">
+        <i class="fa-solid fa-sliders text-base md:w-5 text-center"></i>
+        <span>Vault & Theme</span>
+      </button>
+    </div>
+
+    <div class="hidden md:block p-4 mt-4 mx-3 rounded-2xl bg-slate-800/70 border border-slate-700/80 text-xs space-y-2">
+      <div class="flex items-center justify-between font-bold text-emerald-400">
+        <span>P2P Link Status</span>
+        <span id="sidebarP2PDot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+      </div>
+      <p id="sidebarP2PText" class="text-[11px] opacity-80">Local / AI Mode Active</p>
+      <div class="pt-2 border-t border-slate-700/70 flex items-center justify-between text-[11px]">
+        <span>Auto-Backup:</span>
+        <span id="sidebarBackupBadge" class="font-semibold text-emerald-300">Active</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="theme-main flex-1 p-3 sm:p-6 pb-24 md:pb-8 overflow-x-hidden">
+
+    <section id="view-play" class="route-view space-y-4 animate__animated animate__fadeIn">
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+
+        <div class="xl:col-span-7 flex flex-col items-center">
+          <div class="w-full max-w-[620px] mb-3 flex flex-wrap items-center justify-between gap-2 bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="turnBannerText" class="font-bold text-slate-900 text-xs sm:text-sm">Player 1's Turn</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="streakBadge" class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-bold text-xs">6-Streak: 0/3</span>
+              <button type="button" onclick="GameEngine.confirmResetMatch()" class="min-h-[44px] px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>New Match</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="board-grid" id="boardGridContainer">
+            <div id="boardCellsWrapper" class="contents"></div>
+            <svg id="boardSvgOverlay" viewBox="0 0 1000 1000" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+          </div>
+
+          <div class="w-full max-w-[620px] mt-3 bg-white p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-700">
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-3.5 h-3.5 rounded bg-emerald-200 border border-emerald-600"></span>
+              <span><strong>Hujra Safe Zones:</strong> 1, 14, 27, 50, 75, 92 (Immune to Knockback)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-3.5 h-3.5 rounded bg-red-200 border border-red-500"></span>
+              <span><strong>99 Kalamar:</strong> Giant Snake Hazard</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="xl:col-span-5 space-y-4">
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h2 class="text-sm font-bold text-slate-900">Hujra Dice & Turn Control</h2>
+                <p id="ruleSubtextDisplay" class="text-xs text-slate-500">Need 6 to Open • 3x6 Burns Turn • Takkar Knockback ON</p>
+              </div>
+              <span id="matchModePill" class="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">Vs KPK Ustad Bot</span>
+            </div>
+
+            <div class="flex items-center justify-around bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+              <div class="text-center space-y-1">
+                <div class="text-[11px] font-semibold text-slate-500 uppercase">Current Dice</div>
+                <button type="button" id="diceRollButton" onclick="GameEngine.triggerRoll()" class="dice-cube mx-auto focus:ring-4 focus:ring-emerald-500/40" aria-label="Roll Dice">
+                  <span class="pip" id="pip-0"></span>
+                  <span class="pip" id="pip-1"></span>
+                  <span class="pip" id="pip-2"></span>
+                  <span class="pip" id="pip-3"></span>
+                  <span class="pip active" id="pip-4"></span>
+                  <span class="pip" id="pip-5"></span>
+                  <span class="pip" id="pip-6"></span>
+                  <span class="pip" id="pip-7"></span>
+                  <span class="pip" id="pip-8"></span>
+                </button>
+                <div id="lastRollLabel" class="text-xs font-bold text-slate-800 pt-1">Tap Cube or Press Space</div>
+              </div>
+
+              <div class="space-y-2 flex-1 max-w-[210px] pl-4 border-l border-slate-200">
+                <button type="button" id="primaryRollBtn" onclick="GameEngine.triggerRoll()" class="w-full min-h-[48px] bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm">
+                  <i class="fa-solid fa-dice-d6"></i>
+                  <span>Roll Dice (Bazi)</span>
+                </button>
+                <div id="pashtoCommentaryBox" class="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-xs font-medium leading-snug">
+                  "Bismillah! Roll a 6 (Chakka) to enter the board from Hujra Camp."
+                </div>
+              </div>
+            </div>
+
+            <div id="activePlayersCards" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+            <button type="button" onclick="AppUI.toggleQuickSetupAccordion()" class="w-full min-h-[44px] flex items-center justify-between text-left font-bold text-sm text-slate-900">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-sliders text-emerald-600"></i> Match Configuration & Rule Preset</span>
+              <i id="quickSetupChevron" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+            </button>
+
+            <div id="quickSetupPanel" class="space-y-3 pt-2 border-t border-slate-100">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label for="selectGameMode" class="block text-xs font-semibold text-slate-700 mb-1">Opponent Mode</label>
+                  <select id="selectGameMode" class="w-full" onchange="GameEngine.changeGameMode(this.value)">
+                    <option value="ai">1P vs KPK Ustad AI</option>
+                    <option value="local2">2 Players Pass & Play</option>
+                    <option value="local3">3 Players Hujra</option>
+                    <option value="local4">4 Players Full Hujra</option>
+                    <option value="webrtc">WebRTC P2P Multiplayer</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="selectRulePreset" class="block text-xs font-semibold text-slate-700 mb-1">Regional Rule Preset</label>
+                  <select id="selectRulePreset" class="w-full" onchange="GameEngine.applyPresetById(this.value)"></select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <label class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input type="checkbox" id="chkNeedSix" checked onchange="GameEngine.syncRuleCheckboxes()" class="w-4 h-4 accent-emerald-600 rounded">
+                  <span>Need 6 to Open (Dakhila)</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input type="checkbox" id="chkTripleSixBurn" checked onchange="GameEngine.syncRuleCheckboxes()" class="w-4 h-4 accent-emerald-600 rounded">
+                  <span>3x6 Burns Turn</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input type="checkbox" id="chkKnockback" checked onchange="GameEngine.syncRuleCheckboxes()" class="w-4 h-4 accent-emerald-600 rounded">
+                  <span>Takkar Knockback Cut</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input type="checkbox" id="chkExact100" checked onchange="GameEngine.syncRuleCheckboxes()" class="w-4 h-4 accent-emerald-600 rounded">
+                  <span>Exact 100 Finish</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Live Hujra Match Feed</h3>
+              <button type="button" onclick="GameEngine.printCurrentMatchReport()" class="min-h-[38px] px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-print"></i>
+                <span>Print Match Sheet</span>
+              </button>
+            </div>
+            <div id="liveMatchLogList" class="h-36 overflow-y-auto space-y-1.5 text-xs pr-1"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="view-multiplayer" class="route-view hidden space-y-5 animate__animated animate__fadeIn">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Multi-User WebRTC & QR Code P2P Lobby</h2>
+            <p class="text-xs text-slate-500">Connect directly device-to-device via QR Code Scan, PeerJS Room ID, or Serverless WebRTC SDP Handshake.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="p2pConnectionBadge" class="px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Standby • Ready to Pair</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-5">
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-tower-broadcast text-emerald-600"></i>
+                <span>1. Quick PeerJS + QR Room Sync</span>
+              </h3>
+              <button type="button" onclick="P2PEngine.initPeerSession()" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">
+                Generate Room QR
+              </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
+              <div id="roomQrContainer" class="w-40 h-40 bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-center shrink-0">
+                <span class="text-[11px] text-slate-400 text-center">Click "Generate Room QR"</span>
+              </div>
+              <div class="space-y-2.5 w-full">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 uppercase">Your Host Room ID</label>
+                  <div class="flex items-center gap-2 mt-1">
+                    <input type="text" id="myPeerIdInput" readonly class="w-full min-h-[44px] px-3 rounded-lg bg-slate-100 border border-slate-300 font-mono text-xs text-slate-800" value="Not Initialized">
+                    <button type="button" onclick="P2PEngine.copyRoomId()" class="min-w-[44px] min-h-[44px] rounded-lg bg-slate-900 text-white flex items-center justify-center" title="Copy Room ID">
+                      <i class="fa-regular fa-copy"></i>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label for="remotePeerIdInput" class="block text-[11px] font-bold text-slate-500 uppercase">Join Friend's Room ID</label>
+                  <div class="flex items-center gap-2 mt-1">
+                    <input type="text" id="remotePeerIdInput" class="w-full min-h-[44px] px-3 rounded-lg bg-white border border-slate-300 font-mono text-xs text-slate-800" placeholder="Paste or Scan Room ID">
+                    <button type="button" onclick="P2PEngine.connectToPeerId()" class="min-h-[44px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0">
+                      Connect
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="P2PEngine.startCameraScanner()" class="min-h-[44px] px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-camera"></i>
+                <span>Scan Opponent QR with Camera</span>
+              </button>
+              <button type="button" onclick="P2PEngine.stopCameraScanner()" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold">
+                Stop Camera
+              </button>
+            </div>
+            <div id="qrReaderViewport" class="w-full max-w-sm mx-auto rounded-xl overflow-hidden border border-slate-300 hidden"></div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-network-wired text-indigo-600"></i>
+              <span>2. Direct Serverless WebRTC SDP Offer/Answer + Live Hujra Chat</span>
+            </h3>
+            <p class="text-xs text-slate-600">Zero-server offline LAN/Hotspot WebRTC handshake or instant multi-tab sync.</p>
+
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="P2PEngine.createRawWebRTCOffer()" class="min-h-[44px] px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>1. Create SDP Offer</span>
+              </button>
+              <button type="button" onclick="P2PEngine.acceptRawWebRTCSignal()" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-handshake"></i>
+                <span>2. Accept Offer/Answer</span>
+              </button>
+            </div>
+
+            <div>
+              <label for="webrtcSdpTextarea" class="block text-[11px] font-bold text-slate-500 uppercase mb-1">WebRTC SDP Token (Copy/Paste or Generate QR)</label>
+              <textarea id="webrtcSdpTextarea" rows="3" class="w-full p-2.5 rounded-xl border border-slate-300 font-mono text-[11px] bg-white" placeholder="WebRTC SDP Offer/Answer payload appears here..."></textarea>
+            </div>
+
+            <div class="border-t border-slate-200 pt-3 space-y-2">
+              <div class="text-xs font-bold text-slate-700">Live P2P Hujra Chat & Quick Taunts</div>
+              <div id="p2pChatMessages" class="h-28 overflow-y-auto bg-white p-2.5 rounded-xl border border-slate-200 text-xs space-y-1">
+                <div class="text-slate-400">Connected peers and multi-tab players can chat and sync rolls in real time.</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" id="p2pChatInput" class="w-full min-h-[44px] px-3 rounded-xl border border-slate-300 text-xs" placeholder="Send Pashto/English message (e.g. Daaltay Rasha!)">
+                <button type="button" onclick="P2PEngine.sendChatMessage()" class="min-h-[44px] px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-rules" class="route-view hidden space-y-5 animate__animated animate__fadeIn">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Pashtun Pakistani KPK Area Rules & Custom Presets</h2>
+            <p class="text-xs text-slate-500">Authentic Khyber Pakhtunkhwa Hujra regulations alongside custom board snake/ladder presets.</p>
+          </div>
+          <button type="button" onclick="RulesCRUD.openPresetModal()" class="min-h-[44px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Custom Rule Preset</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+            <div class="flex items-center gap-2 text-emerald-900 font-bold text-sm">
+              <i class="fa-solid fa-dice-six text-emerald-600"></i>
+              <span>1. Dakhila & 3x6 Barsi Rule</span>
+            </div>
+            <p class="text-xs text-emerald-950/80 leading-relaxed">
+              In KPK Hujra rules, a player's token stays off-board in Camp (0) until a <strong>6 (Chakka)</strong> is rolled. Each 6 grants a bonus roll, but rolling <strong>three consecutive 6s (6-6-6)</strong> burns the entire turn ("Teen Chakkay Barsi") and reverts the token to its start-of-turn square.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
+            <div class="flex items-center gap-2 text-amber-900 font-bold text-sm">
+              <i class="fa-solid fa-bolt text-amber-600"></i>
+              <span>2. KPK Takkar (Knockback Cut)</span>
+            </div>
+            <p class="text-xs text-amber-950/80 leading-relaxed">
+              Landing on a square occupied by an opponent triggers a <strong>Takkar (Cut)</strong>, sending the opponent's token back to Square 1! However, designated <strong>Hujra Safe Zones (1, 14, 27, 50, 75, 92)</strong> protect all tokens resting on them from being knocked back.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
+            <div class="flex items-center gap-2 text-rose-900 font-bold text-sm">
+              <i class="fa-solid fa-staff-snake text-rose-600"></i>
+              <span>3. Square 99 Kalamar & Pura 100</span>
+            </div>
+            <p class="text-xs text-rose-950/80 leading-relaxed">
+              Square 99 hosts the dreaded <strong>Kalamar (Black Cobra)</strong> dropping players down to Square 4. Reaching Square 100 requires an <strong>Exact Roll ("Pura 100")</strong>; overshooting keeps the token in place for the next turn.
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <h3 class="text-sm font-bold text-slate-900 mb-3">Saved Regional & Custom Rule Presets</h3>
+          <div class="overflow-x-auto">
+            <table id="presetsDataTable" class="display responsive nowrap w-full text-xs">
+              <thead>
+                <tr>
+                  <th>Preset Name</th>
+                  <th>Region / Style</th>
+                  <th>Need 6</th>
+                  <th>3x6 Burn</th>
+                  <th>Takkar Cut</th>
+                  <th>Snakes / Ladders</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="presetsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-players" class="route-view hidden space-y-5 animate__animated animate__fadeIn">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Hujra Players Directory (CRUD + Auto-Compressed Avatar)</h2>
+            <p class="text-xs text-slate-500">Manage registered players, track career wins, and upload validated avatars (&lt;100KB auto-compressed).</p>
+          </div>
+          <button type="button" onclick="PlayersCRUD.openPlayerModal()" class="min-h-[44px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Add New Player</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table id="playersDataTable" class="display responsive nowrap w-full text-xs">
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>District / Hujra</th>
+                <th>Title / Rank</th>
+                <th>Matches</th>
+                <th>Wins</th>
+                <th>Takkar Cuts</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="playersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Completed Matches & Score Certificates</h2>
+            <p class="text-xs text-slate-500">Full match ledger with printable official certificates and CRUD notes.</p>
+          </div>
+          <button type="button" onclick="MatchesCRUD.openMatchModal()" class="min-h-[44px] px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-file-circle-plus"></i>
+            <span>Log Manual Match Record</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table id="matchesDataTable" class="display responsive nowrap w-full text-xs">
+            <thead>
+              <tr>
+                <th>Match ID</th>
+                <th>Date</th>
+                <th>Winner</th>
+                <th>Rule Preset</th>
+                <th>Total Turns</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="matchesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-settings" class="route-view hidden space-y-5 animate__animated animate__fadeIn">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-palette text-emerald-600"></i>
+              <span>Dynamic User Theme Engine (DB-Backed)</span>
+            </h2>
+            <p class="text-xs text-slate-500">Customizes CSS variables linked to your user ID in IndexedDB.</p>
+          </div>
+
+          <form id="themeSettingsForm" class="space-y-3" onsubmit="ThemeEngine.saveUserTheme(event)">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="themeFontFamily" class="block text-xs font-semibold text-slate-700 mb-1">Font Family</label>
+                <select id="themeFontFamily" class="w-full">
+                  <option value="'Inter', system-ui, sans-serif">Inter Modern UI</option>
+                  <option value="'Segoe UI', Roboto, sans-serif">Segoe Desktop Clean</option>
+                  <option value="'Georgia', serif">Classic Hujra Serif</option>
+                  <option value="'Courier New', monospace">Tactical Monospace</option>
+                </select>
+              </div>
+              <div>
+                <label for="themeFontSize" class="block text-xs font-semibold text-slate-700 mb-1">Base Font Size</label>
+                <select id="themeFontSize" class="w-full">
+                  <option value="13px">Compact (13px)</option>
+                  <option value="14px" selected>Standard (14px)</option>
+                  <option value="15px">Comfortable (15px)</option>
+                  <option value="16px">Large Touch (16px)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              <div>
+                <label for="themeHeaderBg" class="block text-[11px] font-semibold text-slate-600 mb-1">Header BG</label>
+                <input type="color" id="themeHeaderBg" value="#0f172a" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeHeaderText" class="block text-[11px] font-semibold text-slate-600 mb-1">Header Text</label>
+                <input type="color" id="themeHeaderText" value="#f8fafc" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeSidebarBg" class="block text-[11px] font-semibold text-slate-600 mb-1">Sidebar BG</label>
+                <input type="color" id="themeSidebarBg" value="#1e293b" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeSidebarText" class="block text-[11px] font-semibold text-slate-600 mb-1">Sidebar Text</label>
+                <input type="color" id="themeSidebarText" value="#e2e8f0" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeMainBg" class="block text-[11px] font-semibold text-slate-600 mb-1">Main BG</label>
+                <input type="color" id="themeMainBg" value="#f1f5f9" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeMainText" class="block text-[11px] font-semibold text-slate-600 mb-1">Main Text</label>
+                <input type="color" id="themeMainText" value="#0f172a" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeFooterBg" class="block text-[11px] font-semibold text-slate-600 mb-1">Footer BG</label>
+                <input type="color" id="themeFooterBg" value="#0f172a" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+              <div>
+                <label for="themeFooterText" class="block text-[11px] font-semibold text-slate-600 mb-1">Footer Text</label>
+                <input type="color" id="themeFooterText" value="#cbd5e1" class="w-full h-11 rounded-lg border border-slate-300 cursor-pointer">
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 pt-3">
+              <button type="submit" class="min-h-[44px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">
+                Save & Apply User Theme
+              </button>
+              <button type="button" onclick="ThemeEngine.resetDefaultTheme()" class="min-h-[44px] px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold">
+                Reset Default
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-vault text-indigo-600"></i>
+              <span>Encrypted Backup, Restore & Auto-Backup Scheduler</span>
+            </h2>
+            <p class="text-xs text-slate-500">AES-GCM 256-bit authenticated encryption with duplicate protection and tamper detection.</p>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label for="backupPassphrase" class="block text-xs font-semibold text-slate-700 mb-1">Encryption Passphrase Key</label>
+              <input type="password" id="backupPassphrase" value="KhyberVault@2026" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs" placeholder="Enter passphrase for AES-GCM encryption">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="autoBackupFrequency" class="block text-xs font-semibold text-slate-700 mb-1">Auto-Backup Schedule</label>
+                <select id="autoBackupFrequency" class="w-full" onchange="BackupVault.updateScheduleConfig()">
+                  <option value="daily">Daily Auto-Backup</option>
+                  <option value="weekly">Weekly Auto-Backup</option>
+                  <option value="custom">Custom Days Difference</option>
+                </select>
+              </div>
+              <div>
+                <label for="autoBackupCustomDays" class="block text-xs font-semibold text-slate-700 mb-1">Days Difference (If Custom)</label>
+                <input type="number" id="autoBackupCustomDays" min="1" max="90" value="3" onchange="BackupVault.updateScheduleConfig()" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs">
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 pt-2">
+              <button type="button" onclick="BackupVault.exportEncryptedJson()" class="min-h-[44px] px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-2">
+                <i class="fa-solid fa-file-shield"></i>
+                <span>Export Encrypted .JSON Backup</span>
+              </button>
+              <label class="min-h-[44px] px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-file-import"></i>
+                <span>Restore Encrypted .JSON</span>
+                <input type="file" id="restoreJsonInput" accept=".json" class="hidden" onchange="BackupVault.importEncryptedJson(event)">
+              </label>
+            </div>
+
+            <div id="backupStatusBox" class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+              Last Auto-Backup Check: Verified & Ready.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="printReportArea" class="print-only hidden p-8 bg-white text-black">
+  <div class="print-container rounded-xl p-6 space-y-4">
+    <div class="flex items-center justify-between border-b-2 border-black pb-4">
+      <div>
+        <h1 class="text-2xl font-bold">KHYBER SAANP SEEDHI PRO — OFFICIAL MATCH CERTIFICATE</h1>
+        <p class="text-sm">Pashtun KPK Hujra & Classic Board Game Federation Record</p>
+      </div>
+      <div class="text-right text-xs">
+        <div id="printReportDate"></div>
+        <div id="printReportId" class="font-bold"></div>
+      </div>
+    </div>
+    <div id="printReportBody" class="space-y-3 text-sm"></div>
+    <div class="pt-6 border-t border-black text-xs flex items-center justify-between">
+      <div>Created by: <strong>Yasin Ullah</strong> | WhatsApp: 03361593533</div>
+      <div>LinkedIn: https://www.linkedin.com/in/yasin-ullah-029229232/</div>
+    </div>
+  </div>
+</div>
+
+<div id="dynamicModalBackdrop" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto no-print">
+  <div class="bg-white text-slate-900 w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate__animated animate__zoomIn animate__faster">
+    <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+      <h3 id="dynamicModalTitle" class="font-bold text-sm">Modal Title</h3>
+      <button type="button" onclick="AppUI.attemptCloseModal()" class="min-w-[44px] min-h-[44px] rounded-lg hover:bg-slate-800 flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="dynamicModalContent" class="p-5"></div>
+  </div>
+</div>
+
+<footer class="theme-footer border-t border-slate-800/80 py-4 px-4 sm:px-6 text-xs mt-auto mb-14 md:mb-0">
+  <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+    <div class="font-semibold">
+      Created by: <a href="https://www.linkedin.com/in/yasin-ullah-029229232/" target="_blank" rel="noopener noreferrer" class="underline text-emerald-400 hover:text-emerald-300 font-bold">Yasin Ullah</a>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <a href="https://www.linkedin.com/in/yasin-ullah-029229232/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:text-emerald-400 transition">
+        <i class="fa-brands fa-linkedin text-sm text-emerald-400"></i>
+        <span>https://www.linkedin.com/in/yasin-ullah-029229232/</span>
+      </a>
+      <span class="inline-flex items-center gap-1.5 font-semibold">
+        <i class="fa-brands fa-whatsapp text-sm text-emerald-400"></i>
+        <span>WhatsApp: 03361593533</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const APP_CONFIG = {
+  appName: 'Khyber Saanp Seedhi Pro',
+  dbName: 'KhyberSaanpSeedhiDB_v1',
+  dbVersion: 1,
+  baseUrl: 'https://khybersaanpseedhi.app',
+  timezone: 'Asia/Karachi',
+  idleTimeoutMs: 40 * 60 * 1000,
+  absoluteSessionMs: 8 * 60 * 60 * 1000,
+  maxLoginAttempts: 5,
+  lockoutDurationMs: 2 * 60 * 1000,
+  safeSquares: [1, 14, 27, 50, 75, 92],
+  tokenColors: ['#059669', '#2563eb', '#d97706', '#dc2626']
+};
+
+const GameAudio = {
+  muted: false,
+  ctx: null,
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+  },
+  toggleMute() {
+    this.muted = !this.muted;
+    const icon = document.getElementById('audioToggleIcon');
+    if (icon) {
+      icon.className = this.muted ? 'fa-solid fa-volume-xmark text-red-400' : 'fa-solid fa-volume-high';
+    }
+    AppUI.toast(this.muted ? 'Game audio muted' : 'Hujra sound effects enabled', 'info');
+  },
+  playTone(freq, type, duration, delay = 0) {
+    if (this.muted) return;
+    try {
+      this.init();
+      if (!this.ctx) return;
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + delay);
+      gain.gain.setValueAtTime(0.12, this.ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + delay + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime + delay);
+      osc.stop(this.ctx.currentTime + delay + duration);
+    } catch (e) {}
+  },
+  diceRoll() {
+    this.playTone(240, 'triangle', 0.07, 0);
+    this.playTone(320, 'triangle', 0.07, 0.08);
+    this.playTone(420, 'sine', 0.1, 0.16);
+  },
+  stepHop() {
+    this.playTone(520, 'sine', 0.06, 0);
+  },
+  ladderClimb() {
+    [330, 392, 493, 659].forEach((f, idx) => this.playTone(f, 'triangle', 0.14, idx * 0.09));
+  },
+  snakeBite() {
+    [440, 360, 280, 170].forEach((f, idx) => this.playTone(f, 'sawtooth', 0.16, idx * 0.1));
+  },
+  takkarCut() {
+    this.playTone(150, 'square', 0.22, 0);
+    this.playTone(110, 'sawtooth', 0.25, 0.12);
+  },
+  victoryFanfare() {
+    [440, 554, 659, 880, 659, 880].forEach((f, idx) => this.playTone(f, 'triangle', 0.18, idx * 0.12));
+  }
+};
+
+const DBEngine = {
+  db: null,
+  async init() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(APP_CONFIG.dbName, APP_CONFIG.dbVersion);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('users')) {
+          const uStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+          uStore.createIndex('username', 'username', { unique: true });
+        }
+        if (!db.objectStoreNames.contains('players')) {
+          db.createObjectStore('players', { keyPath: 'id', autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains('matches')) {
+          db.createObjectStore('matches', { keyPath: 'id', autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains('presets')) {
+          db.createObjectStore('presets', { keyPath: 'id', autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains('settings')) {
+          db.createObjectStore('settings', { keyPath: 'key' });
+        }
+      };
+      req.onsuccess = async (e) => {
+        this.db = e.target.result;
+        await this.seedInitialData();
+        resolve(this.db);
+      };
+      req.onerror = (e) => reject(e.target.error);
+    });
+  },
+  async getAll(storeName) {
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async getByKey(storeName, key) {
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
+      const req = store.get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async put(storeName, item) {
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      const req = store.put(item);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async delete(storeName, key) {
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      const req = store.delete(key);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async clearStore(storeName) {
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      const req = store.clear();
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async hashPassword(rawPassword) {
+    const enc = new TextEncoder().encode(rawPassword + '_KhyberSalt2026');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+  },
+  async seedInitialData() {
+    const users = await this.getAll('users');
+    if (users.length === 0) {
+      const adminHash = await this.hashPassword('Admin@123');
+      const userHash = await this.hashPassword('Khyber@123');
+      await this.put('users', {
+        id: 1,
+        username: 'admin',
+        passwordHash: adminHash,
+        role: 'Admin',
+        region: 'Peshawar',
+        theme: null
+      });
+      await this.put('users', {
+        id: 2,
+        username: 'zarak_khan',
+        passwordHash: userHash,
+        role: 'Standard User',
+        region: 'Mardan',
+        theme: null
+      });
+    }
+
+    const presets = await this.getAll('presets');
+    if (presets.length === 0) {
+      const seedPresets = [
+        {
+          id: 1,
+          name: 'Peshawar Qissa Khwani Hujra Rules',
+          region: 'Peshawar KPK Traditional',
+          needSix: true,
+          tripleSixBurn: true,
+          knockback: true,
+          exact100: true,
+          ladders: { 4: 25, 13: 46, 33: 49, 42: 63, 50: 69, 62: 81, 74: 92 },
+          snakes: { 27: 5, 40: 3, 43: 18, 54: 31, 66: 45, 89: 53, 99: 4 }
+        },
+        {
+          id: 2,
+          name: 'Mardan Takht-i-Bahi Hardcore Bazi',
+          region: 'Mardan KPK',
+          needSix: true,
+          tripleSixBurn: true,
+          knockback: true,
+          exact100: true,
+          ladders: { 6: 24, 15: 38, 28: 55, 51: 72, 71: 91 },
+          snakes: { 23: 7, 48: 12, 64: 29, 79: 41, 95: 35, 99: 4 }
+        },
+        {
+          id: 3,
+          name: 'Swat Mingora Fast Climb Edition',
+          region: 'Swat Valley KPK',
+          needSix: false,
+          tripleSixBurn: true,
+          knockback: true,
+          exact100: true,
+          ladders: { 3: 22, 8: 30, 20: 41, 36: 58, 57: 77, 73: 94 },
+          snakes: { 32: 10, 47: 19, 68: 34, 87: 52, 98: 12 }
+        },
+        {
+          id: 4,
+          name: 'International Classic Standard Board',
+          region: 'Global Standard',
+          needSix: false,
+          tripleSixBurn: false,
+          knockback: false,
+          exact100: true,
+          ladders: { 4: 14, 9: 31, 21: 42, 28: 84, 51: 67, 71: 91, 80: 99 },
+          snakes: { 17: 7, 54: 34, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 98: 79 }
+        }
+      ];
+      for (const p of seedPresets) await this.put('presets', p);
+    }
+
+    const players = await this.getAll('players');
+    if (players.length === 0) {
+      const seedPlayers = [
+        {
+          id: 1,
+          name: 'Malik Sher Alam Afridi',
+          district: 'Peshawar',
+          rank: 'Hujra Grand Ustad',
+          matches: 42,
+          wins: 29,
+          takkarCuts: 64,
+          avatar: ''
+        },
+        {
+          id: 2,
+          name: 'Zarak Khan Yousafzai',
+          district: 'Mardan',
+          rank: 'Chakka Specialist',
+          matches: 35,
+          wins: 21,
+          takkarCuts: 48,
+          avatar: ''
+        },
+        {
+          id: 3,
+          name: 'gulalai Bibi Khattak',
+          district: 'Kohat',
+          rank: 'Tactical Champion',
+          matches: 28,
+          wins: 19,
+          takkarCuts: 37,
+          avatar: ''
+        },
+        {
+          id: 4,
+          name: 'Arsalaan Khan Swati',
+          district: 'Swat',
+          rank: 'Mountain Strategist',
+          matches: 31,
+          wins: 18,
+          takkarCuts: 41,
+          avatar: ''
+        }
+      ];
+      for (const pl of seedPlayers) await this.put('players', pl);
+    }
+
+    const matches = await this.getAll('matches');
+    if (matches.length === 0) {
+      const seedMatches = [
+        {
+          id: 1001,
+          date: '2026-10-28 21:15',
+          winner: 'Malik Sher Alam Afridi',
+          presetName: 'Peshawar Qissa Khwani Hujra Rules',
+          turns: 44,
+          notes: 'Won after surviving 99 Kalamar snake and landing 2 Takkar knockbacks.'
+        },
+        {
+          id: 1002,
+          date: '2026-10-29 19:40',
+          winner: 'Zarak Khan Yousafzai',
+          presetName: 'Mardan Takht-i-Bahi Hardcore Bazi',
+          turns: 38,
+          notes: 'Opened on first roll with Chakka 6 and climbed 71-91 ladder.'
+        },
+        {
+          id: 1003,
+          date: '2026-10-30 22:05',
+          winner: 'gulalai Bibi Khattak',
+          presetName: 'Swat Mingora Fast Climb Edition',
+          turns: 31,
+          notes: 'Zero snake bites recorded throughout the entire Hujra session.'
+        },
+        {
+          id: 1004,
+          date: '2026-11-01 20:30',
+          winner: 'Arsalaan Khan Swati',
+          presetName: 'Peshawar Qissa Khwani Hujra Rules',
+          turns: 52,
+          notes: 'WebRTC QR P2P match victory with exact 4 roll to reach 100.'
+        }
+      ];
+      for (const m of seedMatches) await this.put('matches', m);
+    }
+  }
+};
+
+const AppAuth = {
+  currentUser: null,
+  captchaSolutions: { login: 0, register: 0 },
+  idleResetTimer: null,
+  sessionInterval: null,
+  lastActivityTs: Date.now(),
+
+  init() {
+    this.generateCaptcha('login');
+    this.generateCaptcha('register');
+    this.setupJustValidate();
+    this.restoreSession();
+    this.bindActivityListeners();
+  },
+
+  switchAuthTab(tab) {
+    const loginForm = document.getElementById('loginForm');
+    const regForm = document.getElementById('registerForm');
+    const tabLoginBtn = document.getElementById('tabLoginBtn');
+    const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+
+    if (tab === 'login') {
+      loginForm.classList.remove('hidden');
+      regForm.classList.add('hidden');
+      tabLoginBtn.className = 'min-h-[44px] rounded-lg font-semibold text-xs bg-white text-slate-900 shadow-sm transition';
+      tabRegisterBtn.className = 'min-h-[44px] rounded-lg font-semibold text-xs text-slate-600 hover:text-slate-900 transition';
+      this.generateCaptcha('login');
+    } else {
+      loginForm.classList.add('hidden');
+      regForm.classList.remove('hidden');
+      tabRegisterBtn.className = 'min-h-[44px] rounded-lg font-semibold text-xs bg-white text-slate-900 shadow-sm transition';
+      tabLoginBtn.className = 'min-h-[44px] rounded-lg font-semibold text-xs text-slate-600 hover:text-slate-900 transition';
+      this.generateCaptcha('register');
+    }
+  },
+
+  generateCaptcha(mode) {
+    const canvasId = mode === 'login' ? 'loginCaptchaCanvas' : 'regCaptchaCanvas';
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#f1f5f9';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const a = Math.floor(Math.random() * 12) + 3;
+    const b = Math.floor(Math.random() * 9) + 2;
+    const ops = ['+', '-'];
+    const op = ops[Math.floor(Math.random() * ops.length)];
+    const ans = op === '+' ? a + b : a - b;
+    this.captchaSolutions[mode] = ans;
+
+    for (let i = 0; i < 7; i++) {
+      ctx.strokeStyle = `rgba(${Math.floor(Math.random() * 150)}, ${Math.floor(Math.random() * 150)}, 180, 0.45)`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.stroke();
+    }
+
+    for (let i = 0; i < 35; i++) {
+      ctx.fillStyle = `rgba(15, 23, 42, ${Math.random() * 0.35})`;
+      ctx.beginPath();
+      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1.3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.font = 'bold 20px monospace';
+    ctx.fillStyle = '#0f172a';
+    ctx.save();
+    ctx.translate(22, 29);
+    ctx.rotate((Math.random() - 0.5) * 0.14);
+    ctx.fillText(`${a} ${op} ${b} = ?`, 0, 0);
+    ctx.restore();
+  },
+
+  fillDemoAndSolve() {
+    document.getElementById('loginUsername').value = 'admin';
+    document.getElementById('loginPassword').value = 'Admin@123';
+    document.getElementById('loginCaptchaInput').value = this.captchaSolutions.login;
+  },
+
+  checkThrottle() {
+    const raw = localStorage.getItem('khyber_auth_throttle');
+    if (!raw) return { locked: false, attempts: 0 };
+    const data = JSON.parse(raw);
+    if (data.lockUntil && Date.now() < data.lockUntil) {
+      const secs = Math.ceil((data.lockUntil - Date.now()) / 1000);
+      return { locked: true, remainingSec: secs };
+    }
+    if (data.lockUntil && Date.now() >= data.lockUntil) {
+      localStorage.removeItem('khyber_auth_throttle');
+      return { locked: false, attempts: 0 };
+    }
+    return { locked: false, attempts: data.attempts || 0 };
+  },
+
+  recordFailedAttempt() {
+    const raw = localStorage.getItem('khyber_auth_throttle');
+    const data = raw ? JSON.parse(raw) : { attempts: 0, lockUntil: null };
+    data.attempts += 1;
+    if (data.attempts >= APP_CONFIG.maxLoginAttempts) {
+      data.lockUntil = Date.now() + APP_CONFIG.lockoutDurationMs;
+    }
+    localStorage.setItem('khyber_auth_throttle', JSON.stringify(data));
+  },
+
+  setupJustValidate() {
+    const loginValidator = new window.JustValidate('#loginForm', {
+      errorFieldCssClass: 'border-red-500',
+      errorLabelStyle: { color: '#dc2626', fontSize: '11px', marginTop: '4px' }
+    });
+    loginValidator
+      .addField('#loginUsername', [
+        { rule: 'required', errorMessage: 'Username is required' },
+        { rule: 'minLength', value: 3, errorMessage: 'Minimum 3 characters' }
+      ])
+      .addField('#loginPassword', [
+        { rule: 'required', errorMessage: 'Password is required' },
+        { rule: 'minLength', value: 8, errorMessage: 'Minimum 8 characters required' },
+        {
+          validator: (val) => /[!@#$%^&*(),.?":{}|<>_\-+=]/.test(val),
+          errorMessage: 'Must include at least 1 special character'
+        }
+      ])
+      .addField('#loginCaptchaInput', [
+        { rule: 'required', errorMessage: 'Solve the math captcha' }
+      ])
+      .onSuccess(async (event) => {
+        event.preventDefault();
+        await this.handleLogin();
+      });
+
+    const regValidator = new window.JustValidate('#registerForm', {
+      errorFieldCssClass: 'border-red-500',
+      errorLabelStyle: { color: '#dc2626', fontSize: '11px', marginTop: '4px' }
+    });
+    regValidator
+      .addField('#regUsername', [
+        { rule: 'required', errorMessage: 'Username is required' },
+        { rule: 'minLength', value: 3, errorMessage: 'Minimum 3 characters' }
+      ])
+      .addField('#regPassword', [
+        { rule: 'required', errorMessage: 'Password is required' },
+        { rule: 'minLength', value: 8, errorMessage: 'Minimum 8 characters required' },
+        {
+          validator: (val) => /[!@#$%^&*(),.?":{}|<>_\-+=]/.test(val),
+          errorMessage: 'Must contain at least 1 special character'
+        }
+      ])
+      .addField('#regCaptchaInput', [
+        { rule: 'required', errorMessage: 'Solve the math captcha' }
+      ])
+      .onSuccess(async (event) => {
+        event.preventDefault();
+        await this.handleRegister();
+      });
+  },
+
+  async handleLogin() {
+    const throttle = this.checkThrottle();
+    const banner = document.getElementById('throttleBanner');
+    if (throttle.locked) {
+      banner.classList.remove('hidden');
+      banner.textContent = `Anti-Brute-Force Protection: Too many failed attempts. Try again in ${throttle.remainingSec}s.`;
+      return;
+    }
+    banner.classList.add('hidden');
+
+    const captchaVal = parseInt(document.getElementById('loginCaptchaInput').value, 10);
+    if (captchaVal !== this.captchaSolutions.login) {
+      this.recordFailedAttempt();
+      this.generateCaptcha('login');
+      AppUI.toast('Incorrect Math Captcha answer', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('loginSubmitBtn');
+    AppUI.setBtnLoading(btn, true, 'Authenticating...');
+
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const passHash = await DBEngine.hashPassword(password);
+
+    const allUsers = await DBEngine.getAll('users');
+    const found = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase() && u.passwordHash === passHash);
+
+    AppUI.setBtnLoading(btn, false, '<i class="fa-solid fa-right-to-bracket"></i><span>Enter Hujra Game Suite</span>');
+
+    if (!found) {
+      this.recordFailedAttempt();
+      this.generateCaptcha('login');
+      AppUI.toast('Invalid username or password', 'error');
+      return;
+    }
+
+    localStorage.removeItem('khyber_auth_throttle');
+    this.establishSession(found);
+    AppUI.toast(`Welcome to Hujra, ${found.username}!`, 'success');
+  },
+
+  async handleRegister() {
+    const captchaVal = parseInt(document.getElementById('regCaptchaInput').value, 10);
+    if (captchaVal !== this.captchaSolutions.register) {
+      this.generateCaptcha('register');
+      AppUI.toast('Incorrect Math Captcha answer', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('regSubmitBtn');
+    AppUI.setBtnLoading(btn, true, 'Creating Account...');
+
+    const username = document.getElementById('regUsername').value.trim();
+    const role = document.getElementById('regRole').value;
+    const region = document.getElementById('regRegion').value;
+    const password = document.getElementById('regPassword').value;
+
+    const allUsers = await DBEngine.getAll('users');
+    if (allUsers.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+      AppUI.setBtnLoading(btn, false, '<i class="fa-solid fa-user-plus"></i><span>Register Account</span>');
+      AppUI.toast('Username already exists', 'error');
+      return;
+    }
+
+    const passwordHash = await DBEngine.hashPassword(password);
+    const newUser = {
+      username,
+      passwordHash,
+      role,
+      region,
+      theme: null
+    };
+    const id = await DBEngine.put('users', newUser);
+    newUser.id = id;
+
+    AppUI.setBtnLoading(btn, false, '<i class="fa-solid fa-user-plus"></i><span>Register Account</span>');
+    this.establishSession(newUser);
+    AppUI.toast('Account registered & logged in!', 'success');
+  },
+
+  establishSession(user) {
+    this.currentUser = user;
+    const now = Date.now();
+    const sessionObj = {
+      userId: user.id,
+      loginTs: now,
+      lastActiveTs: now
+    };
+    localStorage.setItem('khyber_active_session', JSON.stringify(sessionObj));
+    document.getElementById('authOverlay').classList.add('hidden');
+    document.getElementById('headerUserName').textContent = user.username;
+    document.getElementById('headerUserRole').textContent = `${user.role} • ${user.region || 'KPK'}`;
+    ThemeEngine.applyUserTheme(user.theme);
+    this.lastActivityTs = now;
+    this.startSessionWatchdog();
+    PlayersCRUD.refreshTable();
+    MatchesCRUD.refreshTable();
+    RulesCRUD.refreshTable();
+  },
+
+  async restoreSession() {
+    const raw = localStorage.getItem('khyber_active_session');
+    if (!raw) {
+      document.getElementById('authOverlay').classList.remove('hidden');
+      this.fillDemoAndSolve();
+      return;
+    }
+    try {
+      const sess = JSON.parse(raw);
+      const now = Date.now();
+      if (now - sess.loginTs > APP_CONFIG.absoluteSessionMs) {
+        localStorage.removeItem('khyber_active_session');
+        document.getElementById('authOverlay').classList.remove('hidden');
+        Swal.fire({
+          icon: 'warning',
+          title: 'Session Expired (8-Hour Limit)',
+          text: 'Your tenant session reached the maximum 8-hour security limit. Please renew your login.'
+        });
+        return;
+      }
+      if (now - sess.lastActiveTs > APP_CONFIG.idleTimeoutMs) {
+        localStorage.removeItem('khyber_active_session');
+        document.getElementById('authOverlay').classList.remove('hidden');
+        Swal.fire({
+          icon: 'info',
+          title: 'Idle Timeout (40 Minutes)',
+          text: 'You were logged out due to 40 minutes of inactivity.'
+        });
+        return;
+      }
+      const user = await DBEngine.getByKey('users', sess.userId);
+      if (!user) {
+        document.getElementById('authOverlay').classList.remove('hidden');
+        return;
+      }
+      this.establishSession(user);
+    } catch (e) {
+      document.getElementById('authOverlay').classList.remove('hidden');
+    }
+  },
+
+  bindActivityListeners() {
+    ['mousemove', 'keydown', 'click', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, () => {
+        if (!this.currentUser) return;
+        this.lastActivityTs = Date.now();
+        const raw = localStorage.getItem('khyber_active_session');
+        if (raw) {
+          const sess = JSON.parse(raw);
+          sess.lastActiveTs = this.lastActivityTs;
+          localStorage.setItem('khyber_active_session', JSON.stringify(sess));
+        }
+      }, { passive: true });
+    });
+  },
+
+  startSessionWatchdog() {
+    if (this.sessionInterval) clearInterval(this.sessionInterval);
+    this.sessionInterval = setInterval(() => {
+      if (!this.currentUser) return;
+      const now = Date.now();
+      const raw = localStorage.getItem('khyber_active_session');
+      if (!raw) return;
+      const sess = JSON.parse(raw);
+      const idleElapsed = now - this.lastActivityTs;
+      const totalElapsed = now - sess.loginTs;
+
+      if (idleElapsed >= APP_CONFIG.idleTimeoutMs || totalElapsed >= APP_CONFIG.absoluteSessionMs) {
+        this.logout(true);
+        Swal.fire({
+          icon: 'warning',
+          title: 'Session Renewal Required',
+          text: 'Your session expired due to idle or 8-hour security policy. Please sign in again.'
+        });
+        return;
+      }
+
+      const remMs = Math.max(0, APP_CONFIG.idleTimeoutMs - idleElapsed);
+      const mins = Math.floor(remMs / 60000);
+      const secs = Math.floor((remMs % 60000) / 1000);
+      const el = document.getElementById('sessionTimerDisplay');
+      if (el) el.textContent = `Idle: ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }, 1000);
+  },
+
+  logout(silent = false) {
+    this.currentUser = null;
+    localStorage.removeItem('khyber_active_session');
+    if (this.sessionInterval) clearInterval(this.sessionInterval);
+    document.getElementById('authOverlay').classList.remove('hidden');
+    this.generateCaptcha('login');
+    this.fillDemoAndSolve();
+    if (!silent) AppUI.toast('Signed out safely', 'info');
+  }
+};
+
+const ThemeEngine = {
+  defaults: {
+    fontFamily: "'Inter', system-ui, sans-serif",
+    fontSize: '14px',
+    headerBg: '#0f172a',
+    headerText: '#f8fafc',
+    sidebarBg: '#1e293b',
+    sidebarText: '#e2e8f0',
+    mainBg: '#f1f5f9',
+    mainText: '#0f172a',
+    footerBg: '#0f172a',
+    footerText: '#cbd5e1'
+  },
+  applyUserTheme(themeObj) {
+    const t = Object.assign({}, this.defaults, themeObj || {});
+    const root = document.documentElement;
+    root.style.setProperty('--font-family', t.fontFamily);
+    root.style.setProperty('--font-size-base', t.fontSize);
+    root.style.setProperty('--header-bg', t.headerBg);
+    root.style.setProperty('--header-text', t.headerText);
+    root.style.setProperty('--sidebar-bg', t.sidebarBg);
+    root.style.setProperty('--sidebar-text', t.sidebarText);
+    root.style.setProperty('--main-bg', t.mainBg);
+    root.style.setProperty('--main-text', t.mainText);
+    root.style.setProperty('--footer-bg', t.footerBg);
+    root.style.setProperty('--footer-text', t.footerText);
+
+    const ff = document.getElementById('themeFontFamily');
+    if (ff) {
+      ff.value = t.fontFamily;
+      $(ff).trigger('change.select2');
+    }
+    const fs = document.getElementById('themeFontSize');
+    if (fs) {
+      fs.value = t.fontSize;
+      $(fs).trigger('change.select2');
+    }
+    const mapIds = {
+      themeHeaderBg: t.headerBg,
+      themeHeaderText: t.headerText,
+      themeSidebarBg: t.sidebarBg,
+      themeSidebarText: t.sidebarText,
+      themeMainBg: t.mainBg,
+      themeMainText: t.mainText,
+      themeFooterBg: t.footerBg,
+      themeFooterText: t.footerText
+    };
+    Object.entries(mapIds).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+  },
+  async saveUserTheme(e) {
+    e.preventDefault();
+    if (!AppAuth.currentUser) return;
+    const themeObj = {
+      fontFamily: document.getElementById('themeFontFamily').value,
+      fontSize: document.getElementById('themeFontSize').value,
+      headerBg: document.getElementById('themeHeaderBg').value,
+      headerText: document.getElementById('themeHeaderText').value,
+      sidebarBg: document.getElementById('themeSidebarBg').value,
+      sidebarText: document.getElementById('themeSidebarText').value,
+      mainBg: document.getElementById('themeMainBg').value,
+      mainText: document.getElementById('themeMainText').value,
+      footerBg: document.getElementById('themeFooterBg').value,
+      footerText: document.getElementById('themeFooterText').value
+    };
+    AppAuth.currentUser.theme = themeObj;
+    await DBEngine.put('users', AppAuth.currentUser);
+    this.applyUserTheme(themeObj);
+    AppUI.toast('Custom UI Theme saved to your user profile', 'success');
+  },
+  async resetDefaultTheme() {
+    if (!AppAuth.currentUser) return;
+    AppAuth.currentUser.theme = null;
+    await DBEngine.put('users', AppAuth.currentUser);
+    this.applyUserTheme(this.defaults);
+    AppUI.toast('Theme reset to default', 'info');
+  }
+};
+
+const GameEngine = {
+  mode: 'ai',
+  activePreset: null,
+  rules: {
+    needSix: true,
+    tripleSixBurn: true,
+    knockback: true,
+    exact100: true
+  },
+  players: [],
+  currentTurnIdx: 0,
+  consecutiveSixes: 0,
+  turnStartPosition: 0,
+  isAnimating: false,
+  totalTurnsCount: 0,
+  matchFinished: false,
+
+  async init() {
+    const presets = await DBEngine.getAll('presets');
+    this.populatePresetDropdown(presets);
+    this.activePreset = presets[0];
+    this.syncPresetToRules();
+    this.setupPlayersForMode('ai');
+    this.renderBoard();
+    this.renderPlayerCards();
+    this.bindKeyboardShortcuts();
+  },
+
+  populatePresetDropdown(presets) {
+    const sel = document.getElementById('selectRulePreset');
+    if (!sel) return;
+    sel.innerHTML = presets.map(p => `<option value="${p.id}">${AppUI.escapeHtml(p.name)}</option>`).join('');
+    $(sel).trigger('change.select2');
+  },
+
+  async applyPresetById(id) {
+    const preset = await DBEngine.getByKey('presets', Number(id));
+    if (!preset) return;
+    this.activePreset = preset;
+    this.syncPresetToRules();
+    this.renderBoard();
+    document.getElementById('activeRuleBadge').textContent = preset.name;
+    this.addMatchLog(`Switched rule preset to "${preset.name}" (${preset.region}).`);
+  },
+
+  syncPresetToRules() {
+    if (!this.activePreset) return;
+    this.rules.needSix = !!this.activePreset.needSix;
+    this.rules.tripleSixBurn = !!this.activePreset.tripleSixBurn;
+    this.rules.knockback = !!this.activePreset.knockback;
+    this.rules.exact100 = !!this.activePreset.exact100;
+
+    document.getElementById('chkNeedSix').checked = this.rules.needSix;
+    document.getElementById('chkTripleSixBurn').checked = this.rules.tripleSixBurn;
+    document.getElementById('chkKnockback').checked = this.rules.knockback;
+    document.getElementById('chkExact100').checked = this.rules.exact100;
+    this.updateRuleSubtext();
+  },
+
+  syncRuleCheckboxes() {
+    this.rules.needSix = document.getElementById('chkNeedSix').checked;
+    this.rules.tripleSixBurn = document.getElementById('chkTripleSixBurn').checked;
+    this.rules.knockback = document.getElementById('chkKnockback').checked;
+    this.rules.exact100 = document.getElementById('chkExact100').checked;
+    this.updateRuleSubtext();
+    this.addMatchLog('Updated KPK Hujra rule toggles for active match.');
+  },
+
+  updateRuleSubtext() {
+    const parts = [];
+    parts.push(this.rules.needSix ? '6 to Open' : 'Open Any Roll');
+    parts.push(this.rules.tripleSixBurn ? '3x6 Burns Turn' : 'Unlimited 6s');
+    parts.push(this.rules.knockback ? 'Takkar Cut ON' : 'No Cut');
+    parts.push(this.rules.exact100 ? 'Exact 100' : 'Any >=100');
+    document.getElementById('ruleSubtextDisplay').textContent = parts.join(' • ');
+  },
+
+  changeGameMode(mode) {
+    this.mode = mode;
+    const modeLabels = {
+      ai: 'Vs KPK Ustad Bot',
+      local2: '2P Local Hujra',
+      local3: '3P Local Hujra',
+      local4: '4P Full Hujra',
+      webrtc: 'WebRTC P2P Live'
+    };
+    document.getElementById('matchModePill').textContent = modeLabels[mode] || 'Hujra Match';
+    this.setupPlayersForMode(mode);
+    this.renderBoard();
+    this.renderPlayerCards();
+    this.addMatchLog(`Started new game in ${modeLabels[mode]} mode.`);
+  },
+
+  setupPlayersForMode(mode) {
+    this.currentTurnIdx = 0;
+    this.consecutiveSixes = 0;
+    this.totalTurnsCount = 0;
+    this.matchFinished = false;
+
+    const baseNames = [
+      { name: 'Malik Sher (P1)', isAI: false, color: APP_CONFIG.tokenColors[0], short: 'P1' },
+      { name: mode === 'ai' ? 'KPK Ustad Bot' : 'Zarak Khan (P2)', isAI: mode === 'ai', color: APP_CONFIG.tokenColors[1], short: mode === 'ai' ? 'AI' : 'P2' },
+      { name: 'Gulalai Bibi (P3)', isAI: false, color: APP_CONFIG.tokenColors[2], short: 'P3' },
+      { name: 'Arsalaan Swati (P4)', isAI: false, color: APP_CONFIG.tokenColors[3], short: 'P4' }
+    ];
+
+    let count = 2;
+    if (mode === 'local3') count = 3;
+    if (mode === 'local4') count = 4;
+
+    this.players = baseNames.slice(0, count).map((p, idx) => ({
+      index: idx,
+      name: p.name,
+      short: p.short,
+      color: p.color,
+      isAI: p.isAI,
+      pos: this.rules.needSix ? 0 : 1,
+      unlocked: !this.rules.needSix,
+      sixesRolled: 0,
+      cutsMade: 0,
+      snakesBitten: 0,
+      laddersClimbed: 0
+    }));
+
+    this.turnStartPosition = this.players[0].pos;
+    this.updateTurnBanner();
+  },
+
+  confirmResetMatch() {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Reset Current Match?',
+      text: 'All current board token positions will be reset to Hujra Camp.',
+      showCancelButton: true,
+      confirmButtonColor: '#059669',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Yes, Start Fresh'
+    }).then(res => {
+      if (res.isConfirmed) {
+        this.setupPlayersForMode(this.mode);
+        this.renderBoard();
+        this.renderPlayerCards();
+        AppUI.toast('New Hujra match initialized', 'success');
+      }
+    });
+  },
+
+  getSquareCoordinates(sq) {
+    const zeroBased = sq - 1;
+    const rowFromBottom = Math.floor(zeroBased / 10);
+    const colInRow = zeroBased % 10;
+    const col = rowFromBottom % 2 === 0 ? colInRow : 9 - colInRow;
+    const row = 9 - rowFromBottom;
+    return {
+      row,
+      col,
+      cx: col * 100 + 50,
+      cy: row * 100 + 50
+    };
+  },
+
+  renderBoard() {
+    const wrapper = document.getElementById('boardCellsWrapper');
+    if (!wrapper) return;
+    let html = '';
+
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+
+    for (let r = 0; r < 10; r++) {
+      const rowFromBottom = 9 - r;
+      for (let c = 0; c < 10; c++) {
+        const sq = rowFromBottom % 2 === 0
+          ? rowFromBottom * 10 + c + 1
+          : rowFromBottom * 10 + (10 - c);
+
+        const isSafe = APP_CONFIG.safeSquares.includes(sq);
+        const isGoal = sq === 100;
+        const isKingSnake = sq === 99 && snakes[99];
+        const parityClass = (r + c) % 2 === 0 ? 'cell-even' : 'cell-odd';
+        const specialClass = isGoal ? 'cell-goal' : isKingSnake ? 'cell-king-snake' : isSafe ? 'cell-safe' : '';
+
+        const tokensHere = this.players.filter(p => p.pos === sq);
+        const tokensHtml = tokensHere.map(p => `
+          <span class="token-pin animate__animated animate__bounceIn" style="background-color:${p.color}" title="${AppUI.escapeHtml(p.name)}">
+            ${p.short}
+          </span>
+        `).join('');
+
+        let badgeHtml = '';
+        if (isGoal) {
+          badgeHtml = '<i class="fa-solid fa-crown text-[10px] text-white"></i>';
+        } else if (ladders[sq]) {
+          badgeHtml = `<span class="text-[9px] font-bold text-emerald-700"><i class="fa-solid fa-stairs"></i>↑${ladders[sq]}</span>`;
+        } else if (snakes[sq]) {
+          badgeHtml = `<span class="text-[9px] font-bold text-rose-700"><i class="fa-solid fa-staff-snake"></i>↓${snakes[sq]}</span>`;
+        } else if (isSafe) {
+          badgeHtml = '<i class="fa-solid fa-shield-heart text-[9px] text-emerald-700" title="Hujra Safe Square"></i>';
+        }
+
+        html += `
+          <div class="board-cell ${parityClass} ${specialClass}" data-square="${sq}">
+            <div class="flex items-center justify-between w-full leading-none">
+              <span class="text-[10px] sm:text-xs font-extrabold ${isGoal ? 'text-white' : 'text-slate-700'}">${sq}</span>
+              ${badgeHtml}
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-0.5 min-h-[18px]">
+              ${tokensHtml}
+            </div>
+          </div>
+        `;
+      }
+    }
+    wrapper.innerHTML = html;
+    this.renderSvgSnakesAndLadders(ladders, snakes);
+  },
+
+  renderSvgSnakesAndLadders(ladders, snakes) {
+    const svg = document.getElementById('boardSvgOverlay');
+    if (!svg) return;
+    let svgContent = '';
+
+    Object.entries(ladders).forEach(([startStr, endVal]) => {
+      const start = Number(startStr);
+      const end = Number(endVal);
+      const p1 = this.getSquareCoordinates(start);
+      const p2 = this.getSquareCoordinates(end);
+
+      const dx = p2.cx - p1.cx;
+      const dy = p2.cy - p1.cy;
+      const len = Math.hypot(dx, dy);
+      const nx = (-dy / len) * 14;
+      const ny = (dx / len) * 14;
+
+      svgContent += `
+        <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.82"/>
+        <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.82"/>
+      `;
+
+      const steps = Math.max(4, Math.floor(len / 42));
+      for (let i = 1; i < steps; i++) {
+        const t = i / steps;
+        const rx = p1.cx + dx * t;
+        const ry = p1.cy + dy * t;
+        svgContent += `
+          <line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+        `;
+      }
+    });
+
+    Object.entries(snakes).forEach(([headStr, tailVal]) => {
+      const head = Number(headStr);
+      const tail = Number(tailVal);
+      const p1 = this.getSquareCoordinates(head);
+      const p2 = this.getSquareCoordinates(tail);
+
+      const midX = (p1.cx + p2.cx) / 2 + (head % 2 === 0 ? 65 : -65);
+      const midY = (p1.cy + p2.cy) / 2;
+      const isKing = head === 99;
+      const strokeColor = isKing ? '#be123c' : '#e11d48';
+
+      svgContent += `
+        <path d="M ${p1.cx} ${p1.cy} Q ${midX} ${midY} ${p2.cx} ${p2.cy}" fill="none" stroke="${strokeColor}" stroke-width="${isKing ? 13 : 9}" stroke-linecap="round" opacity="0.78"/>
+        <path d="M ${p1.cx} ${p1.cy} Q ${midX} ${midY} ${p2.cx} ${p2.cy}" fill="none" stroke="#fecdd3" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round" opacity="0.9"/>
+        <circle cx="${p1.cx}" cy="${p1.cy}" r="${isKing ? 16 : 12}" fill="${strokeColor}" />
+        <circle cx="${p1.cx - 4}" cy="${p1.cy - 3}" r="2.5" fill="#ffffff" />
+        <circle cx="${p1.cx + 4}" cy="${p1.cy - 3}" r="2.5" fill="#ffffff" />
+      `;
+    });
+
+    svg.innerHTML = svgContent;
+  },
+
+  renderPlayerCards() {
+    const container = document.getElementById('activePlayersCards');
+    if (!container) return;
+    container.innerHTML = this.players.map((p, idx) => {
+      const isTurn = idx === this.currentTurnIdx && !this.matchFinished;
+      const statusText = p.pos === 0 ? 'In Hujra Camp (Need 6)' : `Square ${p.pos}/100`;
+      return `
+        <div class="p-3 rounded-xl border ${isTurn ? 'border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-500/20' : 'border-slate-200 bg-slate-50'} flex items-center justify-between transition">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-full text-white font-bold text-xs flex items-center justify-center shadow" style="background-color:${p.color}">
+              ${p.short}
+            </span>
+            <div>
+              <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                <span>${AppUI.escapeHtml(p.name)}</span>
+                ${isTurn ? '<span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>' : ''}
+              </div>
+              <div class="text-[11px] font-semibold text-slate-600">${statusText}</div>
+            </div>
+          </div>
+          <div class="text-right text-[10px] text-slate-500 font-semibold">
+            <div>Cuts: ${p.cutsMade}</div>
+            <div>6s: ${p.sixesRolled}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  setDiceVisual(val) {
+    const map = {
+      1: [4],
+      2: [0, 8],
+      3: [0, 4, 8],
+      4: [0, 2, 6, 8],
+      5: [0, 2, 4, 6, 8],
+      6: [0, 2, 3, 5, 6, 8]
+    };
+    const activePips = map[val] || [4];
+    for (let i = 0; i < 9; i++) {
+      const pip = document.getElementById(`pip-${i}`);
+      if (!pip) continue;
+      pip.className = 'pip';
+      if (activePips.includes(i)) {
+        pip.classList.add('active');
+        if (val === 6) pip.classList.add('pip-six');
+      }
+    }
+  },
+
+  async triggerRoll(forcedRollValue = null, fromRemotePeer = false) {
+    if (this.isAnimating || this.matchFinished) return;
+    const currentPlayer = this.players[this.currentTurnIdx];
+
+    if (currentPlayer.isAI && !forcedRollValue) return;
+
+    this.isAnimating = true;
+    const cube = document.getElementById('diceRollButton');
+    const primaryBtn = document.getElementById('primaryRollBtn');
+    cube.classList.add('dice-rolling');
+    if (primaryBtn) primaryBtn.disabled = true;
+
+    GameAudio.diceRoll();
+
+    await new Promise(r => setTimeout(r, 420));
+    cube.classList.remove('dice-rolling');
+
+    const roll = forcedRollValue || (Math.floor(Math.random() * 6) + 1);
+    this.setDiceVisual(roll);
+    document.getElementById('lastRollLabel').textContent = `${currentPlayer.short} Rolled: ${roll}`;
+
+    if (!fromRemotePeer && this.mode === 'webrtc') {
+      P2PEngine.broadcastGameAction({ type: 'ROLL', roll, playerIdx: this.currentTurnIdx });
+    }
+
+    await this.processRollOutcome(currentPlayer, roll);
+
+    if (primaryBtn) primaryBtn.disabled = false;
+    this.isAnimating = false;
+
+    if (!this.matchFinished && this.players[this.currentTurnIdx].isAI) {
+      setTimeout(() => {
+        this.executeAITurn();
+      }, 650);
+    }
+  },
+
+  async executeAITurn() {
+    if (this.matchFinished || this.isAnimating) return;
+    const aiRoll = Math.floor(Math.random() * 6) + 1;
+    await this.triggerRoll(aiRoll, false);
+  },
+
+  async processRollOutcome(player, roll) {
+    this.totalTurnsCount += 1;
+
+    if (roll === 6) {
+      this.consecutiveSixes += 1;
+      player.sixesRolled += 1;
+    } else {
+      this.consecutiveSixes = 0;
+    }
+
+    document.getElementById('streakBadge').textContent = `6-Streak: ${this.consecutiveSixes}/3`;
+
+    if (this.rules.tripleSixBurn && this.consecutiveSixes === 3) {
+      player.pos = this.turnStartPosition;
+      this.consecutiveSixes = 0;
+      document.getElementById('streakBadge').textContent = '6-Streak: 0/3';
+      this.setCommentary(`Teen Chakkay Barsi! ${player.name} rolled three 6s in a row! Turn burned & reverted to Square ${player.pos}.`);
+      this.addMatchLog(`${player.name} rolled 6-6-6 (Teen Chakkay Barsi). Reverted to Square ${player.pos}.`);
+      GameAudio.snakeBite();
+      this.renderBoard();
+      this.renderPlayerCards();
+      this.advanceToNextPlayer();
+      return;
+    }
+
+    if (this.rules.needSix && !player.unlocked) {
+      if (roll === 6) {
+        player.unlocked = true;
+        player.pos = 1;
+        this.setCommentary(`Mashallah Chakka! ${player.name} unlocked Dakhila onto Square 1 and earned a bonus roll!`);
+        this.addMatchLog(`${player.name} rolled 6 to enter Square 1 (Dakhila) + Bonus Roll.`);
+        GameAudio.stepHop();
+        this.renderBoard();
+        this.renderPlayerCards();
+        return;
+      } else {
+        this.setCommentary(`${player.name} rolled ${roll}. Still waiting in Hujra Camp for a 6 (Chakka) to enter!`);
+        this.addMatchLog(`${player.name} rolled ${roll} in Camp (Needs 6).`);
+        this.renderPlayerCards();
+        this.advanceToNextPlayer();
+        return;
+      }
+    }
+
+    const targetPos = player.pos + roll;
+    if (this.rules.exact100 && targetPos > 100) {
+      this.setCommentary(`Pura 100 Required! ${player.name} needed ${100 - player.pos} but rolled ${roll}. Stays on ${player.pos}.`);
+      this.addMatchLog(`${player.name} overshot 100 with a ${roll}.`);
+      if (roll !== 6) {
+        this.advanceToNextPlayer();
+      }
+      this.renderPlayerCards();
+      return;
+    }
+
+    const finalStepPos = Math.min(100, targetPos);
+    for (let step = player.pos + 1; step <= finalStepPos; step++) {
+      player.pos = step;
+      GameAudio.stepHop();
+      this.renderBoard();
+      await new Promise(r => setTimeout(r, 95));
+    }
+
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+
+    if (ladders[player.pos]) {
+      const dest = ladders[player.pos];
+      this.setCommentary(`Daaltay Rasha! ${player.name} climbed the ladder from ${player.pos} up to ${dest}!`);
+      this.addMatchLog(`${player.name} climbed ladder ${player.pos} → ${dest}.`);
+      player.pos = dest;
+      player.laddersClimbed += 1;
+      GameAudio.ladderClimb();
+      this.renderBoard();
+      await new Promise(r => setTimeout(r, 260));
+    } else if (snakes[player.pos]) {
+      const dest = snakes[player.pos];
+      const isKalamar = player.pos === 99;
+      this.setCommentary(`${isKalamar ? 'WAH KALAMAR 99!' : 'Saanp Bite!'} ${player.name} slid down from ${player.pos} to ${dest}!`);
+      this.addMatchLog(`${player.name} bitten by snake at ${player.pos} → ${dest}.`);
+      player.pos = dest;
+      player.snakesBitten += 1;
+      GameAudio.snakeBite();
+      this.renderBoard();
+      await new Promise(r => setTimeout(r, 260));
+    }
+
+    if (this.rules.knockback && player.pos > 0 && player.pos < 100 && !APP_CONFIG.safeSquares.includes(player.pos)) {
+      const victims = this.players.filter(other => other.index !== player.index && other.pos === player.pos);
+      if (victims.length > 0) {
+        victims.forEach(v => {
+          v.pos = 1;
+          player.cutsMade += 1;
+          this.setCommentary(`KPK TAKKAR CUT! ${player.name} landed on ${v.name} and knocked them back to Square 1!`);
+          this.addMatchLog(`TAKKAR! ${player.name} knocked ${v.name} back to Square 1.`);
+        });
+        GameAudio.takkarCut();
+        this.renderBoard();
+      }
+    }
+
+    if (player.pos === 100) {
+      this.matchFinished = true;
+      GameAudio.victoryFanfare();
+      this.setCommentary(`MUBARAK SHA! ${player.name} conquered Square 100 and won the Hujra Championship!`);
+      this.addMatchLog(`VICTORY! ${player.name} reached Square 100 in ${this.totalTurnsCount} turns.`);
+      this.renderBoard();
+      this.renderPlayerCards();
+      await this.recordCompletedMatch(player);
+      Swal.fire({
+        icon: 'success',
+        title: `Mubarak! ${player.name} Wins!`,
+        html: `Completed under <strong>${AppUI.escapeHtml(this.activePreset.name)}</strong> in <strong>${this.totalTurnsCount}</strong> total turns.<br>Takkar Knockbacks: <strong>${player.cutsMade}</strong>`,
+        confirmButtonColor: '#059669',
+        confirmButtonText: 'Celebrate & View Board'
+      });
+      return;
+    }
+
+    this.renderPlayerCards();
+
+    if (roll === 6) {
+      this.setCommentary(`Chakka Bonus! ${player.name} rolled a 6 and gets another turn!`);
+    } else {
+      this.advanceToNextPlayer();
+    }
+  },
+
+  advanceToNextPlayer() {
+    this.consecutiveSixes = 0;
+    document.getElementById('streakBadge').textContent = '6-Streak: 0/3';
+    this.currentTurnIdx = (this.currentTurnIdx + 1) % this.players.length;
+    this.turnStartPosition = this.players[this.currentTurnIdx].pos;
+    this.updateTurnBanner();
+    this.renderPlayerCards();
+  },
+
+  updateTurnBanner() {
+    const p = this.players[this.currentTurnIdx];
+    if (!p) return;
+    document.getElementById('turnBannerText').textContent = `${p.name}'s Turn (${p.pos === 0 ? 'Camp' : 'Sq ' + p.pos})`;
+  },
+
+  setCommentary(msg) {
+    const box = document.getElementById('pashtoCommentaryBox');
+    if (box) box.textContent = `"${msg}"`;
+  },
+
+  addMatchLog(text) {
+    const list = document.getElementById('liveMatchLogList');
+    if (!list) return;
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const item = document.createElement('div');
+    item.className = 'p-2 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-2 animate__animated animate__fadeInDown animate__faster';
+    item.innerHTML = `<span class="text-slate-800 font-medium">${AppUI.escapeHtml(text)}</span><span class="text-[10px] text-slate-400 shrink-0">${time}</span>`;
+    list.prepend(item);
+  },
+
+  async recordCompletedMatch(winnerPlayer) {
+    const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ');
+    const newMatch = {
+      date: nowStr,
+      winner: winnerPlayer.name,
+      presetName: this.activePreset ? this.activePreset.name : 'KPK Hujra Rules',
+      turns: this.totalTurnsCount,
+      notes: `Takkar Cuts: ${winnerPlayer.cutsMade}, Ladders: ${winnerPlayer.laddersClimbed}, Snakes: ${winnerPlayer.snakesBitten}`
+    };
+    await DBEngine.put('matches', newMatch);
+    await MatchesCRUD.refreshTable();
+  },
+
+  printCurrentMatchReport() {
+    const nowStr = new Date().toLocaleString();
+    document.getElementById('printReportDate').textContent = `Date: ${nowStr}`;
+    document.getElementById('printReportId').textContent = `Preset: ${this.activePreset ? this.activePreset.name : 'KPK Hujra'}`;
+
+    const rows = this.players.map(p => `
+      <tr>
+        <td style="border:1px solid #000;padding:8px;font-weight:bold;">${AppUI.escapeHtml(p.name)}</td>
+        <td style="border:1px solid #000;padding:8px;">Square ${p.pos} / 100</td>
+        <td style="border:1px solid #000;padding:8px;">${p.sixesRolled}</td>
+        <td style="border:1px solid #000;padding:8px;">${p.cutsMade}</td>
+        <td style="border:1px solid #000;padding:8px;">${p.laddersClimbed} / ${p.snakesBitten}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('printReportBody').innerHTML = `
+      <p><strong>Active KPK Regulations:</strong> Need 6: ${this.rules.needSix ? 'Yes' : 'No'} | 3x6 Burn: ${this.rules.tripleSixBurn ? 'Yes' : 'No'} | Takkar Knockback: ${this.rules.knockback ? 'Yes' : 'No'} | Exact 100: ${this.rules.exact100 ? 'Yes' : 'No'}</p>
+      <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+        <thead>
+          <tr style="background:#f1f5f9;">
+            <th style="border:1px solid #000;padding:8px;text-align:left;">Player</th>
+            <th style="border:1px solid #000;padding:8px;text-align:left;">Position</th>
+            <th style="border:1px solid #000;padding:8px;text-align:left;">Chakkas (6s)</th>
+            <th style="border:1px solid #000;padding:8px;text-align:left;">Takkar Cuts</th>
+            <th style="border:1px solid #000;padding:8px;text-align:left;">Ladders / Snakes</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+    window.print();
+  },
+
+  bindKeyboardShortcuts() {
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && AppRouter.currentRoute === '/play') {
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag)) return;
+        e.preventDefault();
+        this.triggerRoll();
+      }
+    });
+  }
+};
+
+const P2PEngine = {
+  peer: null,
+  conn: null,
+  rawPc: null,
+  rawChannel: null,
+  qrScanner: null,
+  localChannel: null,
+
+  init() {
+    if ('BroadcastChannel' in window) {
+      this.localChannel = new BroadcastChannel('khyber_saanp_seedhi_p2p');
+      this.localChannel.onmessage = (event) => {
+        this.handleIncomingData(event.data);
+      };
+    }
+  },
+
+  initPeerSession() {
+    const randomCode = 'KPK-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+    document.getElementById('myPeerIdInput').value = randomCode;
+    this.renderRoomQrCode(randomCode);
+
+    try {
+      if (this.peer) this.peer.destroy();
+      this.peer = new Peer(randomCode);
+      this.peer.on('open', (id) => {
+        document.getElementById('myPeerIdInput').value = id;
+        this.renderRoomQrCode(id);
+        this.updateStatusBadge('Room QR Active: ' + id, true);
+        AppUI.toast('WebRTC Room QR generated!', 'success');
+      });
+      this.peer.on('connection', (connection) => {
+        this.conn = connection;
+        this.setupPeerConnectionHandlers();
+      });
+      this.peer.on('error', () => {
+        this.updateStatusBadge('Local/QR Code Ready: ' + randomCode, true);
+      });
+    } catch (e) {
+      this.updateStatusBadge('Room Code Ready: ' + randomCode, true);
+    }
+  },
+
+  renderRoomQrCode(textPayload) {
+    const container = document.getElementById('roomQrContainer');
+    if (!container) return;
+    container.innerHTML = '';
+    new QRCode(container, {
+      text: textPayload,
+      width: 140,
+      height: 140,
+      colorDark: '#0f172a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  },
+
+  copyRoomId() {
+    const val = document.getElementById('myPeerIdInput').value;
+    if (!val || val === 'Not Initialized') {
+      AppUI.toast('Click Generate Room QR first', 'warning');
+      return;
+    }
+    navigator.clipboard.writeText(val);
+    AppUI.toast('Room ID copied to clipboard', 'success');
+  },
+
+  connectToPeerId() {
+    const remoteId = document.getElementById('remotePeerIdInput').value.trim();
+    if (!remoteId) {
+      AppUI.toast('Enter or scan a friend Room ID first', 'warning');
+      return;
+    }
+    GameEngine.changeGameMode('webrtc');
+    if (this.peer) {
+      this.conn = this.peer.connect(remoteId);
+      this.setupPeerConnectionHandlers();
+    }
+    this.updateStatusBadge('Connected to ' + remoteId, true);
+    AppUI.toast(`Synced with Room ${remoteId}! Switching to WebRTC mode.`, 'success');
+  },
+
+  setupPeerConnectionHandlers() {
+    if (!this.conn) return;
+    this.conn.on('open', () => {
+      GameEngine.changeGameMode('webrtc');
+      this.updateStatusBadge('P2P WebRTC Connected', true);
+      AppUI.toast('Peer-to-Peer WebRTC DataChannel Connected!', 'success');
+    });
+    this.conn.on('data', (data) => {
+      this.handleIncomingData(data);
+    });
+  },
+
+  async createRawWebRTCOffer() {
+    this.rawPc = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+    this.rawChannel = this.rawPc.createDataChannel('khyberGameChannel');
+    this.rawChannel.onopen = () => {
+      GameEngine.changeGameMode('webrtc');
+      this.updateStatusBadge('Direct WebRTC Connected', true);
+      AppUI.toast('Direct Serverless WebRTC Connected!', 'success');
+    };
+    this.rawChannel.onmessage = (e) => {
+      this.handleIncomingData(JSON.parse(e.data));
+    };
+
+    this.rawPc.onicecandidate = (e) => {
+      if (!e.candidate && this.rawPc.localDescription) {
+        const token = btoa(JSON.stringify(this.rawPc.localDescription));
+        document.getElementById('webrtcSdpTextarea').value = token;
+        this.renderRoomQrCode(token.slice(0, 120));
+        AppUI.toast('SDP Offer created! Share or scan with Guest.', 'success');
+      }
+    };
+
+    const offer = await this.rawPc.createOffer();
+    await this.rawPc.setLocalDescription(offer);
+  },
+
+  async acceptRawWebRTCSignal() {
+    const rawText = document.getElementById('webrtcSdpTextarea').value.trim();
+    if (!rawText) {
+      AppUI.toast('Paste an SDP Offer or Answer token first', 'warning');
+      return;
+    }
+    try {
+      const desc = JSON.parse(atob(rawText));
+      if (desc.type === 'offer') {
+        this.rawPc = new RTCPeerConnection({
+          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        });
+        this.rawPc.ondatachannel = (e) => {
+          this.rawChannel = e.channel;
+          this.rawChannel.onopen = () => {
+            GameEngine.changeGameMode('webrtc');
+            this.updateStatusBadge('Direct WebRTC Connected', true);
+            AppUI.toast('Direct WebRTC P2P Link Active!', 'success');
+          };
+          this.rawChannel.onmessage = (ev) => {
+            this.handleIncomingData(JSON.parse(ev.data));
+          };
+        };
+        this.rawPc.onicecandidate = (e) => {
+          if (!e.candidate && this.rawPc.localDescription) {
+            const ansToken = btoa(JSON.stringify(this.rawPc.localDescription));
+            document.getElementById('webrtcSdpTextarea').value = ansToken;
+            AppUI.toast('SDP Answer generated! Send back to Host.', 'success');
+          }
+        };
+        await this.rawPc.setRemoteDescription(desc);
+        const answer = await this.rawPc.createAnswer();
+        await this.rawPc.setLocalDescription(answer);
+      } else if (desc.type === 'answer' && this.rawPc) {
+        await this.rawPc.setRemoteDescription(desc);
+        this.updateStatusBadge('Direct WebRTC Connected', true);
+        AppUI.toast('Handshake verified! P2P Connected.', 'success');
+      }
+    } catch (err) {
+      AppUI.toast('Invalid SDP token format', 'error');
+    }
+  },
+
+  async startCameraScanner() {
+    const viewport = document.getElementById('qrReaderViewport');
+    viewport.classList.remove('hidden');
+    try {
+      if (!this.qrScanner) {
+        this.qrScanner = new Html5Qrcode('qrReaderViewport');
+      }
+      await this.qrScanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        (decodedText) => {
+          document.getElementById('remotePeerIdInput').value = decodedText;
+          this.stopCameraScanner();
+          this.connectToPeerId();
+        },
+        () => {}
+      );
+    } catch (e) {
+      AppUI.toast('Camera access unavailable or denied on this device', 'warning');
+    }
+  },
+
+  async stopCameraScanner() {
+    const viewport = document.getElementById('qrReaderViewport');
+    if (this.qrScanner) {
+      try {
+        await this.qrScanner.stop();
+      } catch (e) {}
+    }
+    viewport.classList.add('hidden');
+  },
+
+  broadcastGameAction(payload) {
+    if (this.conn && this.conn.open) {
+      this.conn.send(payload);
+    }
+    if (this.rawChannel && this.rawChannel.readyState === 'open') {
+      this.rawChannel.send(JSON.stringify(payload));
+    }
+    if (this.localChannel) {
+      this.localChannel.postMessage(payload);
+    }
+  },
+
+  handleIncomingData(data) {
+    if (!data || !data.type) return;
+    if (data.type === 'ROLL') {
+      GameEngine.triggerRoll(data.roll, true);
+    } else if (data.type === 'CHAT') {
+      this.appendChatMessage(data.sender, data.text);
+    }
+  },
+
+  sendChatMessage() {
+    const input = document.getElementById('p2pChatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const sender = AppAuth.currentUser ? AppAuth.currentUser.username : 'Hujra Peer';
+    this.appendChatMessage(sender, text);
+    this.broadcastGameAction({ type: 'CHAT', sender, text });
+    input.value = '';
+  },
+
+  appendChatMessage(sender, text) {
+    const box = document.getElementById('p2pChatMessages');
+    if (!box) return;
+    const div = document.createElement('div');
+    div.className = 'p-1.5 rounded bg-slate-50 border border-slate-200/70';
+    div.innerHTML = `<strong class="text-emerald-700">${AppUI.escapeHtml(sender)}:</strong> <span>${AppUI.escapeHtml(text)}</span>`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  },
+
+  updateStatusBadge(label, active) {
+    const badge = document.getElementById('p2pConnectionBadge');
+    const dot = document.getElementById('sidebarP2PDot');
+    const sideText = document.getElementById('sidebarP2PText');
+    if (badge) {
+      badge.textContent = label;
+      badge.className = active
+        ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800'
+        : 'px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+    }
+    if (dot) {
+      dot.className = active ? 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping' : 'w-2.5 h-2.5 rounded-full bg-amber-400';
+    }
+    if (sideText) sideText.textContent = label;
+  }
+};
+
+const PlayersCRUD = {
+  dtInstance: null,
+  pendingAvatarDataUrl: '',
+
+  async refreshTable() {
+    const players = await DBEngine.getAll('players');
+    if (this.dtInstance) {
+      this.dtInstance.destroy();
+      this.dtInstance = null;
+    }
+    const tbody = document.getElementById('playersTableBody');
+    if (!tbody) return;
+
+    const isAdmin = AppAuth.currentUser && AppAuth.currentUser.role === 'Admin';
+
+    tbody.innerHTML = players.map(p => {
+      const avatarHtml = p.avatar
+        ? `<img src="${p.avatar}" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-emerald-500">`
+        : `<span class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">${AppUI.escapeHtml(p.name.slice(0, 2).toUpperCase())}</span>`;
+
+      return `
+        <tr>
+          <td>
+            <div class="flex items-center gap-2.5">
+              ${avatarHtml}
+              <span class="font-bold text-slate-900">${AppUI.escapeHtml(p.name)}</span>
+            </div>
+          </td>
+          <td>${AppUI.escapeHtml(p.district)}</td>
+          <td><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold">${AppUI.escapeHtml(p.rank)}</span></td>
+          <td>${p.matches}</td>
+          <td class="font-bold text-emerald-700">${p.wins}</td>
+          <td>${p.takkarCuts}</td>
+          <td>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="PlayersCRUD.openPlayerModal(${p.id})" class="min-w-[36px] min-h-[36px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center" title="Edit Player">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              ${isAdmin ? `
+              <button type="button" onclick="PlayersCRUD.deletePlayer(${p.id})" class="min-w-[36px] min-h-[36px] rounded-lg bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center" title="Delete Player">
+                <i class="fa-solid fa-trash"></i>
+              </button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    this.dtInstance = AppUI.initDataTable('#playersDataTable');
+  },
+
+  async openPlayerModal(editId = null) {
+    let player = { name: '', district: 'Peshawar', rank: 'Hujra Contender', matches: 0, wins: 0, takkarCuts: 0, avatar: '' };
+    if (editId) {
+      const found = await DBEngine.getByKey('players', Number(editId));
+      if (found) player = found;
+    }
+    this.pendingAvatarDataUrl = player.avatar || '';
+
+    const html = `
+      <form id="playerModalForm" class="space-y-3.5" autocomplete="off">
+        <input type="hidden" id="playerEditId" value="${editId || ''}">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+          <input type="text" id="playerNameInput" value="${AppUI.escapeHtml(player.name)}" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs" placeholder="e.g. Tariq Khan Afridi">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">KPK District / Hujra</label>
+            <select id="playerDistrictInput" class="w-full">
+              ${['Peshawar', 'Mardan', 'Swat', 'Kohat', 'Charsadda', 'Abbottabad', 'Bannu'].map(d => `<option value="${d}" ${player.district === d ? 'selected' : ''}>${d}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Hujra Rank / Title</label>
+            <input type="text" id="playerRankInput" value="${AppUI.escapeHtml(player.rank)}" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Matches</label>
+            <input type="number" id="playerMatchesInput" value="${player.matches}" min="0" class="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-300 text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Wins</label>
+            <input type="number" id="playerWinsInput" value="${player.wins}" min="0" class="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-300 text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Takkar Cuts</label>
+            <input type="number" id="playerCutsInput" value="${player.takkarCuts}" min="0" class="w-full min-h-[44px] px-3 py-2 rounded-lg border border-slate-300 text-xs">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Player Avatar (JPG, PNG, WEBP, GIF — Auto-Compressed &lt;100KB)</label>
+          <input type="file" id="playerAvatarFile" accept="image/jpeg,image/png,image/webp,image/gif" onchange="PlayersCRUD.handleAvatarUpload(event)" class="w-full text-xs">
+          <div id="avatarUploadFeedback" class="text-[11px] text-emerald-700 font-medium mt-1"></div>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="AppUI.attemptCloseModal()" class="min-h-[44px] px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+          <button type="submit" id="savePlayerBtn" class="min-h-[44px] px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Save Player</button>
+        </div>
+      </form>
+    `;
+
+    AppUI.openModal(editId ? 'Edit Hujra Player Profile' : 'Register New Hujra Player', html);
+
+    const validator = new window.JustValidate('#playerModalForm', {
+      errorFieldCssClass: 'border-red-500',
+      errorLabelStyle: { color: '#dc2626', fontSize: '11px' }
+    });
+    validator
+      .addField('#playerNameInput', [
+        { rule: 'required', errorMessage: 'Player name is required' },
+        { rule: 'minLength', value: 3, errorMessage: 'At least 3 characters' }
+      ])
+      .addField('#playerRankInput', [
+        { rule: 'required', errorMessage: 'Rank title is required' }
+      ])
+      .onSuccess(async (e) => {
+        e.preventDefault();
+        const item = {
+          name: document.getElementById('playerNameInput').value.trim(),
+          district: document.getElementById('playerDistrictInput').value,
+          rank: document.getElementById('playerRankInput').value.trim(),
+          matches: Number(document.getElementById('playerMatchesInput').value) || 0,
+          wins: Number(document.getElementById('playerWinsInput').value) || 0,
+          takkarCuts: Number(document.getElementById('playerCutsInput').value) || 0,
+          avatar: this.pendingAvatarDataUrl
+        };
+        if (editId) item.id = Number(editId);
+        await DBEngine.put('players', item);
+        AppUI.forceCloseModal();
+        await this.refreshTable();
+        AppUI.toast('Player record saved successfully', 'success');
+      });
+  },
+
+  handleAvatarUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      AppUI.toast('Invalid file type! Only JPG, PNG, WEBP, GIF allowed.', 'error');
+      event.target.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxDim = 220;
+        let w = img.width;
+        let h = img.height;
+        if (w > h && w > maxDim) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else if (h > maxDim) {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        let quality = 0.82;
+        let dataUrl = canvas.toDataURL('image/jpeg', quality);
+        while (dataUrl.length > 100 * 1024 && quality > 0.2) {
+          quality -= 0.12;
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
+        this.pendingAvatarDataUrl = dataUrl;
+        const kbSize = Math.round((dataUrl.length * 3) / 4 / 1024);
+        document.getElementById('avatarUploadFeedback').textContent = `Verified & compressed to ${kbSize}KB (<100KB limit).`;
+      };
+      img.onerror = () => {
+        AppUI.toast('Corrupted or invalid image file rejected', 'error');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  },
+
+  deletePlayer(id) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Delete Player Profile?',
+      text: 'This action will permanently remove this player from IndexedDB.',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      confirmButtonText: 'Yes, Delete'
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        await DBEngine.delete('players', Number(id));
+        await this.refreshTable();
+        AppUI.toast('Player deleted', 'info');
+      }
+    });
+  }
+};
+
+const MatchesCRUD = {
+  dtInstance: null,
+
+  async refreshTable() {
+    const matches = await DBEngine.getAll('matches');
+    if (this.dtInstance) {
+      this.dtInstance.destroy();
+      this.dtInstance = null;
+    }
+    const tbody = document.getElementById('matchesTableBody');
+    if (!tbody) return;
+
+    const isAdmin = AppAuth.currentUser && AppAuth.currentUser.role === 'Admin';
+
+    tbody.innerHTML = matches.map(m => `
+      <tr>
+        <td class="font-mono font-bold">#${m.id}</td>
+        <td>${AppUI.escapeHtml(m.date)}</td>
+        <td class="font-bold text-emerald-700">${AppUI.escapeHtml(m.winner)}</td>
+        <td>${AppUI.escapeHtml(m.presetName)}</td>
+        <td>${m.turns}</td>
+        <td>${AppUI.escapeHtml(m.notes)}</td>
+        <td>
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="MatchesCRUD.printMatchCertificate(${m.id})" class="min-w-[36px] min-h-[36px] rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center" title="Print Certificate">
+              <i class="fa-solid fa-print"></i>
+            </button>
+            <button type="button" onclick="MatchesCRUD.openMatchModal(${m.id})" class="min-w-[36px] min-h-[36px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center" title="Edit Match">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            ${isAdmin ? `
+            <button type="button" onclick="MatchesCRUD.deleteMatch(${m.id})" class="min-w-[36px] min-h-[36px] rounded-lg bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center" title="Delete Match">
+              <i class="fa-solid fa-trash"></i>
+            </button>` : ''}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    this.dtInstance = AppUI.initDataTable('#matchesDataTable');
+  },
+
+  async openMatchModal(editId = null) {
+    let m = {
+      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      winner: 'Malik Sher Alam Afridi',
+      presetName: 'Peshawar Qissa Khwani Hujra Rules',
+      turns: 36,
+      notes: 'Traditional KPK Hujra match.'
+    };
+    if (editId) {
+      const found = await DBEngine.getByKey('matches', Number(editId));
+      if (found) m = found;
+    }
+
+    const html = `
+      <form id="matchModalForm" class="space-y-3.5" autocomplete="off">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Winner Name</label>
+          <input type="text" id="matchWinnerInput" value="${AppUI.escapeHtml(m.winner)}" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Rule Preset Used</label>
+            <input type="text" id="matchPresetInput" value="${AppUI.escapeHtml(m.presetName)}" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Total Turns</label>
+            <input type="number" id="matchTurnsInput" value="${m.turns}" min="1" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Match Commentary / Notes</label>
+          <textarea id="matchNotesInput" rows="3" class="w-full p-3 rounded-lg border border-slate-300 text-xs">${AppUI.escapeHtml(m.notes)}</textarea>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="AppUI.attemptCloseModal()" class="min-h-[44px] px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+          <button type="submit" class="min-h-[44px] px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Save Match</button>
+        </div>
+      </form>
+    `;
+
+    AppUI.openModal(editId ? 'Update Match Record' : 'Log Official Match Record', html);
+
+    const validator = new window.JustValidate('#matchModalForm', {
+      errorFieldCssClass: 'border-red-500',
+      errorLabelStyle: { color: '#dc2626', fontSize: '11px' }
+    });
+    validator
+      .addField('#matchWinnerInput', [{ rule: 'required', errorMessage: 'Winner name required' }])
+      .addField('#matchTurnsInput', [{ rule: 'required', errorMessage: 'Turns count required' }])
+      .onSuccess(async (e) => {
+        e.preventDefault();
+        const item = {
+          date: m.date,
+          winner: document.getElementById('matchWinnerInput').value.trim(),
+          presetName: document.getElementById('matchPresetInput').value.trim(),
+          turns: Number(document.getElementById('matchTurnsInput').value) || 30,
+          notes: document.getElementById('matchNotesInput').value.trim()
+        };
+        if (editId) item.id = Number(editId);
+        await DBEngine.put('matches', item);
+        AppUI.forceCloseModal();
+        await this.refreshTable();
+        AppUI.toast('Match record saved', 'success');
+      });
+  },
+
+  async printMatchCertificate(id) {
+    const m = await DBEngine.getByKey('matches', Number(id));
+    if (!m) return;
+    document.getElementById('printReportDate').textContent = `Match Date: ${m.date}`;
+    document.getElementById('printReportId').textContent = `Certificate ID: #${m.id}`;
+    document.getElementById('printReportBody').innerHTML = `
+      <div style="padding:14px;border:1px solid #000;border-radius:8px;">
+        <h2 style="font-size:18px;font-weight:bold;margin-bottom:8px;">Champion: ${AppUI.escapeHtml(m.winner)}</h2>
+        <p><strong>Ruleset Preset:</strong> ${AppUI.escapeHtml(m.presetName)}</p>
+        <p><strong>Total Turns Taken:</strong> ${m.turns}</p>
+        <p><strong>Official Hujra Match Notes:</strong> ${AppUI.escapeHtml(m.notes)}</p>
+      </div>
+    `;
+    window.print();
+  },
+
+  deleteMatch(id) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Delete Match Record?',
+      text: 'Are you sure you want to permanently remove this match history entry?',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      confirmButtonText: 'Yes, Delete'
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        await DBEngine.delete('matches', Number(id));
+        await this.refreshTable();
+        AppUI.toast('Match record deleted', 'info');
+      }
+    });
+  }
+};
+
+const RulesCRUD = {
+  dtInstance: null,
+
+  async refreshTable() {
+    const presets = await DBEngine.getAll('presets');
+    GameEngine.populatePresetDropdown(presets);
+
+    if (this.dtInstance) {
+      this.dtInstance.destroy();
+      this.dtInstance = null;
+    }
+    const tbody = document.getElementById('presetsTableBody');
+    if (!tbody) return;
+
+    const isAdmin = AppAuth.currentUser && AppAuth.currentUser.role === 'Admin';
+
+    tbody.innerHTML = presets.map(p => {
+      const sCount = Object.keys(p.snakes || {}).length;
+      const lCount = Object.keys(p.ladders || {}).length;
+      return `
+        <tr>
+          <td class="font-bold text-slate-900">${AppUI.escapeHtml(p.name)}</td>
+          <td>${AppUI.escapeHtml(p.region)}</td>
+          <td>${p.needSix ? '<span class="text-emerald-700 font-bold">Yes (6)</span>' : 'No'}</td>
+          <td>${p.tripleSixBurn ? '<span class="text-amber-700 font-bold">Yes (3x6)</span>' : 'No'}</td>
+          <td>${p.knockback ? '<span class="text-indigo-700 font-bold">Takkar ON</span>' : 'Off'}</td>
+          <td>${sCount} Snakes / ${lCount} Ladders</td>
+          <td>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="GameEngine.applyPresetById(${p.id});AppRouter.navigate('/play');" class="min-h-[34px] px-2.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold">
+                Play
+              </button>
+              <button type="button" onclick="RulesCRUD.openPresetModal(${p.id})" class="min-w-[34px] min-h-[34px] rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              ${isAdmin && presets.length > 1 ? `
+              <button type="button" onclick="RulesCRUD.deletePreset(${p.id})" class="min-w-[34px] min-h-[34px] rounded-lg bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center">
+                <i class="fa-solid fa-trash"></i>
+              </button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    this.dtInstance = AppUI.initDataTable('#presetsDataTable');
+  },
+
+  async openPresetModal(editId = null) {
+    let p = {
+      name: '',
+      region: 'Khyber Pakhtunkhwa',
+      needSix: true,
+      tripleSixBurn: true,
+      knockback: true,
+      exact100: true,
+      ladders: { 4: 25, 13: 46, 42: 63, 62: 81, 74: 92 },
+      snakes: { 27: 5, 43: 18, 66: 45, 89: 53, 99: 4 }
+    };
+    if (editId) {
+      const found = await DBEngine.getByKey('presets', Number(editId));
+      if (found) p = found;
+    }
+
+    const html = `
+      <form id="presetModalForm" class="space-y-3.5" autocomplete="off">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Preset Title</label>
+          <input type="text" id="presetNameInput" value="${AppUI.escapeHtml(p.name)}" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs" placeholder="e.g. Bannu Hujra Night Rules">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Region / Community</label>
+          <input type="text" id="presetRegionInput" value="${AppUI.escapeHtml(p.region)}" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold">
+            <input type="checkbox" id="modalNeedSix" ${p.needSix ? 'checked' : ''} class="w-4 h-4 accent-emerald-600">
+            <span>Need 6 to Open</span>
+          </label>
+          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold">
+            <input type="checkbox" id="modalTripleBurn" ${p.tripleSixBurn ? 'checked' : ''} class="w-4 h-4 accent-emerald-600">
+            <span>3x6 Burns Turn</span>
+          </label>
+          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold">
+            <input type="checkbox" id="modalKnockback" ${p.knockback ? 'checked' : ''} class="w-4 h-4 accent-emerald-600">
+            <span>Takkar Cut ON</span>
+          </label>
+          <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold">
+            <input type="checkbox" id="modalExact100" ${p.exact100 ? 'checked' : ''} class="w-4 h-4 accent-emerald-600">
+            <span>Exact 100 Finish</span>
+          </label>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="AppUI.attemptCloseModal()" class="min-h-[44px] px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+          <button type="submit" class="min-h-[44px] px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Save Preset</button>
+        </div>
+      </form>
+    `;
+
+    AppUI.openModal(editId ? 'Edit Regional Rule Preset' : 'Create Custom KPK Rule Preset', html);
+
+    const validator = new window.JustValidate('#presetModalForm', {
+      errorFieldCssClass: 'border-red-500',
+      errorLabelStyle: { color: '#dc2626', fontSize: '11px' }
+    });
+    validator
+      .addField('#presetNameInput', [{ rule: 'required', errorMessage: 'Preset title required' }])
+      .addField('#presetRegionInput', [{ rule: 'required', errorMessage: 'Region required' }])
+      .onSuccess(async (e) => {
+        e.preventDefault();
+        const item = {
+          name: document.getElementById('presetNameInput').value.trim(),
+          region: document.getElementById('presetRegionInput').value.trim(),
+          needSix: document.getElementById('modalNeedSix').checked,
+          tripleSixBurn: document.getElementById('modalTripleBurn').checked,
+          knockback: document.getElementById('modalKnockback').checked,
+          exact100: document.getElementById('modalExact100').checked,
+          ladders: p.ladders,
+          snakes: p.snakes
+        };
+        if (editId) item.id = Number(editId);
+        await DBEngine.put('presets', item);
+        AppUI.forceCloseModal();
+        await this.refreshTable();
+        AppUI.toast('Rule preset saved', 'success');
+      });
+  },
+
+  deletePreset(id) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Delete Rule Preset?',
+      text: 'This preset will be permanently deleted.',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      confirmButtonText: 'Delete'
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        await DBEngine.delete('presets', Number(id));
+        await this.refreshTable();
+        AppUI.toast('Rule preset removed', 'info');
+      }
+    });
+  }
+};
+
+const BackupVault = {
+  async deriveKey(passphrase, saltBytes) {
+    const enc = new TextEncoder();
+    const baseKey = await crypto.subtle.importKey(
+      'raw',
+      enc.encode(passphrase),
+      'PBKDF2',
+      false,
+      ['deriveKey']
+    );
+    return crypto.subtle.deriveKey(
+      {
+        name: 'PBKDF2',
+        salt: saltBytes,
+        iterations: 100000,
+        hash: 'SHA-256'
+      },
+      baseKey,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['encrypt', 'decrypt']
+    );
+  },
+
+  async exportEncryptedJson(isAuto = false) {
+    try {
+      const passphrase = document.getElementById('backupPassphrase').value || 'KhyberVault@2026';
+      const payload = {
+        app: APP_CONFIG.appName,
+        timestamp: Date.now(),
+        users: await DBEngine.getAll('users'),
+        players: await DBEngine.getAll('players'),
+        matches: await DBEngine.getAll('matches'),
+        presets: await DBEngine.getAll('presets')
+      };
+
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await this.deriveKey(passphrase, salt);
+      const encodedData = new TextEncoder().encode(JSON.stringify(payload));
+      const cipherBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encodedData);
+
+      const envelope = {
+        vaultFormat: 'KHYBER-AES-GCM-V1',
+        createdAt: new Date().toISOString(),
+        salt: btoa(String.fromCharCode(...salt)),
+        iv: btoa(String.fromCharCode(...iv)),
+        cipherText: btoa(String.fromCharCode(...new Uint8Array(cipherBuffer)))
+      };
+
+      const blob = new Blob([JSON.stringify(envelope, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `khyber_saanp_seedhi_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      localStorage.setItem('khyber_last_backup_ts', String(Date.now()));
+      if (!isAuto) AppUI.toast('AES-GCM Encrypted Backup exported!', 'success');
+    } catch (e) {
+      AppUI.toast('Failed to encrypt backup', 'error');
+    }
+  },
+
+  async importEncryptedJson(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const passphrase = document.getElementById('backupPassphrase').value || 'KhyberVault@2026';
+
+    try {
+      const text = await file.text();
+      const envelope = JSON.parse(text);
+      if (envelope.vaultFormat !== 'KHYBER-AES-GCM-V1') {
+        AppUI.toast('Invalid or tampered backup file rejected!', 'error');
+        event.target.value = '';
+        return;
+      }
+
+      const salt = Uint8Array.from(atob(envelope.salt), c => c.charCodeAt(0));
+      const iv = Uint8Array.from(atob(envelope.iv), c => c.charCodeAt(0));
+      const cipherBytes = Uint8Array.from(atob(envelope.cipherText), c => c.charCodeAt(0));
+
+      const key = await this.deriveKey(passphrase, salt);
+      const plainBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+      const plainJson = new TextDecoder().decode(plainBuffer);
+      const data = JSON.parse(plainJson);
+
+      let restoredCount = 0;
+      for (const p of (data.players || [])) {
+        await DBEngine.put('players', p);
+        restoredCount++;
+      }
+      for (const m of (data.matches || [])) {
+        await DBEngine.put('matches', m);
+        restoredCount++;
+      }
+      for (const pr of (data.presets || [])) {
+        await DBEngine.put('presets', pr);
+        restoredCount++;
+      }
+
+      await PlayersCRUD.refreshTable();
+      await MatchesCRUD.refreshTable();
+      await RulesCRUD.refreshTable();
+
+      AppUI.toast(`Verified & restored ${restoredCount} records without duplicates!`, 'success');
+    } catch (e) {
+      AppUI.toast('Decryption failed: Wrong passphrase or tampered backup file!', 'error');
+    }
+    event.target.value = '';
+  },
+
+  updateScheduleConfig() {
+    const freq = document.getElementById('autoBackupFrequency').value;
+    const customDays = Number(document.getElementById('autoBackupCustomDays').value) || 3;
+    localStorage.setItem('khyber_backup_schedule', JSON.stringify({ freq, customDays }));
+    document.getElementById('sidebarBackupBadge').textContent = freq.toUpperCase();
+    AppUI.toast(`Auto-backup schedule set to ${freq}`, 'info');
+  },
+
+  checkAutoBackupDue() {
+    const rawSched = localStorage.getItem('khyber_backup_schedule');
+    const sched = rawSched ? JSON.parse(rawSched) : { freq: 'daily', customDays: 3 };
+    const lastTs = Number(localStorage.getItem('khyber_last_backup_ts')) || Date.now();
+    localStorage.setItem('khyber_last_backup_ts', String(lastTs));
+
+    let intervalDays = 1;
+    if (sched.freq === 'weekly') intervalDays = 7;
+    if (sched.freq === 'custom') intervalDays = sched.customDays;
+
+    const diffMs = Date.now() - lastTs;
+    const box = document.getElementById('backupStatusBox');
+    if (diffMs >= intervalDays * 86400000) {
+      this.exportEncryptedJson(true);
+      if (box) box.textContent = `Auto-Backup executed automatically (${sched.freq} policy).`;
+    } else if (box) {
+      const nextHrs = Math.max(1, Math.ceil((intervalDays * 86400000 - diffMs) / 3600000));
+      box.textContent = `Auto-Backup Schedule (${sched.freq.toUpperCase()}) verified. Next encrypted snapshot in ~${nextHrs} hours.`;
+    }
+  }
+};
+
+const AppRouter = {
+  currentRoute: '/play',
+  routes: {
+    '/play': 'view-play',
+    '/multiplayer': 'view-multiplayer',
+    '/rules': 'view-rules',
+    '/players': 'view-players',
+    '/settings': 'view-settings'
+  },
+
+  navigate(routePath) {
+    const cleanRoute = this.routes[routePath] ? routePath : '/play';
+    this.currentRoute = cleanRoute;
+
+    document.querySelectorAll('.route-view').forEach(sec => sec.classList.add('hidden'));
+    const targetId = this.routes[cleanRoute];
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) targetEl.classList.remove('hidden');
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      const r = btn.getAttribute('data-route');
+      if (r === cleanRoute) {
+        btn.className = 'nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-bold bg-emerald-600 text-white shadow transition w-full';
+      } else {
+        btn.className = 'nav-btn min-h-[44px] px-3 py-2 rounded-xl flex flex-col md:flex-row items-center gap-1 md:gap-3 text-[11px] md:text-sm font-semibold hover:bg-slate-800/80 transition w-full opacity-85';
+      }
+    });
+
+    if (cleanRoute === '/players') {
+      PlayersCRUD.refreshTable();
+      MatchesCRUD.refreshTable();
+    } else if (cleanRoute === '/rules') {
+      RulesCRUD.refreshTable();
+    }
+  }
+};
+
+const AppUI = {
+  modalFormDirty: false,
+  lastScrollY: 0,
+
+  init() {
+    this.initAllSelect2();
+    this.setupSmartMobileNavScroll();
+  },
+
+  escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+
+  toast(title, icon = 'success') {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon,
+      title,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+  },
+
+  setBtnLoading(btn, isLoading, htmlContent) {
+    if (!btn) return;
+    btn.disabled = isLoading;
+    if (isLoading) {
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>${htmlContent}</span>`;
+    } else {
+      btn.innerHTML = htmlContent;
+    }
+  },
+
+  initAllSelect2() {
+    $('select').each(function () {
+      const $el = $(this);
+      if (!$el.hasClass('select2-hidden-accessible')) {
+        $el.select2({
+          width: '100%',
+          minimumResultsForSearch: 0
+        });
+      }
+    });
+  },
+
+  initDataTable(selector) {
+    return $(selector).DataTable({
+      responsive: true,
+      pageLength: 5,
+      dom: 'Bfrtip',
+      buttons: [
+        { extend: 'pdfHtml5', text: '<i class="fa-solid fa-file-pdf text-red-600"></i>', titleAttr: 'Export PDF' },
+        { extend: 'excelHtml5', text: '<i class="fa-solid fa-file-excel text-emerald-600"></i>', titleAttr: 'Export Excel' },
+        { extend: 'csvHtml5', text: '<i class="fa-solid fa-file-csv text-sky-600"></i>', titleAttr: 'Export CSV' },
+        { extend: 'print', text: '<i class="fa-solid fa-print text-slate-700"></i>', titleAttr: 'Print Table' },
+        { extend: 'colvis', text: '<i class="fa-solid fa-eye-slash text-indigo-600"></i>', titleAttr: 'Show/Hide Columns' }
+      ]
+    });
+  },
+
+  openModal(title, contentHtml) {
+    this.modalFormDirty = false;
+    document.getElementById('dynamicModalTitle').textContent = title;
+    const body = document.getElementById('dynamicModalContent');
+    body.innerHTML = contentHtml;
+    document.getElementById('dynamicModalBackdrop').classList.remove('hidden');
+
+    this.initAllSelect2();
+
+    const firstInput = body.querySelector('input:not([type="hidden"]), textarea');
+    if (firstInput) setTimeout(() => firstInput.focus(), 80);
+
+    body.querySelectorAll('input, textarea, select').forEach(el => {
+      el.addEventListener('input', () => { this.modalFormDirty = true; });
+      el.addEventListener('change', () => { this.modalFormDirty = true; });
+    });
+  },
+
+  attemptCloseModal() {
+    if (this.modalFormDirty) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Unsaved Changes',
+        text: 'You have unsaved changes. Are you sure you want to leave?',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        confirmButtonText: 'Discard Changes'
+      }).then(res => {
+        if (res.isConfirmed) {
+          this.forceCloseModal();
+        }
+      });
+    } else {
+      this.forceCloseModal();
+    }
+  },
+
+  forceCloseModal() {
+    this.modalFormDirty = false;
+    document.getElementById('dynamicModalBackdrop').classList.add('hidden');
+    document.getElementById('dynamicModalContent').innerHTML = '';
+  },
+
+  openPasswordModal() {
+    const html = `
+      <form id="changePasswordForm" class="space-y-3.5" autocomplete="off">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">New Password (Min 8 chars, 1 special char)</label>
+          <input type="password" id="newPassInput" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs" placeholder="Enter strong password">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Confirm New Password</label>
+          <input type="password" id="confirmPassInput" class="w-full min-h-[44px] px-3.5 py-2 rounded-lg border border-slate-300 text-xs" placeholder="Repeat new password">
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="AppUI.attemptCloseModal()" class="min-h-[44px] px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+          <button type="submit" class="min-h-[44px] px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Update Password</button>
+        </div>
+      </form>
+    `;
+    this.openModal('Change Account Password', html);
+
+    const validator = new window.JustValidate('#changePasswordForm', {
+      errorFieldCssClass: 'border-red-500',
+      errorLabelStyle: { color: '#dc2626', fontSize: '11px' }
+    });
+    validator
+      .addField('#newPassInput', [
+        { rule: 'required', errorMessage: 'New password required' },
+        { rule: 'minLength', value: 8, errorMessage: 'Minimum 8 characters' },
+        {
+          validator: (val) => /[!@#$%^&*(),.?":{}|<>_\-+=]/.test(val),
+          errorMessage: 'Must include at least 1 special character'
+        }
+      ])
+      .addField('#confirmPassInput', [
+        {
+          validator: (val) => val === document.getElementById('newPassInput').value,
+          errorMessage: 'Passwords do not match'
+        }
+      ])
+      .onSuccess(async (e) => {
+        e.preventDefault();
+        if (!AppAuth.currentUser) return;
+        const newPass = document.getElementById('newPassInput').value;
+        AppAuth.currentUser.passwordHash = await DBEngine.hashPassword(newPass);
+        await DBEngine.put('users', AppAuth.currentUser);
+        this.forceCloseModal();
+        this.toast('Password updated securely!', 'success');
+      });
+  },
+
+  toggleQuickSetupAccordion() {
+    const panel = document.getElementById('quickSetupPanel');
+    const chev = document.getElementById('quickSetupChevron');
+    if (!panel) return;
+    panel.classList.toggle('hidden');
+    if (chev) chev.classList.toggle('rotate-180');
+  },
+
+  setupSmartMobileNavScroll() {
+    const nav = document.getElementById('unifiedNavigation');
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth >= 768) {
+        nav.classList.remove('nav-hidden-mobile');
+        return;
+      }
+      const currentY = window.scrollY;
+      if (currentY > this.lastScrollY && currentY > 60) {
+        nav.classList.add('nav-hidden-mobile');
+      } else {
+        nav.classList.remove('nav-hidden-mobile');
+      }
+      this.lastScrollY = currentY;
+    }, { passive: true });
+  }
+};
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await DBEngine.init();
+  AppUI.init();
+  await GameEngine.init();
+  P2PEngine.init();
+  AppAuth.init();
+  BackupVault.checkAutoBackupDue();
+  AppRouter.navigate('/play');
+});
+</script>
+</body>
+</html>
