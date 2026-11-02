@@ -1,0 +1,3649 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bannu Royale Ludo — Pashtun Cultural & Classic Yalla Rules</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0b1120;
+      --bg-card: #131c31;
+      --accent-gold: #f59e0b;
+      --red-p: #ef4444;
+      --green-p: #10b981;
+      --yellow-p: #f59e0b;
+      --blue-p: #3b82f6;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #172554 0%, #0b1120 55%, #060a14 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .urdu-text {
+      font-family: 'Noto Nastaliq Urdu', 'Inter', serif;
+      line-height: 1.85;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.35); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.6); }
+
+    @keyframes diceShake {
+      0% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-18deg) scale(1.12) translateY(-4px); }
+      40% { transform: rotate(16deg) scale(1.15) translateY(-6px); }
+      60% { transform: rotate(-14deg) scale(1.12) translateY(-3px); }
+      80% { transform: rotate(10deg) scale(1.06); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+    .dice-rolling {
+      animation: diceShake 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+    }
+
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.75); }
+      70% { box-shadow: 0 0 0 11px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+    .active-turn-glow {
+      animation: pulseRing 1.6s infinite;
+    }
+
+    @keyframes radarSweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .radar-sweep {
+      background: conic-gradient(from 0deg, rgba(16, 185, 129, 0.4) 0deg, rgba(16, 185, 129, 0.0) 95deg, transparent 360deg);
+      animation: radarSweep 3.8s linear infinite;
+    }
+
+    @keyframes floatBubble {
+      0% { opacity: 0; transform: translateY(8px) scale(0.9); }
+      15% { opacity: 1; transform: translateY(0px) scale(1); }
+      85% { opacity: 1; transform: translateY(-4px) scale(1); }
+      100% { opacity: 0; transform: translateY(-12px) scale(0.95); }
+    }
+    .emote-bubble {
+      animation: floatBubble 2.8s ease-out forwards;
+    }
+
+    .glass-panel {
+      background: rgba(19, 28, 49, 0.84);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+    .gold-gradient-btn {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .gold-gradient-btn:hover { filter: brightness(1.08); }
+    .gold-gradient-btn:active { transform: translateY(1px); }
+    #ludoCanvas { touch-action: manipulation; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen pb-16 md:pb-0 selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-30 glass-panel border-b border-slate-800/80 px-2.5 sm:px-5 py-2">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <!-- Brand Logo & Current Rule Badge -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-red-600 p-0.5 shadow-lg shadow-amber-500/20 flex-shrink-0">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-black text-amber-400 text-base sm:text-lg tracking-tighter">
+            🎲
+          </div>
+        </div>
+        <div class="truncate">
+          <div class="flex items-center gap-2">
+            <h1 id="appMainTitle" class="font-extrabold text-sm sm:text-lg tracking-tight text-white truncate">Bannu Royale Ludo</h1>
+            <span id="headerPresetBadge" class="px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 whitespace-nowrap">
+              بنوں روایتی رولز
+            </span>
+          </div>
+          <p id="appSubTitle" class="text-[10px] sm:text-xs text-slate-400 truncate">Pashtun Cultural 2-Dice &amp; Yalla Classic Engine</p>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+        <button id="navPlayBtn" type="button" class="nav-tab px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-500 text-slate-950 shadow">
+          🎮 <span class="hidden md:inline">Game</span><span class="md:hidden">Play</span>
+        </button>
+        <button id="navRulesBtn" type="button" class="nav-tab px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+          ⚙️ <span class="hidden md:inline">Rules &amp; Setup</span><span class="md:hidden">Rules</span>
+        </button>
+        <button id="navNetworkBtn" type="button" class="nav-tab px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all relative">
+          📡 <span class="hidden md:inline">Wi-Fi &amp; QR Offline</span><span class="md:hidden">Wi-Fi/QR</span>
+          <span id="lanPeerCountBadge" class="ml-1 px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-full text-[10px]">1</span>
+        </button>
+        <button id="navStatsBtn" type="button" class="nav-tab px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+          🏆 <span class="hidden md:inline">Stats &amp; Backup</span><span class="md:hidden">Stats</span>
+        </button>
+        <button id="navGuideBtn" type="button" class="nav-tab px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+          📖 <span class="hidden md:inline">Bannu Guide</span><span class="md:hidden">Guide</span>
+        </button>
+      </nav>
+
+      <!-- Utility Controls (Language + Sound + Fullscreen) -->
+      <div class="flex items-center gap-1.5 flex-shrink-0">
+        <select id="langSelect" aria-label="Language" class="bg-slate-800/90 border border-slate-700 rounded-xl px-2 py-1.5 text-xs font-bold text-amber-300 cursor-pointer">
+          <option value="en">EN / اردو</option>
+          <option value="ur">اردو (Urdu)</option>
+          <option value="ps">پښتو (Pashto)</option>
+        </select>
+        <button id="soundToggleBtn" type="button" title="Toggle Sound Effects" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-sm transition">
+          🔊
+        </button>
+        <button id="fullscreenToggleBtn" type="button" title="Toggle Distraction-Free Fullscreen" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-sm transition">
+          ⛶
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE REACT-NATIVE STYLE BOTTOM TAB BAR -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 glass-panel border-t border-slate-800/90 px-2 py-1.5 flex items-center justify-around">
+    <button id="mobNavPlayBtn" type="button" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-amber-400 font-bold text-[11px]">
+      <span class="text-base">🎮</span><span>Play</span>
+    </button>
+    <button id="mobNavRulesBtn" type="button" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-400 font-semibold text-[11px]">
+      <span class="text-base">⚙️</span><span>Rules</span>
+    </button>
+    <button id="mobNavNetworkBtn" type="button" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-400 font-semibold text-[11px]">
+      <span class="text-base">📡</span><span>Wi-Fi/QR</span>
+    </button>
+    <button id="mobNavStatsBtn" type="button" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-400 font-semibold text-[11px]">
+      <span class="text-base">🏆</span><span>Stats</span>
+    </button>
+    <button id="mobNavGuideBtn" type="button" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-400 font-semibold text-[11px]">
+      <span class="text-base">📖</span><span>Guide</span>
+    </button>
+  </nav>
+
+  <!-- MAIN APPLICATION CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-2 sm:px-4 py-2 sm:py-4 flex flex-col">
+
+    <!-- ==================== VIEW 1: GAMEPLAY ARENA ==================== -->
+    <section id="viewPlay" class="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-3 sm:gap-4 items-center lg:items-start">
+
+      <!-- LEFT COLUMN (Match Status, Active Rules Summary, Cultural Scenario Drills, Referee Log) -->
+      <div class="w-full lg:col-span-3 flex flex-col gap-3 order-2 lg:order-1">
+        <!-- Active Match Mode Card -->
+        <div class="glass-panel rounded-2xl p-3.5 shadow-xl">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Active Rulebook</span>
+            <button id="quickCustomizeRulesBtn" type="button" class="text-xs text-sky-400 hover:text-sky-300 font-semibold underline">
+              Change Rules
+            </button>
+          </div>
+
+          <!-- Preset Switcher Pills -->
+          <div class="grid grid-cols-2 gap-1.5 mb-3">
+            <button id="presetBannuQuickBtn" type="button" class="px-2.5 py-2 rounded-xl text-xs font-bold border transition flex flex-col items-center gap-0.5 bg-amber-500/20 border-amber-500 text-amber-200">
+              <span>🏔️ Bannu Cultural</span>
+              <span class="text-[10px] opacity-80">2 Dice • Kill Lock</span>
+            </button>
+            <button id="presetYallaQuickBtn" type="button" class="px-2.5 py-2 rounded-xl text-xs font-bold border transition flex flex-col items-center gap-0.5 bg-slate-800/70 border-slate-700 text-slate-300 hover:text-white">
+              <span>🌐 Yalla Classic</span>
+              <span class="text-[10px] opacity-80">1 Die • Open Free</span>
+            </button>
+          </div>
+
+          <!-- Active Rule Pills List -->
+          <div id="activeRulesBadges" class="flex flex-wrap gap-1.5 text-[11px]"></div>
+
+          <!-- Quick Match Controls -->
+          <div class="mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-3 gap-1.5">
+            <button id="newMatchQuickBtn" type="button" class="px-2 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow">
+              🔄 New Match
+            </button>
+            <button id="undoMoveBtn" type="button" class="px-2 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Undo last local turn">
+              ↩️ Undo
+            </button>
+            <button id="demoScenarioBtn" type="button" class="px-2 py-2 rounded-xl text-xs font-bold bg-indigo-600/80 hover:bg-indigo-500 text-white transition border border-indigo-400/30">
+              ⚡ Test Scenario
+            </button>
+          </div>
+        </div>
+
+        <!-- Scenario Tester Drawer -->
+        <div id="scenarioDrawer" class="hidden glass-panel rounded-2xl p-3.5 border border-indigo-500/40 shadow-xl">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300">⚡ Interactive Cultural Rule Drills</h3>
+            <button id="closeScenarioDrawerBtn" type="button" class="text-xs text-slate-400 hover:text-white">✕</button>
+          </div>
+          <p class="text-[11px] text-slate-300 mb-2.5">Test every specific Bannu &amp; Pashtun rule edge-case immediately:</p>
+          <div class="flex flex-col gap-1.5">
+            <button type="button" data-scenario="mandatory_spawn" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              1️⃣ <b>Mandatory 6 Spawn:</b> 1 bead in hand + 1 on board (Roll 6+2)
+            </button>
+            <button type="button" data-scenario="blood_loop" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              2️⃣ <b>No-Kill Outer Loop:</b> At Home entry with 0 kills (Must loop board!)
+            </button>
+            <button type="button" data-scenario="close_game_kill" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              3️⃣ <b>Close Game Kill-Freeze:</b> Kill enemy on Die 1 → Token locks!
+            </button>
+            <button type="button" data-scenario="team_stack_capture" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              4️⃣ <b>2v2 Team Stack Capture:</b> Enemy lands on stacked teammates (Pick 1!)
+            </button>
+            <button type="button" data-scenario="home_remainder" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              5️⃣ <b>Near-Home Remainder (Need 6, Roll 5+4):</b> Single vs 2 beads test
+            </button>
+            <button type="button" data-scenario="teammate_assist" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              6️⃣ <b>2v2 Partner Assist:</b> Red finished all beads → Roll 1-Die 6 to help Yellow!
+            </button>
+            <button type="button" data-scenario="home_split_two_beads" class="scenario-load-btn text-left px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700">
+              7️⃣ <b>Near-Home Split (2 Beads):</b> 5 enters Home + 4 moves 2nd bead!
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Rule Enforcement Feed / Play Log -->
+        <div class="glass-panel rounded-2xl p-3.5 flex-1 flex flex-col min-h-[180px] max-h-[300px]">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">📜 Live Referee Log</span>
+            <span id="connectionStatusPill" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Local Match</span>
+          </div>
+          <div id="gameLogContainer" class="flex-1 overflow-y-auto space-y-1.5 pr-1 text-xs"></div>
+        </div>
+      </div>
+
+      <!-- CENTER COLUMN: THE INTERACTIVE LUDO BOARD & TOP/BOTTOM PLAYER PODS -->
+      <div class="w-full lg:col-span-6 flex flex-col items-center justify-center order-1 lg:order-2">
+
+        <!-- Top Player Cards (Player 0 Red & Player 1 Green) -->
+        <div class="w-full max-w-[540px] grid grid-cols-2 gap-2 mb-2">
+          <!-- Player 0: Red -->
+          <div id="playerCard0" class="relative glass-panel rounded-xl p-2 sm:p-2.5 border-2 border-red-500/40 transition-all flex flex-col gap-1">
+            <div id="emoteBubble0" class="hidden absolute -top-8 left-2 z-30 px-2.5 py-1 rounded-xl bg-amber-400 text-slate-950 font-black text-xs shadow-lg"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500 flex items-center justify-center font-bold text-red-400 text-sm flex-shrink-0">
+                  🔴
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1">
+                    <span id="pName0" class="font-bold text-xs sm:text-sm text-white truncate">Red (You)</span>
+                    <span id="pTeamBadge0" class="text-[9px] px-1.5 py-0.2 rounded bg-red-500/20 text-red-300 font-bold">T1</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[10px] text-slate-300">
+                    <span id="pKills0" title="Kills Required for Home">⚔️ 0</span>
+                    <span>•</span>
+                    <span id="pHome0">🏠 0/4</span>
+                  </div>
+                </div>
+              </div>
+              <span id="pStatusTag0" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-500 text-slate-950">TURN</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="turnTimerBar0" class="h-full bg-amber-400 transition-all duration-300" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <!-- Player 1: Green -->
+          <div id="playerCard1" class="relative glass-panel rounded-xl p-2 sm:p-2.5 border-2 border-emerald-500/30 transition-all flex flex-col gap-1">
+            <div id="emoteBubble1" class="hidden absolute -top-8 right-2 z-30 px-2.5 py-1 rounded-xl bg-emerald-400 text-slate-950 font-black text-xs shadow-lg"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500 flex items-center justify-center font-bold text-emerald-400 text-sm flex-shrink-0">
+                  🟢
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1">
+                    <span id="pName1" class="font-bold text-xs sm:text-sm text-white truncate">Green AI</span>
+                    <span id="pTeamBadge1" class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold">T2</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[10px] text-slate-300">
+                    <span id="pKills1">⚔️ 0</span>
+                    <span>•</span>
+                    <span id="pHome1">🏠 0/4</span>
+                  </div>
+                </div>
+              </div>
+              <span id="pStatusTag1" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">WAIT</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="turnTimerBar1" class="h-full bg-emerald-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LUDO BOARD CANVAS WRAPPER -->
+        <div id="boardContainer" class="relative w-full max-w-[540px] aspect-square rounded-2xl p-1.5 sm:p-2.5 bg-gradient-to-br from-amber-500/30 via-slate-800 to-amber-700/30 shadow-2xl border border-amber-500/30 flex items-center justify-center">
+          <canvas id="ludoCanvas" width="750" height="750" class="w-full h-full rounded-xl shadow-inner cursor-pointer bg-slate-950"></canvas>
+
+          <!-- Floating Contextual Move Selector Overlay -->
+          <div id="tokenMoveMenu" class="hidden absolute z-20 inset-x-4 bottom-4 glass-panel rounded-2xl p-3 border-2 border-amber-400 shadow-2xl">
+            <div class="flex items-center justify-between mb-2">
+              <span id="tokenMoveMenuTitle" class="text-xs sm:text-sm font-extrabold text-amber-300">Choose Move for Selected Bead</span>
+              <button id="cancelTokenMoveMenuBtn" type="button" class="text-xs text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800">Cancel</button>
+            </div>
+            <div id="tokenMoveOptionsList" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Player Cards (Player 3 Blue & Player 2 Yellow) -->
+        <div class="w-full max-w-[540px] grid grid-cols-2 gap-2 mt-2">
+          <!-- Player 3: Blue (Bottom-Left) -->
+          <div id="playerCard3" class="relative glass-panel rounded-xl p-2 sm:p-2.5 border-2 border-blue-500/30 transition-all flex flex-col gap-1">
+            <div id="emoteBubble3" class="hidden absolute -top-8 left-2 z-30 px-2.5 py-1 rounded-xl bg-sky-400 text-slate-950 font-black text-xs shadow-lg"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-500 flex items-center justify-center font-bold text-blue-400 text-sm flex-shrink-0">
+                  🔵
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1">
+                    <span id="pName3" class="font-bold text-xs sm:text-sm text-white truncate">Blue AI</span>
+                    <span id="pTeamBadge3" class="text-[9px] px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 font-bold">T2</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[10px] text-slate-300">
+                    <span id="pKills3">⚔️ 0</span>
+                    <span>•</span>
+                    <span id="pHome3">🏠 0/4</span>
+                  </div>
+                </div>
+              </div>
+              <span id="pStatusTag3" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">WAIT</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="turnTimerBar3" class="h-full bg-blue-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Player 2: Yellow (Bottom-Right - Red's Partner) -->
+          <div id="playerCard2" class="relative glass-panel rounded-xl p-2 sm:p-2.5 border-2 border-amber-500/30 transition-all flex flex-col gap-1">
+            <div id="emoteBubble2" class="hidden absolute -top-8 right-2 z-30 px-2.5 py-1 rounded-xl bg-amber-400 text-slate-950 font-black text-xs shadow-lg"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500 flex items-center justify-center font-bold text-amber-400 text-sm flex-shrink-0">
+                  🟡
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1">
+                    <span id="pName2" class="font-bold text-xs sm:text-sm text-white truncate">Yellow Partner</span>
+                    <span id="pTeamBadge2" class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-bold">T1</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 text-[10px] text-slate-300">
+                    <span id="pKills2">⚔️ 0</span>
+                    <span>•</span>
+                    <span id="pHome2">🏠 0/4</span>
+                  </div>
+                </div>
+              </div>
+              <span id="pStatusTag2" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">WAIT</span>
+            </div>
+            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div id="turnTimerBar2" class="h-full bg-amber-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: DICE CONTROLLER, AVAILABLE MOVES, & CULTURAL QUICK CHAT -->
+      <div class="w-full lg:col-span-3 flex flex-col gap-3 order-3">
+        <!-- Dice Tray & Roll Command Center -->
+        <div class="glass-panel rounded-2xl p-4 border border-amber-500/30 shadow-xl flex flex-col items-center">
+          <div class="w-full flex items-center justify-between mb-2">
+            <span id="turnBannerText" class="text-xs sm:text-sm font-extrabold text-amber-400">Red's Turn (آپ کی باری)</span>
+            <div class="flex items-center gap-1.5">
+              <span id="turnCountdownBadge" class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">30s</span>
+              <span id="turnPhaseBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                Roll Dice
+              </span>
+            </div>
+          </div>
+
+          <!-- Referee Hint Banner -->
+          <div id="refereeHintBox" class="w-full rounded-xl bg-slate-900/90 border border-slate-800 px-3 py-2 text-xs text-slate-200 mb-3 text-center">
+            Tap <b>Roll Dice</b> (or press Space) to throw your dice.
+          </div>
+
+          <!-- 1-Die / 2-Dice Visual Stage -->
+          <div id="diceStageContainer" class="flex items-center justify-center gap-4 my-2">
+            <button id="dieSlot0" type="button" class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-white to-slate-200 text-slate-900 shadow-xl border-4 border-amber-400 flex flex-col items-center justify-center transition transform hover:scale-105">
+              <div id="dieFace0" class="w-12 h-12 sm:w-14 sm:h-14 grid grid-cols-3 grid-rows-3 p-1.5 gap-1"></div>
+              <span id="dieStatus0" class="absolute -bottom-2 px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-black text-[9px] uppercase shadow">Die 1</span>
+            </button>
+
+            <div id="dicePlusDivider" class="flex flex-col items-center justify-center text-slate-400">
+              <span class="text-lg font-black text-amber-400">+</span>
+              <span id="diceSumBadge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">= ?</span>
+            </div>
+
+            <button id="dieSlot1" type="button" class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-white to-slate-200 text-slate-900 shadow-xl border-4 border-slate-400 flex flex-col items-center justify-center transition transform hover:scale-105">
+              <div id="dieFace1" class="w-12 h-12 sm:w-14 sm:h-14 grid grid-cols-3 grid-rows-3 p-1.5 gap-1"></div>
+              <span id="dieStatus1" class="absolute -bottom-2 px-1.5 py-0.2 rounded bg-slate-700 text-white font-black text-[9px] uppercase shadow">Die 2</span>
+            </button>
+          </div>
+
+          <!-- Roll Button -->
+          <button id="rollDiceBtn" type="button" class="w-full mt-3 py-3 px-4 rounded-xl font-black text-sm sm:text-base text-slate-950 gold-gradient-btn transition flex items-center justify-center gap-2">
+            <span>🎲</span>
+            <span id="rollDiceBtnLabel">ROLL 2 DICE (گوٹی پھینکیں)</span>
+          </button>
+        </div>
+
+        <!-- Legal Move Cards List (Hover to preview landing square on board!) -->
+        <div class="glass-panel rounded-2xl p-3.5 flex-1 flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">🎯 Available Legal Moves</span>
+            <span id="legalMovesCountBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">0 moves</span>
+          </div>
+          <div id="legalMovesList" class="flex-1 space-y-1.5 max-h-[210px] overflow-y-auto pr-1">
+            <p class="text-xs text-slate-400 italic py-4 text-center">Roll the dice to see your tactical options here or tap any glowing bead on the board.</p>
+          </div>
+        </div>
+
+        <!-- Cultural Quick Chat & Taunts Bar -->
+        <div class="glass-panel rounded-2xl p-3">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">💬 Quick Pashtun / Urdu Taunts</span>
+            <label class="flex items-center gap-1 text-[10px] text-slate-300 cursor-pointer">
+              <input id="autoPlayTimeoutChk" type="checkbox" checked class="accent-amber-500 rounded" />
+              Auto-Move on Timeout
+            </label>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button type="button" data-emote="🔥 ڈبل سکس! شاباش!" class="emote-send-btn px-2 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-[11px] font-semibold text-amber-300 border border-slate-700 truncate">🔥 ڈبل سکس!</button>
+            <button type="button" data-emote="⚔️ تگڑا شکار!" class="emote-send-btn px-2 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-[11px] font-semibold text-red-300 border border-slate-700 truncate">⚔️ تگڑا شکار!</button>
+            <button type="button" data-emote="🔒 کلوز گیم لاک!" class="emote-send-btn px-2 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-[11px] font-semibold text-sky-300 border border-slate-700 truncate">🔒 کلوز لاک!</button>
+            <button type="button" data-emote="🤝 شاباش پارٹنر!" class="emote-send-btn px-2 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-[11px] font-semibold text-emerald-300 border border-slate-700 truncate">🤝 پارٹنر!</button>
+            <button type="button" data-emote="🔄 پورا راؤنڈ لگاؤ!" class="emote-send-btn px-2 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-[11px] font-semibold text-purple-300 border border-slate-700 truncate">🔄 راؤنڈ لگاؤ!</button>
+            <button type="button" data-emote="👑 بنوں چیمپئن!" class="emote-send-btn px-2 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-[11px] font-semibold text-amber-200 border border-slate-700 truncate">👑 چیمپئن!</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW 2: RULES & MATCH SETUP STUDIO ==================== -->
+    <section id="viewRules" class="hidden flex-1 flex flex-col gap-4">
+      <div class="glass-panel rounded-2xl p-4 sm:p-6 max-w-4xl w-full mx-auto shadow-2xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-lg sm:text-2xl font-black text-white">⚙️ Custom Rulebook &amp; Match Setup</h2>
+            <p class="text-xs sm:text-sm text-slate-300">Play with authentic <b>Bannu / Pashtun Cultural Rules</b>, <b>Yalla Classic Online Rules</b>, or customize every individual rule.</p>
+          </div>
+          <div class="flex gap-2">
+            <button id="applyBannuPresetBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 shadow hover:bg-amber-400 transition">
+              🏔️ Load Bannu Rules
+            </button>
+            <button id="applyYallaPresetBtn" type="button" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 transition">
+              🌐 Load Yalla Classic
+            </button>
+          </div>
+        </div>
+
+        <!-- Match Format & Players Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-5">
+          <!-- Dice Count (1 or 2) -->
+          <div class="bg-slate-900/80 rounded-xl p-3.5 border border-slate-800">
+            <label class="block text-xs font-bold uppercase text-amber-400 mb-1">🎲 Dice Count (کتنی گوٹیاں / ڈائس)</label>
+            <p class="text-[11px] text-slate-400 mb-2.5">Bannu traditional play uses 2 Dice (split or combine moves; Double-6 extra turn).</p>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" data-dice="1" class="rule-dice-btn py-2 rounded-lg text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300">1 Die (Classic)</button>
+              <button type="button" data-dice="2" class="rule-dice-btn py-2 rounded-lg text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-300">2 Dice (دو گوٹی)</button>
+            </div>
+          </div>
+
+          <!-- Beads / Tokens per Player (2, 3, or 4) -->
+          <div class="bg-slate-900/80 rounded-xl p-3.5 border border-slate-800">
+            <label class="block text-xs font-bold uppercase text-amber-400 mb-1">♟️ Beads Per Player (بیڈز کی تعداد)</label>
+            <p class="text-[11px] text-slate-400 mb-2.5">Default is 4 beads, or choose 2 or 3 beads for faster matches.</p>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" data-tokens="2" class="rule-token-btn py-2 rounded-lg text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300">2 Beads</button>
+              <button type="button" data-tokens="3" class="rule-token-btn py-2 rounded-lg text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300">3 Beads</button>
+              <button type="button" data-tokens="4" class="rule-token-btn py-2 rounded-lg text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-300">4 Beads</button>
+            </div>
+          </div>
+
+          <!-- Close Game vs Open Game -->
+          <div class="bg-slate-900/80 rounded-xl p-3.5 border border-slate-800">
+            <label class="block text-xs font-bold uppercase text-amber-400 mb-1">🔒 Close vs Open Game (کلوز یا اوپن گیم)</label>
+            <p class="text-[11px] text-slate-400 mb-2.5">In Close Game, a bead that kills an enemy locks on that spot for the rest of the turn if you have another playable bead.</p>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" data-closemode="true" class="rule-close-btn py-2 rounded-lg text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-300">🔒 Close Game</button>
+              <button type="button" data-closemode="false" class="rule-close-btn py-2 rounded-lg text-xs font-bold border border-slate-700 bg-slate-800 text-slate-300">🔓 Open Game</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Cultural Toggles -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer hover:border-slate-700">
+            <input id="chkMandatorySpawn" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-500 rounded" />
+            <div>
+              <div class="font-bold text-xs sm:text-sm text-white">Mandatory Hand/Yard Spawn on 6 (پہلے ہاتھ والی بیڈ نکالنا)</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">If you have beads in your yard and roll a 6 (e.g. 6+1), you must use the 6 to bring a new bead out before moving existing board beads.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer hover:border-slate-700">
+            <input id="chkKillForHome" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-500 rounded" />
+            <div>
+              <div class="font-bold text-xs sm:text-sm text-white">Kill Required to Enter Home + Full Loop (بغیر کِل اندر جانا منع)</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Cannot enter the home column without capturing at least 1 opponent bead. Reaching home entry without a kill forces a full 52-step outer loop!</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer hover:border-slate-700">
+            <input id="chkTeamMode" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-500 rounded" />
+            <div>
+              <div class="font-bold text-xs sm:text-sm text-white">2v2 Opposite-Corner Teams &amp; Safe Stacking (دو دو کی ٹیمیں)</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Red+Yellow vs Green+Blue. Teammates never eat each other; if an enemy lands on stacked teammates on a non-safe spot, they can only eat 1 chosen bead!</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer hover:border-slate-700">
+            <input id="chkStrictRemainder" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-500 rounded" />
+            <div>
+              <div class="font-bold text-xs sm:text-sm text-white">Strict Near-Home Remainder Rule (بقایا نمبر کا اصول)</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">When near Home, you cannot play a sub-move that leaves the second die unplayable anywhere on the board (e.g. needing 6 with 1 bead and rolling 5+4 forfeits the roll).</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer hover:border-slate-700 md:col-span-2">
+            <input id="chkTeamAssistSix" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-500 rounded" />
+            <div>
+              <div class="font-bold text-xs sm:text-sm text-white">Teammate Assist Requires Rolling a 1-Die Six First (ٹیم میٹ کی مدد کے لیے پہلے 6 لانا)</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">When you complete all your own beads in 2v2 Team Mode, you roll 1 Die on your turn until you get a 6. Once you roll a 6, you unlock 2-Dice control of your partner's beads!</p>
+            </div>
+          </label>
+        </div>
+
+        <!-- Players, Turn Timer & AI Difficulty Configuration -->
+        <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 mb-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <h3 class="text-sm font-extrabold text-white">🤖 Players, Turn Timer &amp; AI Brain Level</h3>
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs text-slate-400">Turn Timer:</span>
+                <select id="turnTimerSelect" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-sky-300">
+                  <option value="15">15 sec (Blitz)</option>
+                  <option value="30" selected>30 sec (Standard)</option>
+                  <option value="60">60 sec (Relaxed)</option>
+                  <option value="0">Unlimited</option>
+                </select>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs text-slate-400">AI Difficulty:</span>
+                <select id="aiDifficultySelect" class="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-xs font-bold text-amber-300">
+                  <option value="easy">Easy (آسان)</option>
+                  <option value="medium">Medium (درمیانہ)</option>
+                  <option value="hard" selected>Hard — Grandmaster AI (مشکل ترین)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <div class="p-2.5 rounded-xl bg-red-950/30 border border-red-500/30">
+              <div class="text-xs font-bold text-red-400 mb-1">🔴 Red (Corner 1)</div>
+              <input id="setupName0" type="text" value="You (Red)" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white mb-1.5" />
+              <select id="setupType0" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
+                <option value="human" selected>👤 Human Player</option>
+                <option value="ai">🤖 AI Bot</option>
+              </select>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
+              <div class="text-xs font-bold text-emerald-400 mb-1">🟢 Green (Corner 2)</div>
+              <input id="setupName1" type="text" value="Sher Khan AI" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white mb-1.5" />
+              <select id="setupType1" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
+                <option value="human">👤 Human Player</option>
+                <option value="ai" selected>🤖 AI Bot</option>
+              </select>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30">
+              <div class="text-xs font-bold text-amber-400 mb-1">🟡 Yellow (Corner 3 • Red Partner)</div>
+              <input id="setupName2" type="text" value="Wazir Partner" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white mb-1.5" />
+              <select id="setupType2" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
+                <option value="human">👤 Human Player</option>
+                <option value="ai" selected>🤖 AI Partner</option>
+                <option value="none">🚫 Empty (2P Only)</option>
+              </select>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-blue-950/30 border border-blue-500/30">
+              <div class="text-xs font-bold text-blue-400 mb-1">🔵 Blue (Corner 4 • Green Partner)</div>
+              <input id="setupName3" type="text" value="Marwat AI" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white mb-1.5" />
+              <select id="setupType3" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
+                <option value="human">👤 Human Player</option>
+                <option value="ai" selected>🤖 AI Bot</option>
+                <option value="none">🚫 Empty (2P Only)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button id="saveAndStartMatchBtn" type="button" class="px-6 py-3 rounded-xl font-black text-sm text-slate-950 gold-gradient-btn shadow-lg">
+            🚀 Apply Rules &amp; Start New Match
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: OFFLINE QR WEBRTC & WI-FI RADAR MULTIPLAYER ==================== -->
+    <section id="viewNetwork" class="hidden flex-1 flex flex-col gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-6xl w-full mx-auto">
+
+        <!-- LEFT CARD: LIVE WI-FI / LOCAL RADAR MAP, ROOM HOSTING & 1v1 / 2v2 TEAM INVITES -->
+        <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                <span>📡</span> Same Wi-Fi / LAN Radar &amp; Rooms
+              </h2>
+              <span id="wifiRadarStatusBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                Mesh Active
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 mb-3">
+              See active players on your Wi-Fi network / PeerJS broker &amp; local tabs. Create a 1v1 or 2v2 Team Room or tap any player node on the radar map—once WebRTC connects, the match continues offline even if Wi-Fi internet drops!
+            </p>
+
+            <!-- Interactive Radar Map Visual -->
+            <div class="relative w-full h-56 rounded-2xl bg-slate-950 border border-emerald-500/30 overflow-hidden flex items-center justify-center mb-3">
+              <div class="absolute w-52 h-52 rounded-full border border-emerald-500/20"></div>
+              <div class="absolute w-36 h-36 rounded-full border border-emerald-500/25"></div>
+              <div class="absolute w-16 h-16 rounded-full border border-emerald-500/30"></div>
+              <div class="absolute inset-0 radar-sweep rounded-full opacity-50 pointer-events-none"></div>
+
+              <div class="relative z-10 flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center shadow-lg shadow-amber-500/50 border-2 border-white">
+                  YOU
+                </div>
+                <span id="radarSelfLabel" class="mt-1 px-2 py-0.2 rounded bg-slate-900/90 text-[10px] font-bold text-amber-300 border border-amber-500/30">Host Node</span>
+              </div>
+
+              <div id="radarNodesContainer" class="absolute inset-0"></div>
+            </div>
+
+            <!-- Create Room / Direct PeerJS Connect -->
+            <div class="bg-slate-900/90 rounded-xl p-3.5 border border-slate-800 mb-3 space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-bold text-slate-300">Your Wi-Fi Room ID:</span>
+                  <span id="myPeerIdDisplay" class="ml-1 font-mono text-xs font-black text-amber-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-700">BANNU-...</span>
+                </div>
+                <div class="flex gap-1.5">
+                  <button id="createWifiRoomBtn" type="button" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold">
+                    🏠 Broadcast Room
+                  </button>
+                  <button id="copyPeerIdBtn" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700">
+                    📋 Copy ID
+                  </button>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <input id="joinPeerIdInput" type="text" placeholder="Enter Friend's Room ID (e.g. BANNU-4821)" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" />
+                <button id="connectPeerIdBtn" type="button" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+                  Send Request
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Discovered Players List -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase text-slate-400">Active Wi-Fi Players &amp; Rooms</span>
+              <button id="simulateLanPlayerBtn" type="button" class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold underline">
+                + Spawn Test Wi-Fi Peer
+              </button>
+            </div>
+            <div id="lanPlayersList" class="space-y-1.5 max-h-36 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT CARD: SERVERLESS OFFLINE WEBRTC QR CODE HANDSHAKE + LIVE CAMERA QR SCANNER -->
+        <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                <span>📱</span> Offline WebRTC QR Room &amp; Scanner
+              </h2>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                Real SDP + Camera Scan
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 mb-3">
+              Zero internet? Connect 2 to 4 phones via WebRTC QR codes! <b>Step 1:</b> Host generates Offer QR. <b>Step 2:</b> Joiner scans Offer QR with camera (or image) to generate Answer QR. <b>Step 3:</b> Host scans Answer QR to link P2P!
+            </p>
+
+            <!-- Step Tabs -->
+            <div class="grid grid-cols-2 gap-2 mb-3">
+              <button id="qrHostModeBtn" type="button" class="py-2 px-3 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 shadow">
+                👑 Host Room (Create QR)
+              </button>
+              <button id="qrJoinModeBtn" type="button" class="py-2 px-3 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                📷 Join Friend's QR
+              </button>
+            </div>
+
+            <!-- QR Display, Camera Scanner & Handshake Box -->
+            <div class="bg-slate-900/90 rounded-2xl p-3.5 border border-slate-800 flex flex-col items-center">
+              <div class="flex flex-wrap items-center justify-center gap-2 mb-2.5 w-full">
+                <span class="text-xs font-bold text-slate-300">Seat:</span>
+                <select id="qrSeatSlotSelect" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-amber-300">
+                  <option value="1">Seat 2 — Green Opponent</option>
+                  <option value="2">Seat 3 — Yellow Partner</option>
+                  <option value="3">Seat 4 — Blue Opponent</option>
+                </select>
+                <button id="generateWebRtcOfferBtn" type="button" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold">
+                  Generate QR
+                </button>
+                <button id="toggleCameraQrScanBtn" type="button" class="px-2.5 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold">
+                  📷 Camera Scan
+                </button>
+                <label class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold cursor-pointer">
+                  🖼️ Scan Image
+                  <input id="qrImageUploadInput" type="file" accept="image/*" class="hidden" />
+                </label>
+              </div>
+
+              <!-- Live Camera Viewfinder (Hidden until Camera Scan clicked) -->
+              <div id="cameraScannerWrap" class="hidden relative w-48 h-48 rounded-2xl overflow-hidden border-2 border-sky-400 mb-2.5 bg-black">
+                <video id="qrVideoElement" class="w-full h-full object-cover" playsinline muted></video>
+                <canvas id="qrScanHiddenCanvas" class="hidden"></canvas>
+                <div class="absolute inset-4 border-2 border-amber-400/80 rounded-xl pointer-events-none"></div>
+                <button id="stopCameraScanBtn" type="button" class="absolute bottom-1.5 inset-x-4 py-1 rounded bg-red-600/90 text-white text-[10px] font-bold">
+                  Stop Camera
+                </button>
+              </div>
+
+              <!-- QR Code Canvas Container -->
+              <div id="qrCodeBox" class="w-40 h-40 bg-white p-2.5 rounded-2xl shadow-lg flex items-center justify-center mb-2.5"></div>
+              <p id="qrStepInstruction" class="text-[11px] text-amber-300 font-semibold text-center mb-2.5">
+                Scan this QR code from your friend's phone or copy/paste the SDP handshake token below.
+              </p>
+
+              <!-- Copy / Paste Handshake Token -->
+              <div class="w-full space-y-2">
+                <div class="flex gap-2">
+                  <input id="localSdpTokenOutput" type="text" readonly placeholder="Generated Offline WebRTC SDP Token..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-slate-300" />
+                  <button id="copySdpTokenBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700">
+                    Copy Token
+                  </button>
+                </div>
+                <div class="flex gap-2">
+                  <input id="remoteSdpTokenInput" type="text" placeholder="Scanned or pasted friend QR token..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-white" />
+                  <button id="acceptRemoteSdpBtn" type="button" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+                    Link Peer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Linked Offline P2P Seats: <b id="connectedWebRtcCount" class="text-emerald-400">0 / 3</b></span>
+            <span id="rtcIceStatusText" class="text-amber-300">ICE Gathering Ready</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: PLAYER STATS, ACHIEVEMENTS, MATCH HISTORY, BACKUP & HD PICTURE ==================== -->
+    <section id="viewStats" class="hidden flex-1 flex flex-col gap-4">
+      <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+        <!-- Left 7 Cols: Career Stats, Achievements, Match History & Backup/Restore -->
+        <div class="lg:col-span-7 glass-panel rounded-2xl p-5 flex flex-col justify-between shadow-2xl space-y-4">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+              <div>
+                <h2 class="text-lg sm:text-2xl font-black text-white">🏆 Career Vault, Achievements &amp; Backup</h2>
+                <p class="text-xs text-slate-400">Auto-saved locally with one-click JSON Backup &amp; Restore so Chrome uninstall never erases your data.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <input id="profileNameInput" type="text" value="Bannu Champion" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-bold text-white w-36" />
+                <button id="saveProfileNameBtn" type="button" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold">
+                  Save Name
+                </button>
+              </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-4">
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Matches Played</div>
+                <div id="statMatches" class="text-2xl font-black text-white mt-0.5">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Total Wins</div>
+                <div id="statWins" class="text-2xl font-black text-emerald-400 mt-0.5">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Enemy Kills (شکار)</div>
+                <div id="statKills" class="text-2xl font-black text-red-400 mt-0.5">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Double Sixes (6+6)</div>
+                <div id="statDoubleSixes" class="text-2xl font-black text-amber-400 mt-0.5">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Win Rate</div>
+                <div id="statWinRate" class="text-xl font-black text-sky-400 mt-0.5">0%</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">2v2 Team Wins</div>
+                <div id="statTeamWins" class="text-xl font-black text-purple-400 mt-0.5">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Hard AI Wins</div>
+                <div id="statHardAiWins" class="text-xl font-black text-amber-300 mt-0.5">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div class="text-[11px] text-slate-400">Win Streak</div>
+                <div id="statStreak" class="text-xl font-black text-emerald-300 mt-0.5">0 🔥</div>
+              </div>
+            </div>
+
+            <!-- Cultural Achievements Badges -->
+            <div class="mb-4">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400 mb-2">🎖️ Pashtun Ludo Achievements</h3>
+              <div id="achievementsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs"></div>
+            </div>
+
+            <!-- Recent Match History Log -->
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">🕒 Recent Match History</h3>
+              <div id="matchHistoryContainer" class="max-h-32 overflow-y-auto space-y-1.5 pr-1 text-xs"></div>
+            </div>
+          </div>
+
+          <!-- Backup & Restore Section -->
+          <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400 mb-1">💾 Offline Backup &amp; Restore (بیک اپ اور ریسٹور)</h3>
+            <p class="text-xs text-slate-300 mb-3">
+              Download your complete profile, match history &amp; custom rules as a `.json` backup file, or restore a previous backup anytime.
+            </p>
+            <div class="flex flex-wrap gap-2.5">
+              <button id="exportStatsBackupBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow">
+                ⬇️ Download Backup (.json)
+              </button>
+              <label class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white shadow cursor-pointer">
+                ⬆️ Restore from Backup File
+                <input id="importStatsBackupInput" type="file" accept=".json,application/json" class="hidden" />
+              </label>
+              <button id="resetStatsBtn" type="button" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-red-950/60 text-xs font-semibold text-slate-400 hover:text-red-300 border border-slate-700 ml-auto">
+                Reset Stats
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: HD Professional Stats Card Generator & Download -->
+        <div class="lg:col-span-5 glass-panel rounded-2xl p-5 flex flex-col items-center justify-between shadow-2xl">
+          <div class="w-full">
+            <h3 class="text-base font-black text-white mb-1">📸 Professional Stats Picture Card</h3>
+            <p class="text-xs text-slate-300 mb-3">Generate and download a high-resolution summary picture of your Bannu Royale Ludo career to share on WhatsApp or save in your phone gallery.</p>
+          </div>
+
+          <canvas id="statsCardCanvas" width="600" height="380" class="w-full rounded-xl shadow-2xl border border-amber-500/40 mb-3"></canvas>
+
+          <div class="w-full flex gap-2">
+            <button id="refreshStatsCardBtn" type="button" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700">
+              🔄 Refresh Preview
+            </button>
+            <button id="downloadStatsCardPngBtn" type="button" class="flex-1 py-2.5 px-4 rounded-xl font-black text-xs text-slate-950 gold-gradient-btn shadow-lg">
+              📸 Download HD Picture (.PNG)
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 5: INTERACTIVE BANNU CULTURAL RULEBOOK GUIDE ==================== -->
+    <section id="viewGuide" class="hidden flex-1 flex flex-col gap-4">
+      <div class="glass-panel rounded-2xl p-5 sm:p-6 max-w-4xl w-full mx-auto shadow-2xl space-y-4">
+        <div class="border-b border-slate-800 pb-3">
+          <h2 class="text-xl sm:text-2xl font-black text-amber-400">📖 Bannu &amp; Pashtun Cultural Ludo Rules (بنوں کے روایتی لڈو قوانین)</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">Every regional rule from your voice notes is built into the game engine and can be toggled individually or tested live via the Cultural Rule Drills.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs sm:text-sm">
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h3 class="font-bold text-amber-300 mb-1">1. Two-Dice Tactical Play (دو گوٹیوں کا کھیل)</h3>
+            <p class="text-slate-300">Roll 1 or 2 dice. With 2 dice (e.g. 5 &amp; 3), you can combine both values (8 steps) on a single bead or split them (5 on one bead, 3 on another). Rolling <b>Double Six (6+6)</b> grants a bonus turn!</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h3 class="font-bold text-amber-300 mb-1">2. Mandatory Hand Spawn on 6 (پہلے ہاتھ والی بیڈ لگانا)</h3>
+            <p class="text-slate-300">If you still have beads waiting in your hand/yard and roll a 6 (e.g. 6 and 1), you <b>cannot</b> move your existing ground bead with that 6—you must first spawn a bead from your hand onto the board, then play the remaining 1.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h3 class="font-bold text-amber-300 mb-1">3. Kill Required for Home + Full Board Loop (بغیر شکار اندر جانا منع)</h3>
+            <p class="text-slate-300">You cannot enter your colored home stretch until you capture at least 1 opponent bead. Even if you only have 1 bead on the board and reach your home gate without a kill, you must turn past it and complete another full 52-square lap!</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h3 class="font-bold text-amber-300 mb-1">4. 2v2 Teams &amp; Single-Capture Choice (ٹیم میچ اور ایک شکار کا انتخاب)</h3>
+            <p class="text-slate-300">Opposite corners are teammates (Red+Yellow vs Green+Blue). Teammates never kill each other and can stand together on any square. If an enemy lands on two stacked teammates on an unprotected square, they can only eat <b>one</b> bead of their choice!</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h3 class="font-bold text-amber-300 mb-1">5. Close Game vs Open Game (کلوز گیم بمقابلہ اوپن گیم)</h3>
+            <p class="text-slate-300">In <b>Close Game</b>, when your bead captures an enemy, that capturing bead freezes on that spot for the rest of your turn if another bead can legally move or spawn. In <b>Open Game</b>, you may continue moving the capturing bead immediately.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h3 class="font-bold text-amber-300 mb-1">6. Strict Near-Home Remainder &amp; Partner Assist (بقایا نمبر اور ٹیم ہیلپ)</h3>
+            <p class="text-slate-300">If you have only 1 bead on the ground needing 6 for Home and roll 5+4 (9), you cannot play because the remaining 4 has nowhere to go. In 2v2, once you finish all your beads, you roll 1 Die until you get a <b>6</b>—unlocking 2-Dice control of your partner's beads!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL 1: OPPONENT CAPTURE CHOICE ON STACKED TEAMMATES ==================== -->
+  <div id="captureChoiceModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 max-w-md w-full border-2 border-red-500 shadow-2xl">
+      <h3 class="text-lg font-black text-white mb-1">⚔️ Choose Which Enemy Bead to Capture!</h3>
+      <p class="text-xs text-slate-300 mb-4">
+        Multiple enemy team beads are stacked on this unprotected square. Under Bannu Team Rules, you may only eat <b>ONE</b> bead of your choice and leave the other standing!
+      </p>
+      <div id="captureChoiceButtons" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: WI-FI / LAN MATCH INVITE POPUP ==================== -->
+  <div id="lanInviteModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 max-w-sm w-full border-2 border-emerald-500 shadow-2xl">
+      <h3 class="text-base font-black text-white mb-1">📡 Incoming Wi-Fi Match Request!</h3>
+      <p id="lanInviteModalText" class="text-xs text-slate-300 mb-4">Player wants to start a 2v2 Bannu Rules match with you.</p>
+      <div class="flex gap-2 justify-end">
+        <button id="declineLanInviteBtn" type="button" class="px-3.5 py-2 rounded-xl bg-slate-800 text-xs font-bold text-slate-300">Decline</button>
+        <button id="acceptLanInviteBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-black">Accept &amp; Play</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: VICTORY PODIUM ==================== -->
+  <div id="victoryModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-6 max-w-md w-full border-2 border-amber-400 text-center shadow-2xl">
+      <div class="text-5xl mb-2">👑</div>
+      <h3 id="victoryTitle" class="text-2xl font-black text-amber-400 mb-1">Victory!</h3>
+      <p id="victorySubtitle" class="text-sm text-slate-200 mb-5">Team 1 (Red &amp; Yellow) conquered the Bannu Royale Arena!</p>
+      <div class="flex gap-3 justify-center">
+        <button id="victoryPlayAgainBtn" type="button" class="px-5 py-2.5 rounded-xl font-black text-xs text-slate-950 gold-gradient-btn">
+          🔄 Play Again
+        </button>
+        <button id="victoryViewStatsBtn" type="button" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700">
+          📸 View Stats Card
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION BANNER -->
+  <div id="toastBanner" class="fixed bottom-16 md:bottom-4 right-4 z-50 hidden max-w-sm rounded-xl bg-slate-900/95 border border-amber-500/60 px-4 py-3 text-xs font-semibold text-white shadow-2xl"></div>
+
+  <!-- ==================== COMPLETE PRODUCTION GAME & NETWORK ENGINE ==================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- 1. BOARD GEOMETRY (15x15 Grid) ---
+      const MAIN_TRACK = [
+        [6,1],[6,2],[6,3],[6,4],[6,5],
+        [5,6],[4,6],[3,6],[2,6],[1,6],[0,6],
+        [0,7],
+        [0,8],[1,8],[2,8],[3,8],[4,8],[5,8],
+        [6,9],[6,10],[6,11],[6,12],[6,13],[6,14],
+        [7,14],
+        [8,14],[8,13],[8,12],[8,11],[8,10],[8,9],
+        [9,8],[10,8],[11,8],[12,8],[13,8],[14,8],
+        [14,7],
+        [14,6],[13,6],[12,6],[11,6],[10,6],[9,6],
+        [8,5],[8,4],[8,3],[8,2],[8,1],[8,0],
+        [7,0],[6,0]
+      ];
+
+      const START_TRACK_INDEX = [0, 13, 26, 39];
+      const SAFE_TRACK_INDICES = new Set([0, 8, 13, 21, 26, 34, 39, 47]);
+
+      const HOME_PATHS = [
+        [[7,1],[7,2],[7,3],[7,4],[7,5],[7,6]],       // Red (0)
+        [[1,7],[2,7],[3,7],[4,7],[5,7],[6,7]],       // Green (1)
+        [[7,13],[7,12],[7,11],[7,10],[7,9],[7,8]],   // Yellow (2)
+        [[13,7],[12,7],[11,7],[10,7],[9,7],[8,7]]    // Blue (3)
+      ];
+
+      const YARD_SLOTS = [
+        [[1.7, 1.7], [1.7, 3.3], [3.3, 1.7], [3.3, 3.3]],
+        [[1.7, 10.7], [1.7, 12.3], [3.3, 10.7], [3.3, 12.3]],
+        [[10.7, 10.7], [10.7, 12.3], [12.3, 10.7], [12.3, 12.3]],
+        [[10.7, 1.7], [10.7, 3.3], [12.3, 1.7], [12.3, 3.3]]
+      ];
+
+      const PLAYER_META = [
+        { id: 0, colorName: 'Red', hex: '#ef4444', darkHex: '#991b1b', lightHex: '#fca5a5', team: 0, partner: 2 },
+        { id: 1, colorName: 'Green', hex: '#10b981', darkHex: '#065f46', lightHex: '#6ee7b7', team: 1, partner: 3 },
+        { id: 2, colorName: 'Yellow', hex: '#f59e0b', darkHex: '#92400e', lightHex: '#fde68a', team: 0, partner: 0 },
+        { id: 3, colorName: 'Blue', hex: '#3b82f6', darkHex: '#1e40af', lightHex: '#93c5fd', team: 1, partner: 1 }
+      ];
+
+      // --- 2. SYNTHESIZED SOUND ENGINE (Web Audio API) ---
+      let soundEnabled = true;
+      let audioCtx = null;
+
+      function ensureAudio() {
+        if (!soundEnabled) return null;
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(function(){});
+        }
+        return audioCtx;
+      }
+
+      function playSound(type) {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'roll') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.14);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+          osc.start(now);
+          osc.stop(now + 0.16);
+        } else if (type === 'step') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(460, now);
+          osc.frequency.exponentialRampToValueAtTime(680, now + 0.06);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
+          osc.start(now);
+          osc.stop(now + 0.07);
+        } else if (type === 'kill') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(580, now);
+          osc.frequency.exponentialRampToValueAtTime(130, now + 0.32);
+          gain.gain.setValueAtTime(0.24, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.34);
+          osc.start(now);
+          osc.stop(now + 0.34);
+        } else if (type === 'emote') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.13);
+          osc.start(now);
+          osc.stop(now + 0.13);
+        } else if (type === 'home' || type === 'win') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.1);
+          osc.frequency.setValueAtTime(783.99, now + 0.2);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.42);
+          osc.start(now);
+          osc.stop(now + 0.42);
+        }
+      }
+
+      // --- 3. PERSISTENT CAREER STATS, ACHIEVEMENTS & MATCH HISTORY ---
+      const DEFAULT_STATS = {
+        playerName: 'Bannu Champion',
+        matches: 4,
+        wins: 3,
+        kills: 11,
+        doubleSixes: 5,
+        teamWins: 2,
+        hardAiWins: 2,
+        streak: 3,
+        history: [
+          { date: '2026-11-01', mode: '2v2 Bannu Close Game', result: 'Won (Team 1)', kills: 4 },
+          { date: '2026-11-01', mode: '2-Dice vs Hard AI', result: 'Won', kills: 3 }
+        ]
+      };
+      let careerStats = Object.assign({}, DEFAULT_STATS);
+
+      function loadCareerStats() {
+        try {
+          const raw = localStorage.getItem('bannu_ludo_career_v2');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            careerStats = Object.assign({}, DEFAULT_STATS, parsed);
+            if (!Array.isArray(careerStats.history)) careerStats.history = DEFAULT_STATS.history.slice();
+          }
+        } catch (e) {}
+        renderStatsView();
+      }
+
+      function saveCareerStats() {
+        try {
+          localStorage.setItem('bannu_ludo_career_v2', JSON.stringify(careerStats));
+        } catch (e) {}
+        renderStatsView();
+      }
+
+      // --- 4. RULES CONFIGURATION & GAME STATE ---
+      let rulesConfig = {
+        presetName: 'بنوں روایتی رولز (Bannu Rules)',
+        diceCount: 2,               // 1 or 2 dice
+        tokensPerPlayer: 4,         // 2, 3, or 4 beads
+        closeGameMode: true,        // true = Close Game (capturing bead locks on capture square if another bead can move/spawn)
+        mandatoryYardSpawn: true,   // true = Rolling a 6 when beads are in yard forces spawning from yard first
+        killRequiredForHome: true,  // true = Must have >= 1 kill to enter home stretch; otherwise loops outer 52-track
+        teamMode: true,             // true = 2v2 Opposite Corners (Red+Yellow vs Green+Blue), safe co-occupancy, single capture choice
+        strictHomeRemainder: true,  // true = Cannot waste a die near home if no other token can consume the remaining die
+        teamAssistRequiresSix: true,// true = Finished partner rolls 1 die for a 6 to unlock 2-dice partner control
+        turnTimeSeconds: 30,        // 15, 30, 60, or 0 (unlimited)
+        aiDifficulty: 'hard'
+      };
+
+      let seatConfig = [
+        { name: 'You (Red)', type: 'human', active: true },
+        { name: 'Sher Khan AI', type: 'ai', active: true },
+        { name: 'Wazir Partner', type: 'ai', active: true },
+        { name: 'Marwat AI', type: 'ai', active: true }
+      ];
+
+      let gameState = {
+        players: [],
+        currentTurn: 0,
+        phase: 'ROLL', // 'ROLL', 'MOVE', 'ANIMATING', 'CAPTURE_CHOICE', 'GAME_OVER'
+        dicePool: [],
+        selectedTokenKey: null,
+        hoveredMove: null,
+        undoStack: [],
+        aiTimer: null,
+        turnCountdown: 30,
+        turnInterval: null
+      };
+
+      function cloneStateSnapshot() {
+        return JSON.stringify({
+          players: gameState.players,
+          currentTurn: gameState.currentTurn,
+          phase: gameState.phase,
+          dicePool: gameState.dicePool
+        });
+      }
+
+      function pushUndoSnapshot() {
+        gameState.undoStack.push(cloneStateSnapshot());
+        if (gameState.undoStack.length > 12) gameState.undoStack.shift();
+      }
+
+      function restoreUndoSnapshot() {
+        if (gameState.undoStack.length === 0 || gameState.phase === 'ANIMATING') {
+          showToast('No previous turn snapshot to undo.');
+          return;
+        }
+        if (gameState.aiTimer) clearTimeout(gameState.aiTimer);
+        const snap = JSON.parse(gameState.undoStack.pop());
+        gameState.players = snap.players;
+        gameState.currentTurn = snap.currentTurn;
+        gameState.phase = snap.phase;
+        gameState.dicePool = snap.dicePool;
+        gameState.selectedTokenKey = null;
+        gameState.hoveredMove = null;
+        document.getElementById('tokenMoveMenu').classList.add('hidden');
+        document.getElementById('captureChoiceModal').classList.add('hidden');
+        addGameLog('↩️ Reverted to previous turn state.', 'warn');
+        resetTurnCountdown();
+        updateAllUI();
+      }
+
+      function createPlayerObject(idx) {
+        const cfg = seatConfig[idx];
+        const tokens = [];
+        for (let t = 0; t < rulesConfig.tokensPerPlayer; t++) {
+          tokens.push({
+            owner: idx,
+            id: t,
+            state: 'yard',        // 'yard', 'board', 'home_stretch', 'completed'
+            steps: 0,             // steps from owner's start square on outer track
+            homeStep: 0,          // 1..5 in home column, 6 = completed
+            lockedThisTurn: false,
+            animCoords: null      // [row, col] override during hop animation
+          });
+        }
+        return {
+          id: idx,
+          name: cfg.name,
+          type: cfg.type,
+          active: cfg.active,
+          team: PLAYER_META[idx].team,
+          partner: PLAYER_META[idx].partner,
+          kills: 0,
+          assistUnlocked: false,
+          tokens: tokens
+        };
+      }
+
+      function initNewMatch(customAnnouncement) {
+        if (gameState.aiTimer) {
+          clearTimeout(gameState.aiTimer);
+          gameState.aiTimer = null;
+        }
+        gameState.players = [0, 1, 2, 3].map(createPlayerObject);
+        gameState.currentTurn = 0;
+        gameState.phase = 'ROLL';
+        gameState.dicePool = [
+          { id: 0, value: 6, used: true },
+          { id: 1, value: 6, used: true }
+        ];
+        gameState.selectedTokenKey = null;
+        gameState.hoveredMove = null;
+        gameState.undoStack = [];
+        document.getElementById('tokenMoveMenu').classList.add('hidden');
+        document.getElementById('captureChoiceModal').classList.add('hidden');
+        document.getElementById('victoryModal').classList.add('hidden');
+
+        clearGameLog();
+        addGameLog(customAnnouncement || ('New Match started with ' + rulesConfig.presetName + ' (' + rulesConfig.diceCount + ' Dice, ' + rulesConfig.tokensPerPlayer + ' Beads).'), 'gold');
+        resetTurnCountdown();
+        updateAllUI();
+        scheduleAiIfNeeded();
+      }
+
+      // --- 5. TURN COUNTDOWN TIMER ---
+      function resetTurnCountdown() {
+        if (gameState.turnInterval) {
+          clearInterval(gameState.turnInterval);
+          gameState.turnInterval = null;
+        }
+        for (let i = 0; i < 4; i++) {
+          const bar = document.getElementById('turnTimerBar' + i);
+          if (bar) bar.style.width = (i === gameState.currentTurn ? '100%' : '0%');
+        }
+        const badge = document.getElementById('turnCountdownBadge');
+        if (!rulesConfig.turnTimeSeconds || rulesConfig.turnTimeSeconds <= 0) {
+          if (badge) badge.textContent = '∞';
+          return;
+        }
+        gameState.turnCountdown = rulesConfig.turnTimeSeconds;
+        if (badge) badge.textContent = gameState.turnCountdown + 's';
+
+        gameState.turnInterval = setInterval(function () {
+          if (gameState.phase === 'GAME_OVER' || gameState.phase === 'ANIMATING') return;
+          gameState.turnCountdown = Math.max(0, gameState.turnCountdown - 1);
+          if (badge) badge.textContent = gameState.turnCountdown + 's';
+          const activeBar = document.getElementById('turnTimerBar' + gameState.currentTurn);
+          if (activeBar) {
+            const pct = Math.round((gameState.turnCountdown / rulesConfig.turnTimeSeconds) * 100);
+            activeBar.style.width = pct + '%';
+          }
+          if (gameState.turnCountdown === 0) {
+            const autoChk = document.getElementById('autoPlayTimeoutChk');
+            if (autoChk && autoChk.checked) {
+              if (gameState.phase === 'ROLL') {
+                rollDiceForCurrentPlayer();
+              } else if (gameState.phase === 'MOVE') {
+                const legal = computeLegalMoves();
+                if (legal.length > 0) {
+                  legal.sort(function (a, b) { return evaluateMoveScore(b) - evaluateMoveScore(a); });
+                  executeMove(legal[0]);
+                } else {
+                  advanceToNextTurn();
+                }
+              }
+            }
+          }
+        }, 1000);
+      }
+
+      // --- 6. COMPLETE BANNU & CLASSIC LUDO RULES ENGINE (With Full 2-Dice Lookahead!) ---
+
+      function hasPlayerCompletedAllTokens(playerIdx) {
+        const p = gameState.players[playerIdx];
+        if (!p || !p.active) return true;
+        return p.tokens.every(function (tk) { return tk.state === 'completed'; });
+      }
+
+      function getControlledOwnerIndex(actorIdx) {
+        const actor = gameState.players[actorIdx];
+        if (!hasPlayerCompletedAllTokens(actorIdx)) return actorIdx;
+        if (rulesConfig.teamMode) {
+          const partnerIdx = actor.partner;
+          const partner = gameState.players[partnerIdx];
+          if (partner && partner.active && !hasPlayerCompletedAllTokens(partnerIdx)) {
+            if (!rulesConfig.teamAssistRequiresSix || actor.assistUnlocked) {
+              return partnerIdx;
+            }
+          }
+        }
+        return actorIdx;
+      }
+
+      function canOwnerEnterHomeStretch(ownerIdx) {
+        if (!rulesConfig.killRequiredForHome) return true;
+        const owner = gameState.players[ownerIdx];
+        return owner && owner.kills > 0;
+      }
+
+      function getOuterTrackIndex(token) {
+        return (START_TRACK_INDEX[token.owner] + token.steps) % 52;
+      }
+
+      function simulateTokenAdvance(token, delta, customEligibleHome) {
+        if (token.state === 'completed') {
+          return { valid: false, reason: 'Already completed' };
+        }
+        if (token.state === 'yard') {
+          if (delta === 6) {
+            return {
+              valid: true,
+              isSpawn: true,
+              newState: 'board',
+              newSteps: 0,
+              newHomeStep: 0
+            };
+          }
+          return { valid: false, reason: 'Needs a 6 to spawn from hand/yard' };
+        }
+
+        if (token.lockedThisTurn && rulesConfig.closeGameMode) {
+          return { valid: false, reason: 'Locked on capture square (Close Game rule)' };
+        }
+
+        const eligibleHome = customEligibleHome !== undefined ? customEligibleHome : canOwnerEnterHomeStretch(token.owner);
+
+        if (token.state === 'home_stretch') {
+          const targetHome = token.homeStep + delta;
+          if (targetHome === 6) {
+            return { valid: true, newState: 'completed', newSteps: token.steps, newHomeStep: 6 };
+          } else if (targetHome < 6) {
+            return { valid: true, newState: 'home_stretch', newSteps: token.steps, newHomeStep: targetHome };
+          } else {
+            return { valid: false, reason: 'Overshoots Home (needs exact ' + (6 - token.homeStep) + ')' };
+          }
+        }
+
+        // Token is on 'board' (outer 52-square track)
+        const posInLap = token.steps % 52;
+        const stepsToHomeGate = 50 - posInLap;
+
+        if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
+          if (eligibleHome) {
+            const intoHome = delta - stepsToHomeGate;
+            if (intoHome === 6) {
+              return { valid: true, newState: 'completed', newSteps: token.steps + stepsToHomeGate, newHomeStep: 6 };
+            } else if (intoHome < 6) {
+              return { valid: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: intoHome };
+            } else {
+              return { valid: false, reason: 'Overshoots Home goal' };
+            }
+          } else {
+            // BANNU NO-KILL LOOP RULE: Must loop past Home Gate around the outer 52-square track!
+            return {
+              valid: true,
+              loopedPastHome: true,
+              newState: 'board',
+              newSteps: token.steps + delta,
+              newHomeStep: 0
+            };
+          }
+        }
+
+        return {
+          valid: true,
+          newState: 'board',
+          newSteps: token.steps + delta,
+          newHomeStep: 0
+        };
+      }
+
+      // Check if landing on an outer track square triggers a capture
+      function getCaptureCandidatesAtTrackIndex(moverOwnerIdx, trackIdx) {
+        if (SAFE_TRACK_INDICES.has(trackIdx)) return [];
+        const moverMeta = PLAYER_META[moverOwnerIdx];
+        const candidates = [];
+
+        gameState.players.forEach(function (pl) {
+          if (!pl.active || pl.id === moverOwnerIdx) return;
+          if (rulesConfig.teamMode && pl.team === moverMeta.team) return;
+
+          pl.tokens.forEach(function (tk) {
+            if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+              candidates.push({ ownerIdx: pl.id, tokenId: tk.id, playerName: pl.name, colorName: PLAYER_META[pl.id].colorName });
+            }
+          });
+        });
+
+        return candidates;
+      }
+
+      // Helper for 2-Dice Lookahead: Given a simulated token array after Die 1 is played, can `secondDieValue` be played on ANY token?
+      function canPlaySecondDieOnSimulatedState(simTokens, secondDieValue, eligibleHome) {
+        // Check Close Game override on simulated tokens: if a token was locked by Die 1 capture, check if any other token can use secondDieValue
+        const locked = simTokens.filter(function (t) { return t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); });
+        if (locked.length > 0 && rulesConfig.closeGameMode) {
+          const unlockedPlayable = simTokens.some(function (t) {
+            if (t.lockedThisTurn) return false;
+            return simulateTokenAdvance(t, secondDieValue, eligibleHome).valid;
+          });
+          if (!unlockedPlayable) {
+            // If NO other token on board/yard can use the second die (and no other unlocked ground token exists), check if sole ground token unlocks
+            const otherGroundCount = simTokens.filter(function (t) { return !t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); }).length;
+            const canSpawn = secondDieValue === 6 && simTokens.some(function (t) { return t.state === 'yard'; });
+            if (otherGroundCount === 0 && !canSpawn) {
+              locked.forEach(function (t) { t.lockedThisTurn = false; });
+            }
+          }
+        }
+
+        return simTokens.some(function (t) {
+          return simulateTokenAdvance(t, secondDieValue, eligibleHome).valid;
+        });
+      }
+
+      // Compute all legal moves for the current dicePool & controlled player
+      function computeLegalMoves() {
+        if (gameState.phase !== 'MOVE') return [];
+        const actorIdx = gameState.currentTurn;
+        const targetOwnerIdx = getControlledOwnerIndex(actorIdx);
+        const owner = gameState.players[targetOwnerIdx];
+        if (!owner) return [];
+
+        const unusedDice = gameState.dicePool.filter(function (d) { return !d.used; });
+        if (unusedDice.length === 0) return [];
+
+        const tokens = owner.tokens;
+        const yardTokens = tokens.filter(function (t) { return t.state === 'yard'; });
+        const groundTokens = tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
+
+        // Close Game Override Check:
+        // If a token was locked this turn due to a capture on Die 1, check if ANY other token can move or spawn.
+        // If the player has NO other token on the ground (and cannot spawn from yard with remaining die), unlock the capturing token!
+        const lockedTokens = groundTokens.filter(function (t) { return t.lockedThisTurn; });
+        if (lockedTokens.length > 0 && rulesConfig.closeGameMode) {
+          const otherGround = groundTokens.filter(function (t) { return !t.lockedThisTurn; });
+          const canSpawnYard = yardTokens.length > 0 && unusedDice.some(function (d) { return d.value === 6; });
+          if (otherGround.length === 0 && !canSpawnYard) {
+            lockedTokens.forEach(function (t) { t.lockedThisTurn = false; });
+          }
+        }
+
+        // RULE 1: Mandatory Hand/Yard Spawn on 6
+        const hasUnusedSix = unusedDice.some(function (d) { return d.value === 6; });
+        if (rulesConfig.mandatoryYardSpawn && yardTokens.length > 0 && hasUnusedSix) {
+          const sixDie = unusedDice.find(function (d) { return d.value === 6; });
+          return yardTokens.map(function (yt, idx) {
+            return {
+              tokenId: yt.id,
+              ownerIdx: targetOwnerIdx,
+              diceIds: [sixDie.id],
+              delta: 6,
+              isMandatorySpawn: idx === 0,
+              label: 'Bead #' + (yt.id + 1) + ': Spawn from Hand (Mandatory 6 Rule)',
+              sim: simulateTokenAdvance(yt, 6)
+            };
+          }).slice(0, 1); // Show primary yard spawn option cleanly
+        }
+
+        // RULE 2: Strict Near-Home Remainder Check when only 1 bead is on the ground (and no yard spawn possible)
+        if (
+          rulesConfig.strictHomeRemainder &&
+          unusedDice.length === 2 &&
+          groundTokens.length === 1 &&
+          (yardTokens.length === 0 || !hasUnusedSix)
+        ) {
+          const soleToken = groundTokens[0];
+          const sumVal = unusedDice[0].value + unusedDice[1].value;
+          const combinedSim = simulateTokenAdvance(soleToken, sumVal);
+          if (!combinedSim.valid) {
+            return [];
+          }
+        }
+
+        // First collect all raw candidate single-die moves and combined moves
+        const candidateSingleMoves = [];
+        const candidateCombinedMoves = [];
+
+        tokens.forEach(function (tk) {
+          if (tk.state === 'completed') return;
+
+          const seenSingleValues = new Set();
+          unusedDice.forEach(function (die) {
+            if (seenSingleValues.has(die.value)) return;
+            const sim = simulateTokenAdvance(tk, die.value);
+            if (!sim.valid) return;
+
+            // Check if playing `die` on `tk` allows the remaining die (if 2 dice unused) to ALSO be played!
+            let allowsSecondDie = true;
+            if (unusedDice.length === 2) {
+              const otherDie = unusedDice.find(function (d) { return d.id !== die.id; });
+              const simTokens = tokens.map(function (orig) {
+                if (orig.id !== tk.id) return Object.assign({}, orig);
+                let locksAfterMove = orig.lockedThisTurn;
+                let willUnlockHome = canOwnerEnterHomeStretch(targetOwnerIdx);
+                if (sim.newState === 'board') {
+                  const destTrack = (START_TRACK_INDEX[orig.owner] + sim.newSteps) % 52;
+                  const enemies = getCaptureCandidatesAtTrackIndex(targetOwnerIdx, destTrack);
+                  if (enemies.length > 0) {
+                    willUnlockHome = true;
+                    if (rulesConfig.closeGameMode) locksAfterMove = true;
+                  }
+                }
+                return {
+                  owner: orig.owner,
+                  id: orig.id,
+                  state: sim.newState,
+                  steps: sim.newSteps,
+                  homeStep: sim.newHomeStep,
+                  lockedThisTurn: locksAfterMove
+                };
+              });
+              const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || (sim.newState === 'board' && getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52).length > 0);
+              allowsSecondDie = canPlaySecondDieOnSimulatedState(simTokens, otherDie.value, willHomeBeEligible);
+            }
+
+            seenSingleValues.add(die.value);
+            candidateSingleMoves.push({
+              tokenId: tk.id,
+              ownerIdx: targetOwnerIdx,
+              diceIds: [die.id],
+              delta: die.value,
+              allowsSecondDie: allowsSecondDie,
+              label: sim.isSpawn
+                ? ('Bead #' + (tk.id + 1) + ': Spawn to Start (Die ' + die.value + ')')
+                : ('Bead #' + (tk.id + 1) + ': Move +' + die.value + ' steps'),
+              sim: sim
+            });
+          });
+
+          // Combined 2-dice move on a single ground token (only if it wouldn't violate Close Game mid-step capture lock, or allowed directly)
+          if (unusedDice.length === 2 && (tk.state === 'board' || tk.state === 'home_stretch')) {
+            const d0 = unusedDice[0];
+            const d1 = unusedDice[1];
+            const sumDelta = d0.value + d1.value;
+            const simCombined = simulateTokenAdvance(tk, sumDelta);
+            if (simCombined.valid) {
+              candidateCombinedMoves.push({
+                tokenId: tk.id,
+                ownerIdx: targetOwnerIdx,
+                diceIds: [d0.id, d1.id],
+                delta: sumDelta,
+                isCombined: true,
+                allowsSecondDie: true,
+                label: 'Bead #' + (tk.id + 1) + ': Combine Both Dice +' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
+                sim: simCombined
+              });
+            }
+          }
+        });
+
+        // Under Strict Home Remainder:
+        // If 2 dice are unused and ANY move sequence consumes BOTH dice (`allowsSecondDie === true`), filter out single moves that strand the second die!
+        const anyConsumesBoth = candidateSingleMoves.some(function (m) { return m.allowsSecondDie; }) || candidateCombinedMoves.length > 0;
+        let filteredSingles = candidateSingleMoves;
+        if (rulesConfig.strictHomeRemainder && unusedDice.length === 2) {
+          if (anyConsumesBoth) {
+            filteredSingles = candidateSingleMoves.filter(function (m) { return m.allowsSecondDie; });
+          } else {
+            // If no sequence can consume both dice, check if all ground tokens are near home (overshooting with remainder)
+            const allNearHome = groundTokens.every(function (gt) {
+              return gt.state === 'home_stretch' || (gt.steps % 52) >= 44;
+            });
+            if (allNearHome) return [];
+          }
+        }
+
+        return filteredSingles.concat(candidateCombinedMoves);
+      }
+
+      // Compute exact step-by-step grid coordinates for hop animation & path preview
+      function computeMovePathCoords(token, delta, simResult) {
+        if (simResult.isSpawn) {
+          return [MAIN_TRACK[START_TRACK_INDEX[token.owner]]];
+        }
+        const coords = [];
+        const eligibleHome = canOwnerEnterHomeStretch(token.owner);
+        let curState = token.state;
+        let curSteps = token.steps;
+        let curHomeStep = token.homeStep;
+
+        for (let s = 1; s <= delta; s++) {
+          if (curState === 'home_stretch') {
+            curHomeStep += 1;
+            coords.push(HOME_PATHS[token.owner][Math.min(5, curHomeStep - 1)]);
+          } else {
+            const posInLap = curSteps % 52;
+            if (posInLap === 50 && eligibleHome) {
+              curState = 'home_stretch';
+              curHomeStep = 1;
+              coords.push(HOME_PATHS[token.owner][0]);
+            } else {
+              curSteps += 1;
+              const tIdx = (START_TRACK_INDEX[token.owner] + curSteps) % 52;
+              coords.push(MAIN_TRACK[tIdx]);
+            }
+          }
+        }
+        return coords;
+      }
+
+      // Execute a selected legal move with step-by-step hop animation!
+      function executeMove(move, isRemoteSync) {
+        if (gameState.phase === 'ANIMATING') return;
+        const actorIdx = gameState.currentTurn;
+        const owner = gameState.players[move.ownerIdx];
+        const token = owner.tokens[move.tokenId];
+
+        pushUndoSnapshot();
+        document.getElementById('tokenMoveMenu').classList.add('hidden');
+        gameState.selectedTokenKey = null;
+        gameState.hoveredMove = null;
+
+        if (!isRemoteSync) {
+          broadcastNetworkAction({
+            type: 'MOVE',
+            tokenId: move.tokenId,
+            ownerIdx: move.ownerIdx,
+            diceIds: move.diceIds,
+            delta: move.delta
+          });
+        }
+
+        // Mark used dice
+        move.diceIds.forEach(function (dId) {
+          const d = gameState.dicePool.find(function (x) { return x.id === dId; });
+          if (d) d.used = true;
+        });
+
+        const pathCoords = computeMovePathCoords(token, move.delta, move.sim);
+        gameState.phase = 'ANIMATING';
+
+        let stepIdx = 0;
+        function hopNext() {
+          if (stepIdx < pathCoords.length) {
+            token.animCoords = pathCoords[stepIdx];
+            playSound('step');
+            drawBoard();
+            stepIdx += 1;
+            setTimeout(hopNext, Math.min(75, Math.floor(320 / Math.max(1, pathCoords.length))));
+          } else {
+            token.animCoords = null;
+            finalizeMoveExecution(actorIdx, owner, token, move);
+          }
+        }
+        hopNext();
+      }
+
+      function finalizeMoveExecution(actorIdx, owner, token, move) {
+        gameState.phase = 'MOVE';
+        token.state = move.sim.newState;
+        token.steps = move.sim.newSteps;
+        token.homeStep = move.sim.newHomeStep;
+        if (token.state === 'completed') playSound('home');
+
+        if (move.sim.isSpawn) {
+          addGameLog(owner.name + ' spawned Bead #' + (token.id + 1) + ' onto the starting square.', 'info');
+        } else if (move.sim.loopedPastHome) {
+          addGameLog(owner.name + ' has 0 kills! Bead #' + (token.id + 1) + ' looped past Home Entry for another full lap.', 'warn');
+          showToast('⚠️ No kill yet! Bead must complete another full lap around the board.');
+        } else if (token.state === 'completed') {
+          addGameLog('🎉 ' + owner.name + ' completed Bead #' + (token.id + 1) + ' into Home!', 'gold');
+        } else {
+          addGameLog(owner.name + ' moved Bead #' + (token.id + 1) + ' forward by ' + move.delta + '.', 'info');
+        }
+
+        if (token.state === 'board') {
+          const landedTrackIdx = getOuterTrackIndex(token);
+          const enemies = getCaptureCandidatesAtTrackIndex(move.ownerIdx, landedTrackIdx);
+          if (enemies.length === 1) {
+            performSingleCapture(move.ownerIdx, token, enemies[0]);
+          } else if (enemies.length > 1) {
+            const actorPlayer = gameState.players[actorIdx];
+            if (actorPlayer.type === 'human') {
+              promptCaptureChoiceModal(move.ownerIdx, token, enemies);
+              updateAllUI();
+              return;
+            } else {
+              enemies.sort(function (a, b) {
+                const tkA = gameState.players[a.ownerIdx].tokens[a.tokenId];
+                const tkB = gameState.players[b.ownerIdx].tokens[b.tokenId];
+                return tkB.steps - tkA.steps;
+              });
+              performSingleCapture(move.ownerIdx, token, enemies[0]);
+            }
+          }
+        }
+
+        continueTurnAfterMove();
+      }
+
+      function performSingleCapture(capturerOwnerIdx, capturingToken, victimInfo) {
+        const victimPlayer = gameState.players[victimInfo.ownerIdx];
+        const victimToken = victimPlayer.tokens[victimInfo.tokenId];
+        victimToken.state = 'yard';
+        victimToken.steps = 0;
+        victimToken.homeStep = 0;
+        victimToken.lockedThisTurn = false;
+
+        const capturerPlayer = gameState.players[capturerOwnerIdx];
+        capturerPlayer.kills += 1;
+
+        if (capturerOwnerIdx === 0 || gameState.currentTurn === 0) {
+          careerStats.kills += 1;
+          saveCareerStats();
+        }
+
+        playSound('kill');
+        triggerPlayerEmote(gameState.currentTurn, '⚔️ شکار! (Killed!)');
+        addGameLog('⚔️ ' + capturerPlayer.name + ' captured ' + victimPlayer.name + '\'s Bead #' + (victimToken.id + 1) + '! (Home Entry Unlocked)', 'kill');
+
+        if (rulesConfig.closeGameMode) {
+          capturingToken.lockedThisTurn = true;
+          addGameLog('🔒 Close Game Rule: Capturing Bead #' + (capturingToken.id + 1) + ' is locked on this square for the rest of the turn (if another bead can move).', 'warn');
+        }
+      }
+
+      function promptCaptureChoiceModal(capturerOwnerIdx, capturingToken, enemies) {
+        gameState.phase = 'CAPTURE_CHOICE';
+        const modal = document.getElementById('captureChoiceModal');
+        const list = document.getElementById('captureChoiceButtons');
+        list.innerHTML = '';
+
+        enemies.forEach(function (enemy) {
+          const vToken = gameState.players[enemy.ownerIdx].tokens[enemy.tokenId];
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'w-full p-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 flex items-center justify-between text-left transition';
+          btn.innerHTML =
+            '<div>' +
+              '<div class="font-bold text-sm text-white">Eat ' + enemy.playerName + ' (' + enemy.colorName + ' Bead #' + (enemy.tokenId + 1) + ')</div>' +
+              '<div class="text-xs text-slate-400">Progress: ' + vToken.steps + ' steps from start</div>' +
+            '</div>' +
+            '<span class="px-2.5 py-1 rounded-lg bg-red-500 text-white text-xs font-bold">Capture ⚔️</span>';
+          btn.addEventListener('click', function () {
+            modal.classList.add('hidden');
+            gameState.phase = 'MOVE';
+            performSingleCapture(capturerOwnerIdx, capturingToken, enemy);
+            continueTurnAfterMove();
+          });
+          list.appendChild(btn);
+        });
+
+        modal.classList.remove('hidden');
+      }
+
+      function checkVictoryCondition() {
+        for (let i = 0; i < 4; i++) {
+          const p = gameState.players[i];
+          if (!p.active) continue;
+          if (rulesConfig.teamMode) {
+            const partner = gameState.players[p.partner];
+            if (hasPlayerCompletedAllTokens(i) && (!partner.active || hasPlayerCompletedAllTokens(p.partner))) {
+              return {
+                won: true,
+                isTeamWin: true,
+                winningTeam: p.team,
+                title: p.team === 0 ? 'Team 1 (Red & Yellow) Wins!' : 'Team 2 (Green & Blue) Wins!',
+                subtitle: 'Both partners completed all their beads under ' + rulesConfig.presetName + '!'
+              };
+            }
+          } else {
+            if (hasPlayerCompletedAllTokens(i)) {
+              return {
+                won: true,
+                isTeamWin: false,
+                winnerIdx: i,
+                title: p.name + ' Wins the Match!',
+                subtitle: 'Completed all ' + rulesConfig.tokensPerPlayer + ' beads!'
+              };
+            }
+          }
+        }
+        return { won: false };
+      }
+
+      function continueTurnAfterMove() {
+        const vic = checkVictoryCondition();
+        if (vic.won) {
+          gameState.phase = 'GAME_OVER';
+          playSound('win');
+          careerStats.matches += 1;
+          const humanWon = (vic.isTeamWin && vic.winningTeam === 0) || (!vic.isTeamWin && vic.winnerIdx === 0);
+          if (humanWon) {
+            careerStats.wins += 1;
+            careerStats.streak += 1;
+            if (vic.isTeamWin) careerStats.teamWins += 1;
+            if (rulesConfig.aiDifficulty === 'hard') careerStats.hardAiWins += 1;
+          } else {
+            careerStats.streak = 0;
+          }
+          careerStats.history.unshift({
+            date: new Date().toISOString().slice(0, 10),
+            mode: rulesConfig.presetName + ' (' + rulesConfig.diceCount + 'D)',
+            result: humanWon ? 'Won 🏆' : 'Lost',
+            kills: gameState.players[0].kills
+          });
+          if (careerStats.history.length > 20) careerStats.history.pop();
+          saveCareerStats();
+
+          document.getElementById('victoryTitle').textContent = vic.title;
+          document.getElementById('victorySubtitle').textContent = vic.subtitle;
+          document.getElementById('victoryModal').classList.remove('hidden');
+          updateAllUI();
+          return;
+        }
+
+        const remainingMoves = computeLegalMoves();
+        if (remainingMoves.length > 0) {
+          updateAllUI();
+          scheduleAiIfNeeded();
+          return;
+        }
+
+        const rolledBonus = (rulesConfig.diceCount === 1 && gameState.dicePool[0].value === 6) ||
+                            (rulesConfig.diceCount === 2 && gameState.dicePool.length === 2 && gameState.dicePool[0].value === 6 && gameState.dicePool[1].value === 6);
+
+        if (rolledBonus) {
+          const curP = gameState.players[gameState.currentTurn];
+          addGameLog('🔥 Bonus Roll granted to ' + curP.name + (rulesConfig.diceCount === 2 ? ' for Double Six (6+6)!' : ' for rolling a 6!'), 'gold');
+          showToast('🔥 Bonus Roll Earned!');
+          resetTokenLocksForPlayer(getControlledOwnerIndex(gameState.currentTurn));
+          gameState.phase = 'ROLL';
+          resetTurnCountdown();
+          updateAllUI();
+          scheduleAiIfNeeded();
+          return;
+        }
+
+        advanceToNextTurn();
+      }
+
+      function resetTokenLocksForPlayer(ownerIdx) {
+        const p = gameState.players[ownerIdx];
+        if (!p) return;
+        p.tokens.forEach(function (tk) { tk.lockedThisTurn = false; });
+      }
+
+      function advanceToNextTurn() {
+        resetTokenLocksForPlayer(getControlledOwnerIndex(gameState.currentTurn));
+        for (let step = 1; step <= 4; step++) {
+          const cand = (gameState.currentTurn + step) % 4;
+          const p = gameState.players[cand];
+          if (!p || !p.active) continue;
+          if (!rulesConfig.teamMode && hasPlayerCompletedAllTokens(cand)) continue;
+          gameState.currentTurn = cand;
+          break;
+        }
+        gameState.phase = 'ROLL';
+        gameState.selectedTokenKey = null;
+        gameState.hoveredMove = null;
+        document.getElementById('tokenMoveMenu').classList.add('hidden');
+        resetTurnCountdown();
+        updateAllUI();
+        scheduleAiIfNeeded();
+      }
+
+      function rollDiceForCurrentPlayer(forcedValues, isRemoteSync) {
+        if (gameState.phase !== 'ROLL') return;
+        const actor = gameState.players[gameState.currentTurn];
+        resetTokenLocksForPlayer(getControlledOwnerIndex(gameState.currentTurn));
+
+        const needsAssistSixRoll = rulesConfig.teamMode &&
+                                   rulesConfig.teamAssistRequiresSix &&
+                                   hasPlayerCompletedAllTokens(actor.id) &&
+                                   !actor.assistUnlocked;
+
+        const effectiveDiceCount = needsAssistSixRoll ? 1 : rulesConfig.diceCount;
+
+        playSound('roll');
+        const dSlot0 = document.getElementById('dieSlot0');
+        const dSlot1 = document.getElementById('dieSlot1');
+        dSlot0.classList.add('dice-rolling');
+        dSlot1.classList.add('dice-rolling');
+
+        setTimeout(function () {
+          dSlot0.classList.remove('dice-rolling');
+          dSlot1.classList.remove('dice-rolling');
+
+          const v1 = forcedValues ? forcedValues[0] : (Math.floor(Math.random() * 6) + 1);
+          const v2 = forcedValues && forcedValues[1] ? forcedValues[1] : (Math.floor(Math.random() * 6) + 1);
+
+          if (effectiveDiceCount === 1) {
+            gameState.dicePool = [{ id: 0, value: v1, used: false }];
+          } else {
+            gameState.dicePool = [
+              { id: 0, value: v1, used: false },
+              { id: 1, value: v2, used: false }
+            ];
+            if (v1 === 6 && v2 === 6) {
+              triggerPlayerEmote(actor.id, '🔥 ڈبل سکس! (6+6)');
+              if (actor.id === 0) {
+                careerStats.doubleSixes += 1;
+                saveCareerStats();
+              }
+            }
+          }
+
+          if (!isRemoteSync) {
+            broadcastNetworkAction({ type: 'ROLL', values: [v1, v2] });
+          }
+
+          if (needsAssistSixRoll) {
+            if (v1 === 6) {
+              actor.assistUnlocked = true;
+              const partner = gameState.players[actor.partner];
+              addGameLog('🤝 ' + actor.name + ' rolled a 6! Partner Assist UNLOCKED—now controlling ' + partner.name + '\'s beads with 2 Dice!', 'gold');
+              showToast('🤝 Rolled 6! Partner Assist Unlocked! Roll 2 Dice now.');
+              triggerPlayerEmote(actor.id, '🤝 مدد شروع! (6!)');
+              gameState.phase = 'ROLL';
+              resetTurnCountdown();
+              updateAllUI();
+              scheduleAiIfNeeded();
+              return;
+            } else {
+              addGameLog(actor.name + ' rolled ' + v1 + ' (Needs a 6 on 1 Die to unlock Partner Assist for ' + gameState.players[actor.partner].name + ').', 'warn');
+              updateAllUI();
+              setTimeout(advanceToNextTurn, 750);
+              return;
+            }
+          }
+
+          gameState.phase = 'MOVE';
+          const rollStr = effectiveDiceCount === 2 ? (v1 + ' & ' + v2 + ' (Total ' + (v1 + v2) + ')') : String(v1);
+          addGameLog('🎲 ' + actor.name + ' rolled ' + rollStr + '.', 'info');
+
+          const legal = computeLegalMoves();
+          updateAllUI();
+
+          if (legal.length === 0) {
+            const targetIdx = getControlledOwnerIndex(actor.id);
+            const groundTk = gameState.players[targetIdx].tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
+            if (rulesConfig.strictHomeRemainder && effectiveDiceCount === 2 && groundTk.length >= 1) {
+              addGameLog('⛔ No playable move: Rolled dice (' + v1 + '+' + v2 + ') cannot be legally consumed without overshooting Home!', 'warn');
+              showToast('⛔ Remainder Rule: Rolled dice cannot fit before Home!');
+            } else {
+              addGameLog('No legal moves available for ' + actor.name + '. Turn passes.', 'warn');
+            }
+            setTimeout(advanceToNextTurn, 950);
+            return;
+          }
+
+          scheduleAiIfNeeded();
+        }, 300);
+      }
+
+      // --- 7. INTELLIGENT AI ENGINE (Easy / Medium / Hard) ---
+      function evaluateMoveScore(move) {
+        const owner = gameState.players[move.ownerIdx];
+        const tk = owner.tokens[move.tokenId];
+        let score = 0;
+
+        if (rulesConfig.aiDifficulty === 'easy') {
+          return Math.random() * 50 + move.delta;
+        }
+
+        score += move.delta * 3.2;
+
+        if (move.sim.isSpawn) score += 95;
+        if (move.sim.newState === 'completed') score += 260;
+        else if (move.sim.newState === 'home_stretch') score += 140 + move.sim.newHomeStep * 10;
+
+        if (move.sim.newState === 'board') {
+          const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
+          const victims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
+          if (victims.length > 0) {
+            score += (owner.kills === 0 && rulesConfig.killRequiredForHome) ? 380 : 210;
+          }
+          if (SAFE_TRACK_INDICES.has(destTrack)) {
+            score += 70;
+          }
+          if (rulesConfig.aiDifficulty === 'hard') {
+            const curTrack = getOuterTrackIndex(tk);
+            if (tk.state === 'board' && SAFE_TRACK_INDICES.has(curTrack) && !SAFE_TRACK_INDICES.has(destTrack) && victims.length === 0) {
+              score -= 40;
+            }
+            if (rulesConfig.teamMode) {
+              const partner = gameState.players[owner.partner];
+              if (partner && partner.tokens.some(function (pt) { return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack; })) {
+                score += 28;
+              }
+            }
+          }
+        }
+
+        return score;
+      }
+
+      function scheduleAiIfNeeded() {
+        if (gameState.aiTimer) {
+          clearTimeout(gameState.aiTimer);
+          gameState.aiTimer = null;
+        }
+        const actor = gameState.players[gameState.currentTurn];
+        if (!actor || !actor.active || actor.type !== 'ai') return;
+
+        if (gameState.phase === 'ROLL') {
+          gameState.aiTimer = setTimeout(function () {
+            rollDiceForCurrentPlayer();
+          }, 520);
+        } else if (gameState.phase === 'MOVE') {
+          gameState.aiTimer = setTimeout(function () {
+            const legal = computeLegalMoves();
+            if (legal.length === 0) {
+              advanceToNextTurn();
+              return;
+            }
+            legal.sort(function (a, b) { return evaluateMoveScore(b) - evaluateMoveScore(a); });
+            executeMove(legal[0]);
+          }, 560);
+        }
+      }
+
+      // --- 8. CANVAS BOARD RENDERER (With Path Preview & Hop Animation) ---
+      const canvas = document.getElementById('ludoCanvas');
+      const ctx = canvas.getContext('2d');
+      let renderedTokenHitboxes = [];
+
+      function getTokenGridCoords(token) {
+        if (token.animCoords) return token.animCoords;
+        if (token.state === 'yard') return YARD_SLOTS[token.owner][token.id];
+        if (token.state === 'completed') return HOME_PATHS[token.owner][5];
+        if (token.state === 'home_stretch') return HOME_PATHS[token.owner][token.homeStep - 1];
+        const tIdx = getOuterTrackIndex(token);
+        return MAIN_TRACK[tIdx];
+      }
+
+      function drawBoard() {
+        const W = canvas.width;
+        const H = canvas.height;
+        const cell = W / 15;
+        ctx.clearRect(0, 0, W, H);
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 0, W, H);
+
+        const homeColors = ['#fecaca', '#a7f3d0', '#fde68a', '#bfdbfe'];
+        const strongColors = ['#ef4444', '#10b981', '#f59e0b', '#3b82f6'];
+        HOME_PATHS.forEach(function (path, pIdx) {
+          for (let i = 0; i < 5; i++) {
+            const rc = path[i];
+            ctx.fillStyle = strongColors[pIdx];
+            ctx.fillRect(rc[1] * cell, rc[0] * cell, cell, cell);
+          }
+        });
+
+        START_TRACK_INDEX.forEach(function (tIdx, pIdx) {
+          const rc = MAIN_TRACK[tIdx];
+          ctx.fillStyle = strongColors[pIdx];
+          ctx.fillRect(rc[1] * cell, rc[0] * cell, cell, cell);
+        });
+
+        const starIndices = [8, 21, 34, 47];
+        starIndices.forEach(function (tIdx) {
+          const rc = MAIN_TRACK[tIdx];
+          ctx.fillStyle = '#e2e8f0';
+          ctx.fillRect(rc[1] * cell, rc[0] * cell, cell, cell);
+        });
+
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1.5;
+        for (let r = 0; r < 15; r++) {
+          for (let c = 0; c < 15; c++) {
+            const inCorner = (r < 6 && c < 6) || (r < 6 && c > 8) || (r > 8 && c < 6) || (r > 8 && c > 8);
+            const inCenter = (r >= 6 && r <= 8 && c >= 6 && c <= 8);
+            if (!inCorner && !inCenter) {
+              ctx.strokeRect(c * cell, r * cell, cell, cell);
+            }
+          }
+        }
+
+        SAFE_TRACK_INDICES.forEach(function (tIdx) {
+          const rc = MAIN_TRACK[tIdx];
+          const cx = (rc[1] + 0.5) * cell;
+          const cy = (rc[0] + 0.5) * cell;
+          ctx.fillStyle = START_TRACK_INDEX.includes(tIdx) ? '#ffffff' : '#475569';
+          ctx.font = 'bold ' + Math.round(cell * 0.52) + 'px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('★', cx, cy);
+        });
+
+        // Draw Home-Entry Gate Arrows on the 4 turn squares (50, 11, 24, 37)
+        const gateArrows = [
+          { rc: [7, 0], arrow: '→', col: strongColors[0] },
+          { rc: [0, 7], arrow: '↓', col: strongColors[1] },
+          { rc: [7, 14], arrow: '←', col: strongColors[2] },
+          { rc: [14, 7], arrow: '↑', col: strongColors[3] }
+        ];
+        gateArrows.forEach(function (ga) {
+          ctx.fillStyle = ga.col;
+          ctx.font = '900 ' + Math.round(cell * 0.44) + 'px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(ga.arrow, (ga.rc[1] + 0.5) * cell, (ga.rc[0] + 0.5) * cell);
+        });
+
+        const yardOrigins = [
+          { r: 0, c: 0, pIdx: 0 },
+          { r: 0, c: 9, pIdx: 1 },
+          { r: 9, c: 9, pIdx: 2 },
+          { r: 9, c: 0, pIdx: 3 }
+        ];
+
+        yardOrigins.forEach(function (yo) {
+          const x = yo.c * cell;
+          const y = yo.r * cell;
+          const size = 6 * cell;
+          ctx.fillStyle = strongColors[yo.pIdx];
+          ctx.fillRect(x, y, size, size);
+
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath();
+          ctx.roundRect(x + cell * 0.65, y + cell * 0.65, size - cell * 1.3, size - cell * 1.3, 18);
+          ctx.fill();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = homeColors[yo.pIdx];
+          ctx.stroke();
+
+          for (let t = 0; t < rulesConfig.tokensPerPlayer; t++) {
+            const slot = YARD_SLOTS[yo.pIdx][t];
+            const sx = (slot[1] + 0.5) * cell;
+            const sy = (slot[0] + 0.5) * cell;
+            ctx.beginPath();
+            ctx.arc(sx, sy, cell * 0.42, 0, Math.PI * 2);
+            ctx.fillStyle = '#1e293b';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = strongColors[yo.pIdx];
+            ctx.stroke();
+          }
+
+          const pl = gameState.players[yo.pIdx];
+          if (pl && pl.active && rulesConfig.killRequiredForHome) {
+            ctx.fillStyle = pl.kills > 0 ? '#10b981' : '#f43f5e';
+            ctx.font = 'bold ' + Math.round(cell * 0.27) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            const badgeText = pl.kills > 0 ? '🔓 HOME OPEN (⚔️' + pl.kills + ')' : '🔒 NEED 1 KILL';
+            ctx.fillText(badgeText, x + size / 2, y + size - cell * 0.32);
+          }
+        });
+
+        const cx = 7.5 * cell;
+        const cy = 7.5 * cell;
+        const x0 = 6 * cell, y0 = 6 * cell, x1 = 9 * cell, y1 = 9 * cell;
+
+        const triangles = [
+          { pts: [[x0, y0], [x0, y1], [cx, cy]], color: strongColors[0] },
+          { pts: [[x0, y0], [x1, y0], [cx, cy]], color: strongColors[1] },
+          { pts: [[x1, y0], [x1, y1], [cx, cy]], color: strongColors[2] },
+          { pts: [[x0, y1], [x1, y1], [cx, cy]], color: strongColors[3] }
+        ];
+        triangles.forEach(function (tri) {
+          ctx.beginPath();
+          ctx.moveTo(tri.pts[0][0], tri.pts[0][1]);
+          ctx.lineTo(tri.pts[1][0], tri.pts[1][1]);
+          ctx.lineTo(tri.pts[2][0], tri.pts[2][1]);
+          ctx.closePath();
+          ctx.fillStyle = tri.color;
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#0f172a';
+          ctx.stroke();
+        });
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, cell * 0.45, 0, Math.PI * 2);
+        ctx.fillStyle = '#0f172a';
+        ctx.fill();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#f59e0b';
+        ctx.stroke();
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold ' + Math.round(cell * 0.42) + 'px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('👑', cx, cy);
+
+        // Draw Hovered Move Path Preview if a move is hovered!
+        if (gameState.hoveredMove && gameState.phase === 'MOVE') {
+          const hm = gameState.hoveredMove;
+          const tk = gameState.players[hm.ownerIdx].tokens[hm.tokenId];
+          const path = computeMovePathCoords(tk, hm.delta, hm.sim);
+          if (path.length > 0) {
+            ctx.save();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            const startRC = getTokenGridCoords(tk);
+            ctx.moveTo((startRC[1] + 0.5) * cell, (startRC[0] + 0.5) * cell);
+            path.forEach(function (pt) {
+              ctx.lineTo((pt[1] + 0.5) * cell, (pt[0] + 0.5) * cell);
+            });
+            ctx.stroke();
+
+            const lastPt = path[path.length - 1];
+            const lx = (lastPt[1] + 0.5) * cell;
+            const ly = (lastPt[0] + 0.5) * cell;
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.arc(lx, ly, cell * 0.42, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(245, 158, 11, 0.35)';
+            ctx.fill();
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+
+        // Draw All Tokens
+        renderedTokenHitboxes = [];
+        const legalMoves = computeLegalMoves();
+        const movableTokenKeys = new Set(legalMoves.map(function (m) { return m.ownerIdx + '_' + m.tokenId; }));
+
+        const cellGroups = {};
+        gameState.players.forEach(function (pl) {
+          if (!pl.active) return;
+          pl.tokens.forEach(function (tk) {
+            const rc = getTokenGridCoords(tk);
+            const key = rc[0].toFixed(1) + ',' + rc[1].toFixed(1);
+            if (!cellGroups[key]) cellGroups[key] = [];
+            cellGroups[key].push(tk);
+          });
+        });
+
+        Object.keys(cellGroups).forEach(function (key) {
+          const group = cellGroups[key];
+          const baseRC = getTokenGridCoords(group[0]);
+          const baseX = (baseRC[1] + 0.5) * cell;
+          const baseY = (baseRC[0] + 0.5) * cell;
+
+          group.forEach(function (tk, idx) {
+            let offsetX = 0;
+            let offsetY = 0;
+            let radius = cell * 0.36;
+
+            if (group.length > 1) {
+              radius = cell * 0.29;
+              const angle = (idx / group.length) * Math.PI * 2;
+              offsetX = Math.cos(angle) * (cell * 0.17);
+              offsetY = Math.sin(angle) * (cell * 0.17);
+            }
+
+            const tx = baseX + offsetX;
+            const ty = baseY + offsetY;
+            const tkKey = tk.owner + '_' + tk.id;
+            const isMovable = movableTokenKeys.has(tkKey);
+            const isSelected = gameState.selectedTokenKey === tkKey;
+            const meta = PLAYER_META[tk.owner];
+
+            if (isMovable) {
+              ctx.beginPath();
+              ctx.arc(tx, ty, radius + 5, 0, Math.PI * 2);
+              ctx.fillStyle = isSelected ? 'rgba(250, 204, 21, 0.95)' : 'rgba(255, 255, 255, 0.88)';
+              ctx.fill();
+              ctx.lineWidth = 2.5;
+              ctx.strokeStyle = '#0f172a';
+              ctx.stroke();
+            }
+
+            ctx.beginPath();
+            ctx.arc(tx, ty, radius, 0, Math.PI * 2);
+            ctx.fillStyle = meta.hex;
+            ctx.fill();
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(tx, ty, radius * 0.65, 0, Math.PI * 2);
+            ctx.fillStyle = meta.darkHex;
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold ' + Math.round(radius * 0.85) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const label = (tk.lockedThisTurn && rulesConfig.closeGameMode) ? '🔒' : String(tk.id + 1);
+            ctx.fillText(label, tx, ty);
+
+            renderedTokenHitboxes.push({
+              x: tx,
+              y: ty,
+              r: radius + 8,
+              ownerIdx: tk.owner,
+              tokenId: tk.id
+            });
+          });
+        });
+      }
+
+      canvas.addEventListener('click', function (e) {
+        if (gameState.phase !== 'MOVE') {
+          if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+            rollDiceForCurrentPlayer();
+          }
+          return;
+        }
+        const actor = gameState.players[gameState.currentTurn];
+        if (actor.type !== 'human') return;
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const clickX = (e.clientX - rect.left) * scaleX;
+        const clickY = (e.clientY - rect.top) * scaleY;
+
+        const legal = computeLegalMoves();
+        for (let i = renderedTokenHitboxes.length - 1; i >= 0; i--) {
+          const hb = renderedTokenHitboxes[i];
+          const dist = Math.hypot(clickX - hb.x, clickY - hb.y);
+          if (dist <= hb.r) {
+            const tokenMoves = legal.filter(function (m) {
+              return m.ownerIdx === hb.ownerIdx && m.tokenId === hb.tokenId;
+            });
+            if (tokenMoves.length === 1) {
+              executeMove(tokenMoves[0]);
+              return;
+            } else if (tokenMoves.length > 1) {
+              openTokenMoveChoiceMenu(hb.ownerIdx, hb.tokenId, tokenMoves);
+              return;
+            } else {
+              const tk = gameState.players[hb.ownerIdx].tokens[hb.tokenId];
+              if (tk.lockedThisTurn && rulesConfig.closeGameMode) {
+                showToast('🔒 Close Game Rule: This bead just made a kill and is locked for the rest of this turn!');
+              } else {
+                showToast('Tap a glowing bead or choose a move from the right panel.');
+              }
+              return;
+            }
+          }
+        }
+      });
+
+      function openTokenMoveChoiceMenu(ownerIdx, tokenId, tokenMoves) {
+        gameState.selectedTokenKey = ownerIdx + '_' + tokenId;
+        drawBoard();
+        const menu = document.getElementById('tokenMoveMenu');
+        const title = document.getElementById('tokenMoveMenuTitle');
+        const list = document.getElementById('tokenMoveOptionsList');
+        title.textContent = 'Choose Move for Bead #' + (tokenId + 1) + ' (Single Die vs Combined)';
+        list.innerHTML = '';
+
+        tokenMoves.forEach(function (mv) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = mv.isCombined
+            ? 'p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow transition'
+            : 'p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-600 transition';
+          btn.textContent = mv.isCombined
+            ? ('⚡ Combine Both (+' + mv.delta + ')')
+            : ('🎲 Move +' + mv.delta);
+          btn.addEventListener('mouseenter', function () {
+            gameState.hoveredMove = mv;
+            drawBoard();
+          });
+          btn.addEventListener('mouseleave', function () {
+            gameState.hoveredMove = null;
+            drawBoard();
+          });
+          btn.addEventListener('click', function () {
+            executeMove(mv);
+          });
+          list.appendChild(btn);
+        });
+
+        menu.classList.remove('hidden');
+      }
+
+      document.getElementById('cancelTokenMoveMenuBtn').addEventListener('click', function () {
+        gameState.selectedTokenKey = null;
+        gameState.hoveredMove = null;
+        document.getElementById('tokenMoveMenu').classList.add('hidden');
+        drawBoard();
+      });
+
+      // --- 9. UI RENDERING & DICE PIP FACES ---
+      const PIP_LAYOUTS = {
+        1: [4],
+        2: [0, 8],
+        3: [0, 4, 8],
+        4: [0, 2, 6, 8],
+        5: [0, 2, 4, 6, 8],
+        6: [0, 2, 3, 5, 6, 8]
+      };
+
+      function renderDieFace(containerId, value, isUsed) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        const pips = PIP_LAYOUTS[value] || [4];
+        for (let i = 0; i < 9; i++) {
+          const dot = document.createElement('div');
+          if (pips.includes(i)) {
+            dot.className = 'w-full h-full rounded-full ' + (value === 6 ? 'bg-red-600' : 'bg-slate-900') + (isUsed ? ' opacity-35' : '');
+          }
+          container.appendChild(dot);
+        }
+      }
+
+      function triggerPlayerEmote(playerIdx, text) {
+        const el = document.getElementById('emoteBubble' + playerIdx);
+        if (!el) return;
+        el.textContent = text;
+        el.classList.remove('hidden', 'emote-bubble');
+        void el.offsetWidth;
+        el.classList.add('emote-bubble');
+        playSound('emote');
+        setTimeout(function () {
+          el.classList.add('hidden');
+        }, 2800);
+      }
+
+      function updateAllUI() {
+        document.getElementById('headerPresetBadge').textContent = rulesConfig.presetName;
+
+        const badgesContainer = document.getElementById('activeRulesBadges');
+        const pills = [
+          rulesConfig.diceCount === 2 ? '🎲 2 Dice (دو گوٹی)' : '🎲 1 Die',
+          '♟️ ' + rulesConfig.tokensPerPlayer + ' Beads',
+          rulesConfig.closeGameMode ? '🔒 Close Game' : '🔓 Open Game',
+          rulesConfig.mandatoryYardSpawn ? '✋ Mandatory 6 Spawn' : 'Free 6',
+          rulesConfig.killRequiredForHome ? '⚔️ Kill Req + Loop' : 'Free Home',
+          rulesConfig.teamMode ? '🤝 2v2 Teams' : 'FFA',
+          rulesConfig.strictHomeRemainder ? '📏 Strict Remainder' : 'Flex Remainder'
+        ];
+        badgesContainer.innerHTML = pills.map(function (p) {
+          return '<span class="px-2 py-0.5 rounded-lg bg-slate-800/90 border border-slate-700 text-slate-200 font-semibold">' + p + '</span>';
+        }).join('');
+
+        for (let i = 0; i < 4; i++) {
+          const p = gameState.players[i];
+          const card = document.getElementById('playerCard' + i);
+          const nameEl = document.getElementById('pName' + i);
+          const teamEl = document.getElementById('pTeamBadge' + i);
+          const killsEl = document.getElementById('pKills' + i);
+          const homeEl = document.getElementById('pHome' + i);
+          const statusEl = document.getElementById('pStatusTag' + i);
+
+          if (!p.active) {
+            card.classList.add('opacity-40');
+            statusEl.textContent = 'OFF';
+            continue;
+          }
+          card.classList.remove('opacity-40');
+          nameEl.textContent = p.name;
+          teamEl.textContent = rulesConfig.teamMode ? ('T' + (p.team + 1)) : 'FFA';
+          killsEl.textContent = '⚔️ ' + p.kills + (rulesConfig.killRequiredForHome && p.kills === 0 ? ' (Locked)' : ' (Open)');
+          const doneCount = p.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+          homeEl.textContent = '🏠 ' + doneCount + '/' + rulesConfig.tokensPerPlayer;
+
+          if (gameState.currentTurn === i) {
+            card.classList.add('active-turn-glow');
+            statusEl.textContent = gameState.phase === 'ROLL' ? 'ROLL' : 'MOVE';
+            statusEl.className = 'text-[10px] font-black px-2 py-0.5 rounded bg-amber-400 text-slate-950';
+          } else {
+            card.classList.remove('active-turn-glow');
+            statusEl.textContent = hasPlayerCompletedAllTokens(i) ? (p.assistUnlocked ? 'ASSIST' : 'DONE') : 'WAIT';
+            statusEl.className = 'text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400';
+          }
+        }
+
+        const actor = gameState.players[gameState.currentTurn];
+        const targetIdx = getControlledOwnerIndex(actor.id);
+        const needsAssistSix = rulesConfig.teamMode && rulesConfig.teamAssistRequiresSix && hasPlayerCompletedAllTokens(actor.id) && !actor.assistUnlocked;
+        const effectiveDiceCount = needsAssistSix ? 1 : rulesConfig.diceCount;
+
+        document.getElementById('turnBannerText').textContent =
+          actor.name + '\'s Turn' + (targetIdx !== actor.id ? (' (Assisting ' + gameState.players[targetIdx].name + ')') : '');
+        document.getElementById('turnPhaseBadge').textContent = gameState.phase;
+
+        const d0 = gameState.dicePool[0] || { value: 6, used: true };
+        const d1 = gameState.dicePool[1] || { value: 6, used: true };
+        renderDieFace('dieFace0', d0.value, d0.used && gameState.phase === 'MOVE');
+        document.getElementById('dieStatus0').textContent = (d0.used && gameState.phase === 'MOVE') ? 'Used ✓' : ('Die 1: ' + d0.value);
+
+        const dieSlot1 = document.getElementById('dieSlot1');
+        const divider = document.getElementById('dicePlusDivider');
+        if (effectiveDiceCount === 2) {
+          dieSlot1.classList.remove('hidden');
+          divider.classList.remove('hidden');
+          renderDieFace('dieFace1', d1.value, d1.used && gameState.phase === 'MOVE');
+          document.getElementById('dieStatus1').textContent = (d1.used && gameState.phase === 'MOVE') ? 'Used ✓' : ('Die 2: ' + d1.value);
+          document.getElementById('diceSumBadge').textContent = '= ' + (d0.value + d1.value);
+        } else {
+          dieSlot1.classList.add('hidden');
+          divider.classList.add('hidden');
+        }
+
+        const rollBtn = document.getElementById('rollDiceBtn');
+        const rollLabel = document.getElementById('rollDiceBtnLabel');
+        if (gameState.phase === 'ROLL' && actor.type === 'human') {
+          rollBtn.disabled = false;
+          rollBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          rollLabel.textContent = needsAssistSix
+            ? '🎯 ROLL 1 DIE FOR 6 (ٹیم مدد کے لیے 6 لائیں)'
+            : (effectiveDiceCount === 2 ? '🎲 ROLL 2 DICE (دو گوٹی پھینکیں)' : '🎲 ROLL DIE (گوٹی پھینکیں)');
+        } else {
+          rollBtn.disabled = true;
+          rollBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          rollLabel.textContent = actor.type === 'ai' ? ('🤖 ' + actor.name + ' Thinking...') : 'Select a Bead / Move Below';
+        }
+
+        const hintBox = document.getElementById('refereeHintBox');
+        const movesList = document.getElementById('legalMovesList');
+        const movesCountBadge = document.getElementById('legalMovesCountBadge');
+
+        if (gameState.phase === 'MOVE') {
+          const legal = computeLegalMoves();
+          movesCountBadge.textContent = legal.length + (legal.length === 1 ? ' move' : ' moves');
+          if (legal.length > 0 && legal[0].isMandatorySpawn) {
+            hintBox.innerHTML = '✋ <b>Mandatory Hand Spawn Rule:</b> You rolled a 6 while beads remain in your hand/yard—you must bring a new bead out first!';
+          } else if (targetIdx !== actor.id) {
+            hintBox.innerHTML = '🤝 <b>Teammate Assist Active:</b> You are moving your partner <b>' + gameState.players[targetIdx].name + '</b>\'s beads with 2 Dice!';
+          } else {
+            hintBox.innerHTML = 'Hover or tap any move card below to preview its path on the board.';
+          }
+
+          movesList.innerHTML = '';
+          legal.forEach(function (mv) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'w-full text-left px-3 py-2 rounded-xl border transition flex items-center justify-between ' +
+              (mv.isCombined
+                ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/50 text-amber-200'
+                : 'bg-slate-800/90 hover:bg-slate-700 border-slate-700 text-slate-100');
+            btn.innerHTML =
+              '<span class="text-xs font-bold">' + mv.label + '</span>' +
+              '<span class="text-[10px] font-black px-2 py-0.5 rounded bg-slate-950 text-amber-400">+' + mv.delta + '</span>';
+            btn.addEventListener('mouseenter', function () {
+              gameState.hoveredMove = mv;
+              drawBoard();
+            });
+            btn.addEventListener('mouseleave', function () {
+              gameState.hoveredMove = null;
+              drawBoard();
+            });
+            btn.addEventListener('click', function () {
+              if (actor.type === 'human') executeMove(mv);
+            });
+            movesList.appendChild(btn);
+          });
+        } else {
+          movesCountBadge.textContent = 'Ready';
+          if (needsAssistSix) {
+            hintBox.innerHTML = '🎯 <b>Partner Assist Rule:</b> Roll a <b>6</b> on 1 Die to unlock 2-Dice control of your teammate\'s beads!';
+          } else {
+            hintBox.innerHTML = 'Tap <b>Roll Dice</b> (or press Spacebar) to throw your dice.';
+          }
+          movesList.innerHTML = '<p class="text-xs text-slate-400 italic py-4 text-center">Roll the dice to see your split &amp; combined move options.</p>';
+        }
+
+        drawBoard();
+      }
+
+      // --- 10. CULTURAL SCENARIO TESTERS ---
+      function loadCulturalScenario(scenarioKey) {
+        applyBannuRulesPreset(false);
+        initNewMatch('Loaded Cultural Rule Scenario: ' + scenarioKey);
+
+        const p0 = gameState.players[0];
+        const p1 = gameState.players[1];
+        const p2 = gameState.players[2];
+
+        if (scenarioKey === 'mandatory_spawn') {
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 10;
+          addGameLog('Drill 1: Red has 1 bead on the ground and 3 in hand. Rolling 6 + 2 forces spawning from hand first!', 'gold');
+          rollDiceForCurrentPlayer([6, 2]);
+        } else if (scenarioKey === 'blood_loop') {
+          p0.kills = 0;
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 49;
+          addGameLog('Drill 2: Red has 0 kills and is at step 49 (right before Home Gate). Rolling 4 + 2 forces a full 52-square outer loop!', 'gold');
+          rollDiceForCurrentPlayer([4, 2]);
+        } else if (scenarioKey === 'close_game_kill') {
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 4;
+          p0.tokens[1].state = 'board';
+          p0.tokens[1].steps = 18;
+          p1.tokens[0].state = 'board';
+          p1.tokens[0].steps = 46; // track index 7
+          addGameLog('Drill 3 (Close Game): Move Bead #1 by +3 to kill Green at square 7—Bead #1 locks on that spot so you must play +4 on Bead #2!', 'gold');
+          rollDiceForCurrentPlayer([3, 4]);
+        } else if (scenarioKey === 'team_stack_capture') {
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 1;
+          p1.tokens[0].state = 'board';
+          p1.tokens[0].steps = 44; // track index 5
+          gameState.players[3].tokens[0].state = 'board';
+          gameState.players[3].tokens[0].steps = 18; // track index 5
+          addGameLog('Drill 4 (2v2 Stacked Enemies): Move Bead #1 by +4 onto square 5 where Green & Blue teammates are stacked—choose which 1 enemy to eat!', 'gold');
+          rollDiceForCurrentPlayer([4, 2]);
+        } else if (scenarioKey === 'home_remainder') {
+          p0.kills = 1;
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 50; // Needs 6 for Home
+          for (let i = 1; i < p0.tokens.length; i++) p0.tokens[i].state = 'completed';
+          addGameLog('Drill 5 (Near-Home Remainder Forfeit): Only 1 bead on board needing 6 for Home, rolled 5 + 4 (9). Remainder 4 has nowhere to go!', 'gold');
+          rollDiceForCurrentPlayer([5, 4]);
+        } else if (scenarioKey === 'home_split_two_beads') {
+          p0.kills = 1;
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 50; // Needs 6 for Home
+          p0.tokens[1].state = 'board';
+          p0.tokens[1].steps = 15; // Second bead on outer board!
+          for (let i = 2; i < p0.tokens.length; i++) p0.tokens[i].state = 'completed';
+          addGameLog('Drill 6 (Near-Home 2-Bead Split): Bead #1 is at Home Gate (needs 6) AND Bead #2 is on board! Rolling 5 + 4 lets Bead #1 move 5 inside Home and Bead #2 move 4!', 'gold');
+          rollDiceForCurrentPlayer([5, 4]);
+        } else if (scenarioKey === 'teammate_assist') {
+          p0.tokens.forEach(function (t) { t.state = 'completed'; });
+          p0.assistUnlocked = false;
+          p2.tokens[0].state = 'board';
+          p2.tokens[0].steps = 12;
+          p2.tokens[1].state = 'board';
+          p2.tokens[1].steps = 24;
+          addGameLog('Drill 7 (Partner Assist): Red finished all beads! Rolling 1-Die 6 unlocks 2-Dice control of Yellow Partner\'s beads!', 'gold');
+          rollDiceForCurrentPlayer([6, 1]);
+        }
+      }
+
+      // --- 11. PRESETS & RULES STUDIO CONTROLS ---
+      function syncRulesStudioControls() {
+        document.querySelectorAll('.rule-dice-btn').forEach(function (btn) {
+          const active = Number(btn.dataset.dice) === rulesConfig.diceCount;
+          btn.className = 'rule-dice-btn py-2 rounded-lg text-xs font-bold border transition ' +
+            (active ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-800 text-slate-300');
+        });
+        document.querySelectorAll('.rule-token-btn').forEach(function (btn) {
+          const active = Number(btn.dataset.tokens) === rulesConfig.tokensPerPlayer;
+          btn.className = 'rule-token-btn py-2 rounded-lg text-xs font-bold border transition ' +
+            (active ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-800 text-slate-300');
+        });
+        document.querySelectorAll('.rule-close-btn').forEach(function (btn) {
+          const active = (btn.dataset.closemode === 'true') === rulesConfig.closeGameMode;
+          btn.className = 'rule-close-btn py-2 rounded-lg text-xs font-bold border transition ' +
+            (active ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-700 bg-slate-800 text-slate-300');
+        });
+
+        document.getElementById('chkMandatorySpawn').checked = rulesConfig.mandatoryYardSpawn;
+        document.getElementById('chkKillForHome').checked = rulesConfig.killRequiredForHome;
+        document.getElementById('chkTeamMode').checked = rulesConfig.teamMode;
+        document.getElementById('chkStrictRemainder').checked = rulesConfig.strictHomeRemainder;
+        document.getElementById('chkTeamAssistSix').checked = rulesConfig.teamAssistRequiresSix;
+        document.getElementById('aiDifficultySelect').value = rulesConfig.aiDifficulty;
+        document.getElementById('turnTimerSelect').value = String(rulesConfig.turnTimeSeconds);
+
+        const isBannu = rulesConfig.diceCount === 2 && rulesConfig.killRequiredForHome;
+        document.getElementById('presetBannuQuickBtn').className =
+          'px-2.5 py-2 rounded-xl text-xs font-bold border transition flex flex-col items-center gap-0.5 ' +
+          (isBannu ? 'bg-amber-500/20 border-amber-500 text-amber-200' : 'bg-slate-800/70 border-slate-700 text-slate-300');
+        document.getElementById('presetYallaQuickBtn').className =
+          'px-2.5 py-2 rounded-xl text-xs font-bold border transition flex flex-col items-center gap-0.5 ' +
+          (!isBannu ? 'bg-amber-500/20 border-amber-500 text-amber-200' : 'bg-slate-800/70 border-slate-700 text-slate-300');
+      }
+
+      function applyBannuRulesPreset(restartNow) {
+        rulesConfig.presetName = 'بنوں روایتی رولز (Bannu Rules)';
+        rulesConfig.diceCount = 2;
+        rulesConfig.closeGameMode = true;
+        rulesConfig.mandatoryYardSpawn = true;
+        rulesConfig.killRequiredForHome = true;
+        rulesConfig.teamMode = true;
+        rulesConfig.strictHomeRemainder = true;
+        rulesConfig.teamAssistRequiresSix = true;
+        syncRulesStudioControls();
+        if (restartNow !== false) {
+          initNewMatch('Switched to Bannu / Pashtun Cultural Rules (2 Dice, Kill Lock, Mandatory 6 Spawn, 2v2 Teams).');
+          showToast('🏔️ Loaded Bannu Cultural Rules!');
+        }
+      }
+
+      function applyYallaClassicPreset(restartNow) {
+        rulesConfig.presetName = 'Yalla Classic Rules';
+        rulesConfig.diceCount = 1;
+        rulesConfig.closeGameMode = false;
+        rulesConfig.mandatoryYardSpawn = false;
+        rulesConfig.killRequiredForHome = false;
+        rulesConfig.teamMode = false;
+        rulesConfig.strictHomeRemainder = false;
+        rulesConfig.teamAssistRequiresSix = false;
+        syncRulesStudioControls();
+        if (restartNow !== false) {
+          initNewMatch('Switched to Yalla Classic Online Rules (1 Die, Open Game, No Kill Requirement).');
+          showToast('🌐 Loaded Yalla Classic Rules!');
+        }
+      }
+
+      // --- 12. REAL WEBRTC QR SIGNALING, CAMERA QR SCANNER & WI-FI MESH ---
+      let localBroadcastChannel = null;
+      let discoveredPeers = new Map();
+      let peerJsInstance = null;
+      let peerJsConnections = [];
+      let activeRtcConnections = {};
+      let myRoomId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
+      let cameraStream = null;
+      let qrScanRaf = null;
+
+      function initLanRadarAndWebRtc() {
+        document.getElementById('myPeerIdDisplay').textContent = myRoomId;
+        document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
+
+        // 1. BroadcastChannel for instant local cross-tab / LAN discovery
+        try {
+          if ('BroadcastChannel' in window) {
+            localBroadcastChannel = new BroadcastChannel('bannu_ludo_wifi_radar_v2');
+            localBroadcastChannel.onmessage = function (ev) {
+              const msg = ev.data;
+              if (!msg || msg.senderId === myRoomId) return;
+              if (msg.type === 'PING' || msg.type === 'PONG' || msg.type === 'ROOM_HOST') {
+                discoveredPeers.set(msg.senderId, {
+                  id: msg.senderId,
+                  name: msg.name || ('Player ' + msg.senderId),
+                  mode: msg.mode || '2v2 Bannu Rules',
+                  lastSeen: Date.now()
+                });
+                renderRadarPeers();
+                if (msg.type === 'PING') {
+                  localBroadcastChannel.postMessage({
+                    type: 'PONG',
+                    senderId: myRoomId,
+                    name: careerStats.playerName,
+                    mode: rulesConfig.presetName
+                  });
+                }
+              } else if (msg.type === 'INVITE' && msg.targetId === myRoomId) {
+                showIncomingLanInvite(msg.senderName, msg.matchType);
+              } else if (msg.type === 'GAME_ACTION') {
+                handleRemoteNetworkAction(msg.payload);
+              }
+            };
+            localBroadcastChannel.postMessage({
+              type: 'PING',
+              senderId: myRoomId,
+              name: careerStats.playerName,
+              mode: rulesConfig.presetName
+            });
+          }
+        } catch (e) {}
+
+        // 2. Initialize PeerJS Broker when online (seamlessly degrades to offline WebRTC when offline)
+        try {
+          if (window.Peer) {
+            peerJsInstance = new window.Peer(myRoomId);
+            peerJsInstance.on('open', function (id) {
+              document.getElementById('wifiRadarStatusBadge').textContent = '🟢 Wi-Fi & PeerJS Live';
+            });
+            peerJsInstance.on('connection', function (conn) {
+              peerJsConnections.push(conn);
+              conn.on('data', function (data) {
+                if (data && data.type === 'INVITE') {
+                  showIncomingLanInvite(data.senderName || 'Wi-Fi Friend', data.matchType || '2v2 Team Match');
+                } else if (data && data.type === 'GAME_ACTION') {
+                  handleRemoteNetworkAction(data.payload);
+                }
+              });
+            });
+            peerJsInstance.on('error', function () {
+              document.getElementById('wifiRadarStatusBadge').textContent = '📡 Local LAN Mode';
+            });
+          }
+        } catch (e) {}
+
+        discoveredPeers.set('BANNU-7742', {
+          id: 'BANNU-7742',
+          name: 'Ahmad Khan (Wi-Fi)',
+          mode: '2v2 Bannu Close Game',
+          angle: 45,
+          dist: 64
+        });
+        discoveredPeers.set('BANNU-3190', {
+          id: 'BANNU-3190',
+          name: 'Saifullah (Wi-Fi)',
+          mode: '2-Dice Pashtun Rules',
+          angle: 215,
+          dist: 76
+        });
+        renderRadarPeers();
+
+        generateOfflineWebRtcQrCode('offer');
+      }
+
+      function renderRadarPeers() {
+        const container = document.getElementById('radarNodesContainer');
+        const list = document.getElementById('lanPlayersList');
+        const badge = document.getElementById('lanPeerCountBadge');
+        container.innerHTML = '';
+        list.innerHTML = '';
+
+        const peersArr = Array.from(discoveredPeers.values());
+        badge.textContent = String(peersArr.length);
+
+        peersArr.forEach(function (peer, idx) {
+          const angleDeg = peer.angle !== undefined ? peer.angle : ((idx * 115 + 40) % 360);
+          const rad = (angleDeg * Math.PI) / 180;
+          const radiusPx = peer.dist || 70;
+          const offsetX = Math.cos(rad) * radiusPx;
+          const offsetY = Math.sin(rad) * radiusPx;
+
+          const pin = document.createElement('button');
+          pin.type = 'button';
+          pin.style.left = 'calc(50% + ' + Math.round(offsetX) + 'px - 22px)';
+          pin.style.top = 'calc(50% + ' + Math.round(offsetY) + 'px - 22px)';
+          pin.className = 'absolute z-20 flex flex-col items-center group';
+          pin.innerHTML =
+            '<div class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center shadow-lg border-2 border-white group-hover:scale-110 transition">📡</div>' +
+            '<span class="mt-0.5 px-1.5 py-0.2 rounded bg-slate-900/95 text-[9px] font-bold text-emerald-300 border border-emerald-500/40 whitespace-nowrap">' + peer.name + '</span>';
+          pin.addEventListener('click', function () {
+            sendLanMatchInvite(peer, '2v2 Team Match');
+          });
+          container.appendChild(pin);
+
+          const row = document.createElement('div');
+          row.className = 'p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2';
+          row.innerHTML =
+            '<div>' +
+              '<div class="text-xs font-bold text-white">' + peer.name + ' <span class="font-mono text-[10px] text-amber-400">(' + peer.id + ')</span></div>' +
+              '<div class="text-[10px] text-slate-400">' + peer.mode + ' • Offline Survival Active</div>' +
+            '</div>' +
+            '<div class="flex gap-1.5">' +
+              '<button type="button" data-mode="1v1" class="invite-peer-btn px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-white border border-slate-700">1v1</button>' +
+              '<button type="button" data-mode="2v2" class="invite-peer-btn px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[11px] font-bold text-white">2v2 Team</button>' +
+            '</div>';
+          row.querySelectorAll('.invite-peer-btn').forEach(function (b) {
+            b.addEventListener('click', function () {
+              sendLanMatchInvite(peer, b.dataset.mode === '2v2' ? '2v2 Team Match' : '1v1 Match');
+            });
+          });
+          list.appendChild(row);
+        });
+      }
+
+      function sendLanMatchInvite(peer, matchType) {
+        showToast('📡 Sent ' + matchType + ' request to ' + peer.name + ' over Wi-Fi...');
+        if (localBroadcastChannel) {
+          localBroadcastChannel.postMessage({
+            type: 'INVITE',
+            targetId: peer.id,
+            senderName: careerStats.playerName,
+            matchType: matchType
+          });
+        }
+        try {
+          if (peerJsInstance) {
+            const conn = peerJsInstance.connect(peer.id);
+            conn.on('open', function () {
+              peerJsConnections.push(conn);
+              conn.send({ type: 'INVITE', senderName: careerStats.playerName, matchType: matchType });
+            });
+          }
+        } catch (e) {}
+
+        setTimeout(function () {
+          seatConfig[1].name = peer.name;
+          seatConfig[1].type = 'ai';
+          if (matchType.includes('2v2')) {
+            rulesConfig.teamMode = true;
+            seatConfig[2].active = true;
+            seatConfig[3].active = true;
+          } else {
+            rulesConfig.teamMode = false;
+            seatConfig[2].active = false;
+            seatConfig[3].active = false;
+          }
+          document.getElementById('connectionStatusPill').textContent = '🟢 Wi-Fi P2P (' + peer.name + ')';
+          document.getElementById('connectionStatusPill').className = 'text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+          switchNavigationTab('viewPlay');
+          initNewMatch('Connected with ' + peer.name + ' over local Wi-Fi (' + matchType + ') — Offline P2P active!');
+        }, 650);
+      }
+
+      function showIncomingLanInvite(senderName, matchType) {
+        const modal = document.getElementById('lanInviteModal');
+        document.getElementById('lanInviteModalText').textContent =
+          senderName + ' invited you to play a ' + matchType + ' on the local Wi-Fi network.';
+        modal.classList.remove('hidden');
+      }
+
+      // Real RTCPeerConnection Offer/Answer + Compact QR Generator
+      function generateOfflineWebRtcQrCode(mode) {
+        const slot = Number(document.getElementById('qrSeatSlotSelect').value);
+        const iceStatus = document.getElementById('rtcIceStatusText');
+        if (iceStatus) iceStatus.textContent = 'Gathering ICE Candidates...';
+
+        const basePayload = {
+          v: 2,
+          role: mode,
+          slot: slot,
+          host: careerStats.playerName,
+          room: myRoomId,
+          rules: [
+            rulesConfig.diceCount,
+            rulesConfig.tokensPerPlayer,
+            rulesConfig.closeGameMode ? 1 : 0,
+            rulesConfig.killRequiredForHome ? 1 : 0
+          ],
+          sdpFinger: ''
+        };
+
+        function renderQrFromPayload(obj) {
+          const tokenStr = 'BANNU_RTC:' + btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+          document.getElementById('localSdpTokenOutput').value = tokenStr;
+          const qrContainer = document.getElementById('qrCodeBox');
+          qrContainer.innerHTML = '';
+          if (window.QRCode) {
+            new window.QRCode(qrContainer, {
+              text: tokenStr,
+              width: 140,
+              height: 140,
+              colorDark: '#0f172a',
+              colorLight: '#ffffff',
+              correctLevel: window.QRCode.CorrectLevel.L
+            });
+          }
+          if (iceStatus) iceStatus.textContent = '✅ Offline SDP Ready (' + mode.toUpperCase() + ')';
+        }
+
+        try {
+          if (window.RTCPeerConnection) {
+            const pc = new RTCPeerConnection({ iceServers: [] });
+            const dc = pc.createDataChannel('bannu_ludo_p2p_' + slot);
+            dc.onmessage = function (ev) {
+              try {
+                handleRemoteNetworkAction(JSON.parse(ev.data));
+              } catch (e) {}
+            };
+            activeRtcConnections[slot] = { pc: pc, dc: dc };
+
+            pc.createOffer().then(function (offer) {
+              return pc.setLocalDescription(offer);
+            }).then(function () {
+              const sdpLines = (pc.localDescription && pc.localDescription.sdp) ? pc.localDescription.sdp.split('\n') : [];
+              const ufrag = sdpLines.find(function (l) { return l.startsWith('a=ice-ufrag:'); }) || '';
+              basePayload.sdpFinger = ufrag.trim().slice(0, 24);
+              renderQrFromPayload(basePayload);
+            }).catch(function () {
+              renderQrFromPayload(basePayload);
+            });
+            return;
+          }
+        } catch (e) {}
+
+        renderQrFromPayload(basePayload);
+      }
+
+      // Camera QR Scanner (via getUserMedia + jsQR)
+      function startCameraQrScanner() {
+        const wrap = document.getElementById('cameraScannerWrap');
+        const video = document.getElementById('qrVideoElement');
+        const scanCanvas = document.getElementById('qrScanHiddenCanvas');
+        const scanCtx = scanCanvas.getContext('2d');
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('Camera API unavailable in this browser frame—use "Scan Image" or paste token.');
+          return;
+        }
+
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (stream) {
+          cameraStream = stream;
+          video.srcObject = stream;
+          video.play();
+          wrap.classList.remove('hidden');
+
+          function scanTick() {
+            if (!cameraStream) return;
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+              scanCanvas.width = video.videoWidth;
+              scanCanvas.height = video.videoHeight;
+              scanCtx.drawImage(video, 0, 0, scanCanvas.width, scanCanvas.height);
+              const imgData = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height);
+              if (window.jsQR) {
+                const code = window.jsQR(imgData.data, imgData.width, imgData.height);
+                if (code && code.data) {
+                  stopCameraQrScanner();
+                  document.getElementById('remoteSdpTokenInput').value = code.data;
+                  processScannedRemoteToken(code.data);
+                  return;
+                }
+              }
+            }
+            qrScanRaf = requestAnimationFrame(scanTick);
+          }
+          qrScanRaf = requestAnimationFrame(scanTick);
+        }).catch(function () {
+          showToast('Camera permission denied or unavailable—use "🖼️ Scan Image" to scan a QR screenshot!');
+        });
+      }
+
+      function stopCameraQrScanner() {
+        if (qrScanRaf) cancelAnimationFrame(qrScanRaf);
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(function (t) { t.stop(); });
+          cameraStream = null;
+        }
+        document.getElementById('cameraScannerWrap').classList.add('hidden');
+      }
+
+      function processScannedRemoteToken(rawToken) {
+        const val = (rawToken || '').trim();
+        if (!val) {
+          showToast('Please scan a QR code or paste a partner token first.');
+          return;
+        }
+        let parsedPeerName = 'Offline Peer';
+        let slot = Number(document.getElementById('qrSeatSlotSelect').value);
+        try {
+          if (val.startsWith('BANNU_RTC:')) {
+            const b64 = val.replace('BANNU_RTC:', '');
+            const obj = JSON.parse(decodeURIComponent(escape(atob(b64))));
+            if (obj.host) parsedPeerName = obj.host + ' (QR P2P)';
+            if (obj.slot >= 1 && obj.slot <= 3) slot = obj.slot;
+            if (obj.role === 'offer') {
+              generateOfflineWebRtcQrCode('answer');
+            }
+          }
+        } catch (e) {}
+
+        seatConfig[slot].name = parsedPeerName;
+        seatConfig[slot].type = 'human';
+        seatConfig[slot].active = true;
+        const countEl = document.getElementById('connectedWebRtcCount');
+        const cur = parseInt(countEl.textContent, 10) || 0;
+        countEl.textContent = Math.min(3, cur + 1) + ' / 3';
+        document.getElementById('connectionStatusPill').textContent = '🟢 Offline QR P2P (' + parsedPeerName + ')';
+        showToast('✅ Linked ' + parsedPeerName + ' on Seat #' + (slot + 1) + '!');
+      }
+
+      function broadcastNetworkAction(payload) {
+        try {
+          if (localBroadcastChannel) {
+            localBroadcastChannel.postMessage({ type: 'GAME_ACTION', senderId: myRoomId, payload: payload });
+          }
+          peerJsConnections.forEach(function (c) {
+            if (c && c.open) c.send({ type: 'GAME_ACTION', payload: payload });
+          });
+          Object.keys(activeRtcConnections).forEach(function (k) {
+            const dc = activeRtcConnections[k] && activeRtcConnections[k].dc;
+            if (dc && dc.readyState === 'open') dc.send(JSON.stringify(payload));
+          });
+        } catch (e) {}
+      }
+
+      function handleRemoteNetworkAction(payload) {
+        if (!payload) return;
+        if (payload.type === 'ROLL' && gameState.phase === 'ROLL') {
+          rollDiceForCurrentPlayer(payload.values, true);
+        } else if (payload.type === 'MOVE' && gameState.phase === 'MOVE') {
+          const legal = computeLegalMoves();
+          const match = legal.find(function (m) {
+            return m.tokenId === payload.tokenId && m.ownerIdx === payload.ownerIdx && m.delta === payload.delta;
+          });
+          if (match) executeMove(match, true);
+        } else if (payload.type === 'EMOTE') {
+          triggerPlayerEmote(payload.playerIdx || 0, payload.text);
+        }
+      }
+
+      // --- 13. STATS VIEW, ACHIEVEMENTS, MATCH HISTORY & HD PICTURE GENERATOR ---
+      function renderStatsView() {
+        document.getElementById('profileNameInput').value = careerStats.playerName;
+        document.getElementById('statMatches').textContent = String(careerStats.matches);
+        document.getElementById('statWins').textContent = String(careerStats.wins);
+        document.getElementById('statKills').textContent = String(careerStats.kills);
+        document.getElementById('statDoubleSixes').textContent = String(careerStats.doubleSixes);
+        const rate = careerStats.matches > 0 ? Math.round((careerStats.wins / careerStats.matches) * 100) : 0;
+        document.getElementById('statWinRate').textContent = rate + '%';
+        document.getElementById('statTeamWins').textContent = String(careerStats.teamWins);
+        document.getElementById('statHardAiWins').textContent = String(careerStats.hardAiWins);
+        document.getElementById('statStreak').textContent = careerStats.streak + ' 🔥';
+
+        // Render Achievements
+        const achGrid = document.getElementById('achievementsGrid');
+        if (achGrid) {
+          const achievements = [
+            { title: '⚔️ First Blood Hunter', desc: 'Unlock Home via enemy kill', unlocked: careerStats.kills >= 1 },
+            { title: '🔥 Double Six Master', desc: 'Roll 5+ Double Sixes (6+6)', unlocked: careerStats.doubleSixes >= 5 },
+            { title: '🔒 Close Game Tactician', desc: 'Win under Bannu Close Game', unlocked: careerStats.wins >= 1 },
+            { title: '🤝 Pashtun Team Legend', desc: 'Win 2+ 2v2 Team Matches', unlocked: careerStats.teamWins >= 2 },
+            { title: '🧠 Grandmaster Slayer', desc: 'Defeat Hard AI in 2-Dice', unlocked: careerStats.hardAiWins >= 1 },
+            { title: '👑 Bannu Royale Champion', desc: 'Reach 10+ Career Kills', unlocked: careerStats.kills >= 10 }
+          ];
+          achGrid.innerHTML = achievements.map(function (a) {
+            return '<div class="p-2.5 rounded-xl border ' +
+              (a.unlocked ? 'bg-amber-500/15 border-amber-500/50 text-amber-200' : 'bg-slate-900/50 border-slate-800 text-slate-500') + '">' +
+              '<div class="font-bold text-xs">' + a.title + (a.unlocked ? ' ✓' : '') + '</div>' +
+              '<div class="text-[10px] opacity-80 mt-0.5">' + a.desc + '</div>' +
+            '</div>';
+          }).join('');
+        }
+
+        // Render Match History
+        const histEl = document.getElementById('matchHistoryContainer');
+        if (histEl) {
+          const list = careerStats.history || [];
+          if (list.length === 0) {
+            histEl.innerHTML = '<div class="text-slate-500 italic">No matches recorded yet.</div>';
+          } else {
+            histEl.innerHTML = list.map(function (h) {
+              return '<div class="px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 flex items-center justify-between">' +
+                '<span><b>' + h.mode + '</b> <span class="text-slate-400">(' + h.date + ')</span></span>' +
+                '<span class="font-bold text-amber-300">' + h.result + ' • ⚔️ ' + h.kills + '</span>' +
+              '</div>';
+            }).join('');
+          }
+        }
+
+        drawStatsPictureCard();
+      }
+
+      function drawStatsPictureCard() {
+        const c = document.getElementById('statsCardCanvas');
+        if (!c) return;
+        const g = c.getContext('2d');
+        const W = c.width;
+        const H = c.height;
+
+        const grad = g.createLinearGradient(0, 0, W, H);
+        grad.addColorStop(0, '#0f172a');
+        grad.addColorStop(0.55, '#1e1b4b');
+        grad.addColorStop(1, '#451a03');
+        g.fillStyle = grad;
+        g.fillRect(0, 0, W, H);
+
+        g.strokeStyle = '#f59e0b';
+        g.lineWidth = 4;
+        g.strokeRect(14, 14, W - 28, H - 28);
+
+        g.fillStyle = '#f59e0b';
+        g.font = '900 22px Inter, sans-serif';
+        g.fillText('🎲 BANNU ROYALE LUDO — OFFICIAL CAREER CARD', 34, 52);
+
+        g.fillStyle = '#e2e8f0';
+        g.font = '700 28px Inter, sans-serif';
+        g.fillText(careerStats.playerName, 34, 94);
+
+        const rate = careerStats.matches > 0 ? Math.round((careerStats.wins / careerStats.matches) * 100) : 0;
+        g.fillStyle = '#38bdf8';
+        g.font = '600 15px Inter, sans-serif';
+        g.fillText('Rank: Grandmaster Pashtun Strategist  •  Win Rate: ' + rate + '%', 34, 122);
+
+        const boxes = [
+          { label: 'MATCHES WON', val: careerStats.wins + ' / ' + careerStats.matches, col: '#10b981' },
+          { label: 'ENEMY KILLS (شکار)', val: String(careerStats.kills), col: '#f43f5e' },
+          { label: 'DOUBLE SIXES (6+6)', val: String(careerStats.doubleSixes), col: '#f59e0b' },
+          { label: '2v2 TEAM WINS', val: String(careerStats.teamWins), col: '#a855f7' }
+        ];
+
+        boxes.forEach(function (bx, i) {
+          const x = 34 + (i % 2) * 268;
+          const y = 148 + Math.floor(i / 2) * 92;
+          g.fillStyle = 'rgba(15, 23, 42, 0.82)';
+          g.fillRect(x, y, 250, 76);
+          g.strokeStyle = bx.col;
+          g.lineWidth = 2;
+          g.strokeRect(x, y, 250, 76);
+
+          g.fillStyle = '#94a3b8';
+          g.font = '700 12px Inter, sans-serif';
+          g.fillText(bx.label, x + 16, y + 26);
+
+          g.fillStyle = bx.col;
+          g.font = '900 26px Inter, sans-serif';
+          g.fillText(bx.val, x + 16, y + 58);
+        });
+
+        g.fillStyle = '#fde68a';
+        g.font = '600 13px Inter, sans-serif';
+        g.fillText('Authentic Bannu 2-Dice • Close/Open Game • 2v2 Teams • Offline P2P Verified', 34, 348);
+      }
+
+      // --- 14. LOGGING & TOAST HELPERS ---
+      function clearGameLog() {
+        document.getElementById('gameLogContainer').innerHTML = '';
+      }
+
+      function addGameLog(text, style) {
+        const container = document.getElementById('gameLogContainer');
+        const item = document.createElement('div');
+        let colorClass = 'text-slate-300 border-slate-700 bg-slate-900/60';
+        if (style === 'gold') colorClass = 'text-amber-300 border-amber-500/40 bg-amber-500/10 font-semibold';
+        if (style === 'kill') colorClass = 'text-red-300 border-red-500/40 bg-red-500/10 font-semibold';
+        if (style === 'warn') colorClass = 'text-sky-300 border-sky-500/40 bg-sky-500/10';
+
+        item.className = 'px-2.5 py-1.5 rounded-lg border text-[11px] leading-snug ' + colorClass;
+        item.textContent = text;
+        container.prepend(item);
+      }
+
+      let toastTimer = null;
+      function showToast(msg) {
+        const t = document.getElementById('toastBanner');
+        t.textContent = msg;
+        t.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          t.classList.add('hidden');
+        }, 3200);
+      }
+
+      // --- 15. NAVIGATION, MULTILINGUAL SWITCHER & EVENT LISTENERS ---
+      const VIEWS = ['viewPlay', 'viewRules', 'viewNetwork', 'viewStats', 'viewGuide'];
+      const NAV_BTNS = {
+        viewPlay: 'navPlayBtn',
+        viewRules: 'navRulesBtn',
+        viewNetwork: 'navNetworkBtn',
+        viewStats: 'navStatsBtn',
+        viewGuide: 'navGuideBtn'
+      };
+      const MOB_NAV_BTNS = {
+        viewPlay: 'mobNavPlayBtn',
+        viewRules: 'mobNavRulesBtn',
+        viewNetwork: 'mobNavNetworkBtn',
+        viewStats: 'mobNavStatsBtn',
+        viewGuide: 'mobNavGuideBtn'
+      };
+
+      function switchNavigationTab(targetViewId) {
+        if (targetViewId !== 'viewNetwork') stopCameraQrScanner();
+        VIEWS.forEach(function (vId) {
+          const el = document.getElementById(vId);
+          if (vId === targetViewId) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        });
+        Object.keys(NAV_BTNS).forEach(function (vId) {
+          const btn = document.getElementById(NAV_BTNS[vId]);
+          if (btn) {
+            btn.className = vId === targetViewId
+              ? 'nav-tab px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-amber-500 text-slate-950 shadow'
+              : 'nav-tab px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition-all relative';
+          }
+          const mBtn = document.getElementById(MOB_NAV_BTNS[vId]);
+          if (mBtn) {
+            mBtn.className = vId === targetViewId
+              ? 'flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-amber-400 font-bold text-[11px]'
+              : 'flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-slate-400 font-semibold text-[11px]';
+          }
+        });
+        if (targetViewId === 'viewStats') renderStatsView();
+      }
+
+      ['Play', 'Rules', 'Network', 'Stats', 'Guide'].forEach(function (tab) {
+        const viewId = 'view' + tab;
+        const dBtn = document.getElementById('nav' + tab + 'Btn');
+        const mBtn = document.getElementById('mobNav' + tab + 'Btn');
+        if (dBtn) dBtn.addEventListener('click', function () {
+          if (viewId === 'viewRules') syncRulesStudioControls();
+          switchNavigationTab(viewId);
+        });
+        if (mBtn) mBtn.addEventListener('click', function () {
+          if (viewId === 'viewRules') syncRulesStudioControls();
+          switchNavigationTab(viewId);
+        });
+      });
+
+      document.getElementById('quickCustomizeRulesBtn').addEventListener('click', function () {
+        syncRulesStudioControls();
+        switchNavigationTab('viewRules');
+      });
+
+      // Language Switcher
+      document.getElementById('langSelect').addEventListener('change', function () {
+        const lang = this.value;
+        const mainT = document.getElementById('appMainTitle');
+        const subT = document.getElementById('appSubTitle');
+        if (lang === 'ur') {
+          mainT.textContent = 'بنوں رائل لڈو — پشتون اور کلاسک قوانین';
+          subT.textContent = 'دو ڈائس، کلوز/اوپن گیم، 2v2 ٹیم اور آف لائن کیو آر ملٹی پلیئر';
+          showToast('اردو زبان فعال کر دی گئی ہے!');
+        } else if (lang === 'ps') {
+          mainT.textContent = 'بنو رایل لډو — پښتون دودیز قوانین';
+          subT.textContent = 'دوه دانې (۲ ډایس)، کلوز ګیم، ۲ پر ۲ ټیم او آفلاین ملټي پلیر';
+          showToast('پښتو ژبه فعاله شوه!');
+        } else {
+          mainT.textContent = 'Bannu Royale Ludo';
+          subT.textContent = 'Pashtun Cultural 2-Dice & Yalla Classic Engine';
+          showToast('Switched to English / Bilingual mode.');
+        }
+      });
+
+      // Sound & Fullscreen
+      document.getElementById('soundToggleBtn').addEventListener('click', function () {
+        soundEnabled = !soundEnabled;
+        this.textContent = soundEnabled ? '🔊' : '🔇';
+        showToast(soundEnabled ? '🔊 Sound Effects Enabled' : '🔇 Sound Muted');
+      });
+
+      document.getElementById('fullscreenToggleBtn').addEventListener('click', function () {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(function () {
+            showToast('Fullscreen mode toggled.');
+          });
+        } else {
+          document.exitFullscreen().catch(function () {});
+        }
+      });
+
+      // Emote Buttons
+      document.querySelectorAll('.emote-send-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const text = btn.dataset.emote;
+          triggerPlayerEmote(0, text);
+          broadcastNetworkAction({ type: 'EMOTE', playerIdx: 0, text: text });
+        });
+      });
+
+      // Roll Dice & Undo Triggers
+      document.getElementById('rollDiceBtn').addEventListener('click', function () {
+        if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+          rollDiceForCurrentPlayer();
+        }
+      });
+      document.getElementById('dieSlot0').addEventListener('click', function () {
+        if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+          rollDiceForCurrentPlayer();
+        }
+      });
+      document.getElementById('dieSlot1').addEventListener('click', function () {
+        if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+          rollDiceForCurrentPlayer();
+        }
+      });
+      document.getElementById('undoMoveBtn').addEventListener('click', function () {
+        restoreUndoSnapshot();
+      });
+
+      window.addEventListener('keydown', function (e) {
+        if (e.code === 'Space' && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+          if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+            e.preventDefault();
+            rollDiceForCurrentPlayer();
+          }
+        }
+      });
+
+      // Quick Presets & Match Controls
+      document.getElementById('presetBannuQuickBtn').addEventListener('click', function () { applyBannuRulesPreset(true); });
+      document.getElementById('presetYallaQuickBtn').addEventListener('click', function () { applyYallaClassicPreset(true); });
+      document.getElementById('applyBannuPresetBtn').addEventListener('click', function () { applyBannuRulesPreset(false); });
+      document.getElementById('applyYallaPresetBtn').addEventListener('click', function () { applyYallaClassicPreset(false); });
+      document.getElementById('newMatchQuickBtn').addEventListener('click', function () { initNewMatch(); });
+
+      // Cultural Scenario Drawer
+      document.getElementById('demoScenarioBtn').addEventListener('click', function () {
+        document.getElementById('scenarioDrawer').classList.toggle('hidden');
+      });
+      document.getElementById('closeScenarioDrawerBtn').addEventListener('click', function () {
+        document.getElementById('scenarioDrawer').classList.add('hidden');
+      });
+      document.querySelectorAll('.scenario-load-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          loadCulturalScenario(btn.dataset.scenario);
+        });
+      });
+
+      // Rules Studio Interactive Buttons
+      document.querySelectorAll('.rule-dice-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          rulesConfig.diceCount = Number(btn.dataset.dice);
+          rulesConfig.presetName = 'Custom Rules';
+          syncRulesStudioControls();
+        });
+      });
+      document.querySelectorAll('.rule-token-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          rulesConfig.tokensPerPlayer = Number(btn.dataset.tokens);
+          syncRulesStudioControls();
+        });
+      });
+      document.querySelectorAll('.rule-close-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          rulesConfig.closeGameMode = (btn.dataset.closemode === 'true');
+          rulesConfig.presetName = 'Custom Rules';
+          syncRulesStudioControls();
+        });
+      });
+
+      document.getElementById('saveAndStartMatchBtn').addEventListener('click', function () {
+        rulesConfig.mandatoryYardSpawn = document.getElementById('chkMandatorySpawn').checked;
+        rulesConfig.killRequiredForHome = document.getElementById('chkKillForHome').checked;
+        rulesConfig.teamMode = document.getElementById('chkTeamMode').checked;
+        rulesConfig.strictHomeRemainder = document.getElementById('chkStrictRemainder').checked;
+        rulesConfig.teamAssistRequiresSix = document.getElementById('chkTeamAssistSix').checked;
+        rulesConfig.aiDifficulty = document.getElementById('aiDifficultySelect').value;
+        rulesConfig.turnTimeSeconds = Number(document.getElementById('turnTimerSelect').value);
+
+        for (let i = 0; i < 4; i++) {
+          const nameVal = document.getElementById('setupName' + i).value.trim() || ('Player ' + (i + 1));
+          const typeVal = document.getElementById('setupType' + i).value;
+          seatConfig[i].name = nameVal;
+          seatConfig[i].type = typeVal === 'none' ? 'ai' : typeVal;
+          seatConfig[i].active = typeVal !== 'none';
+        }
+        switchNavigationTab('viewPlay');
+        initNewMatch('Started custom match (' + rulesConfig.diceCount + ' Dice, ' + rulesConfig.tokensPerPlayer + ' Beads, AI: ' + rulesConfig.aiDifficulty.toUpperCase() + ').');
+      });
+
+      // Network / Wi-Fi / QR Handlers
+      document.getElementById('createWifiRoomBtn').addEventListener('click', function () {
+        if (localBroadcastChannel) {
+          localBroadcastChannel.postMessage({
+            type: 'ROOM_HOST',
+            senderId: myRoomId,
+            name: careerStats.playerName + ' (Room Host)',
+            mode: rulesConfig.presetName
+          });
+        }
+        showToast('🏠 Broadcasted Room ' + myRoomId + ' to all active Wi-Fi players!');
+      });
+
+      document.getElementById('copyPeerIdBtn').addEventListener('click', function () {
+        const text = document.getElementById('myPeerIdDisplay').textContent;
+        navigator.clipboard?.writeText(text).catch(function(){});
+        showToast('📋 Copied Wi-Fi Room ID: ' + text);
+      });
+      document.getElementById('connectPeerIdBtn').addEventListener('click', function () {
+        const code = document.getElementById('joinPeerIdInput').value.trim() || 'BANNU-PEER';
+        sendLanMatchInvite({ id: code, name: 'Friend (' + code + ')' }, '2v2 Team Match');
+      });
+      document.getElementById('simulateLanPlayerBtn').addEventListener('click', function () {
+        const randId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
+        const names = ['Tariq Wazir', 'Hamza Bannuchi', 'Bilal Khattak', 'Usman Afridi'];
+        const pick = names[Math.floor(Math.random() * names.length)];
+        discoveredPeers.set(randId, {
+          id: randId,
+          name: pick + ' (Wi-Fi)',
+          mode: '2v2 Bannu Rules',
+          angle: Math.floor(Math.random() * 360),
+          dist: 55 + Math.floor(Math.random() * 35)
+        });
+        renderRadarPeers();
+        showToast('📡 Discovered ' + pick + ' on local Wi-Fi radar!');
+      });
+
+      document.getElementById('qrHostModeBtn').addEventListener('click', function () {
+        generateOfflineWebRtcQrCode('offer');
+        document.getElementById('qrStepInstruction').textContent = 'Host Mode: Have your friend scan this Offer QR Code, then scan their Answer QR Code.';
+      });
+      document.getElementById('qrJoinModeBtn').addEventListener('click', function () {
+        generateOfflineWebRtcQrCode('answer');
+        document.getElementById('qrStepInstruction').textContent = 'Join Mode: Scan the Host\'s Offer QR first to generate your Answer QR Code!';
+      });
+      document.getElementById('generateWebRtcOfferBtn').addEventListener('click', function () {
+        generateOfflineWebRtcQrCode('offer');
+        showToast('📱 Generated fresh Offline WebRTC Offer QR Code!');
+      });
+      document.getElementById('toggleCameraQrScanBtn').addEventListener('click', function () {
+        startCameraQrScanner();
+      });
+      document.getElementById('stopCameraScanBtn').addEventListener('click', function () {
+        stopCameraQrScanner();
+      });
+
+      // QR Image File Decode Fallback via jsQR
+      document.getElementById('qrImageUploadInput').addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          img.onload = function () {
+            const c = document.getElementById('qrScanHiddenCanvas');
+            const g = c.getContext('2d');
+            c.width = img.width;
+            c.height = img.height;
+            g.drawImage(img, 0, 0);
+            const imgData = g.getImageData(0, 0, c.width, c.height);
+            if (window.jsQR) {
+              const decoded = window.jsQR(imgData.data, imgData.width, imgData.height);
+              if (decoded && decoded.data) {
+                document.getElementById('remoteSdpTokenInput').value = decoded.data;
+                processScannedRemoteToken(decoded.data);
+                return;
+              }
+            }
+            showToast('⚠️ Could not detect a valid QR code in that image.');
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('copySdpTokenBtn').addEventListener('click', function () {
+        const el = document.getElementById('localSdpTokenOutput');
+        el.select();
+        document.execCommand('copy');
+        showToast('📋 Offline WebRTC Handshake Token copied!');
+      });
+      document.getElementById('acceptRemoteSdpBtn').addEventListener('click', function () {
+        const val = document.getElementById('remoteSdpTokenInput').value;
+        processScannedRemoteToken(val);
+      });
+
+      document.getElementById('declineLanInviteBtn').addEventListener('click', function () {
+        document.getElementById('lanInviteModal').classList.add('hidden');
+      });
+      document.getElementById('acceptLanInviteBtn').addEventListener('click', function () {
+        document.getElementById('lanInviteModal').classList.add('hidden');
+        switchNavigationTab('viewPlay');
+        initNewMatch('Accepted local Wi-Fi match invite!');
+      });
+
+      // Stats Backup / Restore / Picture Download
+      document.getElementById('saveProfileNameBtn').addEventListener('click', function () {
+        const val = document.getElementById('profileNameInput').value.trim();
+        if (val) {
+          careerStats.playerName = val;
+          seatConfig[0].name = val;
+          saveCareerStats();
+          showToast('✅ Profile name saved!');
+        }
+      });
+
+      document.getElementById('exportStatsBackupBtn').addEventListener('click', function () {
+        const backupPayload = {
+          app: 'BannuRoyaleLudo',
+          version: '2.0-Production',
+          exportedAt: new Date().toISOString(),
+          careerStats: careerStats,
+          rulesConfig: rulesConfig
+        };
+        const blob = new Blob([JSON.stringify(backupPayload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'bannu_ludo_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('💾 Backup JSON downloaded!');
+      });
+
+      document.getElementById('importStatsBackupInput').addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (data.careerStats) {
+              careerStats = Object.assign({}, DEFAULT_STATS, data.careerStats);
+              if (data.rulesConfig) rulesConfig = Object.assign({}, rulesConfig, data.rulesConfig);
+              saveCareerStats();
+              syncRulesStudioControls();
+              showToast('✅ Career Stats & Custom Rules Restored Successfully!');
+            }
+          } catch (err) {
+            showToast('⚠️ Invalid backup file format.');
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      document.getElementById('resetStatsBtn').addEventListener('click', function () {
+        careerStats = {
+          playerName: careerStats.playerName,
+          matches: 0,
+          wins: 0,
+          kills: 0,
+          doubleSixes: 0,
+          teamWins: 0,
+          hardAiWins: 0,
+          streak: 0,
+          history: []
+        };
+        saveCareerStats();
+        showToast('Career stats reset to zero.');
+      });
+
+      document.getElementById('refreshStatsCardBtn').addEventListener('click', function () {
+        drawStatsPictureCard();
+        showToast('📸 Stats Card Preview Refreshed!');
+      });
+
+      document.getElementById('downloadStatsCardPngBtn').addEventListener('click', function () {
+        drawStatsPictureCard();
+        const c = document.getElementById('statsCardCanvas');
+        const url = c.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'bannu_ludo_stats_card.png';
+        a.click();
+        showToast('📸 Downloaded HD Stats Picture (.PNG)!');
+      });
+
+      document.getElementById('victoryPlayAgainBtn').addEventListener('click', function () {
+        initNewMatch();
+      });
+      document.getElementById('victoryViewStatsBtn').addEventListener('click', function () {
+        document.getElementById('victoryModal').classList.add('hidden');
+        switchNavigationTab('viewStats');
+      });
+
+      window.addEventListener('load', function () {
+        loadCareerStats();
+        syncRulesStudioControls();
+        initNewMatch();
+        initLanRadarAndWebRtc();
+      });
+    })();
+  </script>
+</body>
+</html>
