@@ -392,8 +392,8 @@
           </div>
         </div>
 
-        <!-- 2. Match Mode & Bead Count Row -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <!-- 2. Match Mode, Bead Count, Kill Mode & Turn Timer Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           <div>
             <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Match Format</label>
             <select id="homeQuickFormatSelect" class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900">
@@ -419,6 +419,22 @@
               <option value="close" selected>🔒 Close Game + Kill Re-Roll</option>
               <option value="open">🔓 Open Game + Kill Re-Roll</option>
             </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Turn Timer</label>
+            <div class="flex gap-1">
+              <select id="homeQuickTimerSelect" class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-2 text-xs font-bold text-slate-900">
+                <option value="0">🚫 No Timer (Off)</option>
+                <option value="15">⏱️ 15 Seconds</option>
+                <option value="30" selected>⏱️ 30 Seconds</option>
+                <option value="60">⏱️ 1 Minute</option>
+                <option value="120">⏱️ 2 Minutes</option>
+                <option value="180">⏱️ 3 Minutes</option>
+                <option value="custom">✏️ Custom...</option>
+              </select>
+              <input id="homeCustomTimerInput" type="number" min="5" max="3600" value="45" placeholder="Sec" class="hidden w-16 bg-white border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" />
+            </div>
           </div>
         </div>
 
@@ -451,20 +467,18 @@
   <!-- ==================== SCREEN 1: ZERO-SCROLLBAR PURE GAMEPLAY ARENA (`100dvh`) ==================== -->
   <section id="viewPlay" class="hidden w-full h-dvh max-h-dvh overflow-hidden flex flex-col items-center justify-between px-2 py-1 select-none">
 
-    <!-- WING 1 / TOP ROW: Player 0 (Red), Center Mini HUD (Menu, Immersive, Fullscreen, Undo, Drills), Player 1 (Green) -->
     <div id="playTopRow" class="w-full max-w-[720px] h-[48px] flex-shrink-0 grid grid-cols-12 items-center gap-1.5">
-      <!-- Player 0: Red (4 cols) -->
       <div id="playerCard0" class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-rose-400 flex flex-col justify-center h-full transition-all">
         <div id="emoteBubble0" class="hidden absolute top-11 left-1 z-30 px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] shadow"></div>
         <div class="flex items-center justify-between gap-1">
           <div class="flex items-center gap-1 min-w-0">
             <span class="text-xs">🔴</span>
             <span id="pName0" class="font-extrabold text-[11px] sm:text-xs text-slate-900 truncate">You</span>
-            <span id="pTeamBadge0" class="text-[8px] px-1 rounded bg-amber-100 text-amber-900 border border-amber-400 font-black" title="Teammate with Yellow">♦T1</span>
+            <span id="pTeamBadge0" class="text-[8px] px-1 rounded bg-amber-200 text-slate-950 border border-amber-500 font-black" title="Teammate with Yellow">♦T1</span>
           </div>
-          <span id="pStatusTag0" class="text-[8px] font-black px-1.5 py-0.2 rounded bg-rose-500 text-white">BARI</span>
+          <span id="pStatusTag0" class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-amber-300">BARI</span>
         </div>
-        <div class="flex items-center justify-between text-[9px] font-bold text-slate-500 mt-0.5">
+        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
           <span id="pKills0">⚔️ 0</span>
           <span id="pHome0">🏠 0/4</span>
         </div>
@@ -473,37 +487,38 @@
         </div>
       </div>
 
-      <!-- Center Mini HUD Controls (4 cols) — Includes Fullscreen & Immersive Board-Only Mode! -->
       <div class="col-span-4 flex flex-wrap items-center justify-center gap-1">
-        <button id="openPauseMenuBtn" type="button" title="Game Menu & Setup" class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-800 font-extrabold text-[10px] sm:text-[11px] border border-amber-300 shadow-sm flex items-center gap-1">
+        <button id="openPauseMenuBtn" type="button" title="Game Menu & Setup" class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-extrabold text-[10px] sm:text-[11px] border border-amber-400 shadow-sm flex items-center gap-1">
           <span>⏸️</span><span>Menu</span>
         </button>
-        <button id="toggleImmersivePlayBtn" type="button" title="Immersive Board-Only Mode (Zero Distractions)" class="px-2 py-1 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[10px] sm:text-[11px] shadow-sm flex items-center gap-1">
+        <button id="toggleImmersivePlayBtn" type="button" title="Immersive Board-Only Mode (Zero Distractions)" class="px-2 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-extrabold text-[10px] sm:text-[11px] shadow-sm flex items-center gap-1">
           <span>👁️</span><span class="hidden sm:inline">Board Only</span>
         </button>
-        <button id="inGameFullscreenBtn" type="button" title="Toggle Fullscreen" class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-800 font-bold text-[10px] sm:text-[11px] border border-amber-300 shadow-sm">
+        <button id="inGameFullscreenBtn" type="button" title="Toggle Fullscreen" class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-bold text-[10px] sm:text-[11px] border border-amber-400 shadow-sm">
           ⛶
         </button>
-        <button id="undoMoveBtn" type="button" title="Undo Move" class="px-1.5 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-700 font-bold text-[10px] border border-amber-200 shadow-sm">
+        <button id="undoMoveBtn" type="button" title="Undo Move" class="px-1.5 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-bold text-[10px] border border-amber-300 shadow-sm">
           ↩️
         </button>
-        <button id="demoScenarioBtn" type="button" title="Test Cultural Rule Drills" class="px-1.5 py-1 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[10px] border border-indigo-200 shadow-sm">
+        <button id="demoScenarioBtn" type="button" title="Test Cultural Rule Drills" class="px-1.5 py-1 rounded-xl bg-indigo-100 hover:bg-indigo-200 text-indigo-950 font-bold text-[10px] border border-indigo-400 shadow-sm">
           ⚡
+        </button>
+        <button id="exitScenarioDrillBtn" type="button" title="Exit Drill & Return to Match" class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm">
+          🔙 Match
         </button>
       </div>
 
-      <!-- Player 1: Green (4 cols) -->
       <div id="playerCard1" class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-emerald-300 flex flex-col justify-center h-full transition-all">
         <div id="emoteBubble1" class="hidden absolute top-11 right-1 z-30 px-2 py-0.5 rounded-lg bg-emerald-400 text-slate-950 font-black text-[10px] shadow"></div>
         <div class="flex items-center justify-between gap-1">
           <div class="flex items-center gap-1 min-w-0">
             <span class="text-xs">🟢</span>
             <span id="pName1" class="font-extrabold text-[11px] sm:text-xs text-slate-900 truncate">Sher Khan</span>
-            <span id="pTeamBadge1" class="text-[8px] px-1 rounded bg-sky-100 text-sky-900 border border-sky-400 font-black" title="Teammate with Blue">★T2</span>
+            <span id="pTeamBadge1" class="text-[8px] px-1 rounded bg-sky-200 text-slate-950 border border-sky-500 font-black" title="Teammate with Blue">★T2</span>
           </div>
-          <span id="pStatusTag1" class="text-[8px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-500">WAIT</span>
+          <span id="pStatusTag1" class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800">WAIT</span>
         </div>
-        <div class="flex items-center justify-between text-[9px] font-bold text-slate-500 mt-0.5">
+        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
           <span id="pKills1">⚔️ 0</span>
           <span id="pHome1">🏠 0/4</span>
         </div>
@@ -513,27 +528,24 @@
       </div>
     </div>
 
-    <!-- CENTERPIECE LUDO BOARD (Expands to fill Widescreen & Portrait with ZERO scrollbars!) -->
     <div id="playBoardRow" class="flex-1 min-h-0 w-full flex items-center justify-center">
       <div id="boardContainer" class="relative rounded-2xl p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-700 shadow-2xl border-2 border-amber-300 flex items-center justify-center">
         <canvas id="ludoCanvas" width="750" height="750" class="w-full h-full rounded-xl shadow-inner cursor-grab active:cursor-grabbing bg-white"></canvas>
       </div>
     </div>
 
-    <!-- WING 2 / BOTTOM ROW: Player 3 (Blue), Integrated Center Dice Dock, Player 2 (Yellow) -->
     <div id="playBottomRow" class="w-full max-w-[720px] h-[58px] flex-shrink-0 grid grid-cols-12 items-center gap-1.5">
-      <!-- Player 3: Blue (3 cols) -->
       <div id="playerCard3" class="col-span-3 relative royal-card rounded-xl px-2 py-1 border-2 border-blue-300 flex flex-col justify-center h-full transition-all">
         <div id="emoteBubble3" class="hidden absolute -top-8 left-1 z-30 px-2 py-0.5 rounded-lg bg-sky-400 text-slate-950 font-black text-[10px] shadow"></div>
         <div class="flex items-center justify-between gap-1">
           <div class="flex items-center gap-1 min-w-0">
             <span class="text-xs">🔵</span>
             <span id="pName3" class="font-extrabold text-[10px] sm:text-xs text-slate-900 truncate">Marwat</span>
-            <span id="pTeamBadge3" class="text-[8px] px-1 rounded bg-sky-100 text-sky-900 border border-sky-400 font-black">★T2</span>
+            <span id="pTeamBadge3" class="text-[8px] px-1 rounded bg-sky-200 text-slate-950 border border-sky-500 font-black">★T2</span>
           </div>
-          <span id="pStatusTag3" class="text-[8px] font-bold px-1 py-0.2 rounded bg-slate-100 text-slate-500">WAIT</span>
+          <span id="pStatusTag3" class="text-[8px] font-bold px-1 py-0.5 rounded bg-slate-200 text-slate-800">WAIT</span>
         </div>
-        <div class="flex items-center justify-between text-[9px] font-bold text-slate-500 mt-0.5">
+        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
           <span id="pKills3">⚔️ 0</span>
           <span id="pHome3">🏠 0/4</span>
         </div>
@@ -542,22 +554,21 @@
         </div>
       </div>
 
-      <!-- Center Integrated Dice & Roll Dock (6 cols) -->
       <div id="centerDiceDock" class="col-span-6 royal-card rounded-2xl px-2 py-1 border-2 border-amber-400 h-full flex items-center justify-between gap-1.5">
         <div id="diceStageContainer" class="flex items-center gap-1 flex-shrink-0">
           <button id="dieSlot0" type="button" title="Die 1" class="relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 border-amber-400 flex flex-col items-center justify-center transition">
             <div id="dieFace0" class="w-7 h-7 grid grid-cols-3 grid-rows-3 p-0.5 gap-0.5"></div>
-            <span id="dieStatus0" class="absolute -bottom-1 px-1 rounded bg-amber-500 text-white font-black text-[7px]">D1</span>
+            <span id="dieStatus0" class="absolute -bottom-0.5 px-1 rounded bg-slate-900 text-amber-300 font-black text-[8px]">D1</span>
           </button>
 
-          <button id="dicePlusDivider" type="button" title="Combine Both Dice" class="flex flex-col items-center justify-center px-1 py-0.5 rounded bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900">
-            <span class="text-[10px] font-black text-amber-600">+</span>
-            <span id="diceSumBadge" class="text-[8px] font-extrabold">=12</span>
+          <button id="dicePlusDivider" type="button" title="Combine Both Dice" class="flex flex-col items-center justify-center px-1 py-0.5 rounded bg-amber-100 hover:bg-amber-200 border border-amber-400 text-slate-950">
+            <span class="text-[10px] font-black text-amber-900">+</span>
+            <span id="diceSumBadge" class="text-[8px] font-black text-slate-900">=12</span>
           </button>
 
           <button id="dieSlot1" type="button" title="Die 2" class="relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 border-slate-300 flex flex-col items-center justify-center transition">
             <div id="dieFace1" class="w-7 h-7 grid grid-cols-3 grid-rows-3 p-0.5 gap-0.5"></div>
-            <span id="dieStatus1" class="absolute -bottom-1 px-1 rounded bg-slate-700 text-white font-black text-[7px]">D2</span>
+            <span id="dieStatus1" class="absolute -bottom-0.5 px-1 rounded bg-slate-900 text-white font-black text-[8px]">D2</span>
           </button>
         </div>
 
@@ -566,29 +577,28 @@
             <span>🎲</span>
             <span id="rollDiceBtnLabel" class="truncate">Roll Dice</span>
           </button>
-          <div class="flex items-center justify-between text-[9px] text-slate-600 font-bold px-0.5 mt-0.5">
-            <span id="turnBannerText" class="truncate text-amber-800">Red's Turn</span>
-            <span id="turnCountdownBadge" class="font-mono">30s</span>
+          <div class="flex items-center justify-between text-[9px] text-slate-900 font-extrabold px-0.5 mt-0.5">
+            <span id="turnBannerText" class="truncate text-amber-950">Red's Turn</span>
+            <span id="turnCountdownBadge" class="font-mono text-slate-900">30s</span>
           </div>
         </div>
 
-        <button id="toggleEmoteTrayBtn" type="button" title="Quick Taunts" class="w-8 h-9 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 flex items-center justify-center text-xs flex-shrink-0">
+        <button id="toggleEmoteTrayBtn" type="button" title="Quick Taunts" class="w-8 h-9 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 flex items-center justify-center text-xs flex-shrink-0">
           💬
         </button>
       </div>
 
-      <!-- Player 2: Yellow (3 cols) -->
       <div id="playerCard2" class="col-span-3 relative royal-card rounded-xl px-2 py-1 border-2 border-amber-300 flex flex-col justify-center h-full transition-all">
         <div id="emoteBubble2" class="hidden absolute -top-8 right-1 z-30 px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] shadow"></div>
         <div class="flex items-center justify-between gap-1">
           <div class="flex items-center gap-1 min-w-0">
             <span class="text-xs">🟡</span>
             <span id="pName2" class="font-extrabold text-[10px] sm:text-xs text-slate-900 truncate">Wazir</span>
-            <span id="pTeamBadge2" class="text-[8px] px-1 rounded bg-amber-100 text-amber-900 border border-amber-400 font-black" title="Teammate with Red">♦T1</span>
+            <span id="pTeamBadge2" class="text-[8px] px-1 rounded bg-amber-200 text-slate-950 border border-amber-500 font-black" title="Teammate with Red">♦T1</span>
           </div>
-          <span id="pStatusTag2" class="text-[8px] font-bold px-1 py-0.2 rounded bg-slate-100 text-slate-500">WAIT</span>
+          <span id="pStatusTag2" class="text-[8px] font-bold px-1 py-0.5 rounded bg-slate-200 text-slate-800">WAIT</span>
         </div>
-        <div class="flex items-center justify-between text-[9px] font-bold text-slate-500 mt-0.5">
+        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
           <span id="pKills2">⚔️ 0</span>
           <span id="pHome2">🏠 0/4</span>
         </div>
@@ -650,6 +660,10 @@
         <div id="seatTakeoverButtons" class="grid grid-cols-2 gap-1.5"></div>
       </div>
 
+      <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-xs font-bold text-slate-900 cursor-pointer">
+        <span>🎲 Auto-Roll Dice on My Turn</span>
+        <input id="autoRollTurnChk" type="checkbox" class="accent-amber-600 rounded w-4 h-4" />
+      </label>
       <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
         <span>Auto-Move on Timeout</span>
         <input id="autoPlayTimeoutChk" type="checkbox" checked class="accent-amber-600 rounded" />
@@ -755,6 +769,14 @@
             <p class="text-[11px] text-slate-600">After completing all your beads in 2v2, roll 1 Die for a 6 to unlock 2-Dice control of your partner's beads.</p>
           </div>
         </label>
+
+        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal md:col-span-2">
+          <input id="chkAutoRollTurn" type="checkbox" class="mt-1 w-4 h-4 accent-amber-600 rounded" />
+          <div>
+            <div class="font-bold text-xs text-slate-900">🎲 Auto-Roll Dice on Turn Start (باری آنے پر خودکار ڈائس رول)</div>
+            <p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
+          </div>
+        </label>
       </div>
 
       <div class="bg-amber-50/70 rounded-2xl p-3.5 border border-amber-200 mb-4">
@@ -762,11 +784,15 @@
           <h3 class="text-xs font-extrabold uppercase text-slate-800">🤖 Players, Turn Timer &amp; AI Brain Level</h3>
           <div class="flex flex-wrap items-center gap-2">
             <select id="turnTimerSelect" class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
+              <option value="0">🚫 No Timer (Off)</option>
               <option value="15">15s Timer</option>
               <option value="30" selected>30s Timer</option>
-              <option value="60">60s Timer</option>
-              <option value="0">Unlimited</option>
+              <option value="60">1 Minute (60s)</option>
+              <option value="120">2 Minutes (120s)</option>
+              <option value="180">3 Minutes (180s)</option>
+              <option value="custom">✏️ Custom...</option>
             </select>
+            <input id="rulesCustomTimerInput" type="number" min="5" max="3600" value="45" placeholder="Sec" class="hidden w-16 bg-white border border-amber-400 rounded-lg px-2 py-1 text-xs font-bold text-slate-900" />
             <select id="aiDifficultySelect" class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-amber-900">
               <option value="easy">Easy AI</option>
               <option value="medium">Medium AI</option>
@@ -791,6 +817,7 @@
             <select id="setupType1" class="w-full bg-white border border-emerald-200 rounded px-2 py-1 text-xs text-slate-700">
               <option value="human">👤 Human</option>
               <option value="ai" selected>🤖 AI Bot</option>
+              <option value="none">🚫 Empty (2P)</option>
             </select>
           </div>
 
@@ -1191,6 +1218,30 @@
     </div>
   </div>
 
+  <div id="crownCheatModal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-amber-500 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+        <h3 class="text-base font-black text-slate-900">👑 What do you want?</h3>
+        <button id="closeCrownCheatBtn" type="button" class="px-2.5 py-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-xs font-bold text-slate-800">Ignore ✕</button>
+      </div>
+
+      <div id="crownAuthStep" class="space-y-2.5">
+        <p class="text-xs text-slate-600">Enter secret password to unlock dice control, or close to ignore:</p>
+        <input id="crownPasswordInput" type="password" placeholder="Enter password..." class="w-full bg-white border border-amber-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900" />
+        <div class="flex gap-2 justify-end">
+          <button id="ignoreCrownAuthBtn" type="button" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">Ignore</button>
+          <button id="unlockCrownAuthBtn" type="button" class="px-4 py-2 rounded-xl gold-gradient-btn text-xs font-black">Unlock</button>
+        </div>
+      </div>
+
+      <div id="crownDiceStep" class="hidden space-y-2.5">
+        <p id="crownDicePromptText" class="text-xs font-semibold text-slate-700">Enter desired dice values (comma-separated for 2 dice, e.g. 6,6 or 6,2):</p>
+        <input id="crownDiceValuesInput" type="text" placeholder="e.g. 6,6 or 5" class="w-full bg-white border-2 border-amber-400 rounded-xl px-3 py-2 text-sm font-black text-slate-900 font-mono" />
+        <button id="applyComingDiceBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-black text-xs emerald-play-btn">✅ Set Coming Roll</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST NOTIFICATION BANNER -->
   <div id="toastBanner" class="fixed top-3 left-1/2 -translate-x-1/2 z-50 hidden max-w-sm rounded-2xl bg-slate-900/95 border border-amber-400 px-4 py-2 text-xs font-semibold text-white shadow-2xl"></div>
 
@@ -1345,20 +1396,45 @@
       }
 
       // --- 4. RULES CONFIGURATION & GAME STATE ---
+      let savedAutoRollPref = false;
+      try {
+        savedAutoRollPref = localStorage.getItem('bannu_ludo_auto_roll_v1') === 'true';
+      } catch (e) {}
+
       let rulesConfig = {
         presetName: 'بنوں روایتی رولز (Bannu Rules)',
         diceCount: 2,
         tokensPerPlayer: 4,
         closeGameMode: true,
-        bonusRollOnKill: true,      // Default ON: Re-roll dice when you eat/kill an opponent bead!
+        bonusRollOnKill: true,
         mandatoryYardSpawn: true,
         killRequiredForHome: true,
         teamMode: true,
         strictHomeRemainder: true,
         teamAssistRequiresSix: true,
+        autoRollOnTurn: savedAutoRollPref,
         turnTimeSeconds: 30,
         aiDifficulty: 'hard'
       };
+
+      let queuedCheatDice = null;
+      let crownTapTimestamps = [];
+      let preDrillMatchBackup = null;
+
+      function setAutoRollPreference(enabled) {
+        rulesConfig.autoRollOnTurn = Boolean(enabled);
+        try {
+          localStorage.setItem('bannu_ludo_auto_roll_v1', rulesConfig.autoRollOnTurn ? 'true' : 'false');
+        } catch (e) {}
+        const chk1 = document.getElementById('autoRollTurnChk');
+        const chk2 = document.getElementById('chkAutoRollTurn');
+        if (chk1) chk1.checked = rulesConfig.autoRollOnTurn;
+        if (chk2) chk2.checked = rulesConfig.autoRollOnTurn;
+        saveActiveMatchSnapshot();
+        if (rulesConfig.autoRollOnTurn && gameState.isMatchActive && gameState.phase === 'ROLL') {
+          scheduleAiIfNeeded();
+        }
+      }
 
       let seatConfig = [
         { name: 'You (Red)', type: 'human', active: true, isBotTakeover: false },
@@ -1384,9 +1460,8 @@
         turnInterval: null
       };
 
-      // --- AUTO-SAVE & CRASH/DISCONNECT/TAB-CLOSE RECOVERY ENGINE ---
       function saveActiveMatchSnapshot() {
-        if (!gameState.isMatchActive || gameState.phase === 'GAME_OVER') return;
+        if (!gameState.isMatchActive || gameState.phase === 'GAME_OVER' || gameState.isScenarioDrill) return;
         try {
           const payload = {
             savedAt: Date.now(),
@@ -1405,6 +1480,7 @@
       }
 
       function clearSavedMatchSnapshot() {
+        if (gameState.isScenarioDrill) return;
         try {
           localStorage.removeItem('bannu_ludo_saved_match_v1');
           checkSavedMatchBanner();
@@ -1627,15 +1703,20 @@
           clearInterval(gameState.turnInterval);
           gameState.turnInterval = null;
         }
+        const hasTimer = Boolean(rulesConfig.turnTimeSeconds && rulesConfig.turnTimeSeconds > 0);
         for (let i = 0; i < 4; i++) {
           const bar = document.getElementById('turnTimerBar' + i);
-          if (bar) bar.style.width = (i === gameState.currentTurn ? '100%' : '0%');
+          if (bar) {
+            if (bar.parentElement) bar.parentElement.style.display = hasTimer ? '' : 'none';
+            bar.style.width = (hasTimer && i === gameState.currentTurn) ? '100%' : '0%';
+          }
         }
         const badge = document.getElementById('turnCountdownBadge');
-        if (!rulesConfig.turnTimeSeconds || rulesConfig.turnTimeSeconds <= 0) {
-          if (badge) badge.textContent = '∞';
+        if (!hasTimer) {
+          if (badge) badge.classList.add('hidden');
           return;
         }
+        if (badge) badge.classList.remove('hidden');
         gameState.turnCountdown = rulesConfig.turnTimeSeconds;
         if (badge) badge.textContent = gameState.turnCountdown + 's';
 
@@ -2374,6 +2455,11 @@
           dSlot0.classList.remove('dice-rolling');
           dSlot1.classList.remove('dice-rolling');
 
+          if (!forcedValues && queuedCheatDice && queuedCheatDice.length > 0 && actor.type === 'human') {
+            forcedValues = queuedCheatDice.slice();
+            queuedCheatDice = null;
+          }
+
           const v1 = forcedValues ? forcedValues[0] : (Math.floor(Math.random() * 6) + 1);
           const v2 = forcedValues && forcedValues[1] ? forcedValues[1] : (Math.floor(Math.random() * 6) + 1);
 
@@ -2499,7 +2585,19 @@
         }
         if (!gameState.isMatchActive) return;
         const actor = gameState.players[gameState.currentTurn];
-        if (!actor || !actor.active || actor.type !== 'ai') return;
+        if (!actor || !actor.active) return;
+
+        if (actor.type === 'human') {
+          if (rulesConfig.autoRollOnTurn && gameState.phase === 'ROLL') {
+            gameState.aiTimer = setTimeout(function () {
+              if (gameState.isMatchActive && gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+                rollDiceForCurrentPlayer();
+              }
+            }, 350);
+          }
+          return;
+        }
+        if (actor.type !== 'ai') return;
 
         if (gameState.phase === 'ROLL') {
           gameState.aiTimer = setTimeout(function () {
@@ -2656,14 +2754,30 @@
           ctx.stroke();
           ctx.restore();
 
-          // Top Banner inside Corner Yard: Player Name + Team Badge + Active Turn (JISKI BARI) Indicator!
           if (pl && pl.active) {
-            ctx.fillStyle = isCurrentTurnYard ? '#b45309' : '#334155';
-            ctx.font = '900 ' + Math.round(cell * 0.25) + 'px Inter, sans-serif';
-            ctx.textAlign = 'center';
             const teamStr = rulesConfig.teamMode ? (' [' + meta.teamTag + ']') : '';
             const turnPrefix = isCurrentTurnYard ? '⚡ BARI: ' : '';
-            ctx.fillText(turnPrefix + pl.name.slice(0, 12) + teamStr, x + size / 2, y + cell * 0.92);
+            const bannerText = turnPrefix + pl.name.slice(0, 11) + teamStr;
+            const bannerW = size - cell * 1.4;
+            const bannerH = cell * 0.5;
+            const bannerX = x + (size - bannerW) / 2;
+            const bannerY = y + cell * 0.68;
+
+            ctx.save();
+            ctx.fillStyle = isCurrentTurnYard ? '#0f172a' : '#f1f5f9';
+            ctx.beginPath();
+            ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 8);
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = isCurrentTurnYard ? '#f59e0b' : '#cbd5e1';
+            ctx.stroke();
+
+            ctx.fillStyle = isCurrentTurnYard ? '#fde047' : '#0f172a';
+            ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(bannerText, x + size / 2, bannerY + bannerH / 2);
+            ctx.restore();
           }
 
           for (let t = 0; t < rulesConfig.tokensPerPlayer; t++) {
@@ -2680,11 +2794,27 @@
           }
 
           if (pl && pl.active && rulesConfig.killRequiredForHome) {
-            ctx.fillStyle = pl.kills > 0 ? '#059669' : '#e11d48';
-            ctx.font = '800 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
-            ctx.textAlign = 'center';
             const badgeText = pl.kills > 0 ? '🔓 HOME OPEN (⚔️' + pl.kills + ')' : '🔒 NEED 1 KILL';
-            ctx.fillText(badgeText, x + size / 2, y + size - cell * 0.32);
+            const badgeW = size - cell * 1.4;
+            const badgeH = cell * 0.52;
+            const badgeX = x + (size - badgeW) / 2;
+            const badgeY = y + size - cell * 1.2;
+
+            ctx.save();
+            ctx.fillStyle = pl.kills > 0 ? '#065f46' : '#881337';
+            ctx.beginPath();
+            ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(badgeText, x + size / 2, badgeY + badgeH / 2);
+            ctx.restore();
           }
 
           // On-Board Interactive Dice / Roll Pill in the center of the Active Player's Yard (Especially handy in Immersive Board-Only Mode!)
@@ -2818,14 +2948,16 @@
           const baseX = (baseRC[1] + 0.5) * cell;
           const baseY = (baseRC[0] + 0.5) * cell;
 
-          // Check if two teammates from different corners are co-occupying this square!
           if (rulesConfig.teamMode && group.length > 1) {
             const ownersOnCell = new Set(group.map(function (g) { return g.owner; }));
             if (ownersOnCell.size > 1) {
               ctx.save();
-              ctx.fillStyle = '#0f172a';
               ctx.font = '900 ' + Math.round(cell * 0.2) + 'px Inter, sans-serif';
               ctx.textAlign = 'center';
+              ctx.lineWidth = 3;
+              ctx.strokeStyle = '#ffffff';
+              ctx.strokeText('🤝 TEAM', baseX, baseY + cell * 0.44);
+              ctx.fillStyle = '#0f172a';
               ctx.fillText('🤝 TEAM', baseX, baseY + cell * 0.44);
               ctx.restore();
             }
@@ -2921,12 +3053,14 @@
               ctx.fillText(tk.owner % 2 === 0 ? '♦' : '★', bx, by);
             }
 
-            // Floating "+N" tag on the bead that just moved
             if (isLastMoved && tk.state !== 'yard') {
               ctx.save();
-              ctx.fillStyle = '#0f172a';
               ctx.font = '900 ' + Math.round(cell * 0.22) + 'px Inter, sans-serif';
               ctx.textAlign = 'center';
+              ctx.lineWidth = 3.5;
+              ctx.strokeStyle = '#ffffff';
+              ctx.strokeText('✨+' + gameState.lastMovedTrail.delta, tx, ty - radius - cell * 0.16);
+              ctx.fillStyle = '#0f172a';
               ctx.fillText('✨+' + gameState.lastMovedTrail.delta, tx, ty - radius - cell * 0.16);
               ctx.restore();
             }
@@ -3051,12 +3185,26 @@
       let pointerDownInfo = null;
 
       function handlePointerStart(e) {
+        const pt = getCanvasPoint(e);
+        const cell = canvas.width / 15;
+        const crownX = 7.5 * cell;
+        const crownY = 7.5 * cell;
+
+        if (Math.hypot(pt.x - crownX, pt.y - crownY) <= cell * 0.65) {
+          if (e.cancelable) e.preventDefault();
+          const now = Date.now();
+          crownTapTimestamps = crownTapTimestamps.filter(function (t) { return now - t < 1800; });
+          crownTapTimestamps.push(now);
+          if (crownTapTimestamps.length >= 5) {
+            crownTapTimestamps = [];
+            openCrownCheatModal();
+          }
+          return;
+        }
+
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
 
-        const pt = getCanvasPoint(e);
-
-        // Allow tapping on the active player's On-Board Yard Roll Pill (or anywhere on board in ROLL phase)
         if (gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer();
           return;
@@ -3252,11 +3400,11 @@
           if (gameState.currentTurn === i) {
             card.classList.add('active-turn-glow');
             statusEl.textContent = gameState.phase === 'ROLL' ? '🎲 BARI' : '⚡ MOVE';
-            statusEl.className = 'text-[8px] font-black px-1.5 py-0.2 rounded bg-amber-500 text-white shadow';
+            statusEl.className = 'text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-amber-300 shadow';
           } else {
             card.classList.remove('active-turn-glow');
             statusEl.textContent = hasPlayerCompletedAllTokens(i) ? (p.assistUnlocked ? 'ASSIST' : 'DONE') : 'WAIT';
-            statusEl.className = 'text-[8px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-500';
+            statusEl.className = 'text-[8px] font-extrabold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800';
           }
         }
 
@@ -3314,11 +3462,59 @@
         drawBoard();
       }
 
-      // --- 11. CULTURAL SCENARIO TESTERS ---
+      function restorePreDrillMatch() {
+        if (!preDrillMatchBackup) return;
+        if (gameState.aiTimer) {
+          clearTimeout(gameState.aiTimer);
+          gameState.aiTimer = null;
+        }
+        rulesConfig = JSON.parse(JSON.stringify(preDrillMatchBackup.rulesConfig));
+        seatConfig = JSON.parse(JSON.stringify(preDrillMatchBackup.seatConfig));
+        gameState.players = JSON.parse(JSON.stringify(preDrillMatchBackup.players));
+        gameState.currentTurn = preDrillMatchBackup.currentTurn;
+        gameState.phase = preDrillMatchBackup.phase;
+        gameState.dicePool = JSON.parse(JSON.stringify(preDrillMatchBackup.dicePool));
+        gameState.earnedKillBonusThisTurn = Boolean(preDrillMatchBackup.earnedKillBonusThisTurn);
+        gameState.lastMovedTrail = preDrillMatchBackup.lastMovedTrail ? JSON.parse(JSON.stringify(preDrillMatchBackup.lastMovedTrail)) : null;
+        gameState.undoStack = preDrillMatchBackup.undoStack.slice();
+        gameState.selectedTokenKey = null;
+        gameState.draggingToken = null;
+        gameState.preferredDieFilter = null;
+        gameState.isScenarioDrill = false;
+        gameState.isMatchActive = true;
+        preDrillMatchBackup = null;
+
+        document.getElementById('exitScenarioDrillBtn').classList.add('hidden');
+        document.getElementById('scenarioDrawer').classList.add('hidden');
+        document.getElementById('victoryModal').classList.add('hidden');
+        document.getElementById('captureChoiceModal').classList.add('hidden');
+        syncRulesStudioControls();
+        resetTurnCountdown();
+        updateAllUI();
+        scheduleAiIfNeeded();
+        showToast('🔙 Restored your match in progress!');
+      }
+
       function loadCulturalScenario(scenarioKey) {
+        if (!gameState.isScenarioDrill && gameState.players && gameState.players.length === 4) {
+          saveActiveMatchSnapshot();
+          preDrillMatchBackup = {
+            rulesConfig: JSON.parse(JSON.stringify(rulesConfig)),
+            seatConfig: JSON.parse(JSON.stringify(seatConfig)),
+            players: JSON.parse(JSON.stringify(gameState.players)),
+            currentTurn: gameState.currentTurn,
+            phase: gameState.phase === 'ANIMATING' ? 'MOVE' : gameState.phase,
+            dicePool: JSON.parse(JSON.stringify(gameState.dicePool)),
+            earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
+            lastMovedTrail: gameState.lastMovedTrail ? JSON.parse(JSON.stringify(gameState.lastMovedTrail)) : null,
+            undoStack: gameState.undoStack.slice()
+          };
+        }
+        gameState.isScenarioDrill = true;
+        document.getElementById('exitScenarioDrillBtn').classList.remove('hidden');
         applyBannuRulesPreset(false);
         switchNavigationTab('viewPlay');
-        initNewMatch('Loaded Cultural Rule Scenario: ' + scenarioKey, false);
+        initNewMatch('Loaded Cultural Rule Scenario: ' + scenarioKey + ' (Your match is safely paused — click "🔙 Match" anytime to return).', false);
 
         const p0 = gameState.players[0];
         const p1 = gameState.players[1];
@@ -3399,14 +3595,45 @@
             (active ? 'border-amber-500 bg-amber-500 text-white shadow-sm' : 'border-slate-300 bg-white text-slate-700');
         });
 
+        try {
+          if (localStorage.getItem('bannu_ludo_auto_roll_v1') !== null) {
+            rulesConfig.autoRollOnTurn = localStorage.getItem('bannu_ludo_auto_roll_v1') === 'true';
+          }
+        } catch (e) {}
         document.getElementById('chkBonusOnKill').checked = rulesConfig.bonusRollOnKill;
         document.getElementById('chkMandatorySpawn').checked = rulesConfig.mandatoryYardSpawn;
         document.getElementById('chkKillForHome').checked = rulesConfig.killRequiredForHome;
         document.getElementById('chkTeamMode').checked = rulesConfig.teamMode;
         document.getElementById('chkStrictRemainder').checked = rulesConfig.strictHomeRemainder;
         document.getElementById('chkTeamAssistSix').checked = rulesConfig.teamAssistRequiresSix;
+        const chkAuto1 = document.getElementById('autoRollTurnChk');
+        const chkAuto2 = document.getElementById('chkAutoRollTurn');
+        if (chkAuto1) chkAuto1.checked = Boolean(rulesConfig.autoRollOnTurn);
+        if (chkAuto2) chkAuto2.checked = Boolean(rulesConfig.autoRollOnTurn);
         document.getElementById('aiDifficultySelect').value = rulesConfig.aiDifficulty;
-        document.getElementById('turnTimerSelect').value = String(rulesConfig.turnTimeSeconds);
+        const presetTimers = ['0', '15', '30', '60', '120', '180'];
+        const curTimerStr = String(rulesConfig.turnTimeSeconds);
+        const isPresetTimer = presetTimers.includes(curTimerStr);
+
+        const rulesTimerSel = document.getElementById('turnTimerSelect');
+        const rulesCustomInp = document.getElementById('rulesCustomTimerInput');
+        if (rulesTimerSel) {
+          rulesTimerSel.value = isPresetTimer ? curTimerStr : 'custom';
+          if (rulesCustomInp) {
+            rulesCustomInp.classList.toggle('hidden', isPresetTimer);
+            if (!isPresetTimer) rulesCustomInp.value = curTimerStr;
+          }
+        }
+
+        const homeTimerSel = document.getElementById('homeQuickTimerSelect');
+        const homeCustomInp = document.getElementById('homeCustomTimerInput');
+        if (homeTimerSel) {
+          homeTimerSel.value = isPresetTimer ? curTimerStr : 'custom';
+          if (homeCustomInp) {
+            homeCustomInp.classList.toggle('hidden', isPresetTimer);
+            if (!isPresetTimer) homeCustomInp.value = curTimerStr;
+          }
+        }
 
         document.getElementById('homeQuickTokensSelect').value = String(rulesConfig.tokensPerPlayer);
         document.getElementById('homeQuickCloseSelect').value = rulesConfig.closeGameMode ? 'close' : 'open';
@@ -3651,15 +3878,19 @@
         } catch (e) {}
 
         setTimeout(function () {
-          seatConfig[1].name = peer.name;
-          seatConfig[1].type = 'ai';
           if (matchType.includes('2v2')) {
             rulesConfig.teamMode = true;
+            seatConfig[1].name = peer.name;
+            seatConfig[1].type = 'ai';
+            seatConfig[1].active = true;
             seatConfig[2].active = true;
             seatConfig[3].active = true;
           } else {
             rulesConfig.teamMode = false;
-            seatConfig[2].active = false;
+            seatConfig[1].active = false;
+            seatConfig[2].name = peer.name;
+            seatConfig[2].type = 'ai';
+            seatConfig[2].active = true;
             seatConfig[3].active = false;
           }
           document.getElementById('connectionStatusPill').textContent = '🟢 Wi-Fi P2P (' + peer.name + ')';
@@ -3880,9 +4111,9 @@
           ];
           achGrid.innerHTML = achievements.map(function (a) {
             return '<div class="p-2 rounded-xl border ' +
-              (a.unlocked ? 'bg-amber-100/80 border-amber-400 text-amber-900' : 'bg-slate-100 border-slate-200 text-slate-400') + '">' +
+              (a.unlocked ? 'bg-amber-100/90 border-amber-500 text-slate-950' : 'bg-slate-100 border-slate-300 text-slate-700') + '">' +
               '<div class="font-bold text-[11px]">' + a.title + (a.unlocked ? ' ✓' : '') + '</div>' +
-              '<div class="text-[10px] opacity-80">' + a.desc + '</div>' +
+              '<div class="text-[10px] font-medium">' + a.desc + '</div>' +
             '</div>';
           }).join('');
         }
@@ -4059,10 +4290,21 @@
         resumeSavedMatch();
       });
 
+      document.getElementById('homeQuickTimerSelect').addEventListener('change', function () {
+        document.getElementById('homeCustomTimerInput').classList.toggle('hidden', this.value !== 'custom');
+      });
+      document.getElementById('turnTimerSelect').addEventListener('change', function () {
+        document.getElementById('rulesCustomTimerInput').classList.toggle('hidden', this.value !== 'custom');
+      });
+
       document.getElementById('startMatchHeroBtn').addEventListener('click', function () {
         const fmt = document.getElementById('homeQuickFormatSelect').value;
         rulesConfig.tokensPerPlayer = Number(document.getElementById('homeQuickTokensSelect').value);
         rulesConfig.closeGameMode = (document.getElementById('homeQuickCloseSelect').value === 'close');
+        const homeTimerVal = document.getElementById('homeQuickTimerSelect').value;
+        rulesConfig.turnTimeSeconds = homeTimerVal === 'custom'
+          ? Math.max(5, parseInt(document.getElementById('homeCustomTimerInput').value, 10) || 45)
+          : Number(homeTimerVal);
 
         if (fmt === '2v2_ai') {
           rulesConfig.teamMode = true;
@@ -4073,8 +4315,8 @@
         } else if (fmt === '1v1_ai') {
           rulesConfig.teamMode = false;
           seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
           seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
         } else if (fmt === '4p_ai') {
           rulesConfig.teamMode = false;
@@ -4274,6 +4516,71 @@
         });
       });
 
+      function openCrownCheatModal() {
+        const modal = document.getElementById('crownCheatModal');
+        document.getElementById('crownAuthStep').classList.remove('hidden');
+        document.getElementById('crownDiceStep').classList.add('hidden');
+        document.getElementById('crownPasswordInput').value = '';
+        document.getElementById('crownDiceValuesInput').value = rulesConfig.diceCount === 2 ? '6,6' : '6';
+        document.getElementById('crownDicePromptText').textContent =
+          rulesConfig.diceCount === 2
+            ? '2-Dice Mode: Enter two values (1-6) separated by comma (e.g. 6,6 or 6,2):'
+            : '1-Die Mode: Enter a die value from 1 to 6:';
+        modal.classList.remove('hidden');
+        setTimeout(function () {
+          document.getElementById('crownPasswordInput').focus();
+        }, 50);
+      }
+
+      function closeCrownCheatModal() {
+        document.getElementById('crownCheatModal').classList.add('hidden');
+      }
+
+      function parseCrownDiceInput() {
+        const raw = document.getElementById('crownDiceValuesInput').value.trim();
+        const parts = raw.split(',').map(function (s) { return parseInt(s.trim(), 10); }).filter(function (n) { return !isNaN(n) && n >= 1 && n <= 6; });
+        if (parts.length === 0) return null;
+        if (rulesConfig.diceCount === 2) {
+          return [parts[0], parts[1] !== undefined ? parts[1] : parts[0]];
+        }
+        return [parts[0]];
+      }
+
+      document.getElementById('closeCrownCheatBtn').addEventListener('click', closeCrownCheatModal);
+      document.getElementById('ignoreCrownAuthBtn').addEventListener('click', closeCrownCheatModal);
+
+      document.getElementById('exitScenarioDrillBtn').addEventListener('click', function () {
+        restorePreDrillMatch();
+      });
+
+      document.getElementById('unlockCrownAuthBtn').addEventListener('click', function () {
+        const pwd = document.getElementById('crownPasswordInput').value.trim();
+        if (pwd === 'yasin123') {
+          document.getElementById('crownAuthStep').classList.add('hidden');
+          document.getElementById('crownDiceStep').classList.remove('hidden');
+          document.getElementById('crownDiceValuesInput').focus();
+        } else {
+          showToast('⛔ Incorrect password.');
+        }
+      });
+
+      document.getElementById('applyComingDiceBtn').addEventListener('click', function () {
+        const vals = parseCrownDiceInput();
+        if (!vals) {
+          showToast('Enter valid dice numbers (1-6), e.g. 6,6');
+          return;
+        }
+        queuedCheatDice = vals;
+        closeCrownCheatModal();
+      });
+
+      document.getElementById('autoRollTurnChk').addEventListener('change', function () {
+        setAutoRollPreference(this.checked);
+      });
+      document.getElementById('chkAutoRollTurn').addEventListener('change', function () {
+        setAutoRollPreference(this.checked);
+      });
+
       document.getElementById('saveAndStartMatchBtn').addEventListener('click', function () {
         rulesConfig.bonusRollOnKill = document.getElementById('chkBonusOnKill').checked;
         rulesConfig.mandatoryYardSpawn = document.getElementById('chkMandatorySpawn').checked;
@@ -4281,8 +4588,12 @@
         rulesConfig.teamMode = document.getElementById('chkTeamMode').checked;
         rulesConfig.strictHomeRemainder = document.getElementById('chkStrictRemainder').checked;
         rulesConfig.teamAssistRequiresSix = document.getElementById('chkTeamAssistSix').checked;
+        setAutoRollPreference(document.getElementById('chkAutoRollTurn').checked);
         rulesConfig.aiDifficulty = document.getElementById('aiDifficultySelect').value;
-        rulesConfig.turnTimeSeconds = Number(document.getElementById('turnTimerSelect').value);
+        const rulesTimerVal = document.getElementById('turnTimerSelect').value;
+        rulesConfig.turnTimeSeconds = rulesTimerVal === 'custom'
+          ? Math.max(5, parseInt(document.getElementById('rulesCustomTimerInput').value, 10) || 45)
+          : Number(rulesTimerVal);
 
         for (let i = 0; i < 4; i++) {
           const nameVal = document.getElementById('setupName' + i).value.trim() || ('Player ' + (i + 1));
