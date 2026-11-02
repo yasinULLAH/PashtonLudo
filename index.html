@@ -1,17 +1,18 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Bannu Royale Ludo — Pashtun Cultural & Classic Yalla Rules</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Bannu Royale Ludo — Pashtun Cultural &amp; Classic Yalla Rules</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Noto+Nastaliq+Urdu:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
@@ -313,967 +314,889 @@
     .bg-rose-600 { background-color: #e11d48; }
     .bg-slate-900 { background-color: #0f172a; }
   </style>
-</head>
+<link href="manifest.json" rel="manifest"/><link href="favicon.ico" rel="icon" type="image/x-icon"/></head>
 <body class="w-full h-dvh overflow-hidden flex flex-col selection:bg-amber-500 selection:text-white">
-
-  <!-- FLOATING MINI HUD FOR IMMERSIVE BOARD-ONLY MODE (Only shown when Immersive Mode is active!) -->
-  <div id="immersiveFloatingHud" class="hidden fixed top-2 right-2 z-50 items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-full shadow-xl border border-amber-400">
-    <button id="immersiveRollBtn" type="button" class="px-2.5 py-1 rounded-full gold-gradient-btn font-black text-xs flex items-center gap-1">
-      <span>🎲</span><span id="immersiveRollLabel">Roll</span>
-    </button>
-    <button id="exitImmersiveBtn" type="button" class="px-2.5 py-1 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center gap-1">
-      <span>👁️</span><span>Exit Immersive</span>
-    </button>
-  </div>
-
-  <!-- ==================== SCREEN 0: TRADITIONAL HOME LOBBY / START SCREEN ==================== -->
-  <section id="viewHome" class="w-full h-dvh overflow-y-auto flex flex-col justify-between p-3 sm:p-5 max-w-4xl mx-auto">
-    <!-- Top Bar on Home Screen -->
-    <div class="w-full flex items-center justify-between gap-2 royal-card rounded-2xl px-3.5 py-2.5">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-md text-white text-xl flex-shrink-0">
+<!-- FLOATING MINI HUD FOR IMMERSIVE BOARD-ONLY MODE (Only shown when Immersive Mode is active!) -->
+<div class="hidden fixed top-2 right-2 z-50 items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-full shadow-xl border border-amber-400" id="immersiveFloatingHud">
+<button class="px-2.5 py-1 rounded-full gold-gradient-btn font-black text-xs flex items-center gap-1" id="immersiveRollBtn" type="button">
+<span>🎲</span><span id="immersiveRollLabel">Roll</span>
+</button>
+<button class="px-2.5 py-1 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center gap-1" id="exitImmersiveBtn" type="button">
+<span>👁️</span><span>Exit Immersive</span>
+</button>
+</div>
+<!-- ==================== SCREEN 0: TRADITIONAL HOME LOBBY / START SCREEN ==================== -->
+<section class="w-full h-dvh overflow-y-auto flex flex-col justify-between p-3 sm:p-5 max-w-4xl mx-auto" id="viewHome">
+<!-- Top Bar on Home Screen -->
+<div class="w-full flex items-center justify-between gap-2 royal-card rounded-2xl px-3.5 py-2.5">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-md text-white text-xl flex-shrink-0">
           👑
         </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5">
-            <span id="homePlayerName" class="font-black text-sm sm:text-base text-slate-900 truncate">Bannu Champion</span>
-            <span id="networkResilienceBadge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-black text-sm sm:text-base text-slate-900 truncate" id="homePlayerName">Bannu Champion</span>
+<span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300" id="networkResilienceBadge">
               🟢 Online &amp; Offline Ready
             </span>
-          </div>
-          <div class="text-[11px] font-semibold text-slate-500 flex items-center gap-2">
-            <span id="homeQuickStats">🏆 0 Wins • ⚔️ 0 Kills</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-1.5">
-        <select id="langSelect" aria-label="Language" class="bg-amber-50 border border-amber-200 rounded-xl px-2.5 py-1.5 text-xs font-bold text-amber-900 cursor-pointer">
-          <option value="en">EN / اردو</option>
-          <option value="ur">اردو (Urdu)</option>
-          <option value="ps">پښتو (Pashto)</option>
-        </select>
-        <button id="soundToggleBtn" type="button" title="Toggle Sound Effects" class="w-9 h-9 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 flex items-center justify-center text-sm transition">
+</div>
+<div class="text-[11px] font-semibold text-slate-500 flex items-center gap-2">
+<span id="homeQuickStats">🏆 0 Wins • ⚔️ 0 Kills</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<select aria-label="Language" class="bg-amber-50 border border-amber-200 rounded-xl px-2.5 py-1.5 text-xs font-bold text-amber-900 cursor-pointer" id="langSelect">
+<option value="en">EN / اردو</option>
+<option value="ur">اردو (Urdu)</option>
+<option value="ps">پښتو (Pashto)</option>
+</select>
+<button class="w-9 h-9 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 flex items-center justify-center text-sm transition" id="soundToggleBtn" title="Toggle Sound Effects" type="button">
           🔊
         </button>
-        <button id="fullscreenToggleBtn" type="button" title="Toggle Fullscreen" class="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center shadow-sm transition">
+<button class="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center shadow-sm transition" id="fullscreenToggleBtn" title="Toggle Fullscreen" type="button">
           ⛶
         </button>
-      </div>
-    </div>
-
-    <!-- Center Hero & Instant Quick-Launch Card -->
-    <div class="my-auto py-2 flex flex-col items-center text-center">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold mb-1.5">
-        <span>🎲</span>
-        <span id="headerPresetBadge">بنوں روایتی رولز (Bannu Rules)</span>
-      </div>
-      <h1 id="appMainTitle" class="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+</div>
+</div>
+<!-- Center Hero & Instant Quick-Launch Card -->
+<div class="my-auto py-2 flex flex-col items-center text-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold mb-1.5">
+<span>🎲</span>
+<span id="headerPresetBadge">بنوں روایتی رولز (Bannu Rules)</span>
+</div>
+<h1 class="text-2xl sm:text-4xl font-black tracking-tight text-slate-900" id="appMainTitle">
         Bannu Royale Ludo
       </h1>
-      <p id="appSubTitle" class="text-xs sm:text-sm text-slate-600 max-w-md mt-0.5 mb-3">
+<p class="text-xs sm:text-sm text-slate-600 max-w-md mt-0.5 mb-3" id="appSubTitle">
         Authentic Pashtun 2-Dice Cultural Rules &amp; Classic Yalla Ludo — Direct Drag &amp; Tap Board
       </p>
-
-      <!-- Auto-Saved Crash/Close Recovery Banner (Visible whenever an unfinished match is saved!) -->
-      <div id="resumeSavedMatchBanner" class="hidden w-full max-w-xl mb-3 p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex items-center justify-between gap-2 shadow-md">
-        <div class="text-left">
-          <div class="text-xs font-black text-emerald-900">🔄 Unfinished Match Saved (ادھورا کھیل محفوظ ہے)</div>
-          <div id="resumeSavedMatchInfo" class="text-[11px] text-emerald-700">Disconnected or closed earlier? Resume from the exact turn!</div>
-        </div>
-        <button id="resumeSavedMatchBtn" type="button" class="px-4 py-2 rounded-xl font-black text-xs emerald-play-btn">
+<!-- Auto-Saved Crash/Close Recovery Banner (Visible whenever an unfinished match is saved!) -->
+<div class="hidden w-full max-w-xl mb-3 p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex items-center justify-between gap-2 shadow-md" id="resumeSavedMatchBanner">
+<div class="text-left">
+<div class="text-xs font-black text-emerald-900">🔄 Unfinished Match Saved (ادھورا کھیل محفوظ ہے)</div>
+<div class="text-[11px] text-emerald-700" id="resumeSavedMatchInfo">Disconnected or closed earlier? Resume from the exact turn!</div>
+</div>
+<button class="px-4 py-2 rounded-xl font-black text-xs emerald-play-btn" id="resumeSavedMatchBtn" type="button">
           ▶️ Resume Match
         </button>
-      </div>
-
-      <!-- Main Pre-Game Mode Picker Card -->
-      <div class="w-full max-w-xl royal-card rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-xl text-left space-y-3">
-        <!-- 1. Rulebook Preset Switch -->
-        <div>
-          <label class="block text-[11px] font-extrabold uppercase tracking-wider text-amber-800 mb-1.5">1. Select Rulebook (قوانین کا انتخاب)</label>
-          <div class="grid grid-cols-2 gap-2">
-            <button id="presetBannuQuickBtn" type="button" class="py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-black border-2 transition flex items-center justify-center gap-1.5 bg-amber-500 border-amber-600 text-white shadow">
-              <span>🏔️</span><span>Bannu 2-Dice Rules</span>
-            </button>
-            <button id="presetYallaQuickBtn" type="button" class="py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-bold border-2 transition flex items-center justify-center gap-1.5 bg-white border-amber-200 text-slate-700 hover:bg-amber-50">
-              <span>🌐</span><span>Yalla 1-Die Classic</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 2. Match Mode, Bead Count, Kill Mode & Turn Timer Row -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Match Format</label>
-            <select id="homeQuickFormatSelect" class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900">
-              <option value="2v2_ai" selected>🤝 2v2 Teams (vs AI)</option>
-              <option value="1v1_ai">⚔️ 1v1 Duel (vs AI)</option>
-              <option value="4p_ai">👑 4-Player FFA (vs AI)</option>
-              <option value="pass_play">👥 Pass &amp; Play (Humans)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Beads Per Player</label>
-            <select id="homeQuickTokensSelect" class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900">
-              <option value="2">♟️ 2 Beads (Fast)</option>
-              <option value="3">♟️ 3 Beads (Medium)</option>
-              <option value="4" selected>♟️ 4 Beads (Standard)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Kill Rule Mode</label>
-            <select id="homeQuickCloseSelect" class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900">
-              <option value="close" selected>🔒 Close Game + Kill Re-Roll</option>
-              <option value="open">🔓 Open Game + Kill Re-Roll</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Turn Timer</label>
-            <div class="flex gap-1">
-              <select id="homeQuickTimerSelect" class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-2 text-xs font-bold text-slate-900">
-                <option value="0">🚫 No Timer (Off)</option>
-                <option value="15">⏱️ 15 Seconds</option>
-                <option value="30" selected>⏱️ 30 Seconds</option>
-                <option value="60">⏱️ 1 Minute</option>
-                <option value="120">⏱️ 2 Minutes</option>
-                <option value="180">⏱️ 3 Minutes</option>
-                <option value="custom">✏️ Custom...</option>
-              </select>
-              <input id="homeCustomTimerInput" type="number" min="5" max="3600" value="45" placeholder="Sec" class="hidden w-16 bg-white border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" />
-            </div>
-          </div>
-        </div>
-
-        <!-- BIG START GAME HERO BUTTON -->
-        <button id="startMatchHeroBtn" type="button" class="w-full py-3.5 px-6 rounded-2xl font-black text-base sm:text-lg emerald-play-btn transition flex items-center justify-center gap-2 shadow-xl">
-          <span>▶️</span>
-          <span>PLAY GAME NOW (کھیل شروع کریں)</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Bottom Secondary Navigation Bar on Home Screen -->
-    <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2">
-      <button id="navRulesBtn" type="button" class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition">
-        <span>⚙️</span><span>Advanced Rules</span>
-      </button>
-      <button id="navNetworkBtn" type="button" class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition">
-        <span>📡</span><span>Wi-Fi &amp; QR Room</span>
-        <span id="lanPeerCountBadge" class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-[10px]">0</span>
-      </button>
-      <button id="navStatsBtn" type="button" class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition">
-        <span>🏆</span><span>Stats &amp; Backup</span>
-      </button>
-      <button id="navGuideBtn" type="button" class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition">
-        <span>📖</span><span>Bannu Guide</span>
-      </button>
-    </div>
-  </section>
-
-  <!-- ==================== SCREEN 1: ZERO-SCROLLBAR PURE GAMEPLAY ARENA (`100dvh`) ==================== -->
-  <section id="viewPlay" class="hidden w-full h-dvh max-h-dvh overflow-hidden flex flex-col items-center justify-between px-2 py-1 select-none">
-
-    <div id="playTopRow" class="w-full max-w-[720px] h-[48px] flex-shrink-0 grid grid-cols-12 items-center gap-1.5">
-      <div id="playerCard0" class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-rose-400 flex flex-col justify-center h-full transition-all">
-        <div id="emoteBubble0" class="hidden absolute top-11 left-1 z-30 px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] shadow"></div>
-        <div class="flex items-center justify-between gap-1">
-          <div class="flex items-center gap-1 min-w-0">
-            <span class="text-xs">🔴</span>
-            <span id="pName0" class="font-extrabold text-[11px] sm:text-xs text-slate-900 truncate">You</span>
-            <span id="pTeamBadge0" class="text-[8px] px-1 rounded bg-amber-200 text-slate-950 border border-amber-500 font-black" title="Teammate with Yellow">♦T1</span>
-          </div>
-          <span id="pStatusTag0" class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-amber-300">BARI</span>
-        </div>
-        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
-          <span id="pKills0">⚔️ 0</span>
-          <span id="pHome0">🏠 0/4</span>
-        </div>
-        <div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
-          <div id="turnTimerBar0" class="h-full bg-rose-500 transition-all duration-300" style="width: 100%"></div>
-        </div>
-      </div>
-
-      <div class="col-span-4 flex flex-wrap items-center justify-center gap-1">
-        <button id="openPauseMenuBtn" type="button" title="Game Menu & Setup" class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-extrabold text-[10px] sm:text-[11px] border border-amber-400 shadow-sm flex items-center gap-1">
-          <span>⏸️</span><span>Menu</span>
-        </button>
-        <button id="toggleImmersivePlayBtn" type="button" title="Immersive Board-Only Mode (Zero Distractions)" class="px-2 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-extrabold text-[10px] sm:text-[11px] shadow-sm flex items-center gap-1">
-          <span>👁️</span><span class="hidden sm:inline">Board Only</span>
-        </button>
-        <button id="inGameFullscreenBtn" type="button" title="Toggle Fullscreen" class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-bold text-[10px] sm:text-[11px] border border-amber-400 shadow-sm">
+</div>
+<!-- Main Pre-Game Mode Picker Card -->
+<div class="w-full max-w-xl royal-card rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-xl text-left space-y-3">
+<!-- 1. Rulebook Preset Switch -->
+<div>
+<label class="block text-[11px] font-extrabold uppercase tracking-wider text-amber-800 mb-1.5">1. Select Rulebook (قوانین کا انتخاب)</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-black border-2 transition flex items-center justify-center gap-1.5 bg-amber-500 border-amber-600 text-white shadow" id="presetBannuQuickBtn" type="button">
+<span>🏔️</span><span>Bannu 2-Dice Rules</span>
+</button>
+<button class="py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-bold border-2 transition flex items-center justify-center gap-1.5 bg-white border-amber-200 text-slate-700 hover:bg-amber-50" id="presetYallaQuickBtn" type="button">
+<span>🌐</span><span>Yalla 1-Die Classic</span>
+</button>
+</div>
+</div>
+<!-- 2. Match Mode, Bead Count, Kill Mode & Turn Timer Row -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<div>
+<label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Match Format</label>
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900" id="homeQuickFormatSelect">
+<option selected="" value="2v2_ai">🤝 2v2 Teams (vs AI)</option>
+<option value="1v1_ai">⚔️ 1v1 Duel (vs AI)</option>
+<option value="4p_ai">👑 4-Player FFA (vs AI)</option>
+<option value="pass_play">👥 Pass &amp; Play (Humans)</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Beads Per Player</label>
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900" id="homeQuickTokensSelect">
+<option value="2">♟️ 2 Beads (Fast)</option>
+<option value="3">♟️ 3 Beads (Medium)</option>
+<option selected="" value="4">♟️ 4 Beads (Standard)</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Kill Rule Mode</label>
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900" id="homeQuickCloseSelect">
+<option selected="" value="close">🔒 Close Game + Kill Re-Roll</option>
+<option value="open">🔓 Open Game + Kill Re-Roll</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Turn Timer</label>
+<div class="flex gap-1">
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-2 text-xs font-bold text-slate-900" id="homeQuickTimerSelect">
+<option value="0">🚫 No Timer (Off)</option>
+<option value="15">⏱️ 15 Seconds</option>
+<option selected="" value="30">⏱️ 30 Seconds</option>
+<option value="60">⏱️ 1 Minute</option>
+<option value="120">⏱️ 2 Minutes</option>
+<option value="180">⏱️ 3 Minutes</option>
+<option value="custom">✏️ Custom...</option>
+</select>
+<input class="hidden w-16 bg-white border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeCustomTimerInput" max="3600" min="5" placeholder="Sec" type="number" value="45"/>
+</div>
+</div>
+</div>
+<!-- BIG START GAME HERO BUTTON -->
+<button class="w-full py-3.5 px-6 rounded-2xl font-black text-base sm:text-lg emerald-play-btn transition flex items-center justify-center gap-2 shadow-xl" id="startMatchHeroBtn" type="button">
+<span>▶️</span>
+<span>PLAY GAME NOW (کھیل شروع کریں)</span>
+</button>
+</div>
+</div>
+<!-- Bottom Secondary Navigation Bar on Home Screen -->
+<div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition" id="navRulesBtn" type="button">
+<span>⚙️</span><span>Advanced Rules</span>
+</button>
+<button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition" id="navNetworkBtn" type="button">
+<span>📡</span><span>Wi-Fi &amp; QR Room</span>
+<span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-[10px]" id="lanPeerCountBadge">0</span>
+</button>
+<button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition" id="navStatsBtn" type="button">
+<span>🏆</span><span>Stats &amp; Backup</span>
+</button>
+<button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition" id="navGuideBtn" type="button">
+<span>📖</span><span>Bannu Guide</span>
+</button>
+</div>
+</section>
+<!-- ==================== SCREEN 1: ZERO-SCROLLBAR PURE GAMEPLAY ARENA (`100dvh`) ==================== -->
+<section class="hidden w-full h-dvh max-h-dvh overflow-hidden flex flex-col items-center justify-between px-2 py-1 select-none" id="viewPlay">
+<div class="w-full max-w-[720px] h-[48px] flex-shrink-0 grid grid-cols-12 items-center gap-1.5" id="playTopRow">
+<div class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-rose-400 flex flex-col justify-center h-full transition-all" id="playerCard0">
+<div class="hidden absolute top-11 left-1 z-30 px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] shadow" id="emoteBubble0"></div>
+<div class="flex items-center justify-between gap-1">
+<div class="flex items-center gap-1 min-w-0">
+<span class="text-xs">🔴</span>
+<span class="font-extrabold text-[11px] sm:text-xs text-slate-900 truncate" id="pName0">You</span>
+<span class="text-[8px] px-1 rounded bg-amber-200 text-slate-950 border border-amber-500 font-black" id="pTeamBadge0" title="Teammate with Yellow">♦T1</span>
+</div>
+<span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-amber-300" id="pStatusTag0">BARI</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
+<span id="pKills0">⚔️ 0</span>
+<span id="pHome0">🏠 0/4</span>
+</div>
+<div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
+<div class="h-full bg-rose-500 transition-all duration-300" id="turnTimerBar0" style="width: 100%"></div>
+</div>
+</div>
+<div class="col-span-4 flex flex-wrap items-center justify-center gap-1">
+<button class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-extrabold text-[10px] sm:text-[11px] border border-amber-400 shadow-sm flex items-center gap-1" id="openPauseMenuBtn" title="Game Menu &amp; Setup" type="button">
+<span>⏸️</span><span>Menu</span>
+</button>
+<button class="px-2 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-extrabold text-[10px] sm:text-[11px] shadow-sm flex items-center gap-1" id="toggleImmersivePlayBtn" title="Immersive Board-Only Mode (Zero Distractions)" type="button">
+<span>👁️</span><span class="hidden sm:inline">Board Only</span>
+</button>
+<button class="px-2 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-bold text-[10px] sm:text-[11px] border border-amber-400 shadow-sm" id="inGameFullscreenBtn" title="Toggle Fullscreen" type="button">
           ⛶
         </button>
-        <button id="undoMoveBtn" type="button" title="Undo Move" class="px-1.5 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-bold text-[10px] border border-amber-300 shadow-sm">
+<button class="px-1.5 py-1 rounded-xl bg-white hover:bg-amber-50 text-slate-900 font-bold text-[10px] border border-amber-300 shadow-sm" id="undoMoveBtn" title="Undo Move" type="button">
           ↩️
         </button>
-        <button id="demoScenarioBtn" type="button" title="Test Cultural Rule Drills" class="px-1.5 py-1 rounded-xl bg-indigo-100 hover:bg-indigo-200 text-indigo-950 font-bold text-[10px] border border-indigo-400 shadow-sm">
+<button class="px-1.5 py-1 rounded-xl bg-indigo-100 hover:bg-indigo-200 text-indigo-950 font-bold text-[10px] border border-indigo-400 shadow-sm" id="demoScenarioBtn" title="Test Cultural Rule Drills" type="button">
           ⚡
         </button>
-        <button id="exitScenarioDrillBtn" type="button" title="Exit Drill & Return to Match" class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm">
+<button class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm" id="exitScenarioDrillBtn" title="Exit Drill &amp; Return to Match" type="button">
           🔙 Match
         </button>
-      </div>
-
-      <div id="playerCard1" class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-emerald-300 flex flex-col justify-center h-full transition-all">
-        <div id="emoteBubble1" class="hidden absolute top-11 right-1 z-30 px-2 py-0.5 rounded-lg bg-emerald-400 text-slate-950 font-black text-[10px] shadow"></div>
-        <div class="flex items-center justify-between gap-1">
-          <div class="flex items-center gap-1 min-w-0">
-            <span class="text-xs">🟢</span>
-            <span id="pName1" class="font-extrabold text-[11px] sm:text-xs text-slate-900 truncate">Sher Khan</span>
-            <span id="pTeamBadge1" class="text-[8px] px-1 rounded bg-sky-200 text-slate-950 border border-sky-500 font-black" title="Teammate with Blue">★T2</span>
-          </div>
-          <span id="pStatusTag1" class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800">WAIT</span>
-        </div>
-        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
-          <span id="pKills1">⚔️ 0</span>
-          <span id="pHome1">🏠 0/4</span>
-        </div>
-        <div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
-          <div id="turnTimerBar1" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="playBoardRow" class="flex-1 min-h-0 w-full flex items-center justify-center">
-      <div id="boardContainer" class="relative rounded-2xl p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-700 shadow-2xl border-2 border-amber-300 flex items-center justify-center">
-        <canvas id="ludoCanvas" width="750" height="750" class="w-full h-full rounded-xl shadow-inner cursor-grab active:cursor-grabbing bg-white"></canvas>
-      </div>
-    </div>
-
-    <div id="playBottomRow" class="w-full max-w-[720px] h-[58px] flex-shrink-0 grid grid-cols-12 items-center gap-1.5">
-      <div id="playerCard3" class="col-span-3 relative royal-card rounded-xl px-2 py-1 border-2 border-blue-300 flex flex-col justify-center h-full transition-all">
-        <div id="emoteBubble3" class="hidden absolute -top-8 left-1 z-30 px-2 py-0.5 rounded-lg bg-sky-400 text-slate-950 font-black text-[10px] shadow"></div>
-        <div class="flex items-center justify-between gap-1">
-          <div class="flex items-center gap-1 min-w-0">
-            <span class="text-xs">🔵</span>
-            <span id="pName3" class="font-extrabold text-[10px] sm:text-xs text-slate-900 truncate">Marwat</span>
-            <span id="pTeamBadge3" class="text-[8px] px-1 rounded bg-sky-200 text-slate-950 border border-sky-500 font-black">★T2</span>
-          </div>
-          <span id="pStatusTag3" class="text-[8px] font-bold px-1 py-0.5 rounded bg-slate-200 text-slate-800">WAIT</span>
-        </div>
-        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
-          <span id="pKills3">⚔️ 0</span>
-          <span id="pHome3">🏠 0/4</span>
-        </div>
-        <div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
-          <div id="turnTimerBar3" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
-        </div>
-      </div>
-
-      <div id="centerDiceDock" class="col-span-6 royal-card rounded-2xl px-2 py-1 border-2 border-amber-400 h-full flex items-center justify-between gap-1.5">
-        <div id="diceStageContainer" class="flex items-center gap-1 flex-shrink-0">
-          <button id="dieSlot0" type="button" title="Die 1" class="relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 border-amber-400 flex flex-col items-center justify-center transition">
-            <div id="dieFace0" class="w-7 h-7 grid grid-cols-3 grid-rows-3 p-0.5 gap-0.5"></div>
-            <span id="dieStatus0" class="absolute -bottom-0.5 px-1 rounded bg-slate-900 text-amber-300 font-black text-[8px]">D1</span>
-          </button>
-
-          <button id="dicePlusDivider" type="button" title="Combine Both Dice" class="flex flex-col items-center justify-center px-1 py-0.5 rounded bg-amber-100 hover:bg-amber-200 border border-amber-400 text-slate-950">
-            <span class="text-[10px] font-black text-amber-900">+</span>
-            <span id="diceSumBadge" class="text-[8px] font-black text-slate-900">=12</span>
-          </button>
-
-          <button id="dieSlot1" type="button" title="Die 2" class="relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 border-slate-300 flex flex-col items-center justify-center transition">
-            <div id="dieFace1" class="w-7 h-7 grid grid-cols-3 grid-rows-3 p-0.5 gap-0.5"></div>
-            <span id="dieStatus1" class="absolute -bottom-0.5 px-1 rounded bg-slate-900 text-white font-black text-[8px]">D2</span>
-          </button>
-        </div>
-
-        <div class="flex-1 min-w-0 flex flex-col items-stretch justify-center">
-          <button id="rollDiceBtn" type="button" class="w-full py-1.5 px-2 rounded-xl font-black text-[11px] sm:text-xs gold-gradient-btn transition flex items-center justify-center gap-1">
-            <span>🎲</span>
-            <span id="rollDiceBtnLabel" class="truncate">Roll Dice</span>
-          </button>
-          <div class="flex items-center justify-between text-[9px] text-slate-900 font-extrabold px-0.5 mt-0.5">
-            <span id="turnBannerText" class="truncate text-amber-950">Red's Turn</span>
-            <span id="turnCountdownBadge" class="font-mono text-slate-900">30s</span>
-          </div>
-        </div>
-
-        <button id="toggleEmoteTrayBtn" type="button" title="Quick Taunts" class="w-8 h-9 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 flex items-center justify-center text-xs flex-shrink-0">
+</div>
+<div class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-emerald-300 flex flex-col justify-center h-full transition-all" id="playerCard1">
+<div class="hidden absolute top-11 right-1 z-30 px-2 py-0.5 rounded-lg bg-emerald-400 text-slate-950 font-black text-[10px] shadow" id="emoteBubble1"></div>
+<div class="flex items-center justify-between gap-1">
+<div class="flex items-center gap-1 min-w-0">
+<span class="text-xs">🟢</span>
+<span class="font-extrabold text-[11px] sm:text-xs text-slate-900 truncate" id="pName1">Sher Khan</span>
+<span class="text-[8px] px-1 rounded bg-sky-200 text-slate-950 border border-sky-500 font-black" id="pTeamBadge1" title="Teammate with Blue">★T2</span>
+</div>
+<span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800" id="pStatusTag1">WAIT</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
+<span id="pKills1">⚔️ 0</span>
+<span id="pHome1">🏠 0/4</span>
+</div>
+<div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
+<div class="h-full bg-emerald-500 transition-all duration-300" id="turnTimerBar1" style="width: 0%"></div>
+</div>
+</div>
+</div>
+<div class="flex-1 min-h-0 w-full flex items-center justify-center" id="playBoardRow">
+<div class="relative rounded-2xl p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-700 shadow-2xl border-2 border-amber-300 flex items-center justify-center" id="boardContainer">
+<canvas class="w-full h-full rounded-xl shadow-inner cursor-grab active:cursor-grabbing bg-white" height="750" id="ludoCanvas" width="750"></canvas>
+</div>
+</div>
+<div class="w-full max-w-[720px] h-[58px] flex-shrink-0 grid grid-cols-12 items-center gap-1.5" id="playBottomRow">
+<div class="col-span-3 relative royal-card rounded-xl px-2 py-1 border-2 border-blue-300 flex flex-col justify-center h-full transition-all" id="playerCard3">
+<div class="hidden absolute -top-8 left-1 z-30 px-2 py-0.5 rounded-lg bg-sky-400 text-slate-950 font-black text-[10px] shadow" id="emoteBubble3"></div>
+<div class="flex items-center justify-between gap-1">
+<div class="flex items-center gap-1 min-w-0">
+<span class="text-xs">🔵</span>
+<span class="font-extrabold text-[10px] sm:text-xs text-slate-900 truncate" id="pName3">Marwat</span>
+<span class="text-[8px] px-1 rounded bg-sky-200 text-slate-950 border border-sky-500 font-black" id="pTeamBadge3">★T2</span>
+</div>
+<span class="text-[8px] font-bold px-1 py-0.5 rounded bg-slate-200 text-slate-800" id="pStatusTag3">WAIT</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
+<span id="pKills3">⚔️ 0</span>
+<span id="pHome3">🏠 0/4</span>
+</div>
+<div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
+<div class="h-full bg-blue-500 transition-all duration-300" id="turnTimerBar3" style="width: 0%"></div>
+</div>
+</div>
+<div class="col-span-6 royal-card rounded-2xl px-2 py-1 border-2 border-amber-400 h-full flex items-center justify-between gap-1.5" id="centerDiceDock">
+<div class="flex items-center gap-1 flex-shrink-0" id="diceStageContainer">
+<button class="relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 border-amber-400 flex flex-col items-center justify-center transition" id="dieSlot0" title="Die 1" type="button">
+<div class="w-7 h-7 grid grid-cols-3 grid-rows-3 p-0.5 gap-0.5" id="dieFace0"></div>
+<span class="absolute -bottom-0.5 px-1 rounded bg-slate-900 text-amber-300 font-black text-[8px]" id="dieStatus0">D1</span>
+</button>
+<button class="flex flex-col items-center justify-center px-1 py-0.5 rounded bg-amber-100 hover:bg-amber-200 border border-amber-400 text-slate-950" id="dicePlusDivider" title="Combine Both Dice" type="button">
+<span class="text-[10px] font-black text-amber-900">+</span>
+<span class="text-[8px] font-black text-slate-900" id="diceSumBadge">=12</span>
+</button>
+<button class="relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 border-slate-300 flex flex-col items-center justify-center transition" id="dieSlot1" title="Die 2" type="button">
+<div class="w-7 h-7 grid grid-cols-3 grid-rows-3 p-0.5 gap-0.5" id="dieFace1"></div>
+<span class="absolute -bottom-0.5 px-1 rounded bg-slate-900 text-white font-black text-[8px]" id="dieStatus1">D2</span>
+</button>
+</div>
+<div class="flex-1 min-w-0 flex flex-col items-stretch justify-center">
+<button class="w-full py-1.5 px-2 rounded-xl font-black text-[11px] sm:text-xs gold-gradient-btn transition flex items-center justify-center gap-1" id="rollDiceBtn" type="button">
+<span>🎲</span>
+<span class="truncate" id="rollDiceBtnLabel">Roll Dice</span>
+</button>
+<div class="flex items-center justify-between text-[9px] text-slate-900 font-extrabold px-0.5 mt-0.5">
+<span class="truncate text-amber-950" id="turnBannerText">Red's Turn</span>
+<span class="font-mono text-slate-900" id="turnCountdownBadge">30s</span>
+</div>
+</div>
+<button class="w-8 h-9 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 flex items-center justify-center text-xs flex-shrink-0" id="toggleEmoteTrayBtn" title="Quick Taunts" type="button">
           💬
         </button>
-      </div>
-
-      <div id="playerCard2" class="col-span-3 relative royal-card rounded-xl px-2 py-1 border-2 border-amber-300 flex flex-col justify-center h-full transition-all">
-        <div id="emoteBubble2" class="hidden absolute -top-8 right-1 z-30 px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] shadow"></div>
-        <div class="flex items-center justify-between gap-1">
-          <div class="flex items-center gap-1 min-w-0">
-            <span class="text-xs">🟡</span>
-            <span id="pName2" class="font-extrabold text-[10px] sm:text-xs text-slate-900 truncate">Wazir</span>
-            <span id="pTeamBadge2" class="text-[8px] px-1 rounded bg-amber-200 text-slate-950 border border-amber-500 font-black" title="Teammate with Red">♦T1</span>
-          </div>
-          <span id="pStatusTag2" class="text-[8px] font-bold px-1 py-0.5 rounded bg-slate-200 text-slate-800">WAIT</span>
-        </div>
-        <div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
-          <span id="pKills2">⚔️ 0</span>
-          <span id="pHome2">🏠 0/4</span>
-        </div>
-        <div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
-          <div id="turnTimerBar2" class="h-full bg-amber-500 transition-all duration-300" style="width: 0%"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hidden Compatibility Hooks -->
-    <span id="turnPhaseBadge" class="hidden">ROLL</span>
-    <div id="refereeHintBox" class="hidden"></div>
-    <div id="activeRulesBadges" class="hidden"></div>
-    <span id="connectionStatusPill" class="hidden">Local Match</span>
-    <span id="legalMovesCountBadge" class="hidden">0 moves</span>
-    <div id="legalMovesList" class="hidden"></div>
-    <div id="tokenMoveMenu" class="hidden">
-      <span id="tokenMoveMenuTitle"></span>
-      <button id="cancelTokenMoveMenuBtn" type="button">Cancel</button>
-      <div id="tokenMoveOptionsList"></div>
-    </div>
-  </section>
-
-  <!-- ==================== FLOATING QUICK EMOTE POPOVER ==================== -->
-  <div id="quickEmoteDrawer" class="hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-50 royal-card rounded-2xl p-2.5 border-2 border-amber-400 shadow-2xl flex items-center gap-1.5">
-    <button type="button" data-emote="🔥 ڈبل سکس! شاباش!" class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs font-bold text-amber-900 border border-amber-200">🔥 ڈبل سکس!</button>
-    <button type="button" data-emote="⚔️ تگڑا شکار!" class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-xs font-bold text-rose-800 border border-rose-200">⚔️ تگڑا شکار!</button>
-    <button type="button" data-emote="🔒 کلوز گیم لاک!" class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-xs font-bold text-sky-800 border border-sky-200">🔒 کلوز لاک!</button>
-    <button type="button" data-emote="🤝 شاباش پارٹنر!" class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-xs font-bold text-emerald-800 border border-emerald-200">🤝 پارٹنر!</button>
-    <button type="button" data-emote="👑 بنوں چیمپئن!" class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-bold text-amber-900 border border-amber-300">👑 چیمپئن!</button>
-  </div>
-
-  <!-- ==================== IN-GAME PAUSE, BOT TAKEOVER & OPTIONS MODAL ==================== -->
-  <div id="pauseMenuModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-amber-400 shadow-2xl space-y-2.5">
-      <div class="flex items-center justify-between pb-2 border-b border-amber-200">
-        <h3 class="text-base font-black text-slate-900">⏸️ Game Menu &amp; Seat Recovery</h3>
-        <button id="closePauseMenuBtn" type="button" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">✕</button>
-      </div>
-      <button id="resumeGameBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-black text-xs emerald-play-btn">
+</div>
+<div class="col-span-3 relative royal-card rounded-xl px-2 py-1 border-2 border-amber-300 flex flex-col justify-center h-full transition-all" id="playerCard2">
+<div class="hidden absolute -top-8 right-1 z-30 px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] shadow" id="emoteBubble2"></div>
+<div class="flex items-center justify-between gap-1">
+<div class="flex items-center gap-1 min-w-0">
+<span class="text-xs">🟡</span>
+<span class="font-extrabold text-[10px] sm:text-xs text-slate-900 truncate" id="pName2">Wazir</span>
+<span class="text-[8px] px-1 rounded bg-amber-200 text-slate-950 border border-amber-500 font-black" id="pTeamBadge2" title="Teammate with Red">♦T1</span>
+</div>
+<span class="text-[8px] font-bold px-1 py-0.5 rounded bg-slate-200 text-slate-800" id="pStatusTag2">WAIT</span>
+</div>
+<div class="flex items-center justify-between text-[10px] font-extrabold text-slate-800 mt-0.5">
+<span id="pKills2">⚔️ 0</span>
+<span id="pHome2">🏠 0/4</span>
+</div>
+<div class="w-full h-0.5 bg-amber-100 rounded-full overflow-hidden mt-0.5">
+<div class="h-full bg-amber-500 transition-all duration-300" id="turnTimerBar2" style="width: 0%"></div>
+</div>
+</div>
+</div>
+<!-- Hidden Compatibility Hooks -->
+<span class="hidden" id="turnPhaseBadge">ROLL</span>
+<div class="hidden" id="refereeHintBox"></div>
+<div class="hidden" id="activeRulesBadges"></div>
+<span class="hidden" id="connectionStatusPill">Local Match</span>
+<span class="hidden" id="legalMovesCountBadge">0 moves</span>
+<div class="hidden" id="legalMovesList"></div>
+<div class="hidden" id="tokenMoveMenu">
+<span id="tokenMoveMenuTitle"></span>
+<button id="cancelTokenMoveMenuBtn" type="button">Cancel</button>
+<div id="tokenMoveOptionsList"></div>
+</div>
+</section>
+<!-- ==================== FLOATING QUICK EMOTE POPOVER ==================== -->
+<div class="hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-50 royal-card rounded-2xl p-2.5 border-2 border-amber-400 shadow-2xl flex items-center gap-1.5" id="quickEmoteDrawer">
+<button class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs font-bold text-amber-900 border border-amber-200" data-emote="🔥 ڈبل سکس! شاباش!" type="button">🔥 ڈبل سکس!</button>
+<button class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-xs font-bold text-rose-800 border border-rose-200" data-emote="⚔️ تگڑا شکار!" type="button">⚔️ تگڑا شکار!</button>
+<button class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-xs font-bold text-sky-800 border border-sky-200" data-emote="🔒 کلوز گیم لاک!" type="button">🔒 کلوز لاک!</button>
+<button class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-xs font-bold text-emerald-800 border border-emerald-200" data-emote="🤝 شاباش پارٹنر!" type="button">🤝 پارٹنر!</button>
+<button class="emote-send-btn px-2.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-bold text-amber-900 border border-amber-300" data-emote="👑 بنوں چیمپئن!" type="button">👑 چیمپئن!</button>
+</div>
+<!-- ==================== IN-GAME PAUSE, BOT TAKEOVER & OPTIONS MODAL ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" id="pauseMenuModal">
+<div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-amber-400 shadow-2xl space-y-2.5">
+<div class="flex items-center justify-between pb-2 border-b border-amber-200">
+<h3 class="text-base font-black text-slate-900">⏸️ Game Menu &amp; Seat Recovery</h3>
+<button class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700" id="closePauseMenuBtn" type="button">✕</button>
+</div>
+<button class="w-full py-2.5 px-4 rounded-xl font-black text-xs emerald-play-btn" id="resumeGameBtn" type="button">
         ▶️ Resume Match
       </button>
-      <button id="enterImmersiveFromMenuBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-600 text-white shadow">
+<button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-600 text-white shadow" id="enterImmersiveFromMenuBtn" type="button">
         👁️ Immersive Board-Only Mode (Zero Distractions)
       </button>
-      <button id="newMatchQuickBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300">
+<button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300" id="newMatchQuickBtn" type="button">
         🔄 Restart Match
       </button>
-      <button id="quickCustomizeRulesBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-white hover:bg-slate-50 text-slate-800 border border-slate-300">
+<button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-white hover:bg-slate-50 text-slate-800 border border-slate-300" id="quickCustomizeRulesBtn" type="button">
         ⚙️ Change Rules &amp; Players
       </button>
-      <button id="toggleLogModalBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-white hover:bg-slate-50 text-slate-800 border border-slate-300">
+<button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-white hover:bg-slate-50 text-slate-800 border border-slate-300" id="toggleLogModalBtn" type="button">
         📜 View Referee Log
       </button>
-
-      <!-- Live Disconnect / Player Left AI Takeover Controls -->
-      <div class="p-2.5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5">
-        <div class="text-[10px] font-extrabold uppercase text-amber-900">🤖 Player Left / Disconnect Bot Takeover</div>
-        <div id="seatTakeoverButtons" class="grid grid-cols-2 gap-1.5"></div>
-      </div>
-
-      <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-xs font-bold text-slate-900 cursor-pointer">
-        <span>🎲 Auto-Roll Dice on My Turn</span>
-        <input id="autoRollTurnChk" type="checkbox" class="accent-amber-600 rounded w-4 h-4" />
-      </label>
-      <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
-        <span>Auto-Move on Timeout</span>
-        <input id="autoPlayTimeoutChk" type="checkbox" checked class="accent-amber-600 rounded" />
-      </label>
-      <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
-        <span>💬 Show Top Tooltips &amp; Hints</span>
-        <input id="showTooltipsChk" type="checkbox" checked class="accent-amber-600 rounded" />
-      </label>
-      <button id="exitToHomeBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200">
+<!-- Live Disconnect / Player Left AI Takeover Controls -->
+<div class="p-2.5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5">
+<div class="text-[10px] font-extrabold uppercase text-amber-900">🤖 Player Left / Disconnect Bot Takeover</div>
+<div class="grid grid-cols-2 gap-1.5" id="seatTakeoverButtons"></div>
+</div>
+<label class="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-xs font-bold text-slate-900 cursor-pointer">
+<span>🎲 Auto-Roll Dice on My Turn</span>
+<input class="accent-amber-600 rounded w-4 h-4" id="autoRollTurnChk" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
+<span>Auto-Move on Timeout</span>
+<input checked="" class="accent-amber-600 rounded" id="autoPlayTimeoutChk" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
+<span>💬 Show Top Tooltips &amp; Hints</span>
+<input checked="" class="accent-amber-600 rounded" id="showTooltipsChk" type="checkbox"/>
+</label>
+<button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200" id="exitToHomeBtn" type="button">
         🏠 Save &amp; Exit to Main Title Screen
       </button>
-    </div>
-  </div>
-
-  <!-- ==================== SCREEN 2: ADVANCED RULES & MATCH SETUP STUDIO ==================== -->
-  <section id="viewRules" class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5">
-    <div class="royal-card rounded-3xl p-4 sm:p-6 max-w-4xl w-full mx-auto">
-      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-amber-200">
-        <div class="flex items-center gap-2">
-          <button type="button" class="back-to-home-btn px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs">
+</div>
+</div>
+<!-- ==================== SCREEN 2: ADVANCED RULES & MATCH SETUP STUDIO ==================== -->
+<section class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5" id="viewRules">
+<div class="royal-card rounded-3xl p-4 sm:p-6 max-w-4xl w-full mx-auto">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-amber-200">
+<div class="flex items-center gap-2">
+<button class="back-to-home-btn px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs" type="button">
             ⬅️ Home
           </button>
-          <h2 class="text-base sm:text-xl font-black text-slate-900">⚙️ Custom Rulebook &amp; Match Setup</h2>
-        </div>
-        <div class="flex gap-2">
-          <button id="applyBannuPresetBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold gold-gradient-btn shadow">
+<h2 class="text-base sm:text-xl font-black text-slate-900">⚙️ Custom Rulebook &amp; Match Setup</h2>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-xl text-xs font-bold gold-gradient-btn shadow" id="applyBannuPresetBtn" type="button">
             🏔️ Load Bannu Rules
           </button>
-          <button id="applyYallaPresetBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300 hover:bg-slate-200">
+<button class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300 hover:bg-slate-200" id="applyYallaPresetBtn" type="button">
             🌐 Load Yalla Classic
           </button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 my-4">
-        <div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200">
-          <label class="block text-xs font-bold uppercase text-amber-800 mb-1">🎲 Dice Count</label>
-          <div class="grid grid-cols-2 gap-2 mt-2">
-            <button type="button" data-dice="1" class="rule-dice-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700">1 Die (Classic)</button>
-            <button type="button" data-dice="2" class="rule-dice-btn py-2 px-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500 text-white">2 Dice (دو گوٹی)</button>
-          </div>
-        </div>
-
-        <div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200">
-          <label class="block text-xs font-bold uppercase text-amber-800 mb-1">♟️ Beads Per Player</label>
-          <div class="grid grid-cols-3 gap-2 mt-2">
-            <button type="button" data-tokens="2" class="rule-token-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700">2 Beads</button>
-            <button type="button" data-tokens="3" class="rule-token-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700">3 Beads</button>
-            <button type="button" data-tokens="4" class="rule-token-btn py-2 px-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500 text-white">4 Beads</button>
-          </div>
-        </div>
-
-        <div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200">
-          <label class="block text-xs font-bold uppercase text-amber-800 mb-1">🔒 Close vs Open Game</label>
-          <div class="grid grid-cols-2 gap-2 mt-2">
-            <button type="button" data-closemode="true" class="rule-close-btn py-2 px-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500 text-white">🔒 Close Game</button>
-            <button type="button" data-closemode="false" class="rule-close-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700">🔓 Open Game</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4">
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-          <input id="chkBonusOnKill" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">⚔️ Bonus Re-Roll on Kill / Capture (شکار کرنے پر دوبارہ باری — Default ON)</div>
-            <p class="text-[11px] text-slate-600">Eating/killing an opponent's bead grants an extra dice re-roll once your current dice are played (can be disabled here).</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-          <input id="chkMandatorySpawn" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">Mandatory Hand/Yard Spawn on 6 (پہلے ہاتھ والی بیڈ نکالنا)</div>
-            <p class="text-[11px] text-slate-600">Must use a rolled 6 to bring a bead out from hand before moving ground beads.</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-          <input id="chkKillForHome" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">Kill Required to Enter Home + Full Loop (بغیر کِل اندر جانا منع)</div>
-            <p class="text-[11px] text-slate-600">Without a kill, reaching home entry forces another full 52-square outer lap.</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-          <input id="chkTeamMode" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">2v2 Opposite-Corner Teams &amp; Safe Stacking (دو دو کی ٹیمیں)</div>
-            <p class="text-[11px] text-slate-600">Red+Yellow vs Green+Blue. Enemy landing on stacked teammates can only eat 1 chosen bead.</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-          <input id="chkStrictRemainder" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">Strict Near-Home Remainder Rule (بقایا نمبر کا اصول)</div>
-            <p class="text-[11px] text-slate-600">Cannot waste a second die near Home if no other bead can use the remainder.</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-          <input id="chkTeamAssistSix" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">Teammate Assist Requires Rolling a 1-Die Six First (ٹیم میٹ کی مدد کے لیے پہلے 6 لانا)</div>
-            <p class="text-[11px] text-slate-600">After completing all your beads in 2v2, roll 1 Die for a 6 to unlock 2-Dice control of your partner's beads.</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-          <input id="chkAutoRollTurn" type="checkbox" class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">🎲 Auto-Roll Dice on Turn Start (باری آنے پر خودکار ڈائس رول)</div>
-            <p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
-          </div>
-        </label>
-
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-          <input id="chkShowTooltips" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
-          <div>
-            <div class="font-bold text-xs text-slate-900">💬 Show Top Tooltips &amp; Preview Hints (ٹول ٹپس دکھائیں)</div>
-            <p class="text-[11px] text-slate-600">Show top hint banners and floating move labels. Disable to keep the board 100% clear (saved across reloads).</p>
-          </div>
-        </label>
-      </div>
-
-      <div class="bg-amber-50/70 rounded-2xl p-3.5 border border-amber-200 mb-4">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-          <h3 class="text-xs font-extrabold uppercase text-slate-800">🤖 Players, Turn Timer &amp; AI Brain Level</h3>
-          <div class="flex flex-wrap items-center gap-2">
-            <select id="turnTimerSelect" class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
-              <option value="0">🚫 No Timer (Off)</option>
-              <option value="15">15s Timer</option>
-              <option value="30" selected>30s Timer</option>
-              <option value="60">1 Minute (60s)</option>
-              <option value="120">2 Minutes (120s)</option>
-              <option value="180">3 Minutes (180s)</option>
-              <option value="custom">✏️ Custom...</option>
-            </select>
-            <input id="rulesCustomTimerInput" type="number" min="5" max="3600" value="45" placeholder="Sec" class="hidden w-16 bg-white border border-amber-400 rounded-lg px-2 py-1 text-xs font-bold text-slate-900" />
-            <select id="aiDifficultySelect" class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-amber-900">
-              <option value="easy">Easy AI</option>
-              <option value="medium">Medium AI</option>
-              <option value="hard" selected>Hard — Grandmaster AI</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-          <div class="p-2 rounded-xl bg-rose-50 border border-rose-200">
-            <div class="text-[11px] font-bold text-rose-700 mb-1">🔴 Red</div>
-            <input id="setupName0" type="text" value="You (Red)" class="w-full bg-white border border-rose-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" />
-            <select id="setupType0" class="w-full bg-white border border-rose-200 rounded px-2 py-1 text-xs text-slate-700">
-              <option value="human" selected>👤 Human</option>
-              <option value="ai">🤖 AI Bot</option>
-            </select>
-          </div>
-
-          <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200">
-            <div class="text-[11px] font-bold text-emerald-700 mb-1">🟢 Green</div>
-            <input id="setupName1" type="text" value="Sher Khan AI" class="w-full bg-white border border-emerald-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" />
-            <select id="setupType1" class="w-full bg-white border border-emerald-200 rounded px-2 py-1 text-xs text-slate-700">
-              <option value="human">👤 Human</option>
-              <option value="ai" selected>🤖 AI Bot</option>
-              <option value="none">🚫 Empty (2P)</option>
-            </select>
-          </div>
-
-          <div class="p-2 rounded-xl bg-amber-50 border border-amber-200">
-            <div class="text-[11px] font-bold text-amber-800 mb-1">🟡 Yellow</div>
-            <input id="setupName2" type="text" value="Wazir Partner" class="w-full bg-white border border-amber-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" />
-            <select id="setupType2" class="w-full bg-white border border-amber-200 rounded px-2 py-1 text-xs text-slate-700">
-              <option value="human">👤 Human</option>
-              <option value="ai" selected>🤖 AI Partner</option>
-              <option value="none">🚫 Empty (2P)</option>
-            </select>
-          </div>
-
-          <div class="p-2 rounded-xl bg-blue-50 border border-blue-200">
-            <div class="text-[11px] font-bold text-blue-700 mb-1">🔵 Blue</div>
-            <input id="setupName3" type="text" value="Marwat AI" class="w-full bg-white border border-blue-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" />
-            <select id="setupType3" class="w-full bg-white border border-blue-200 rounded px-2 py-1 text-xs text-slate-700">
-              <option value="human">👤 Human</option>
-              <option value="ai" selected>🤖 AI Bot</option>
-              <option value="none">🚫 Empty (2P)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-end gap-2">
-        <button id="saveAndStartMatchBtn" type="button" class="px-6 py-2.5 rounded-xl font-black text-sm emerald-play-btn shadow-lg">
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 my-4">
+<div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200">
+<label class="block text-xs font-bold uppercase text-amber-800 mb-1">🎲 Dice Count</label>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<button class="rule-dice-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700" data-dice="1" type="button">1 Die (Classic)</button>
+<button class="rule-dice-btn py-2 px-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500 text-white" data-dice="2" type="button">2 Dice (دو گوٹی)</button>
+</div>
+</div>
+<div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200">
+<label class="block text-xs font-bold uppercase text-amber-800 mb-1">♟️ Beads Per Player</label>
+<div class="grid grid-cols-3 gap-2 mt-2">
+<button class="rule-token-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700" data-tokens="2" type="button">2 Beads</button>
+<button class="rule-token-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700" data-tokens="3" type="button">3 Beads</button>
+<button class="rule-token-btn py-2 px-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500 text-white" data-tokens="4" type="button">4 Beads</button>
+</div>
+</div>
+<div class="bg-amber-50/60 rounded-2xl p-3.5 border border-amber-200">
+<label class="block text-xs font-bold uppercase text-amber-800 mb-1">🔒 Close vs Open Game</label>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<button class="rule-close-btn py-2 px-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500 text-white" data-closemode="true" type="button">🔒 Close Game</button>
+<button class="rule-close-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-300 bg-white text-slate-700" data-closemode="false" type="button">🔓 Open Game</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4">
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkBonusOnKill" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⚔️ Bonus Re-Roll on Kill / Capture (شکار کرنے پر دوبارہ باری — Default ON)</div>
+<p class="text-[11px] text-slate-600">Eating/killing an opponent's bead grants an extra dice re-roll once your current dice are played (can be disabled here).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMandatorySpawn" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">Mandatory Hand/Yard Spawn on 6 (پہلے ہاتھ والی بیڈ نکالنا)</div>
+<p class="text-[11px] text-slate-600">Must use a rolled 6 to bring a bead out from hand before moving ground beads.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkKillForHome" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">Kill Required to Enter Home + Full Loop (بغیر کِل اندر جانا منع)</div>
+<p class="text-[11px] text-slate-600">Without a kill, reaching home entry forces another full 52-square outer lap.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkTeamMode" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">2v2 Opposite-Corner Teams &amp; Safe Stacking (دو دو کی ٹیمیں)</div>
+<p class="text-[11px] text-slate-600">Red+Yellow vs Green+Blue. Enemy landing on stacked teammates can only eat 1 chosen bead.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkStrictRemainder" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">Strict Near-Home Remainder Rule (بقایا نمبر کا اصول)</div>
+<p class="text-[11px] text-slate-600">Cannot waste a second die near Home if no other bead can use the remainder.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkTeamAssistSix" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">Teammate Assist Requires Rolling a 1-Die Six First (ٹیم میٹ کی مدد کے لیے پہلے 6 لانا)</div>
+<p class="text-[11px] text-slate-600">After completing all your beads in 2v2, roll 1 Die for a 6 to unlock 2-Dice control of your partner's beads.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkAutoRollTurn" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🎲 Auto-Roll Dice on Turn Start (باری آنے پر خودکار ڈائس رول)</div>
+<p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkShowTooltips" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">💬 Show Top Tooltips &amp; Preview Hints (ٹول ٹپس دکھائیں)</div>
+<p class="text-[11px] text-slate-600">Show top hint banners and floating move labels. Disable to keep the board 100% clear (saved across reloads).</p>
+</div>
+</label>
+</div>
+<div class="bg-amber-50/70 rounded-2xl p-3.5 border border-amber-200 mb-4">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+<h3 class="text-xs font-extrabold uppercase text-slate-800">🤖 Players, Turn Timer &amp; AI Brain Level</h3>
+<div class="flex flex-wrap items-center gap-2">
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-800" id="turnTimerSelect">
+<option value="0">🚫 No Timer (Off)</option>
+<option value="15">15s Timer</option>
+<option selected="" value="30">30s Timer</option>
+<option value="60">1 Minute (60s)</option>
+<option value="120">2 Minutes (120s)</option>
+<option value="180">3 Minutes (180s)</option>
+<option value="custom">✏️ Custom...</option>
+</select>
+<input class="hidden w-16 bg-white border border-amber-400 rounded-lg px-2 py-1 text-xs font-bold text-slate-900" id="rulesCustomTimerInput" max="3600" min="5" placeholder="Sec" type="number" value="45"/>
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-amber-900" id="aiDifficultySelect">
+<option value="easy">Easy AI</option>
+<option value="medium">Medium AI</option>
+<option selected="" value="hard">Hard — Grandmaster AI</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+<div class="p-2 rounded-xl bg-rose-50 border border-rose-200">
+<div class="text-[11px] font-bold text-rose-700 mb-1">🔴 Red</div>
+<input class="w-full bg-white border border-rose-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" id="setupName0" type="text" value="You (Red)"/>
+<select class="w-full bg-white border border-rose-200 rounded px-2 py-1 text-xs text-slate-700" id="setupType0">
+<option selected="" value="human">👤 Human</option>
+<option value="ai">🤖 AI Bot</option>
+</select>
+</div>
+<div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200">
+<div class="text-[11px] font-bold text-emerald-700 mb-1">🟢 Green</div>
+<input class="w-full bg-white border border-emerald-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" id="setupName1" type="text" value="Sher Khan AI"/>
+<select class="w-full bg-white border border-emerald-200 rounded px-2 py-1 text-xs text-slate-700" id="setupType1">
+<option value="human">👤 Human</option>
+<option selected="" value="ai">🤖 AI Bot</option>
+<option value="none">🚫 Empty (2P)</option>
+</select>
+</div>
+<div class="p-2 rounded-xl bg-amber-50 border border-amber-200">
+<div class="text-[11px] font-bold text-amber-800 mb-1">🟡 Yellow</div>
+<input class="w-full bg-white border border-amber-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" id="setupName2" type="text" value="Wazir Partner"/>
+<select class="w-full bg-white border border-amber-200 rounded px-2 py-1 text-xs text-slate-700" id="setupType2">
+<option value="human">👤 Human</option>
+<option selected="" value="ai">🤖 AI Partner</option>
+<option value="none">🚫 Empty (2P)</option>
+</select>
+</div>
+<div class="p-2 rounded-xl bg-blue-50 border border-blue-200">
+<div class="text-[11px] font-bold text-blue-700 mb-1">🔵 Blue</div>
+<input class="w-full bg-white border border-blue-200 rounded px-2 py-1 text-xs font-semibold text-slate-900 mb-1" id="setupName3" type="text" value="Marwat AI"/>
+<select class="w-full bg-white border border-blue-200 rounded px-2 py-1 text-xs text-slate-700" id="setupType3">
+<option value="human">👤 Human</option>
+<option selected="" value="ai">🤖 AI Bot</option>
+<option value="none">🚫 Empty (2P)</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-2">
+<button class="px-6 py-2.5 rounded-xl font-black text-sm emerald-play-btn shadow-lg" id="saveAndStartMatchBtn" type="button">
           ▶️ Save &amp; Start Match Now
         </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== SCREEN 3: OFFLINE QR WEBRTC & WI-FI RADAR MULTIPLAYER ==================== -->
-  <section id="viewNetwork" class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5">
-    <div class="max-w-5xl w-full mx-auto space-y-3">
-      <div class="flex items-center justify-between">
-        <button type="button" class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-amber-900 font-bold text-xs border border-amber-300 shadow-sm">
+</div>
+</div>
+</section>
+<!-- ==================== SCREEN 3: OFFLINE QR WEBRTC & WI-FI RADAR MULTIPLAYER ==================== -->
+<section class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5" id="viewNetwork">
+<div class="max-w-5xl w-full mx-auto space-y-3">
+<div class="flex items-center justify-between">
+<button class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-amber-900 font-bold text-xs border border-amber-300 shadow-sm" type="button">
           ⬅️ Back to Home Lobby
         </button>
-        <span id="wifiRadarStatusBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300" id="wifiRadarStatusBadge">
           🟢 Mesh &amp; Offline P2P Ready
         </span>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="royal-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
-          <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 mb-1">📡 Same Wi-Fi / LAN Radar &amp; Rooms</h2>
-            <p class="text-xs text-slate-600 mb-3">
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="royal-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
+<div>
+<h2 class="text-base sm:text-lg font-black text-slate-900 mb-1">📡 Same Wi-Fi / LAN Radar &amp; Rooms</h2>
+<p class="text-xs text-slate-600 mb-3">
               Tap any player node on the radar map to send a 1v1 or 2v2 Team Match invite—continues offline once linked, with automatic AI Bot Takeover if a peer drops!
             </p>
-
-            <div class="relative w-full h-48 rounded-2xl bg-slate-900 border-2 border-emerald-500/40 overflow-hidden flex items-center justify-center mb-3">
-              <div class="absolute w-44 h-44 rounded-full border border-emerald-500/20"></div>
-              <div class="absolute w-28 h-28 rounded-full border border-emerald-500/25"></div>
-              <div class="absolute inset-0 radar-sweep rounded-full opacity-50 pointer-events-none"></div>
-
-              <div class="relative z-10 flex flex-col items-center">
-                <div class="w-9 h-9 rounded-full bg-amber-500 text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white">
+<div class="relative w-full h-48 rounded-2xl bg-slate-900 border-2 border-emerald-500/40 overflow-hidden flex items-center justify-center mb-3">
+<div class="absolute w-44 h-44 rounded-full border border-emerald-500/20"></div>
+<div class="absolute w-28 h-28 rounded-full border border-emerald-500/25"></div>
+<div class="absolute inset-0 radar-sweep rounded-full opacity-50 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-9 h-9 rounded-full bg-amber-500 text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white">
                   YOU
                 </div>
-                <span id="radarSelfLabel" class="mt-0.5 px-2 py-0.2 rounded bg-slate-950/90 text-[9px] font-bold text-amber-300">Host</span>
-              </div>
-              <div id="radarNodesContainer" class="absolute inset-0"></div>
-            </div>
-
-            <div class="bg-amber-50/70 rounded-2xl p-3 border border-amber-200 mb-3 space-y-2">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <span class="text-xs font-bold text-slate-700">Room ID:</span>
-                  <span id="myPeerIdDisplay" class="ml-1 font-mono text-xs font-black text-amber-900 bg-white px-2 py-0.5 rounded border border-amber-300">BANNU-...</span>
-                </div>
-                <div class="flex gap-1.5">
-                  <button id="createWifiRoomBtn" type="button" class="px-2.5 py-1 rounded-lg bg-amber-500 text-white text-xs font-bold">
+<span class="mt-0.5 px-2 py-0.2 rounded bg-slate-950/90 text-[9px] font-bold text-amber-300" id="radarSelfLabel">Host</span>
+</div>
+<div class="absolute inset-0" id="radarNodesContainer"></div>
+</div>
+<div class="bg-amber-50/70 rounded-2xl p-3 border border-amber-200 mb-3 space-y-2">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div>
+<span class="text-xs font-bold text-slate-700">Room ID:</span>
+<span class="ml-1 font-mono text-xs font-black text-amber-900 bg-white px-2 py-0.5 rounded border border-amber-300" id="myPeerIdDisplay">BANNU-...</span>
+</div>
+<div class="flex gap-1.5">
+<button class="px-2.5 py-1 rounded-lg bg-amber-500 text-white text-xs font-bold" id="createWifiRoomBtn" type="button">
                     🏠 Broadcast Room
                   </button>
-                  <button id="copyPeerIdBtn" type="button" class="px-2.5 py-1 rounded-lg bg-white hover:bg-amber-100 text-xs font-semibold text-slate-700 border border-amber-300">
+<button class="px-2.5 py-1 rounded-lg bg-white hover:bg-amber-100 text-xs font-semibold text-slate-700 border border-amber-300" id="copyPeerIdBtn" type="button">
                     📋 Copy ID
                   </button>
-                </div>
-              </div>
-              <div class="flex gap-2">
-                <input id="joinPeerIdInput" type="text" placeholder="Friend's Room ID (e.g. BANNU-4821)" class="flex-1 bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-slate-900" />
-                <button id="connectPeerIdBtn" type="button" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+</div>
+</div>
+<div class="flex gap-2">
+<input class="flex-1 bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-slate-900" id="joinPeerIdInput" placeholder="Friend's Room ID (e.g. BANNU-4821)" type="text"/>
+<button class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white" id="connectPeerIdBtn" type="button">
                   Send Request
                 </button>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-xs font-bold uppercase text-slate-500">Nearby Wi-Fi Players</span>
-              <button id="simulateLanPlayerBtn" type="button" class="text-xs text-emerald-700 font-bold underline">
+</div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-xs font-bold uppercase text-slate-500">Nearby Wi-Fi Players</span>
+<button class="text-xs text-emerald-700 font-bold underline" id="simulateLanPlayerBtn" type="button">
                 🔄 Scan Radar Now
               </button>
-            </div>
-            <div id="lanPlayersList" class="space-y-1.5 max-h-32 overflow-y-auto"></div>
-          </div>
-        </div>
-
-        <div class="royal-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
-          <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 mb-1">📱 Offline WebRTC QR Room &amp; Scanner</h2>
-            <p class="text-xs text-slate-600 mb-3">
+</div>
+<div class="space-y-1.5 max-h-32 overflow-y-auto" id="lanPlayersList"></div>
+</div>
+</div>
+<div class="royal-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
+<div>
+<h2 class="text-base sm:text-lg font-black text-slate-900 mb-1">📱 Offline WebRTC QR Room &amp; Scanner</h2>
+<p class="text-xs text-slate-600 mb-3">
               Connect 2–4 phones with zero internet! Host generates Offer QR, Joiner scans it to show Answer QR, and Host links Peer!
             </p>
-
-            <div class="grid grid-cols-2 gap-2 mb-2.5">
-              <button id="qrHostModeBtn" type="button" class="py-2 px-3 rounded-xl text-xs font-bold bg-amber-500 text-white shadow">
+<div class="grid grid-cols-2 gap-2 mb-2.5">
+<button class="py-2 px-3 rounded-xl text-xs font-bold bg-amber-500 text-white shadow" id="qrHostModeBtn" type="button">
                 👑 Host Room (Create QR)
               </button>
-              <button id="qrJoinModeBtn" type="button" class="py-2 px-3 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300">
+<button class="py-2 px-3 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300" id="qrJoinModeBtn" type="button">
                 📷 Join Friend's QR
               </button>
-            </div>
-
-            <div class="bg-amber-50/60 rounded-2xl p-3 border border-amber-200 flex flex-col items-center">
-              <div class="flex flex-wrap items-center justify-center gap-1.5 mb-2 w-full">
-                <select id="qrSeatSlotSelect" class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
-                  <option value="1">Seat 2 — Green</option>
-                  <option value="2">Seat 3 — Yellow</option>
-                  <option value="3">Seat 4 — Blue</option>
-                </select>
-                <button id="generateWebRtcOfferBtn" type="button" class="px-2.5 py-1 rounded-lg bg-amber-500 text-white text-xs font-bold">
+</div>
+<div class="bg-amber-50/60 rounded-2xl p-3 border border-amber-200 flex flex-col items-center">
+<div class="flex flex-wrap items-center justify-center gap-1.5 mb-2 w-full">
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-800" id="qrSeatSlotSelect">
+<option value="1">Seat 2 — Green</option>
+<option value="2">Seat 3 — Yellow</option>
+<option value="3">Seat 4 — Blue</option>
+</select>
+<button class="px-2.5 py-1 rounded-lg bg-amber-500 text-white text-xs font-bold" id="generateWebRtcOfferBtn" type="button">
                   Generate QR
                 </button>
-                <button id="toggleCameraQrScanBtn" type="button" class="px-2.5 py-1 rounded-lg bg-sky-600 text-white text-xs font-bold">
+<button class="px-2.5 py-1 rounded-lg bg-sky-600 text-white text-xs font-bold" id="toggleCameraQrScanBtn" type="button">
                   📷 Camera Scan
                 </button>
-                <label class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-xs font-bold cursor-pointer">
+<label class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-xs font-bold cursor-pointer">
                   🖼️ Scan Image
-                  <input id="qrImageUploadInput" type="file" accept="image/*" class="hidden" />
-                </label>
-              </div>
-
-              <div id="cameraScannerWrap" class="hidden relative w-40 h-40 rounded-2xl overflow-hidden border-2 border-sky-500 mb-2 bg-black">
-                <video id="qrVideoElement" class="w-full h-full object-cover" playsinline muted></video>
-                <canvas id="qrScanHiddenCanvas" class="hidden"></canvas>
-                <button id="stopCameraScanBtn" type="button" class="absolute bottom-1 inset-x-3 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold">
+                  <input accept="image/*" class="hidden" id="qrImageUploadInput" type="file"/>
+</label>
+</div>
+<div class="hidden relative w-40 h-40 rounded-2xl overflow-hidden border-2 border-sky-500 mb-2 bg-black" id="cameraScannerWrap">
+<video class="w-full h-full object-cover" id="qrVideoElement" muted="" playsinline=""></video>
+<canvas class="hidden" id="qrScanHiddenCanvas"></canvas>
+<button class="absolute bottom-1 inset-x-3 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold" id="stopCameraScanBtn" type="button">
                   Stop Camera
                 </button>
-              </div>
-
-              <div id="qrCodeBox" class="w-36 h-36 bg-white p-2 rounded-2xl shadow border border-amber-200 flex items-center justify-center mb-2"></div>
-              <p id="qrStepInstruction" class="text-[11px] text-amber-900 font-semibold text-center mb-2">
+</div>
+<div class="w-36 h-36 bg-white p-2 rounded-2xl shadow border border-amber-200 flex items-center justify-center mb-2" id="qrCodeBox"></div>
+<p class="text-[11px] text-amber-900 font-semibold text-center mb-2" id="qrStepInstruction">
                 Scan this QR code or copy/paste the token below.
               </p>
-
-              <div class="w-full space-y-1.5">
-                <div class="flex gap-1.5">
-                  <input id="localSdpTokenOutput" type="text" readonly class="flex-1 bg-white border border-amber-300 rounded-xl px-2.5 py-1 text-[11px] font-mono text-slate-700" />
-                  <button id="copySdpTokenBtn" type="button" class="px-2.5 py-1 rounded-xl bg-white text-xs font-bold text-slate-800 border border-amber-300">
+<div class="w-full space-y-1.5">
+<div class="flex gap-1.5">
+<input class="flex-1 bg-white border border-amber-300 rounded-xl px-2.5 py-1 text-[11px] font-mono text-slate-700" id="localSdpTokenOutput" readonly="" type="text"/>
+<button class="px-2.5 py-1 rounded-xl bg-white text-xs font-bold text-slate-800 border border-amber-300" id="copySdpTokenBtn" type="button">
                     Copy Token
                   </button>
-                </div>
-                <div class="flex gap-1.5">
-                  <input id="remoteSdpTokenInput" type="text" placeholder="Paste scanned partner QR token..." class="flex-1 bg-white border border-amber-300 rounded-xl px-2.5 py-1 text-[11px] font-mono text-slate-900" />
-                  <button id="acceptRemoteSdpBtn" type="button" class="px-3 py-1 rounded-xl bg-emerald-600 text-xs font-bold text-white">
+</div>
+<div class="flex gap-1.5">
+<input class="flex-1 bg-white border border-amber-300 rounded-xl px-2.5 py-1 text-[11px] font-mono text-slate-900" id="remoteSdpTokenInput" placeholder="Paste scanned partner QR token..." type="text"/>
+<button class="px-3 py-1 rounded-xl bg-emerald-600 text-xs font-bold text-white" id="acceptRemoteSdpBtn" type="button">
                     Link Peer
                   </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-slate-600 flex items-center justify-between">
-            <span>Linked Offline P2P Seats: <b id="connectedWebRtcCount" class="text-emerald-700">0 / 3</b></span>
-            <span id="rtcIceStatusText" class="text-amber-800 font-semibold">ICE Ready</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== SCREEN 4: CAREER STATS, BACKUP & HD PICTURE CARD ==================== -->
-  <section id="viewStats" class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5">
-    <div class="max-w-5xl w-full mx-auto space-y-3">
-      <div>
-        <button type="button" class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-amber-900 font-bold text-xs border border-amber-300 shadow-sm">
+</div>
+</div>
+</div>
+</div>
+<div class="mt-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-slate-600 flex items-center justify-between">
+<span>Linked Offline P2P Seats: <b class="text-emerald-700" id="connectedWebRtcCount">0 / 3</b></span>
+<span class="text-amber-800 font-semibold" id="rtcIceStatusText">ICE Ready</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== SCREEN 4: CAREER STATS, BACKUP & HD PICTURE CARD ==================== -->
+<section class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5" id="viewStats">
+<div class="max-w-5xl w-full mx-auto space-y-3">
+<div>
+<button class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-amber-900 font-bold text-xs border border-amber-300 shadow-sm" type="button">
           ⬅️ Back to Home Lobby
         </button>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <div class="lg:col-span-7 royal-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between space-y-3">
-          <div>
-            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-amber-200">
-              <h2 class="text-base sm:text-xl font-black text-slate-900">🏆 Career Vault &amp; Backup</h2>
-              <div class="flex items-center gap-1.5">
-                <input id="profileNameInput" type="text" value="Bannu Champion" class="bg-white border border-amber-300 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-900 w-36" />
-                <button id="saveProfileNameBtn" type="button" class="px-3 py-1 rounded-xl gold-gradient-btn text-xs font-bold">
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+<div class="lg:col-span-7 royal-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between space-y-3">
+<div>
+<div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-amber-200">
+<h2 class="text-base sm:text-xl font-black text-slate-900">🏆 Career Vault &amp; Backup</h2>
+<div class="flex items-center gap-1.5">
+<input class="bg-white border border-amber-300 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-900 w-36" id="profileNameInput" type="text" value="Bannu Champion"/>
+<button class="px-3 py-1 rounded-xl gold-gradient-btn text-xs font-bold" id="saveProfileNameBtn" type="button">
                   Save Name
                 </button>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-3">
-              <div class="p-2.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-                <div class="text-[10px] font-semibold text-slate-500">Matches</div>
-                <div id="statMatches" class="text-xl font-black text-slate-900">0</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200">
-                <div class="text-[10px] font-semibold text-emerald-700">Wins</div>
-                <div id="statWins" class="text-xl font-black text-emerald-700">0</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200">
-                <div class="text-[10px] font-semibold text-rose-700">Kills (شکار)</div>
-                <div id="statKills" class="text-xl font-black text-rose-600">0</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200">
-                <div class="text-[10px] font-semibold text-amber-800">Double 6s</div>
-                <div id="statDoubleSixes" class="text-xl font-black text-amber-600">0</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-sky-50 border border-sky-200">
-                <div class="text-[10px] font-semibold text-sky-700">Win Rate</div>
-                <div id="statWinRate" class="text-lg font-black text-sky-700">0%</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-purple-50 border border-purple-200">
-                <div class="text-[10px] font-semibold text-purple-700">Team Wins</div>
-                <div id="statTeamWins" class="text-lg font-black text-purple-700">0</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200">
-                <div class="text-[10px] font-semibold text-amber-800">Hard AI Wins</div>
-                <div id="statHardAiWins" class="text-lg font-black text-amber-700">0</div>
-              </div>
-              <div class="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200">
-                <div class="text-[10px] font-semibold text-emerald-700">Streak</div>
-                <div id="statStreak" class="text-lg font-black text-emerald-700">0 🔥</div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <h3 class="text-xs font-extrabold uppercase text-amber-800 mb-1.5">🎖️ Achievements</h3>
-              <div id="achievementsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs"></div>
-            </div>
-
-            <div>
-              <h3 class="text-xs font-extrabold uppercase text-slate-500 mb-1">🕒 Match History</h3>
-              <div id="matchHistoryContainer" class="max-h-24 overflow-y-auto space-y-1 pr-1 text-xs"></div>
-            </div>
-          </div>
-
-          <div class="bg-amber-50/80 rounded-2xl p-3 border border-amber-200 flex flex-wrap items-center gap-2">
-            <button id="exportStatsBackupBtn" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-600 text-xs font-bold text-white shadow">
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-3">
+<div class="p-2.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<div class="text-[10px] font-semibold text-slate-500">Matches</div>
+<div class="text-xl font-black text-slate-900" id="statMatches">0</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+<div class="text-[10px] font-semibold text-emerald-700">Wins</div>
+<div class="text-xl font-black text-emerald-700" id="statWins">0</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-rose-50 border border-rose-200">
+<div class="text-[10px] font-semibold text-rose-700">Kills (شکار)</div>
+<div class="text-xl font-black text-rose-600" id="statKills">0</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200">
+<div class="text-[10px] font-semibold text-amber-800">Double 6s</div>
+<div class="text-xl font-black text-amber-600" id="statDoubleSixes">0</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-sky-50 border border-sky-200">
+<div class="text-[10px] font-semibold text-sky-700">Win Rate</div>
+<div class="text-lg font-black text-sky-700" id="statWinRate">0%</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-purple-50 border border-purple-200">
+<div class="text-[10px] font-semibold text-purple-700">Team Wins</div>
+<div class="text-lg font-black text-purple-700" id="statTeamWins">0</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200">
+<div class="text-[10px] font-semibold text-amber-800">Hard AI Wins</div>
+<div class="text-lg font-black text-amber-700" id="statHardAiWins">0</div>
+</div>
+<div class="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+<div class="text-[10px] font-semibold text-emerald-700">Streak</div>
+<div class="text-lg font-black text-emerald-700" id="statStreak">0 🔥</div>
+</div>
+</div>
+<div class="mb-3">
+<h3 class="text-xs font-extrabold uppercase text-amber-800 mb-1.5">🎖️ Achievements</h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs" id="achievementsGrid"></div>
+</div>
+<div>
+<h3 class="text-xs font-extrabold uppercase text-slate-500 mb-1">🕒 Match History</h3>
+<div class="max-h-24 overflow-y-auto space-y-1 pr-1 text-xs" id="matchHistoryContainer"></div>
+</div>
+</div>
+<div class="bg-amber-50/80 rounded-2xl p-3 border border-amber-200 flex flex-wrap items-center gap-2">
+<button class="px-3.5 py-2 rounded-xl bg-emerald-600 text-xs font-bold text-white shadow" id="exportStatsBackupBtn" type="button">
               ⬇️ Download Backup (.json)
             </button>
-            <label class="px-3.5 py-2 rounded-xl bg-sky-600 text-xs font-bold text-white shadow cursor-pointer">
+<label class="px-3.5 py-2 rounded-xl bg-sky-600 text-xs font-bold text-white shadow cursor-pointer">
               ⬆️ Restore Backup
-              <input id="importStatsBackupInput" type="file" accept=".json,application/json" class="hidden" />
-            </label>
-            <button id="resetStatsBtn" type="button" class="px-3 py-2 rounded-xl bg-white text-xs font-semibold text-slate-600 border border-slate-300 ml-auto">
+              <input accept=".json,application/json" class="hidden" id="importStatsBackupInput" type="file"/>
+</label>
+<button class="px-3 py-2 rounded-xl bg-white text-xs font-semibold text-slate-600 border border-slate-300 ml-auto" id="resetStatsBtn" type="button">
               Reset Stats
             </button>
-          </div>
-        </div>
-
-        <div class="lg:col-span-5 royal-card rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-between">
-          <div class="w-full">
-            <h3 class="text-base font-black text-slate-900 mb-1">📸 HD Stats Picture Card</h3>
-            <p class="text-xs text-slate-600 mb-2">Download a crisp summary image of your career stats.</p>
-          </div>
-          <canvas id="statsCardCanvas" width="600" height="380" class="w-full rounded-2xl shadow-lg border-2 border-amber-400 mb-3"></canvas>
-          <div class="w-full flex gap-2">
-            <button id="refreshStatsCardBtn" type="button" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 text-xs font-bold text-slate-800 border border-slate-300">
+</div>
+</div>
+<div class="lg:col-span-5 royal-card rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-between">
+<div class="w-full">
+<h3 class="text-base font-black text-slate-900 mb-1">📸 HD Stats Picture Card</h3>
+<p class="text-xs text-slate-600 mb-2">Download a crisp summary image of your career stats.</p>
+</div>
+<canvas class="w-full rounded-2xl shadow-lg border-2 border-amber-400 mb-3" height="380" id="statsCardCanvas" width="600"></canvas>
+<div class="w-full flex gap-2">
+<button class="flex-1 py-2 px-3 rounded-xl bg-slate-100 text-xs font-bold text-slate-800 border border-slate-300" id="refreshStatsCardBtn" type="button">
               🔄 Refresh Preview
             </button>
-            <button id="downloadStatsCardPngBtn" type="button" class="flex-1 py-2 px-3 rounded-xl font-black text-xs gold-gradient-btn shadow">
+<button class="flex-1 py-2 px-3 rounded-xl font-black text-xs gold-gradient-btn shadow" id="downloadStatsCardPngBtn" type="button">
               📸 Download HD Picture (.PNG)
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== SCREEN 5: BANNU CULTURAL RULEBOOK GUIDE ==================== -->
-  <section id="viewGuide" class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5">
-    <div class="royal-card rounded-3xl p-5 max-w-4xl w-full mx-auto space-y-4">
-      <div class="flex items-center justify-between border-b border-amber-200 pb-3">
-        <h2 class="text-lg sm:text-2xl font-black text-amber-800">📖 Bannu &amp; Pashtun Cultural Rules</h2>
-        <button type="button" class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-amber-100 text-amber-900 font-bold text-xs">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== SCREEN 5: BANNU CULTURAL RULEBOOK GUIDE ==================== -->
+<section class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5" id="viewGuide">
+<div class="royal-card rounded-3xl p-5 max-w-4xl w-full mx-auto space-y-4">
+<div class="flex items-center justify-between border-b border-amber-200 pb-3">
+<h2 class="text-lg sm:text-2xl font-black text-amber-800">📖 Bannu &amp; Pashtun Cultural Rules</h2>
+<button class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-amber-100 text-amber-900 font-bold text-xs" type="button">
           ⬅️ Back to Home
         </button>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
-        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-          <h3 class="font-bold text-amber-900 mb-1">1. Two-Dice Tactical Play &amp; Kill Re-Roll</h3>
-          <p class="text-slate-700">With 2 dice (e.g. 5 &amp; 3), drag or tap a bead to move by one die or combine both dice on one bead. Rolling Double Six (6+6) OR eating/killing an enemy bead grants a bonus re-roll!</p>
-        </div>
-        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-          <h3 class="font-bold text-amber-900 mb-1">2. Mandatory Hand Spawn on 6 (پہلے ہاتھ والی بیڈ لگانا)</h3>
-          <p class="text-slate-700">If you have beads in your hand/yard and roll a 6 (e.g. 6+1), you must spawn a bead from your hand first before moving existing board beads.</p>
-        </div>
-        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-          <h3 class="font-bold text-amber-900 mb-1">3. Kill Required for Home + Loop (بغیر شکار اندر جانا منع)</h3>
-          <p class="text-slate-700">Cannot enter the home column without capturing at least 1 enemy bead. Reaching home entry with 0 kills forces another full 52-square lap!</p>
-        </div>
-        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-          <h3 class="font-bold text-amber-900 mb-1">4. 2v2 Teams &amp; Single-Capture Choice (ٹیم میچ)</h3>
-          <p class="text-slate-700">Opposite corners are teammates (Red+Yellow ♦T1 vs Green+Blue ★T2). Teammates stack safely; an enemy landing on stacked teammates can only eat 1 chosen bead.</p>
-        </div>
-        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-          <h3 class="font-bold text-amber-900 mb-1">5. Close Game vs Open Game (کلوز گیم بمقابلہ اوپن گیم)</h3>
-          <p class="text-slate-700">In Close Game, a bead that kills an enemy locks on that square for the rest of your turn if another bead can move or spawn.</p>
-        </div>
-        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-          <h3 class="font-bold text-amber-900 mb-1">6. Disconnect / Close Protection &amp; AI Takeover</h3>
-          <p class="text-slate-700">Every turn is auto-saved so closing or refreshing the app lets you resume immediately. If a player loses connection or leaves mid-match, an intelligent AI Bot automatically takes over their seat!</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== MODAL: SCENARIO TESTER DRAWER ==================== -->
-  <div id="scenarioDrawer" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-5 max-w-md w-full border-2 border-indigo-400 shadow-2xl">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="text-sm font-black uppercase tracking-wider text-indigo-800">⚡ Cultural Rule Drills</h3>
-        <button id="closeScenarioDrawerBtn" type="button" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">✕</button>
-      </div>
-      <p class="text-xs text-slate-600 mb-3">Load an instant board state to test any specific Bannu cultural rule directly on the board:</p>
-      <div class="flex flex-col gap-1.5">
-        <button type="button" data-scenario="mandatory_spawn" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">1. Two-Dice Tactical Play &amp; Kill Re-Roll</h3>
+<p class="text-slate-700">With 2 dice (e.g. 5 &amp; 3), drag or tap a bead to move by one die or combine both dice on one bead. Rolling Double Six (6+6) OR eating/killing an enemy bead grants a bonus re-roll!</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">2. Mandatory Hand Spawn on 6 (پہلے ہاتھ والی بیڈ لگانا)</h3>
+<p class="text-slate-700">If you have beads in your hand/yard and roll a 6 (e.g. 6+1), you must spawn a bead from your hand first before moving existing board beads.</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">3. Kill Required for Home + Loop (بغیر شکار اندر جانا منع)</h3>
+<p class="text-slate-700">Cannot enter the home column without capturing at least 1 enemy bead. Reaching home entry with 0 kills forces another full 52-square lap!</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">4. 2v2 Teams &amp; Single-Capture Choice (ٹیم میچ)</h3>
+<p class="text-slate-700">Opposite corners are teammates (Red+Yellow ♦T1 vs Green+Blue ★T2). Teammates stack safely; an enemy landing on stacked teammates can only eat 1 chosen bead.</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">5. Close Game vs Open Game (کلوز گیم بمقابلہ اوپن گیم)</h3>
+<p class="text-slate-700">In Close Game, a bead that kills an enemy locks on that square for the rest of your turn if another bead can move or spawn.</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">6. Disconnect / Close Protection &amp; AI Takeover</h3>
+<p class="text-slate-700">Every turn is auto-saved so closing or refreshing the app lets you resume immediately. If a player loses connection or leaves mid-match, an intelligent AI Bot automatically takes over their seat!</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== MODAL: SCENARIO TESTER DRAWER ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" id="scenarioDrawer">
+<div class="royal-card rounded-3xl p-5 max-w-md w-full border-2 border-indigo-400 shadow-2xl">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-sm font-black uppercase tracking-wider text-indigo-800">⚡ Cultural Rule Drills</h3>
+<button class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700" id="closeScenarioDrawerBtn" type="button">✕</button>
+</div>
+<p class="text-xs text-slate-600 mb-3">Load an instant board state to test any specific Bannu cultural rule directly on the board:</p>
+<div class="flex flex-col gap-1.5">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="mandatory_spawn" type="button">
           1️⃣ <b>Mandatory 6 Spawn:</b> 1 bead in hand + 1 on board (Roll 6+2)
         </button>
-        <button type="button" data-scenario="blood_loop" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="blood_loop" type="button">
           2️⃣ <b>No-Kill Outer Loop:</b> At Home entry with 0 kills (Must loop board!)
         </button>
-        <button type="button" data-scenario="close_game_kill" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="close_game_kill" type="button">
           3️⃣ <b>Close Game Kill + Bonus Re-Roll:</b> Kill enemy on Die 1 → Capturer locks &amp; earns Kill Re-Roll!
         </button>
-        <button type="button" data-scenario="team_stack_capture" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="team_stack_capture" type="button">
           4️⃣ <b>2v2 Team Stack Capture:</b> Enemy lands on stacked teammates (Pick 1!)
         </button>
-        <button type="button" data-scenario="home_remainder" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="home_remainder" type="button">
           5️⃣ <b>Near-Home Remainder (Need 6, Roll 5+4):</b> Single vs 2 beads test
         </button>
-        <button type="button" data-scenario="teammate_assist" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="teammate_assist" type="button">
           6️⃣ <b>2v2 Partner Assist:</b> Red finished all beads → Roll 1-Die 6 to help Yellow!
         </button>
-        <button type="button" data-scenario="home_split_two_beads" class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal">
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="home_split_two_beads" type="button">
           7️⃣ <b>Near-Home Split (2 Beads):</b> 5 enters Home + 4 moves 2nd bead!
         </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL: REFEREE LOG POPOVER ==================== -->
-  <div id="refereeLogModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-5 max-w-md w-full border-2 border-amber-400 shadow-2xl">
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-sm font-black uppercase tracking-wider text-slate-800">📜 Live Referee Log</span>
-        <button id="closeRefereeLogModalBtn" type="button" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">✕</button>
-      </div>
-      <div id="gameLogContainer" class="max-h-72 overflow-y-auto space-y-1.5 pr-1 text-xs"></div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL 1: OPPONENT CAPTURE CHOICE ON STACKED TEAMMATES ==================== -->
-  <div id="captureChoiceModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-5 max-w-md w-full border-2 border-rose-500 shadow-2xl">
-      <h3 class="text-lg font-black text-slate-900 mb-1">⚔️ Choose Which Enemy Bead to Capture!</h3>
-      <p class="text-xs text-slate-600 mb-4">
+</div>
+</div>
+</div>
+<!-- ==================== MODAL: REFEREE LOG POPOVER ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" id="refereeLogModal">
+<div class="royal-card rounded-3xl p-5 max-w-md w-full border-2 border-amber-400 shadow-2xl">
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm font-black uppercase tracking-wider text-slate-800">📜 Live Referee Log</span>
+<button class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700" id="closeRefereeLogModalBtn" type="button">✕</button>
+</div>
+<div class="max-h-72 overflow-y-auto space-y-1.5 pr-1 text-xs" id="gameLogContainer"></div>
+</div>
+</div>
+<!-- ==================== MODAL 1: OPPONENT CAPTURE CHOICE ON STACKED TEAMMATES ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4" id="captureChoiceModal">
+<div class="royal-card rounded-3xl p-5 max-w-md w-full border-2 border-rose-500 shadow-2xl">
+<h3 class="text-lg font-black text-slate-900 mb-1">⚔️ Choose Which Enemy Bead to Capture!</h3>
+<p class="text-xs text-slate-600 mb-4">
         Multiple enemy team beads are stacked on this unprotected square. Under Bannu Team Rules, you may only eat <b>ONE</b> bead of your choice and leave the other standing!
       </p>
-      <div id="captureChoiceButtons" class="space-y-2"></div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL 2: WI-FI / LAN MATCH INVITE POPUP ==================== -->
-  <div id="lanInviteModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-emerald-500 shadow-2xl">
-      <h3 class="text-base font-black text-slate-900 mb-1">📡 Incoming Wi-Fi Match Request!</h3>
-      <p id="lanInviteModalText" class="text-xs text-slate-600 mb-4">Player wants to start a 2v2 Bannu Rules match with you.</p>
-      <div class="flex gap-2 justify-end">
-        <button id="declineLanInviteBtn" type="button" class="px-3.5 py-2 rounded-xl bg-slate-100 text-xs font-bold text-slate-700">Decline</button>
-        <button id="acceptLanInviteBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black">Accept &amp; Play</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL 3: VICTORY PODIUM ==================== -->
-  <div id="victoryModal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-6 max-w-md w-full border-2 border-amber-400 text-center shadow-2xl">
-      <div class="text-5xl mb-2">👑</div>
-      <h3 id="victoryTitle" class="text-2xl font-black text-amber-700 mb-1">Victory!</h3>
-      <p id="victorySubtitle" class="text-sm text-slate-700 mb-5">Team 1 (Red &amp; Yellow) conquered the Bannu Royale Arena!</p>
-      <div class="flex gap-3 justify-center">
-        <button id="victoryPlayAgainBtn" type="button" class="px-5 py-2.5 rounded-xl font-black text-xs gold-gradient-btn">
+<div class="space-y-2" id="captureChoiceButtons"></div>
+</div>
+</div>
+<!-- ==================== MODAL 2: WI-FI / LAN MATCH INVITE POPUP ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4" id="lanInviteModal">
+<div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-emerald-500 shadow-2xl">
+<h3 class="text-base font-black text-slate-900 mb-1">📡 Incoming Wi-Fi Match Request!</h3>
+<p class="text-xs text-slate-600 mb-4" id="lanInviteModalText">Player wants to start a 2v2 Bannu Rules match with you.</p>
+<div class="flex gap-2 justify-end">
+<button class="px-3.5 py-2 rounded-xl bg-slate-100 text-xs font-bold text-slate-700" id="declineLanInviteBtn" type="button">Decline</button>
+<button class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black" id="acceptLanInviteBtn" type="button">Accept &amp; Play</button>
+</div>
+</div>
+</div>
+<!-- ==================== MODAL 3: VICTORY PODIUM ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4" id="victoryModal">
+<div class="royal-card rounded-3xl p-6 max-w-md w-full border-2 border-amber-400 text-center shadow-2xl">
+<div class="text-5xl mb-2">👑</div>
+<h3 class="text-2xl font-black text-amber-700 mb-1" id="victoryTitle">Victory!</h3>
+<p class="text-sm text-slate-700 mb-5" id="victorySubtitle">Team 1 (Red &amp; Yellow) conquered the Bannu Royale Arena!</p>
+<div class="flex gap-3 justify-center">
+<button class="px-5 py-2.5 rounded-xl font-black text-xs gold-gradient-btn" id="victoryPlayAgainBtn" type="button">
           🔄 Play Again
         </button>
-        <button id="victoryViewStatsBtn" type="button" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 border border-slate-300">
+<button class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 border border-slate-300" id="victoryViewStatsBtn" type="button">
           📸 View Stats Card
         </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="crownCheatModal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-amber-500 shadow-2xl space-y-3">
-      <div class="flex items-center justify-between border-b border-amber-200 pb-2">
-        <h3 class="text-base font-black text-slate-900">👑 What do you want?</h3>
-        <button id="closeCrownCheatBtn" type="button" class="px-2.5 py-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-xs font-bold text-slate-800">Ignore ✕</button>
-      </div>
-
-      <div id="crownAuthStep" class="space-y-2.5">
-        <p class="text-xs text-slate-600">Enter secret password to unlock dice control, or close to ignore:</p>
-        <input id="crownPasswordInput" type="password" placeholder="Enter password..." class="w-full bg-white border border-amber-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900" />
-        <div class="flex gap-2 justify-end">
-          <button id="ignoreCrownAuthBtn" type="button" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">Ignore</button>
-          <button id="unlockCrownAuthBtn" type="button" class="px-4 py-2 rounded-xl gold-gradient-btn text-xs font-black">Unlock</button>
-        </div>
-      </div>
-
-      <div id="crownDiceStep" class="hidden space-y-2.5">
-        <p id="crownDicePromptText" class="text-xs font-semibold text-slate-700">Enter desired dice values (comma-separated for 2 dice, e.g. 6,6 or 6,2):</p>
-        <input id="crownDiceValuesInput" type="text" placeholder="e.g. 6,6 or 5" class="w-full bg-white border-2 border-amber-400 rounded-xl px-3 py-2 text-sm font-black text-slate-900 font-mono" />
-        <button id="applyComingDiceBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-black text-xs emerald-play-btn">✅ Set Coming Roll</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOAST NOTIFICATION BANNER -->
-  <div id="toastBanner" class="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 hidden max-w-xs sm:max-w-md w-[92vw] sm:w-auto rounded-2xl bg-slate-900/90 backdrop-blur-sm border border-amber-400 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl flex items-center justify-between gap-2">
-    <span id="toastBannerText" class="truncate"></span>
-    <div class="flex items-center gap-1 flex-shrink-0">
-      <button id="muteTooltipsQuickBtn" type="button" title="Disable Tooltips (Remembered)" class="px-1.5 py-0.5 rounded-lg bg-slate-800 hover:bg-rose-700 text-[10px] font-bold text-amber-300 border border-slate-600">🔕 Off</button>
-      <button id="closeToastBannerBtn" type="button" title="Close" class="w-5 h-5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] font-black text-white flex items-center justify-center">✕</button>
-    </div>
-  </div>
-
-  <!-- ==================== COMPLETE GAME, VISUAL TRAILS, RESILIENCE & NETWORK ENGINE ==================== -->
-  <script>
+</div>
+</div>
+</div>
+<div class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4" id="crownCheatModal">
+<div class="royal-card rounded-3xl p-5 max-w-sm w-full border-2 border-amber-500 shadow-2xl space-y-3">
+<div class="flex items-center justify-between border-b border-amber-200 pb-2">
+<h3 class="text-base font-black text-slate-900">👑 What do you want?</h3>
+<button class="px-2.5 py-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-xs font-bold text-slate-800" id="closeCrownCheatBtn" type="button">Ignore ✕</button>
+</div>
+<div class="space-y-2.5" id="crownAuthStep">
+<p class="text-xs text-slate-600">Enter secret password to unlock dice control, or close to ignore:</p>
+<input class="w-full bg-white border border-amber-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900" id="crownPasswordInput" placeholder="Enter password..." type="password"/>
+<div class="flex gap-2 justify-end">
+<button class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700" id="ignoreCrownAuthBtn" type="button">Ignore</button>
+<button class="px-4 py-2 rounded-xl gold-gradient-btn text-xs font-black" id="unlockCrownAuthBtn" type="button">Unlock</button>
+</div>
+</div>
+<div class="hidden space-y-2.5" id="crownDiceStep">
+<p class="text-xs font-semibold text-slate-700" id="crownDicePromptText">Enter desired dice values (comma-separated for 2 dice, e.g. 6,6 or 6,2):</p>
+<input class="w-full bg-white border-2 border-amber-400 rounded-xl px-3 py-2 text-sm font-black text-slate-900 font-mono" id="crownDiceValuesInput" placeholder="e.g. 6,6 or 5" type="text"/>
+<button class="w-full py-2.5 px-4 rounded-xl font-black text-xs emerald-play-btn" id="applyComingDiceBtn" type="button">✅ Set Coming Roll</button>
+</div>
+</div>
+</div>
+<!-- TOAST NOTIFICATION BANNER -->
+<div class="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 hidden max-w-xs sm:max-w-md w-[92vw] sm:w-auto rounded-2xl bg-slate-900/90 backdrop-blur-sm border border-amber-400 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl flex items-center justify-between gap-2" id="toastBanner">
+<span class="truncate" id="toastBannerText"></span>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="px-1.5 py-0.5 rounded-lg bg-slate-800 hover:bg-rose-700 text-[10px] font-bold text-amber-300 border border-slate-600" id="muteTooltipsQuickBtn" title="Disable Tooltips (Remembered)" type="button">🔕 Off</button>
+<button class="w-5 h-5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] font-black text-white flex items-center justify-center" id="closeToastBannerBtn" title="Close" type="button">✕</button>
+</div>
+</div>
+<!-- ==================== COMPLETE GAME, VISUAL TRAILS, RESILIENCE & NETWORK ENGINE ==================== -->
+<script>
     (function () {
       'use strict';
 
@@ -5154,5 +5077,5 @@
       });
     })();
   </script>
-</body>
+<script src="./pwa-register.js" type="module"></script></body>
 </html>
