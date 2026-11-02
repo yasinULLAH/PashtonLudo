@@ -179,58 +179,171 @@ html, body {
   box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.45);
 }
 
+/* Step-by-Step Visual Clue Trail & Manual Snake Editor Highlights */
+.board-cell.cell-step-trail {
+  box-shadow: inset 0 0 0 2.5px var(--step-trail-color, #10b981), 0 0 10px rgba(16, 185, 129, 0.35) !important;
+  background-color: rgba(16, 185, 129, 0.16) !important;
+  z-index: 14;
+}
+.board-cell.cell-step-current {
+  box-shadow: inset 0 0 0 3.5px var(--step-trail-color, #f59e0b), 0 0 18px rgba(245, 158, 11, 0.75) !important;
+  background-color: rgba(254, 243, 199, 0.95) !important;
+  transform: scale(1.03);
+  z-index: 18;
+}
+.board-cell.cell-transition-from {
+  box-shadow: inset 0 0 0 3.5px #f43f5e, 0 0 18px rgba(244, 63, 94, 0.8) !important;
+  z-index: 18;
+}
+.board-cell.cell-transition-to {
+  box-shadow: inset 0 0 0 3.5px #10b981, 0 0 18px rgba(16, 185, 129, 0.8) !important;
+  z-index: 18;
+}
+.board-cell.cell-edit-pending-head {
+  box-shadow: inset 0 0 0 4px #e11d48, 0 0 20px rgba(225, 29, 72, 0.85) !important;
+  background-color: #ffe4e6 !important;
+  animation: editCellPulse 0.75s infinite alternate ease-in-out;
+  z-index: 22;
+}
+.board-cell.cell-edit-mode-cursor {
+  cursor: crosshair !important;
+}
+.board-cell.cell-edit-mode-cursor:hover {
+  box-shadow: inset 0 0 0 3px #6366f1 !important;
+  z-index: 19;
+}
+@keyframes editCellPulse {
+  0% { transform: scale(0.98); }
+  100% { transform: scale(1.04); }
+}
+.step-clue-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1px 4px;
+  border-radius: 9999px;
+  font-size: clamp(7px, 1.05vmin, 10px);
+  font-weight: 900;
+  color: #ffffff;
+  background: var(--step-trail-color, #059669);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), 0 0 0 1.5px #ffffff;
+  pointer-events: none;
+  z-index: 24;
+  white-space: nowrap;
+  animation: stepBadgePop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes stepBadgePop {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.2; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* Beautiful 3D Sculpted Hujra Beads with Floating Name Tags */
+.hujra-bead-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 .token-pin {
-  width: clamp(14px, 2.3vmin, 24px);
-  height: clamp(14px, 2.3vmin, 24px);
+  position: relative;
+  width: clamp(16px, 2.6vmin, 26px);
+  height: clamp(16px, 2.6vmin, 26px);
   border-radius: 9999px;
   border: 2px solid #ffffff;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.45);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.65) 0%, var(--bead-color, #059669) 38%, #0f172a 100%);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.55), inset 0 2px 3px rgba(255,255,255,0.65), inset 0 -2px 4px rgba(0,0,0,0.45);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: clamp(7px, 1.1vmin, 10px);
-  font-weight: 800;
+  font-weight: 900;
   color: #ffffff;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  z-index: 25;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  z-index: 30;
+}
+.token-pin::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+}
+.token-pin::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  width: 34%;
+  height: 26%;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.65);
+  transform: rotate(-25deg);
+  pointer-events: none;
+}
+.bead-name-tag {
+  margin-top: -2px;
+  padding: 0.5px 4px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  color: #f8fafc;
+  font-size: clamp(6px, 0.92vmin, 8.5px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  max-width: clamp(38px, 6.8vmin, 64px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  z-index: 32;
+  pointer-events: none;
 }
 .token-active-glow {
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.7), 0 4px 10px rgba(0,0,0,0.5);
-  transform: scale(1.12);
+  box-shadow: 0 0 0 2.5px #fbbf24, 0 0 12px rgba(16, 185, 129, 0.85), 0 4px 10px rgba(0,0,0,0.6);
+  transform: scale(1.1);
+}
+.bead-hopping {
+  animation: beadStepHop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate !important;
+  box-shadow: 0 0 0 3px #facc15, 0 8px 18px rgba(0,0,0,0.65) !important;
+  z-index: 40 !important;
+}
+@keyframes beadStepHop {
+  0% { transform: translateY(0) scale(1.08); }
+  100% { transform: translateY(-7px) scale(1.28); }
 }
 .token-selectable-pulse {
   cursor: pointer !important;
   pointer-events: auto !important;
   box-shadow: 0 0 0 3px #facc15, 0 0 14px rgba(250, 204, 21, 0.95) !important;
   animation: beadSelectPulse 0.85s infinite alternate ease-in-out;
-  z-index: 35 !important;
+  z-index: 38 !important;
 }
 @keyframes beadSelectPulse {
   0% { transform: scale(1.08); }
   100% { transform: scale(1.32); }
 }
 
-/* Center Board Interactive Dice Medallion */
+/* Center Board Interactive Dice Medallion — Hidden visually while board click rolls dice */
 .center-dice-hub {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 28;
-  width: clamp(62px, 11vmin, 86px);
-  height: clamp(62px, 11vmin, 86px);
-  border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.94));
-  border: 2.5px solid rgba(16, 185, 129, 0.75);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 0 4px rgba(16, 185, 129, 0.18), inset 0 1px 3px rgba(255, 255, 255, 0.25);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-  backdrop-filter: blur(4px);
+  z-index: -1;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 .center-dice-hub:hover {
   transform: translate(-50%, -50%) scale(1.08);
@@ -843,6 +956,62 @@ table.dataTable tbody tr:hover {
             <div id="setupPlayerSeatsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
           </div>
 
+          <!-- Manual Match Snakes & Bites Placement Customizer -->
+          <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-rose-900 flex items-center gap-1.5">
+                  <i class="fa-solid fa-staff-snake text-rose-600"></i>
+                  <span>Manual Match Snakes &amp; Bites Placement (Custom Locations for This Match)</span>
+                </h3>
+                <p class="text-[11px] text-slate-600">Add, remove, or place snake bite heads &amp; drop tails manually, or click squares directly on the board.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" onclick="GameEngine.openBoardInSnakeEditMode()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-sm flex items-center gap-1.5 transition">
+                  <i class="fa-solid fa-hand-pointer"></i>
+                  <span>Place on Board Visually</span>
+                </button>
+                <button type="button" onclick="GameEngine.resetMatchSnakesToPreset()" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs transition">
+                  Reset Preset Snakes
+                </button>
+                <button type="button" onclick="GameEngine.clearAllMatchSnakes()" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-rose-100 border border-rose-300 text-rose-700 font-bold text-xs transition">
+                  Clear All
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end bg-white p-3 rounded-xl border border-rose-200/80">
+              <div class="sm:col-span-3">
+                <label for="setupSnakeHeadInput" class="block text-[11px] font-bold text-slate-700 mb-1">Snake Bite Square (Head 2–99)</label>
+                <input type="number" id="setupSnakeHeadInput" min="2" max="99" value="97" class="w-full min-h-[38px] px-3 rounded-lg border border-slate-300 text-xs font-bold text-rose-700">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="setupSnakeTailInput" class="block text-[11px] font-bold text-slate-700 mb-1">Drop To Square (Tail 1–98)</label>
+                <input type="number" id="setupSnakeTailInput" min="1" max="98" value="12" class="w-full min-h-[38px] px-3 rounded-lg border border-slate-300 text-xs font-bold text-emerald-700">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="setupSnakeSizeSelect" class="block text-[11px] font-bold text-slate-700 mb-1">Snake Visual Size &amp; Clarity</label>
+                <select id="setupSnakeSizeSelect" onchange="GameEngine.setSnakeSizeScale(this.value)" class="no-select2 w-full min-h-[38px] px-2.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-800 bg-white">
+                  <option value="0.42">Ultra-Slim (Max Board Visibility)</option>
+                  <option value="0.55" selected>Slim &amp; Translucent (Recommended)</option>
+                  <option value="0.72">Medium Classic</option>
+                  <option value="0.90">Bold Cobra</option>
+                </select>
+              </div>
+              <div class="sm:col-span-3">
+                <button type="button" onclick="GameEngine.addManualSnakeFromSetup()" class="w-full min-h-[38px] px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-solid fa-plus text-rose-400"></i>
+                  <span>Add Snake Bite</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-[11px] font-bold text-slate-600 mb-1.5">Active Snakes &amp; Bites for Match (Click × to remove any snake):</div>
+              <div id="setupActiveSnakesChips" class="flex flex-wrap items-center gap-1.5"></div>
+            </div>
+          </div>
+
           <!-- Traditional KPK Hujra Rule Toggles -->
           <div>
             <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-2.5">KPK Hujra Gameplay Rules</h3>
@@ -1353,6 +1522,12 @@ table.dataTable tbody tr:hover {
         <span id="hudBotPlayLabel" class="hidden md:inline">Auto-Play: OFF</span>
       </button>
 
+      <!-- Manual Snake & Bite Board Placement Toggle -->
+      <button type="button" id="hudSnakeEditorBtn" onclick="GameEngine.toggleBoardSnakeEditor()" class="min-h-[38px] px-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/35 border border-rose-500/40 text-rose-300 text-[11px] font-extrabold flex items-center gap-1.5 transition" title="Manually Place or Edit Snakes, Bites & Ladders on the Board">
+        <i class="fa-solid fa-staff-snake"></i>
+        <span class="hidden md:inline">Snakes &amp; Bites</span>
+      </button>
+
       <!-- Speed Multiplier Cycle -->
       <button type="button" id="hudSpeedBtn" onclick="GameEngine.cycleGameSpeed()" class="min-h-[38px] px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 text-[11px] font-extrabold transition" title="Cycle Animation Speed">
         1.6x
@@ -1390,6 +1565,62 @@ table.dataTable tbody tr:hover {
       <div id="floatingEmoteText" class="px-4 py-1.5 rounded-full bg-slate-900/95 border border-emerald-400 text-emerald-300 font-bold text-xs shadow-xl animate__animated animate__fadeInUp"></div>
     </div>
 
+    <!-- Interactive On-Board Snake & Bite Manual Placement Bar -->
+    <div id="snakePlacementBar" class="hidden absolute top-2 left-1/2 -translate-x-1/2 z-40 bg-slate-950/95 border-2 border-rose-500 rounded-2xl px-3.5 py-2.5 shadow-2xl flex flex-col gap-2 w-[96vw] max-w-2xl backdrop-blur-md">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-1.5">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-black uppercase">Manual Snake &amp; Bite Editor</span>
+          <span id="snakeEditorInstructionText" class="text-[11px] font-bold text-amber-300">Click any square (2–99) on the board to set a Snake Bite Head!</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <select id="arenaSnakeSizeSelect" onchange="GameEngine.setSnakeSizeScale(this.value)" class="no-select2 bg-slate-900 text-emerald-300 font-bold px-2 py-1 rounded-lg border border-slate-700 text-[10px]" title="Snake Size & Visibility">
+            <option value="0.42">Size: Ultra-Slim</option>
+            <option value="0.55" selected>Size: Slim &amp; Clear</option>
+            <option value="0.72">Size: Medium</option>
+            <option value="0.90">Size: Bold</option>
+          </select>
+          <button type="button" onclick="GameEngine.toggleBoardSnakeEditor(false)" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-[11px] flex items-center gap-1">
+            <i class="fa-solid fa-check"></i>
+            <span>Done</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-1">
+          <button type="button" id="editModeToolSnake" onclick="GameEngine.setBoardEditTool('snake')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-extrabold text-[10px] flex items-center gap-1">
+            <i class="fa-solid fa-staff-snake"></i>
+            <span>Place Snake (Head→Tail)</span>
+          </button>
+          <button type="button" id="editModeToolLadder" onclick="GameEngine.setBoardEditTool('ladder')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px] flex items-center gap-1">
+            <i class="fa-solid fa-stairs"></i>
+            <span>Place Ladder (Foot→Top)</span>
+          </button>
+          <button type="button" id="editModeToolDelete" onclick="GameEngine.setBoardEditTool('delete')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px] flex items-center gap-1">
+            <i class="fa-solid fa-eraser"></i>
+            <span>Click Square to Remove</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <input type="number" id="arenaSnakeHeadInput" min="2" max="99" placeholder="Head" value="95" class="w-14 h-7 px-1.5 rounded bg-slate-900 border border-rose-500/50 text-rose-300 font-bold text-[11px] text-center" title="Snake Bite Square (2-99)">
+          <span class="text-slate-400 text-xs font-bold">→</span>
+          <input type="number" id="arenaSnakeTailInput" min="1" max="98" placeholder="Tail" value="15" class="w-14 h-7 px-1.5 rounded bg-slate-900 border border-emerald-500/50 text-emerald-300 font-bold text-[11px] text-center" title="Snake Drop Square (1-98)">
+          <button type="button" onclick="GameEngine.addManualSnakeFromArenaBar()" class="px-2.5 h-7 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-[10px]">
+            + Add
+          </button>
+          <button type="button" onclick="GameEngine.clearAllMatchSnakes()" class="px-2 h-7 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-rose-300 font-bold text-[10px]" title="Clear All Snakes">
+            Clear
+          </button>
+          <button type="button" onclick="GameEngine.resetMatchSnakesToPreset()" class="px-2 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px]" title="Reset Default Snakes">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div id="arenaActiveSnakesChips" class="flex items-center gap-1 overflow-x-auto py-0.5 text-[10px]"></div>
+    </div>
+
     <!-- Interactive Multi-Bead Choice Bar (Appears when >1 beads have distinct valid moves) -->
     <div id="beadChoiceBar" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-950/95 border-2 border-amber-400 rounded-2xl px-4 py-2.5 shadow-2xl flex flex-col items-center gap-2 max-w-[95vw]">
       <div class="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
@@ -1399,13 +1630,13 @@ table.dataTable tbody tr:hover {
       <div id="beadChoiceButtons" class="flex flex-wrap items-center justify-center gap-2"></div>
     </div>
 
-    <!-- 10x10 Responsive Board (Clicking Center or Board Rolls Dice) -->
-    <div class="board-grid" id="boardGridContainer" onclick="GameEngine.handleBoardGridClick(event)">
+    <!-- 10x10 Responsive Board (Clicking Center or Anywhere on Board Rolls Dice) -->
+    <div class="board-grid cursor-pointer" id="boardGridContainer" onclick="GameEngine.handleBoardGridClick(event)" title="Click anywhere on the board to roll dice (or place snakes in Snake Editor mode)">
       <div id="boardCellsWrapper" class="contents"></div>
       <svg id="boardSvgOverlay" viewBox="0 0 1000 1000" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
 
-      <!-- Interactive Center Dice Roll Hub (Click Center to Roll Dice!) -->
-      <button type="button" id="centerBoardDiceBtn" onclick="GameEngine.handleCenterDiceClick(event)" class="center-dice-hub" title="Click Center to Roll Dice (Space)">
+      <!-- Hidden Center Dice DOM Element (Kept hidden per user request; board click handles rolling) -->
+      <button type="button" id="centerBoardDiceBtn" onclick="GameEngine.handleCenterDiceClick(event)" class="center-dice-hub hidden" aria-hidden="true" title="Click Center to Roll Dice (Space)">
         <div id="centerDiceCubeVisual" class="center-dice-mini">
           <span class="center-pip" id="centerPip-0"></span>
           <span class="center-pip" id="centerPip-1"></span>
@@ -1543,6 +1774,16 @@ table.dataTable tbody tr:hover {
         <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/80 border border-slate-700">
           <span class="font-bold">Tactical Board Hazard/Cut Radar</span>
           <input type="checkbox" id="pauseChkRadar" checked onchange="GameEngine.setRadarEnabled(this.checked)" class="w-4 h-4 accent-emerald-500">
+        </div>
+
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/40">
+          <div>
+            <span class="font-bold text-rose-300 block">Manual Snakes &amp; Bites / Snake Size</span>
+            <span class="text-[10px] text-slate-400">Customize snake places &amp; bites for this match</span>
+          </div>
+          <button type="button" onclick="GameEngine.togglePauseDrawer(false);GameEngine.toggleBoardSnakeEditor(true);" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs">
+            Edit Snakes
+          </button>
         </div>
 
         <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/80 border border-slate-700">
@@ -2326,6 +2567,13 @@ const GameEngine = {
     knockback: true,
     exact100: true
   },
+  boardEditMode: false,
+  boardEditTool: 'snake',
+  pendingEditStartSq: null,
+  activeStepTrail: [],
+  activeMovingBeadKey: null,
+  activeTransitionClue: null,
+  stepTrailCleanupTimer: null,
   settings: {
     alwaysAutoRoll: false,
     idleAutoRoll: true,
@@ -2338,7 +2586,9 @@ const GameEngine = {
     allowUndo: true,
     haptics: true,
     fastCamp: true,
-    speedMultiplier: 1.6
+    speedMultiplier: 1.6,
+    snakeScale: 0.55,
+    snakeOpacity: 0.62
   },
   players: [],
   seatAssignments: [null, null, null, null],
@@ -2360,8 +2610,10 @@ const GameEngine = {
     this.syncPresetToRules();
     await this.renderSeatSelectors();
     await this.setupPlayersForMode('ai');
+    this.loadCustomMatchBoardOverrides();
     this.renderBoard();
     this.renderPlayerCards();
+    this.renderCustomSnakesChips();
     this.bindKeyboardShortcuts();
     await this.checkSavedMatchState();
     this.startIdleWatchdog();
@@ -2427,6 +2679,8 @@ const GameEngine = {
       setChk('chkHaptics', s.haptics);
       setChk('chkFastCamp', s.fastCamp);
       AppUI.syncSelectValue('homeGameSpeedSelect', s.speedMultiplier);
+      AppUI.syncSelectValue('setupSnakeSizeSelect', s.snakeScale || 0.55);
+      AppUI.syncSelectValue('arenaSnakeSizeSelect', s.snakeScale || 0.55);
 
       const sideBadge = document.getElementById('sidebarAutoRollBadge');
       if (sideBadge) {
@@ -2639,10 +2893,11 @@ const GameEngine = {
   },
 
   /* ==========================================================================
-     CENTER BOARD CLICK-TO-ROLL & BOARD INTERACTION HANDLERS
+     BOARD CLICK-TO-ROLL & INTERACTIVE MANUAL SNAKE / BITE PLACEMENT HANDLERS
      ========================================================================== */
   handleCenterDiceClick(event) {
     if (event) event.stopPropagation();
+    if (this.boardEditMode) return;
     if (this.awaitingBeadChoice) {
       this.autoPickPendingBead();
       return;
@@ -2652,11 +2907,318 @@ const GameEngine = {
 
   handleBoardGridClick(event) {
     if (!this.inArena || this.isPaused || this.matchFinished) return;
+    const cellEl = event && event.target ? event.target.closest('.board-cell') : null;
+    const clickedSq = cellEl ? Number(cellEl.getAttribute('data-square')) : null;
+
+    if (this.boardEditMode) {
+      if (clickedSq) {
+        this.handleSquareManualEditClick(clickedSq, event);
+      }
+      return;
+    }
+
     if (this.awaitingBeadChoice) return;
     const cur = this.players[this.currentTurnIdx];
     if (cur && !cur.isAI && !this.isAnimating) {
       this.triggerRoll();
     }
+  },
+
+  setSnakeSizeScale(val) {
+    const parsed = Math.max(0.35, Math.min(1.0, Number(val) || 0.55));
+    this.settings.snakeScale = parsed;
+    this.saveSettings();
+    this.renderBoard();
+    AppUI.toast('Updated snake size & board visibility!', 'info');
+  },
+
+  loadCustomMatchBoardOverrides() {
+    try {
+      const raw = localStorage.getItem('khyber_custom_match_board_v4');
+      if (raw && this.activePreset) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.presetId === this.activePreset.id) {
+          if (parsed.snakes) this.activePreset.snakes = parsed.snakes;
+          if (parsed.ladders) this.activePreset.ladders = parsed.ladders;
+        }
+      }
+    } catch (e) {}
+  },
+
+  saveCustomMatchBoardOverrides() {
+    if (!this.activePreset) return;
+    try {
+      localStorage.setItem('khyber_custom_match_board_v4', JSON.stringify({
+        presetId: this.activePreset.id,
+        snakes: this.activePreset.snakes || {},
+        ladders: this.activePreset.ladders || {}
+      }));
+    } catch (e) {}
+    this.renderCustomSnakesChips();
+  },
+
+  openBoardInSnakeEditMode() {
+    this.launchArena();
+    this.toggleBoardSnakeEditor(true);
+  },
+
+  toggleBoardSnakeEditor(forceState) {
+    const nextState = forceState !== undefined ? !!forceState : !this.boardEditMode;
+    this.boardEditMode = nextState;
+    this.pendingEditStartSq = null;
+
+    const bar = document.getElementById('snakePlacementBar');
+    const hudBtn = document.getElementById('hudSnakeEditorBtn');
+    if (bar) bar.classList.toggle('hidden', !this.boardEditMode);
+    if (hudBtn) {
+      hudBtn.className = this.boardEditMode
+        ? 'min-h-[38px] px-2.5 rounded-xl bg-rose-600 border border-rose-300 text-white text-[11px] font-extrabold flex items-center gap-1.5 shadow-lg transition'
+        : 'min-h-[38px] px-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/35 border border-rose-500/40 text-rose-300 text-[11px] font-extrabold flex items-center gap-1.5 transition';
+    }
+    this.updateSnakeEditorInstruction();
+    this.renderCustomSnakesChips();
+    this.renderBoard();
+    if (!this.boardEditMode) {
+      this.resetIdleTimer();
+      this.scheduleAutoRollIfNeeded();
+    }
+  },
+
+  setBoardEditTool(tool) {
+    this.boardEditTool = tool || 'snake';
+    this.pendingEditStartSq = null;
+    const tSnake = document.getElementById('editModeToolSnake');
+    const tLadder = document.getElementById('editModeToolLadder');
+    const tDel = document.getElementById('editModeToolDelete');
+    const activeCls = 'px-2.5 py-1 rounded-lg bg-rose-600 text-white font-extrabold text-[10px] flex items-center gap-1 shadow';
+    const activeLadderCls = 'px-2.5 py-1 rounded-lg bg-emerald-600 text-slate-950 font-extrabold text-[10px] flex items-center gap-1 shadow';
+    const activeDelCls = 'px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-extrabold text-[10px] flex items-center gap-1 shadow';
+    const idleCls = 'px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px] flex items-center gap-1';
+
+    if (tSnake) tSnake.className = this.boardEditTool === 'snake' ? activeCls : idleCls;
+    if (tLadder) tLadder.className = this.boardEditTool === 'ladder' ? activeLadderCls : idleCls;
+    if (tDel) tDel.className = this.boardEditTool === 'delete' ? activeDelCls : idleCls;
+
+    this.updateSnakeEditorInstruction();
+    this.renderBoard();
+  },
+
+  updateSnakeEditorInstruction() {
+    const el = document.getElementById('snakeEditorInstructionText');
+    if (!el) return;
+    if (this.boardEditTool === 'delete') {
+      el.textContent = 'Click any square with a Snake Head or Ladder Foot to remove it!';
+    } else if (this.boardEditTool === 'ladder') {
+      if (!this.pendingEditStartSq) {
+        el.textContent = 'Step 1: Click any square (2–98) to set the Ladder Foot (Bottom)!';
+      } else {
+        el.textContent = `Ladder Foot at Sq ${this.pendingEditStartSq} — Now click any HIGHER square (${this.pendingEditStartSq + 1}–99) for Ladder Top!`;
+      }
+    } else {
+      if (!this.pendingEditStartSq) {
+        el.textContent = 'Step 1: Click any square (2–99) on the board to place a Snake Bite (Head)!';
+      } else {
+        el.textContent = `Snake Bite Head at Sq ${this.pendingEditStartSq} — Now click any LOWER square (1–${this.pendingEditStartSq - 1}) for the Bite Drop Tail!`;
+      }
+    }
+  },
+
+  handleSquareManualEditClick(sq, event) {
+    if (event) event.stopPropagation();
+    if (!this.activePreset) return;
+    if (!this.activePreset.snakes) this.activePreset.snakes = {};
+    if (!this.activePreset.ladders) this.activePreset.ladders = {};
+
+    if (this.boardEditTool === 'delete') {
+      let removed = false;
+      if (this.activePreset.snakes[sq]) {
+        const oldTail = this.activePreset.snakes[sq];
+        delete this.activePreset.snakes[sq];
+        removed = true;
+        AppUI.toast(`Removed Snake ${sq} → ${oldTail}`, 'info');
+      }
+      if (this.activePreset.ladders[sq]) {
+        const oldTop = this.activePreset.ladders[sq];
+        delete this.activePreset.ladders[sq];
+        removed = true;
+        AppUI.toast(`Removed Ladder ${sq} → ${oldTop}`, 'info');
+      }
+      if (!removed) {
+        AppUI.toast(`Square ${sq} has no snake head or ladder foot to remove`, 'warning');
+      }
+      this.saveCustomMatchBoardOverrides();
+      this.renderBoard();
+      return;
+    }
+
+    if (this.boardEditTool === 'snake') {
+      if (!this.pendingEditStartSq) {
+        if (sq <= 1 || sq >= 100) {
+          AppUI.toast('Snake Bite Head must be between Square 2 and 99!', 'warning');
+          return;
+        }
+        this.pendingEditStartSq = sq;
+        const headIn = document.getElementById('arenaSnakeHeadInput');
+        if (headIn) headIn.value = sq;
+        this.updateSnakeEditorInstruction();
+        this.renderBoard();
+      } else {
+        if (sq === this.pendingEditStartSq) {
+          this.pendingEditStartSq = null;
+          this.updateSnakeEditorInstruction();
+          this.renderBoard();
+          return;
+        }
+        if (sq >= this.pendingEditStartSq || sq < 1) {
+          if (sq > 1 && sq < 100) {
+            this.pendingEditStartSq = sq;
+            const headIn = document.getElementById('arenaSnakeHeadInput');
+            if (headIn) headIn.value = sq;
+            this.updateSnakeEditorInstruction();
+            this.renderBoard();
+            AppUI.toast(`Switched Snake Head to Square ${sq}. Now click a lower square for its tail!`, 'info');
+          } else {
+            AppUI.toast(`Snake Tail must be lower than Head (${this.pendingEditStartSq})!`, 'warning');
+          }
+          return;
+        }
+        const headSq = this.pendingEditStartSq;
+        const tailSq = sq;
+        delete this.activePreset.ladders[headSq];
+        this.activePreset.snakes[headSq] = tailSq;
+        this.pendingEditStartSq = null;
+        const tailIn = document.getElementById('arenaSnakeTailInput');
+        if (tailIn) tailIn.value = tailSq;
+        GameAudio.snakeBite();
+        this.saveCustomMatchBoardOverrides();
+        this.updateSnakeEditorInstruction();
+        this.renderBoard();
+        this.addMatchLog(`Manually placed Snake Bite at Square ${headSq} → drops to Square ${tailSq}.`);
+        AppUI.toast(`Placed Snake: Bite at Sq ${headSq} → Drops to Sq ${tailSq}!`, 'success');
+      }
+      return;
+    }
+
+    if (this.boardEditTool === 'ladder') {
+      if (!this.pendingEditStartSq) {
+        if (sq <= 1 || sq >= 99) {
+          AppUI.toast('Ladder Foot must be between Square 2 and 98!', 'warning');
+          return;
+        }
+        this.pendingEditStartSq = sq;
+        this.updateSnakeEditorInstruction();
+        this.renderBoard();
+      } else {
+        if (sq === this.pendingEditStartSq) {
+          this.pendingEditStartSq = null;
+          this.updateSnakeEditorInstruction();
+          this.renderBoard();
+          return;
+        }
+        if (sq <= this.pendingEditStartSq || sq >= 100) {
+          AppUI.toast(`Ladder Top must be higher than ${this.pendingEditStartSq} (up to 99)!`, 'warning');
+          return;
+        }
+        const footSq = this.pendingEditStartSq;
+        const topSq = sq;
+        delete this.activePreset.snakes[footSq];
+        this.activePreset.ladders[footSq] = topSq;
+        this.pendingEditStartSq = null;
+        GameAudio.ladderClimb();
+        this.saveCustomMatchBoardOverrides();
+        this.updateSnakeEditorInstruction();
+        this.renderBoard();
+        this.addMatchLog(`Manually placed Ladder at Square ${footSq} → climbs to Square ${topSq}.`);
+        AppUI.toast(`Placed Ladder: Sq ${footSq} → Climbs to Sq ${topSq}!`, 'success');
+      }
+    }
+  },
+
+  addManualSnakePair(headVal, tailVal) {
+    const head = Number(headVal);
+    const tail = Number(tailVal);
+    if (!Number.isInteger(head) || !Number.isInteger(tail) || head < 2 || head > 99 || tail < 1 || tail >= head) {
+      AppUI.toast('Snake Bite (Head) must be 2–99 and Drop (Tail) must be smaller (1 to Head-1)!', 'warning');
+      return false;
+    }
+    if (!this.activePreset) return false;
+    if (!this.activePreset.snakes) this.activePreset.snakes = {};
+    if (this.activePreset.ladders) delete this.activePreset.ladders[head];
+    this.activePreset.snakes[head] = tail;
+    this.pendingEditStartSq = null;
+    this.saveCustomMatchBoardOverrides();
+    this.renderBoard();
+    this.addMatchLog(`Added custom Snake Bite: Square ${head} → Square ${tail}.`);
+    AppUI.toast(`Added Snake: Bite at Sq ${head} → Drops to Sq ${tail}`, 'success');
+    return true;
+  },
+
+  addManualSnakeFromSetup() {
+    const h = document.getElementById('setupSnakeHeadInput') ? document.getElementById('setupSnakeHeadInput').value : 97;
+    const t = document.getElementById('setupSnakeTailInput') ? document.getElementById('setupSnakeTailInput').value : 12;
+    this.addManualSnakePair(h, t);
+  },
+
+  addManualSnakeFromArenaBar() {
+    const h = document.getElementById('arenaSnakeHeadInput') ? document.getElementById('arenaSnakeHeadInput').value : 95;
+    const t = document.getElementById('arenaSnakeTailInput') ? document.getElementById('arenaSnakeTailInput').value : 15;
+    this.addManualSnakePair(h, t);
+  },
+
+  removeManualSnake(headSq) {
+    if (!this.activePreset || !this.activePreset.snakes) return;
+    const tailSq = this.activePreset.snakes[headSq];
+    delete this.activePreset.snakes[headSq];
+    this.saveCustomMatchBoardOverrides();
+    this.renderBoard();
+    AppUI.toast(`Removed Snake ${headSq} → ${tailSq}`, 'info');
+  },
+
+  clearAllMatchSnakes() {
+    if (!this.activePreset) return;
+    this.activePreset.snakes = {};
+    this.pendingEditStartSq = null;
+    this.saveCustomMatchBoardOverrides();
+    this.renderBoard();
+    AppUI.toast('Cleared all snakes for this match — place your own!', 'info');
+  },
+
+  async resetMatchSnakesToPreset() {
+    try {
+      localStorage.removeItem('khyber_custom_match_board_v4');
+    } catch (e) {}
+    const presetId = this.activePreset ? this.activePreset.id : 1;
+    const fresh = await DBEngine.getByKey('presets', Number(presetId));
+    if (fresh) {
+      this.activePreset = JSON.parse(JSON.stringify(fresh));
+    }
+    this.pendingEditStartSq = null;
+    this.renderCustomSnakesChips();
+    this.renderBoard();
+    AppUI.toast('Restored default preset snakes & ladders!', 'success');
+  },
+
+  renderCustomSnakesChips() {
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    const entries = Object.entries(snakes).sort((a, b) => Number(b[0]) - Number(a[0]));
+
+    const buildChips = (compact) => {
+      if (entries.length === 0) {
+        return `<span class="text-[11px] text-slate-400 italic">No snakes placed yet — click squares on the board or use + Add above!</span>`;
+      }
+      return entries.map(([h, t]) => `
+        <span class="inline-flex items-center gap-1 ${compact ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'} rounded-full bg-rose-500/15 border border-rose-500/40 text-rose-700 dark:text-rose-300 font-extrabold shrink-0">
+          <span>🐍 ${h} → ${t}</span>
+          <button type="button" onclick="GameEngine.removeManualSnake(${Number(h)})" class="ml-0.5 w-4 h-4 rounded-full hover:bg-rose-600 hover:text-white flex items-center justify-center transition" title="Remove Snake ${h}→${t}">×</button>
+        </span>
+      `).join('');
+    };
+
+    const setupBox = document.getElementById('setupActiveSnakesChips');
+    if (setupBox) setupBox.innerHTML = buildChips(false);
+
+    const arenaBox = document.getElementById('arenaActiveSnakesChips');
+    if (arenaBox) arenaBox.innerHTML = buildChips(true);
   },
 
   /* ==========================================================================
@@ -2916,11 +3478,13 @@ const GameEngine = {
   async applyPresetById(id) {
     const preset = await DBEngine.getByKey('presets', Number(id));
     if (!preset) return;
-    this.activePreset = preset;
+    this.activePreset = JSON.parse(JSON.stringify(preset));
+    this.loadCustomMatchBoardOverrides();
     this.syncPresetToRules();
     if (this.totalTurnsCount === 0 && this.players.length > 0) {
       await this.setupPlayersForMode(this.mode);
     }
+    this.renderCustomSnakesChips();
     this.renderBoard();
     document.getElementById('activeRuleBadge').textContent = preset.name;
     this.addMatchLog(`Switched rule preset to "${preset.name}" (${preset.region}).`);
@@ -2991,13 +3555,26 @@ const GameEngine = {
     this.addMatchLog(`Configured game in ${modeLabels[mode]} mode.`);
   },
 
-  createBeadsForPlayer(shortCode, beadCount) {
+  formatPlayerTagName(fullName, shortCode) {
+    if (!fullName) return shortCode || 'Player';
+    const cleaned = String(fullName).replace(/\(.*?\)/g, '').trim();
+    const parts = cleaned.split(/\s+/);
+    let tag = parts[0] || shortCode;
+    if (tag.toLowerCase() === 'kpk' && parts[1]) tag = parts[1];
+    if (tag.toLowerCase() === 'grand' && parts[1]) tag = parts[1];
+    if (tag.length > 8) tag = tag.slice(0, 8);
+    return tag;
+  },
+
+  createBeadsForPlayer(shortCode, beadCount, playerName = '') {
     const startPos = this.rules.needSix ? 0 : 1;
     const startUnlocked = !this.rules.needSix;
+    const baseTag = this.formatPlayerTagName(playerName, shortCode);
     return Array.from({ length: beadCount }, (_, bIdx) => ({
       id: bIdx,
       num: bIdx + 1,
-      label: beadCount > 1 ? `${shortCode}•${bIdx + 1}` : shortCode,
+      tagName: beadCount > 1 ? `${baseTag}#${bIdx + 1}` : baseTag,
+      label: beadCount > 1 ? `${baseTag} #${bIdx + 1}` : baseTag,
       pos: startPos,
       unlocked: startUnlocked,
       finished: false
@@ -3084,7 +3661,7 @@ const GameEngine = {
     if (mode === 'local4') count = 4;
 
     this.players = slots.slice(0, count).map((p, idx) => {
-      const beads = this.createBeadsForPlayer(p.short, beadCount);
+      const beads = this.createBeadsForPlayer(p.short, beadCount, p.name);
       const pl = {
         index: idx,
         dbId: p.dbId,
@@ -3217,6 +3794,11 @@ const GameEngine = {
     const radarMap = this.computeRadarMap();
     const beadCount = this.settings.beadsPerPlayer || 1;
 
+    const stepTrailMap = {};
+    (this.activeStepTrail || []).forEach(item => {
+      stepTrailMap[item.sq] = item;
+    });
+
     for (let r = 0; r < 10; r++) {
       const rowFromBottom = 9 - r;
       for (let c = 0; c < 10; c++) {
@@ -3231,49 +3813,76 @@ const GameEngine = {
         const specialClass = isGoal ? 'cell-goal' : isKingSnake ? 'cell-king-snake' : isSafe ? 'cell-safe' : '';
         const radarClass = radarMap[sq] || '';
 
+        const trailInfo = stepTrailMap[sq];
+        let stepClass = '';
+        let stepStyle = '';
+        let stepBadgeHtml = '';
+        if (trailInfo) {
+          stepClass = trailInfo.isCurrent ? 'cell-step-current' : 'cell-step-trail';
+          stepStyle = `--step-trail-color:${trailInfo.color || '#10b981'};`;
+          if (trailInfo.badgeText) {
+            stepBadgeHtml = `<span class="step-clue-badge" style="--step-trail-color:${trailInfo.color || '#059669'}">${AppUI.escapeHtml(trailInfo.badgeText)}</span>`;
+          }
+        }
+
+        if (this.activeTransitionClue) {
+          if (this.activeTransitionClue.fromSq === sq) stepClass += ' cell-transition-from';
+          if (this.activeTransitionClue.toSq === sq) stepClass += ' cell-transition-to';
+        }
+
+        const editPendingClass = (this.boardEditMode && this.pendingEditStartSq === sq) ? 'cell-edit-pending-head' : '';
+        const editCursorClass = this.boardEditMode ? 'cell-edit-mode-cursor' : '';
+
         const beadTokensOnSquare = [];
         this.players.forEach(p => {
           (p.beads || []).forEach(b => {
             if (b.pos === sq) {
               const isTurn = p.index === this.currentTurnIdx && !this.matchFinished;
               const isSelectable = isTurn && this.awaitingBeadChoice && this.pendingEligibleBeadIds.includes(b.id);
-              beadTokensOnSquare.push({ player: p, bead: b, isTurn, isSelectable });
+              const isHopping = this.activeMovingBeadKey === `${p.index}_${b.id}`;
+              beadTokensOnSquare.push({ player: p, bead: b, isTurn, isSelectable, isHopping });
             }
           });
         });
 
-        const tokensHtml = beadTokensOnSquare.map(({ player: p, bead: b, isTurn, isSelectable }) => {
+        const tokensHtml = beadTokensOnSquare.map(({ player: p, bead: b, isTurn, isSelectable, isHopping }) => {
           const clickAttr = isSelectable ? `onclick="GameEngine.selectBeadToMove(${b.id}, event)"` : '';
-          const pinText = beadCount > 1 ? `${p.short.replace('P', '')}${b.num}` : p.short;
+          const properTag = b.tagName || this.formatPlayerTagName(p.name, p.short);
+          const centerSymbol = b.pos === 100 ? '👑' : (beadCount > 1 ? b.num : (p.isAI ? '🤖' : '★'));
           return `
-            <span ${clickAttr} class="token-pin ${isTurn ? 'token-active-glow' : ''} ${isSelectable ? 'token-selectable-pulse' : ''}" style="background-color:${p.color}" title="${AppUI.escapeHtml(p.name)} (${b.label})">
-              ${pinText}
-            </span>
+            <div ${clickAttr} class="hujra-bead-wrap ${isSelectable ? 'cursor-pointer' : ''}" title="${AppUI.escapeHtml(p.name)} — Bead ${b.label} (Sq ${b.pos})">
+              <span class="token-pin ${isTurn ? 'token-active-glow' : ''} ${isSelectable ? 'token-selectable-pulse' : ''} ${isHopping ? 'bead-hopping' : ''}" style="--bead-color:${p.color};background-color:${p.color}">
+                ${centerSymbol}
+              </span>
+              <span class="bead-name-tag" style="border-color:${p.color}">${AppUI.escapeHtml(properTag)}</span>
+            </div>
           `;
         }).join('');
 
         let badgeHtml = '';
-        if (isGoal) {
+        if (this.boardEditMode && this.pendingEditStartSq === sq) {
+          badgeHtml = `<span class="px-1 rounded bg-rose-600 text-white text-[8px] font-black animate-pulse">HEAD</span>`;
+        } else if (isGoal) {
           badgeHtml = '<i class="fa-solid fa-crown text-[10px] text-white"></i>';
         } else if (ladders[sq]) {
-          badgeHtml = `<span class="text-[8px] sm:text-[9px] font-extrabold text-emerald-700">↑${ladders[sq]}</span>`;
+          badgeHtml = `<span class="px-1 rounded bg-emerald-100/90 text-[8px] sm:text-[9px] font-extrabold text-emerald-800 border border-emerald-400/50">↑${ladders[sq]}</span>`;
         } else if (snakes[sq]) {
           badgeHtml = `
-            <span class="inline-flex items-center gap-0.5 text-[8px] sm:text-[9px] font-extrabold text-rose-700" title="Snake Head → Slides to ${snakes[sq]}">
-              <svg viewBox="0 0 32 32" class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 overflow-visible" fill="none"><path d="M5 27 C2 21, 12 18, 17 21 C23 24, 28 18, 22 13 C18 10, 12 12, 15 7" stroke="#e11d48" stroke-width="3.6" stroke-linecap="round"/><ellipse cx="16" cy="7" rx="5.2" ry="3.6" fill="#be123c"/><circle cx="14.3" cy="6.2" r="1" fill="#fde047"/><circle cx="17.7" cy="6.2" r="1" fill="#fde047"/><path d="M16 3.4 L16 0.5 M16 0.5 L14 -1.2 M16 0.5 L18 -1.2" stroke="#e11d48" stroke-width="1.3" stroke-linecap="round"/></svg>
-              <span>↓${snakes[sq]}</span>
+            <span class="inline-flex items-center gap-0.5 px-1 rounded bg-rose-100/90 border border-rose-400/50 text-[8px] sm:text-[9px] font-extrabold text-rose-800" title="Snake Bite at ${sq} → Drops to ${snakes[sq]}">
+              <span>🐍↓${snakes[sq]}</span>
             </span>`;
         } else if (isSafe) {
           badgeHtml = '<i class="fa-solid fa-shield-heart text-[8px] sm:text-[9px] text-emerald-700" title="Hujra Safe Square"></i>';
         }
 
         html += `
-          <div class="board-cell ${parityClass} ${specialClass} ${radarClass}" data-square="${sq}">
-            <div class="flex items-center justify-between w-full leading-none">
-              <span class="text-[9px] sm:text-[11px] font-extrabold ${isGoal ? 'text-white' : 'text-slate-700'}">${sq}</span>
+          <div class="board-cell ${parityClass} ${specialClass} ${radarClass} ${stepClass} ${editPendingClass} ${editCursorClass}" style="${stepStyle}" data-square="${sq}">
+            <div class="relative z-20 pointer-events-none flex items-center justify-between w-full leading-none">
+              <span class="px-1 py-0.5 rounded bg-white/75 backdrop-blur-[1px] text-[9px] sm:text-[10.5px] font-extrabold ${isGoal ? '!bg-amber-900/60 text-white' : 'text-slate-800'}">${sq}</span>
               ${badgeHtml}
             </div>
-            <div class="flex flex-wrap items-center justify-center gap-0.5 min-h-[14px]">
+            ${stepBadgeHtml}
+            <div class="relative z-30 flex flex-wrap items-center justify-center gap-1 min-h-[18px] pb-0.5">
               ${tokensHtml}
             </div>
           </div>
@@ -3298,6 +3907,9 @@ const GameEngine = {
       ? { id: 'kalamarKing', bodyA: '#0f172a', bodyB: '#be123c', belly: '#fda4af', pattern: '#f43f5e', eye: '#fde047', outline: '#020617' }
       : palettes[idx % palettes.length];
 
+    const scaleFactor = Math.max(0.35, Math.min(1.0, Number(this.settings.snakeScale) || 0.55));
+    const opacityVal = Math.max(0.35, Math.min(0.9, Number(this.settings.snakeOpacity) || 0.62));
+
     const dx = p2.cx - p1.cx;
     const dy = p2.cy - p1.cy;
     const dist = Math.hypot(dx, dy) || 1;
@@ -3306,16 +3918,16 @@ const GameEngine = {
     const nx = -uy;
     const ny = ux;
 
-    const numWaves = Math.max(2.0, Math.min(3.5, dist / 165));
-    const waveAmp = Math.min(48, Math.max(24, dist * 0.11));
+    const numWaves = Math.max(1.8, Math.min(3.2, dist / 175));
+    const waveAmp = Math.min(22, Math.max(9, dist * 0.055)) * (0.65 + scaleFactor * 0.35);
     const sign = head % 2 === 0 ? 1 : -1;
-    const maxHalfWidth = isKing ? 16 : 12.5;
-    const steps = 34;
+    const maxHalfWidth = (isKing ? 11.5 : 8.8) * scaleFactor;
+    const steps = 32;
 
     const spine = [];
     for (let i = 0; i <= steps; i++) {
       const t = i / steps;
-      const env = Math.pow(Math.sin(t * Math.PI), 0.78);
+      const env = Math.pow(Math.sin(t * Math.PI), 0.8);
       const wave = sign * waveAmp * Math.sin(t * Math.PI * numWaves) * env;
       const sx = p1.cx + dx * t + nx * wave;
       const sy = p1.cy + dy * t + ny * wave;
@@ -3325,12 +3937,12 @@ const GameEngine = {
         w = maxHalfWidth * (0.62 + (t / 0.06) * 0.25);
       } else if ((isKing || idx % 2 === 0) && t >= 0.06 && t <= 0.17) {
         const hoodT = Math.sin(((t - 0.06) / 0.11) * Math.PI);
-        w = maxHalfWidth * (0.88 + hoodT * (isKing ? 0.85 : 0.55));
+        w = maxHalfWidth * (0.85 + hoodT * (isKing ? 0.55 : 0.38));
       } else if (t < 0.48) {
-        w = maxHalfWidth * (0.92 + 0.12 * Math.sin(((t - 0.06) / 0.42) * Math.PI));
+        w = maxHalfWidth * (0.9 + 0.1 * Math.sin(((t - 0.06) / 0.42) * Math.PI));
       } else {
         const tailT = (t - 0.48) / 0.52;
-        w = Math.max(1.4, maxHalfWidth * Math.pow(1 - tailT, 1.35));
+        w = Math.max(1.1, maxHalfWidth * Math.pow(1 - tailT, 1.35));
       }
       spine.push({ sx, sy, t, w });
     }
@@ -3362,8 +3974,8 @@ const GameEngine = {
     let scalesSvg = '';
     for (let i = 3; i < steps - 3; i += 2) {
       const pt = spine[i];
-      const rw = pt.w * 0.58;
-      const rl = pt.w * 0.78;
+      const rw = pt.w * 0.52;
+      const rl = pt.w * 0.72;
       const d1x = pt.sx + pt.tx * rl;
       const d1y = pt.sy + pt.ty * rl;
       const d2x = pt.sx + pt.pnx * rw;
@@ -3373,7 +3985,7 @@ const GameEngine = {
       const d4x = pt.sx - pt.pnx * rw;
       const d4y = pt.sy - pt.pny * rw;
       scalesSvg += `
-        <polygon points="${d1x.toFixed(1)},${d1y.toFixed(1)} ${d2x.toFixed(1)},${d2y.toFixed(1)} ${d3x.toFixed(1)},${d3y.toFixed(1)} ${d4x.toFixed(1)},${d4y.toFixed(1)}" fill="${pal.pattern}" opacity="0.65" stroke="${pal.belly}" stroke-width="0.9"/>
+        <polygon points="${d1x.toFixed(1)},${d1y.toFixed(1)} ${d2x.toFixed(1)},${d2y.toFixed(1)} ${d3x.toFixed(1)},${d3y.toFixed(1)} ${d4x.toFixed(1)},${d4y.toFixed(1)}" fill="${pal.pattern}" opacity="0.58" stroke="${pal.belly}" stroke-width="0.65"/>
       `;
     }
 
@@ -3385,27 +3997,28 @@ const GameEngine = {
     hx /= hLen;
     hy /= hLen;
     const angleDeg = (Math.atan2(hy, hx) * 180) / Math.PI;
-    const headScale = isKing ? 1.28 : 1.04;
+    const headScale = (isKing ? 0.88 : 0.72) * (0.68 + scaleFactor * 0.32);
 
     const headSvg = `
-      <g transform="translate(${p1.cx.toFixed(1)}, ${p1.cy.toFixed(1)}) rotate(${angleDeg.toFixed(1)}) scale(${headScale})">
-        <path d="M 14 0 L 26 0 M 26 0 L 32 -5 M 26 0 L 32 5" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-        <path d="M -12 -9 C -6 -16, 4 -14, 15 -6 C 19 -3, 19 3, 15 6 C 4 14, -6 16, -12 9 C -15 4, -15 -4, -12 -9 Z" fill="${pal.bodyA}" stroke="${pal.outline}" stroke-width="2.2"/>
-        <polygon points="-6,0 1,-6 9,0 1,6" fill="${pal.bodyB}" opacity="0.85"/>
-        <ellipse cx="4" cy="-6.8" rx="3.4" ry="2.3" fill="${pal.eye}" stroke="#020617" stroke-width="1"/>
-        <line x1="3.2" y1="-8.6" x2="4.8" y2="-5.0" stroke="#020617" stroke-width="1.5" stroke-linecap="round"/>
-        <ellipse cx="4" cy="6.8" rx="3.4" ry="2.3" fill="${pal.eye}" stroke="#020617" stroke-width="1"/>
-        <line x1="3.2" y1="5.0" x2="4.8" y2="8.6" stroke="#020617" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="13" cy="-2.4" r="1" fill="#020617"/>
-        <circle cx="13" cy="2.4" r="1" fill="#020617"/>
+      <g transform="translate(${p1.cx.toFixed(1)}, ${p1.cy.toFixed(1)}) rotate(${angleDeg.toFixed(1)}) scale(${headScale.toFixed(2)})">
+        <path d="M 14 0 L 25 0 M 25 0 L 30 -4.5 M 25 0 L 30 4.5" stroke="#e11d48" stroke-width="2.1" stroke-linecap="round" fill="none"/>
+        <path d="M -11 -8 C -5 -14, 4 -12, 14 -5 C 18 -2.5, 18 2.5, 14 5 C 4 12, -5 14, -11 8 C -14 3.5, -14 -3.5, -11 -8 Z" fill="${pal.bodyA}" stroke="${pal.outline}" stroke-width="1.8"/>
+        <polygon points="-5,0 1,-5 8,0 1,5" fill="${pal.bodyB}" opacity="0.85"/>
+        <ellipse cx="3.8" cy="-5.8" rx="3" ry="2" fill="${pal.eye}" stroke="#020617" stroke-width="0.9"/>
+        <ellipse cx="3.8" cy="5.8" rx="3" ry="2" fill="${pal.eye}" stroke="#020617" stroke-width="0.9"/>
       </g>
     `;
 
+    const tailMarkerSvg = `
+      <circle cx="${p2.cx.toFixed(1)}" cy="${p2.cy.toFixed(1)}" r="3.5" fill="${pal.bodyB}" stroke="#ffffff" stroke-width="1.2" opacity="0.8"/>
+    `;
+
     return `
-      <g filter="url(#snakeDropShadow)" opacity="0.93">
-        <path d="${bodyPolygonPath}" fill="url(#grad_${pal.id})" stroke="${pal.outline}" stroke-width="2" stroke-linejoin="round"/>
-        <path d="${spinePath}" fill="none" stroke="${pal.belly}" stroke-width="2.2" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.55"/>
+      <g filter="url(#snakeDropShadow)" opacity="${opacityVal}">
+        <path d="${bodyPolygonPath}" fill="url(#grad_${pal.id})" stroke="${pal.outline}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="${spinePath}" fill="none" stroke="${pal.belly}" stroke-width="1.5" stroke-dasharray="4 6" stroke-linecap="round" opacity="0.5"/>
         ${scalesSvg}
+        ${tailMarkerSvg}
         ${headSvg}
       </g>
     `;
@@ -3417,7 +4030,7 @@ const GameEngine = {
     let svgContent = `
       <defs>
         <filter id="snakeDropShadow" x="-15%" y="-15%" width="130%" height="130%">
-          <feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#020617" flood-opacity="0.45"/>
+          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#020617" flood-opacity="0.28"/>
         </filter>
         <linearGradient id="grad_kalamarKing" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#0f172a"/>
@@ -3462,23 +4075,25 @@ const GameEngine = {
       const dx = p2.cx - p1.cx;
       const dy = p2.cy - p1.cy;
       const len = Math.hypot(dx, dy) || 1;
-      const nx = (-dy / len) * 13;
-      const ny = (dx / len) * 13;
+      const nx = (-dy / len) * 9.5;
+      const ny = (dx / len) * 9.5;
 
       svgContent += `
-        <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.86"/>
-        <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.86"/>
+        <g opacity="0.66">
+          <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="4.2" stroke-linecap="round"/>
+          <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="4.2" stroke-linecap="round"/>
       `;
 
-      const steps = Math.max(4, Math.floor(len / 42));
+      const steps = Math.max(4, Math.floor(len / 44));
       for (let i = 1; i < steps; i++) {
         const t = i / steps;
         const rx = p1.cx + dx * t;
         const ry = p1.cy + dy * t;
         svgContent += `
-          <line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" opacity="0.92"/>
+          <line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
         `;
       }
+      svgContent += `</g>`;
     });
 
     Object.entries(snakes).forEach(([headStr, tailVal], idx) => {
@@ -3490,6 +4105,28 @@ const GameEngine = {
       svgContent += this.buildRealisticSnakeSvg(head, tail, p1, p2, idx);
     });
 
+    if (this.activeStepTrail && this.activeStepTrail.length > 1) {
+      const trailPts = this.activeStepTrail.map(it => {
+        const c = this.getSquareCoordinates(it.sq);
+        return `${c.cx},${c.cy}`;
+      }).join(' L ');
+      const trailColor = this.activeStepTrail[0].color || '#10b981';
+      svgContent += `
+        <path d="M ${trailPts}" fill="none" stroke="${trailColor}" stroke-width="5.5" stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
+      `;
+    }
+
+    if (this.activeTransitionClue) {
+      const c1 = this.getSquareCoordinates(this.activeTransitionClue.fromSq);
+      const c2 = this.getSquareCoordinates(this.activeTransitionClue.toSq);
+      const col = this.activeTransitionClue.color || '#f43f5e';
+      svgContent += `
+        <line x1="${c1.cx}" y1="${c1.cy}" x2="${c2.cx}" y2="${c2.cy}" stroke="${col}" stroke-width="8" stroke-dasharray="12 8" stroke-linecap="round" opacity="0.92"/>
+        <circle cx="${c1.cx}" cy="${c1.cy}" r="18" fill="none" stroke="${col}" stroke-width="4" opacity="0.9"/>
+        <circle cx="${c2.cx}" cy="${c2.cy}" r="22" fill="none" stroke="${col}" stroke-width="5" opacity="0.95"/>
+      `;
+    }
+
     svg.innerHTML = svgContent;
   },
 
@@ -3500,24 +4137,25 @@ const GameEngine = {
 
     container.innerHTML = this.players.map((p, idx) => {
       const isTurn = idx === this.currentTurnIdx && !this.matchFinished;
+      const tagBase = this.formatPlayerTagName(p.name, p.short);
       let statusHtml = '';
       if (beadCount === 1) {
-        const statusText = p.pos === 0 ? 'Camp (Need 6)' : `Sq ${p.pos}/100`;
-        statusHtml = `<div class="text-[10px] font-bold ${isTurn ? 'text-emerald-300' : 'text-slate-400'} truncate">${statusText}</div>`;
+        const statusText = p.pos === 0 ? `Camp • Tag: ${tagBase}` : `Sq ${p.pos}/100 • ${tagBase}`;
+        statusHtml = `<div class="text-[10px] font-bold ${isTurn ? 'text-emerald-300' : 'text-slate-400'} truncate">${AppUI.escapeHtml(statusText)}</div>`;
       } else {
         const pills = (p.beads || []).map(b => {
           const isSelectable = isTurn && this.awaitingBeadChoice && this.pendingEligibleBeadIds.includes(b.id);
           const clickAttr = isSelectable ? `onclick="GameEngine.selectBeadToMove(${b.id}, event)"` : '';
-          const valStr = b.pos === 0 ? 'Camp' : (b.pos === 100 ? '100👑' : b.pos);
-          return `<span ${clickAttr} class="px-1 rounded ${isSelectable ? 'bg-amber-400 text-slate-950 font-black cursor-pointer animate-pulse' : 'bg-slate-900/80 text-emerald-300'} text-[9px]">B${b.num}:${valStr}</span>`;
+          const valStr = b.pos === 0 ? 'Camp' : (b.pos === 100 ? '100👑' : `Sq${b.pos}`);
+          return `<span ${clickAttr} class="px-1.5 py-0.5 rounded-full border border-white/25 ${isSelectable ? 'bg-amber-400 text-slate-950 font-black cursor-pointer animate-pulse' : 'bg-slate-900/90 text-emerald-300'} text-[9px]">${AppUI.escapeHtml(b.tagName || ('B' + b.num))}:${valStr}</span>`;
         }).join(' ');
         statusHtml = `<div class="flex flex-wrap items-center gap-0.5 mt-0.5">${pills}</div>`;
       }
       return `
-        <div class="px-2.5 py-1.5 rounded-xl border ${isTurn ? 'border-emerald-400 bg-emerald-950/70 ring-2 ring-emerald-400/30' : 'border-slate-800 bg-slate-800/60 opacity-80'} flex items-center justify-between gap-1.5 min-w-0 transition">
+        <div class="px-2.5 py-1.5 rounded-xl border ${isTurn ? 'border-emerald-400 bg-emerald-950/70 ring-2 ring-emerald-400/30' : 'border-slate-800 bg-slate-800/60 opacity-85'} flex items-center justify-between gap-1.5 min-w-0 transition">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="w-7 h-7 rounded-full text-white font-extrabold text-[11px] flex items-center justify-center shadow shrink-0" style="background-color:${p.color}">
-              ${p.short}
+            <span class="token-pin shrink-0 !w-7 !h-7" style="--bead-color:${p.color};background-color:${p.color}">
+              ${p.isAI ? '🤖' : '★'}
             </span>
             <div class="min-w-0">
               <div class="text-[11px] sm:text-xs font-extrabold text-white truncate flex items-center gap-1">
@@ -3904,9 +4542,16 @@ const GameEngine = {
     let earnedBonusTurn = (roll === 6);
     const beadTag = (this.settings.beadsPerPlayer > 1) ? ` (${chosenBead.label})` : '';
 
+    if (this.stepTrailCleanupTimer) {
+      clearTimeout(this.stepTrailCleanupTimer);
+      this.stepTrailCleanupTimer = null;
+    }
+
     if (this.rules.needSix && !chosenBead.unlocked && roll === 6) {
       chosenBead.unlocked = true;
       chosenBead.pos = 1;
+      this.activeMovingBeadKey = `${player.index}_${chosenBead.id}`;
+      this.activeStepTrail = [{ sq: 1, stepNum: 1, totalSteps: 1, color: player.color, isCurrent: true, badgeText: 'OPEN ★' }];
       this.syncPlayerAggregatePos(player);
       this.showFloatingCallout(`CHAKKA 6! ${chosenBead.label} OPENED!`, 'bg-emerald-600 border-emerald-300 text-white');
       this.setCommentary(`Mashallah Chakka! ${player.name}${beadTag} entered Square 1 + Bonus Roll!`);
@@ -3914,6 +4559,9 @@ const GameEngine = {
       GameAudio.stepHop();
       this.renderBoard();
       this.renderPlayerCards();
+      await new Promise(r => setTimeout(r, Math.round(320 / this.settings.speedMultiplier)));
+      this.activeMovingBeadKey = null;
+      this.scheduleStepTrailClear();
       this.updateTurnBanner();
       return;
     }
@@ -3922,15 +4570,34 @@ const GameEngine = {
       this.showFloatingCallout('CHAKKA 6! BONUS ROLL!', 'bg-emerald-600 border-emerald-300 text-white');
     }
 
-    const targetPos = chosenBead.pos + roll;
+    const startSq = chosenBead.pos;
+    const targetPos = startSq + roll;
     const finalStepPos = Math.min(100, targetPos);
-    const stepDelay = Math.round(85 / this.settings.speedMultiplier);
+    const totalHops = finalStepPos - startSq;
+    const stepDelay = Math.round(265 / this.settings.speedMultiplier);
 
-    for (let step = chosenBead.pos + 1; step <= finalStepPos; step++) {
+    this.activeMovingBeadKey = `${player.index}_${chosenBead.id}`;
+    this.activeStepTrail = startSq > 0
+      ? [{ sq: startSq, stepNum: 0, totalSteps: totalHops, color: player.color, isStart: true, isCurrent: false, badgeText: 'START' }]
+      : [];
+
+    for (let step = startSq + 1; step <= finalStepPos; step++) {
+      const hopNum = step - startSq;
+      this.activeStepTrail.forEach(item => { item.isCurrent = false; });
+      this.activeStepTrail.push({
+        sq: step,
+        stepNum: hopNum,
+        totalSteps: totalHops,
+        color: player.color,
+        isCurrent: true,
+        badgeText: `+${hopNum}`
+      });
       chosenBead.pos = step;
       this.syncPlayerAggregatePos(player);
+      this.setCommentary(`${player.name} (${chosenBead.label}) stepping ${hopNum}/${totalHops} → Square ${step}`);
       GameAudio.stepHop();
       this.renderBoard();
+      this.renderPlayerCards();
       await new Promise(r => setTimeout(r, stepDelay));
     }
 
@@ -3938,29 +4605,48 @@ const GameEngine = {
     const snakes = (this.activePreset && this.activePreset.snakes) || {};
 
     if (ladders[chosenBead.pos]) {
-      const dest = ladders[chosenBead.pos];
-      this.showFloatingCallout(`SEEDHI CLIMB! ${chosenBead.pos} → ${dest}`, 'bg-teal-600 border-teal-200 text-white');
-      this.setCommentary(`Daaltay Rasha! ${player.name}${beadTag} climbed ladder ${chosenBead.pos} → ${dest}!`);
-      this.addMatchLog(`${player.name}${beadTag} climbed ladder ${chosenBead.pos} → ${dest}.`);
+      const fromSq = chosenBead.pos;
+      const dest = ladders[fromSq];
+      this.activeTransitionClue = { fromSq, toSq: dest, type: 'ladder', color: '#10b981' };
+      this.showFloatingCallout(`SEEDHI CLIMB! ${fromSq} → ${dest}`, 'bg-teal-600 border-teal-200 text-white');
+      this.setCommentary(`Daaltay Rasha! ${player.name}${beadTag} climbing ladder ${fromSq} → ${dest}!`);
+      this.renderBoard();
+      await new Promise(r => setTimeout(r, Math.round(290 / this.settings.speedMultiplier)));
+
       chosenBead.pos = dest;
       player.laddersClimbed += 1;
+      this.activeStepTrail.forEach(item => { item.isCurrent = false; });
+      this.activeStepTrail.push({ sq: dest, stepNum: '↑', color: '#10b981', isCurrent: true, badgeText: `↑${dest}` });
       this.syncPlayerAggregatePos(player);
+      this.addMatchLog(`${player.name}${beadTag} climbed ladder ${fromSq} → ${dest}.`);
       GameAudio.ladderClimb();
       this.renderBoard();
-      await new Promise(r => setTimeout(r, Math.round(230 / this.settings.speedMultiplier)));
+      this.renderPlayerCards();
+      await new Promise(r => setTimeout(r, Math.round(360 / this.settings.speedMultiplier)));
     } else if (snakes[chosenBead.pos]) {
-      const dest = snakes[chosenBead.pos];
-      const isKalamar = chosenBead.pos === 99;
-      this.showFloatingCallout(isKalamar ? `WAH KALAMAR 99! → ${dest}` : `SAANP BITE! ${chosenBead.pos} → ${dest}`, 'bg-rose-700 border-rose-300 text-white');
-      this.setCommentary(`${isKalamar ? 'WAH KALAMAR 99!' : 'Saanp Bite!'} ${player.name}${beadTag} slid ${chosenBead.pos} → ${dest}!`);
-      this.addMatchLog(`${player.name}${beadTag} bitten by snake at ${chosenBead.pos} → ${dest}.`);
+      const fromSq = chosenBead.pos;
+      const dest = snakes[fromSq];
+      const isKalamar = fromSq === 99;
+      this.activeTransitionClue = { fromSq, toSq: dest, type: 'snake', color: '#f43f5e' };
+      this.showFloatingCallout(isKalamar ? `WAH KALAMAR 99! → ${dest}` : `SAANP BITE! ${fromSq} → ${dest}`, 'bg-rose-700 border-rose-300 text-white');
+      this.setCommentary(`${isKalamar ? 'WAH KALAMAR 99!' : 'Saanp Bite!'} ${player.name}${beadTag} bitten at ${fromSq} → dropping to ${dest}!`);
+      this.renderBoard();
+      await new Promise(r => setTimeout(r, Math.round(310 / this.settings.speedMultiplier)));
+
       chosenBead.pos = dest;
       player.snakesBitten += 1;
+      this.activeStepTrail.forEach(item => { item.isCurrent = false; });
+      this.activeStepTrail.push({ sq: dest, stepNum: '↓', color: '#f43f5e', isCurrent: true, badgeText: `🐍↓${dest}` });
       this.syncPlayerAggregatePos(player);
+      this.addMatchLog(`${player.name}${beadTag} bitten by snake at ${fromSq} → ${dest}.`);
       GameAudio.snakeBite();
       this.renderBoard();
-      await new Promise(r => setTimeout(r, Math.round(230 / this.settings.speedMultiplier)));
+      this.renderPlayerCards();
+      await new Promise(r => setTimeout(r, Math.round(360 / this.settings.speedMultiplier)));
     }
+
+    this.activeMovingBeadKey = null;
+    this.scheduleStepTrailClear();
 
     if (this.rules.knockback && chosenBead.pos > 0 && chosenBead.pos < 100 && !APP_CONFIG.safeSquares.includes(chosenBead.pos)) {
       let cutOccurred = false;
@@ -4043,6 +4729,19 @@ const GameEngine = {
     } else {
       this.advanceToNextPlayer();
     }
+  },
+
+  scheduleStepTrailClear() {
+    if (this.stepTrailCleanupTimer) clearTimeout(this.stepTrailCleanupTimer);
+    this.stepTrailCleanupTimer = setTimeout(() => {
+      this.activeStepTrail = [];
+      this.activeTransitionClue = null;
+      this.activeMovingBeadKey = null;
+      this.stepTrailCleanupTimer = null;
+      if (this.inArena && !this.isAnimating) {
+        this.renderBoard();
+      }
+    }, 520);
   },
 
   advanceToNextPlayer() {
@@ -5205,15 +5904,19 @@ const AppUI = {
   },
 
   toast(title, icon = 'success') {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon,
-      title,
-      showConfirmButton: false,
-      timer: 2600,
-      timerProgressBar: true
-    });
+    if (typeof Swal !== 'undefined' && Swal.fire) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon,
+        title,
+        showConfirmButton: false,
+        timer: 2600,
+        timerProgressBar: true
+      });
+    } else if (typeof GameEngine !== 'undefined' && GameEngine.showFloatingEmote) {
+      GameEngine.showFloatingEmote(title);
+    }
   },
 
   toggleBrowserFullscreen() {

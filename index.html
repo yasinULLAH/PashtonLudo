@@ -81,6 +81,7 @@
     }
     .emote-bubble {
       animation: floatBubble 2.5s ease-out forwards;
+      pointer-events: none;
     }
 
     .royal-card {
@@ -676,6 +677,10 @@
         <span>Auto-Move on Timeout</span>
         <input id="autoPlayTimeoutChk" type="checkbox" checked class="accent-amber-600 rounded" />
       </label>
+      <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
+        <span>💬 Show Top Tooltips &amp; Hints</span>
+        <input id="showTooltipsChk" type="checkbox" checked class="accent-amber-600 rounded" />
+      </label>
       <button id="exitToHomeBtn" type="button" class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200">
         🏠 Save &amp; Exit to Main Title Screen
       </button>
@@ -778,11 +783,19 @@
           </div>
         </label>
 
-        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal md:col-span-2">
+        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
           <input id="chkAutoRollTurn" type="checkbox" class="mt-1 w-4 h-4 accent-amber-600 rounded" />
           <div>
             <div class="font-bold text-xs text-slate-900">🎲 Auto-Roll Dice on Turn Start (باری آنے پر خودکار ڈائس رول)</div>
             <p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+          <input id="chkShowTooltips" type="checkbox" checked class="mt-1 w-4 h-4 accent-amber-600 rounded" />
+          <div>
+            <div class="font-bold text-xs text-slate-900">💬 Show Top Tooltips &amp; Preview Hints (ٹول ٹپس دکھائیں)</div>
+            <p class="text-[11px] text-slate-600">Show top hint banners and floating move labels. Disable to keep the board 100% clear (saved across reloads).</p>
           </div>
         </label>
       </div>
@@ -1251,7 +1264,13 @@
   </div>
 
   <!-- TOAST NOTIFICATION BANNER -->
-  <div id="toastBanner" class="fixed top-3 left-1/2 -translate-x-1/2 z-50 hidden max-w-sm rounded-2xl bg-slate-900/95 border border-amber-400 px-4 py-2 text-xs font-semibold text-white shadow-2xl"></div>
+  <div id="toastBanner" class="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 hidden max-w-xs sm:max-w-md w-[92vw] sm:w-auto rounded-2xl bg-slate-900/90 backdrop-blur-sm border border-amber-400 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl flex items-center justify-between gap-2">
+    <span id="toastBannerText" class="truncate"></span>
+    <div class="flex items-center gap-1 flex-shrink-0">
+      <button id="muteTooltipsQuickBtn" type="button" title="Disable Tooltips (Remembered)" class="px-1.5 py-0.5 rounded-lg bg-slate-800 hover:bg-rose-700 text-[10px] font-bold text-amber-300 border border-slate-600">🔕 Off</button>
+      <button id="closeToastBannerBtn" type="button" title="Close" class="w-5 h-5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] font-black text-white flex items-center justify-center">✕</button>
+    </div>
+  </div>
 
   <!-- ==================== COMPLETE GAME, VISUAL TRAILS, RESILIENCE & NETWORK ENGINE ==================== -->
   <script>
@@ -1402,8 +1421,12 @@
 
       // --- 4. RULES CONFIGURATION & GAME STATE ---
       let savedAutoRollPref = false;
+      let savedShowTooltipsPref = true;
       try {
         savedAutoRollPref = localStorage.getItem('bannu_ludo_auto_roll_v1') === 'true';
+        if (localStorage.getItem('bannu_ludo_show_tooltips_v1') !== null) {
+          savedShowTooltipsPref = localStorage.getItem('bannu_ludo_show_tooltips_v1') === 'true';
+        }
       } catch (e) {}
 
       let rulesConfig = {
@@ -1418,6 +1441,7 @@
         strictHomeRemainder: true,
         teamAssistRequiresSix: true,
         autoRollOnTurn: savedAutoRollPref,
+        showTooltips: savedShowTooltipsPref,
         turnTimeSeconds: 30,
         aiDifficulty: 'hard'
       };
@@ -1439,6 +1463,21 @@
         if (rulesConfig.autoRollOnTurn && gameState.isMatchActive && gameState.phase === 'ROLL') {
           scheduleAiIfNeeded();
         }
+      }
+
+      function setShowTooltipsPreference(enabled) {
+        rulesConfig.showTooltips = Boolean(enabled);
+        try {
+          localStorage.setItem('bannu_ludo_show_tooltips_v1', rulesConfig.showTooltips ? 'true' : 'false');
+        } catch (e) {}
+        const chk1 = document.getElementById('showTooltipsChk');
+        const chk2 = document.getElementById('chkShowTooltips');
+        if (chk1) chk1.checked = rulesConfig.showTooltips;
+        if (chk2) chk2.checked = rulesConfig.showTooltips;
+        if (!rulesConfig.showTooltips) {
+          document.getElementById('toastBanner').classList.add('hidden');
+        }
+        drawBoard();
       }
 
       let seatConfig = [
@@ -2935,6 +2974,7 @@
         renderedDestinationTargets = [];
         const legalMoves = computeLegalMoves();
         const movableTokenKeys = new Set(legalMoves.map(function (m) { return m.ownerIdx + '_' + m.tokenId; }));
+        const controlledOwnerIdx = getControlledOwnerIndex(gameState.currentTurn);
 
         const cellGroups = {};
         gameState.players.forEach(function (pl) {
@@ -2949,24 +2989,18 @@
 
         Object.keys(cellGroups).forEach(function (key) {
           const group = cellGroups[key];
+          group.sort(function (a, b) {
+            const aKey = a.owner + '_' + a.id;
+            const bKey = b.owner + '_' + b.id;
+            const aScore = (gameState.selectedTokenKey === aKey ? 4 : 0) + (movableTokenKeys.has(aKey) ? 2 : 0) + (a.owner === controlledOwnerIdx ? 1 : 0);
+            const bScore = (gameState.selectedTokenKey === bKey ? 4 : 0) + (movableTokenKeys.has(bKey) ? 2 : 0) + (b.owner === controlledOwnerIdx ? 1 : 0);
+            return aScore - bScore;
+          });
+
           const baseRC = getTokenGridCoords(group[0]);
           const baseX = (baseRC[1] + 0.5) * cell;
           const baseY = (baseRC[0] + 0.5) * cell;
-
-          if (rulesConfig.teamMode && group.length > 1) {
-            const ownersOnCell = new Set(group.map(function (g) { return g.owner; }));
-            if (ownersOnCell.size > 1) {
-              ctx.save();
-              ctx.font = '900 ' + Math.round(cell * 0.2) + 'px Inter, sans-serif';
-              ctx.textAlign = 'center';
-              ctx.lineWidth = 3;
-              ctx.strokeStyle = '#ffffff';
-              ctx.strokeText('🤝 TEAM', baseX, baseY + cell * 0.44);
-              ctx.fillStyle = '#0f172a';
-              ctx.fillText('🤝 TEAM', baseX, baseY + cell * 0.44);
-              ctx.restore();
-            }
-          }
+          const isSafeStopCell = group[0].state === 'board' && SAFE_TRACK_INDICES.has(getOuterTrackIndex(group[0]));
 
           group.forEach(function (tk, idx) {
             if (gameState.draggingToken && gameState.draggingToken.ownerIdx === tk.owner && gameState.draggingToken.tokenId === tk.id) {
@@ -2975,13 +3009,16 @@
 
             let offsetX = 0;
             let offsetY = 0;
-            let radius = cell * 0.36;
+            let radius = cell * 0.34;
 
             if (group.length > 1) {
-              radius = cell * 0.29;
-              const angle = (idx / group.length) * Math.PI * 2;
-              offsetX = Math.cos(angle) * (cell * 0.17);
-              offsetY = Math.sin(angle) * (cell * 0.17);
+              radius = group.length === 2 ? cell * 0.24 : (group.length <= 4 ? cell * 0.21 : cell * 0.18);
+              const spread = group.length === 2 ? cell * 0.23 : cell * 0.27;
+              const angle = (idx / group.length) * Math.PI * 2 - Math.PI / 4;
+              offsetX = Math.cos(angle) * spread;
+              offsetY = Math.sin(angle) * spread;
+            } else if (isSafeStopCell) {
+              radius = cell * 0.31;
             }
 
             const tx = baseX + offsetX;
@@ -2996,37 +3033,33 @@
             );
             const meta = PLAYER_META[tk.owner];
 
-            // Glowing Halo for Movable Beads on Current Turn (Jiski Bari Ho)
             if (isMovable) {
               ctx.beginPath();
-              ctx.arc(tx, ty, radius + 7, 0, Math.PI * 2);
+              ctx.arc(tx, ty, radius + 6, 0, Math.PI * 2);
               ctx.fillStyle = isSelected ? 'rgba(245, 158, 11, 0.95)' : 'rgba(250, 204, 21, 0.65)';
               ctx.fill();
               ctx.lineWidth = 2.5;
               ctx.strokeStyle = '#b45309';
               ctx.stroke();
             } else if (isLastMoved) {
-              // Subtle cyan/gold ring around the bead that just moved!
               ctx.beginPath();
-              ctx.arc(tx, ty, radius + 5, 0, Math.PI * 2);
+              ctx.arc(tx, ty, radius + 4, 0, Math.PI * 2);
               ctx.strokeStyle = '#0ea5e9';
               ctx.lineWidth = 2.5;
               ctx.stroke();
             }
 
-            // Pawn Drop Shadow & 3D Body
             ctx.save();
             ctx.shadowColor = 'rgba(15, 23, 42, 0.35)';
-            ctx.shadowBlur = 6;
-            ctx.shadowOffsetY = 3;
+            ctx.shadowBlur = 5;
+            ctx.shadowOffsetY = 2;
             ctx.beginPath();
             ctx.arc(tx, ty, radius, 0, Math.PI * 2);
             ctx.fillStyle = meta.hex;
             ctx.fill();
             ctx.restore();
 
-            // Outer border: Team-colored ring in 2v2 mode so teammates (Red+Yellow = Gold, Green+Blue = Cyan) are visually linked!
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 2.2;
             ctx.strokeStyle = rulesConfig.teamMode ? meta.teamRing : '#ffffff';
             ctx.stroke();
 
@@ -3042,7 +3075,6 @@
             const label = (tk.lockedThisTurn && rulesConfig.closeGameMode) ? '🔒' : String(tk.id + 1);
             ctx.fillText(label, tx, ty);
 
-            // Teammate Visual Badge on Token Shoulder (♦ for Team 1 Red+Yellow, ★ for Team 2 Green+Blue)
             if (rulesConfig.teamMode && tk.state !== 'completed') {
               const bx = tx + radius * 0.68;
               const by = ty - radius * 0.68;
@@ -3060,24 +3092,44 @@
 
             if (isLastMoved && tk.state !== 'yard') {
               ctx.save();
-              ctx.font = '900 ' + Math.round(cell * 0.22) + 'px Inter, sans-serif';
+              ctx.font = '900 ' + Math.round(cell * 0.21) + 'px Inter, sans-serif';
               ctx.textAlign = 'center';
-              ctx.lineWidth = 3.5;
+              ctx.lineWidth = 3;
               ctx.strokeStyle = '#ffffff';
-              ctx.strokeText('✨+' + gameState.lastMovedTrail.delta, tx, ty - radius - cell * 0.16);
+              ctx.strokeText('✨+' + gameState.lastMovedTrail.delta, tx, ty - radius - cell * 0.14);
               ctx.fillStyle = '#0f172a';
-              ctx.fillText('✨+' + gameState.lastMovedTrail.delta, tx, ty - radius - cell * 0.16);
+              ctx.fillText('✨+' + gameState.lastMovedTrail.delta, tx, ty - radius - cell * 0.14);
               ctx.restore();
             }
 
             renderedTokenHitboxes.push({
               x: tx,
               y: ty,
-              r: radius + 10,
+              cellX: baseX,
+              cellY: baseY,
+              cellKey: key,
+              r: radius + 9,
               ownerIdx: tk.owner,
               tokenId: tk.id
             });
           });
+
+          if (isSafeStopCell || group.length > 1) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(baseX, baseY, cell * 0.15, 0, Math.PI * 2);
+            ctx.fillStyle = isSafeStopCell ? 'rgba(254, 243, 199, 0.96)' : 'rgba(15, 23, 42, 0.85)';
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = isSafeStopCell ? '#d97706' : '#ffffff';
+            ctx.stroke();
+            ctx.fillStyle = isSafeStopCell ? '#b45309' : '#ffffff';
+            ctx.font = '900 ' + Math.round(cell * 0.19) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(isSafeStopCell ? '★' : String(group.length), baseX, baseY);
+            ctx.restore();
+          }
         });
 
         // 9. Draw On-Board Interactive Destination Targets
@@ -3114,33 +3166,44 @@
 
             ctx.save();
             ctx.beginPath();
-            ctx.arc(dx, dy, cell * 0.45, 0, Math.PI * 2);
+            ctx.arc(dx, dy, cell * 0.46, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.strokeStyle = outcome.color;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(dx, dy, cell * 0.31, 0, Math.PI * 2);
             ctx.fillStyle = outcome.color;
             ctx.fill();
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2;
             ctx.strokeStyle = '#ffffff';
             ctx.stroke();
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '900 ' + Math.round(cell * 0.3) + 'px Inter, sans-serif';
+            ctx.font = '900 ' + Math.round(cell * 0.25) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('+' + mv.delta, dx, dy);
 
-            const pillW = Math.max(cell * 1.65, outcome.tag.length * (cell * 0.14));
-            const pillH = cell * 0.42;
-            const px = Math.min(canvas.width - pillW - 4, Math.max(4, dx - pillW / 2));
-            const py = Math.max(4, dy - cell * 0.88);
-            ctx.fillStyle = '#0f172a';
-            ctx.beginPath();
-            ctx.roundRect(px, py, pillW, pillH, 6);
-            ctx.fill();
-            ctx.strokeStyle = outcome.color;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '800 ' + Math.round(cell * 0.2) + 'px Inter, sans-serif';
-            ctx.fillText(outcome.tag, px + pillW / 2, py + pillH / 2);
+            if (rulesConfig.showTooltips) {
+              const pillW = Math.max(cell * 1.5, outcome.tag.length * (cell * 0.13));
+              const pillH = cell * 0.36;
+              const px = Math.min(canvas.width - pillW - 4, Math.max(4, dx - pillW / 2));
+              const py = dy > cell * 2 ? (dy - cell * 0.78) : (dy + cell * 0.46);
+              ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+              ctx.beginPath();
+              ctx.roundRect(px, py, pillW, pillH, 6);
+              ctx.fill();
+              ctx.strokeStyle = outcome.color;
+              ctx.lineWidth = 1.2;
+              ctx.stroke();
+              ctx.fillStyle = '#ffffff';
+              ctx.font = '800 ' + Math.round(cell * 0.18) + 'px Inter, sans-serif';
+              ctx.fillText(outcome.tag, px + pillW / 2, py + pillH / 2);
+            }
             ctx.restore();
 
             renderedDestinationTargets.push({
@@ -3228,35 +3291,55 @@
           }
         }
 
-        // 2. Grab/tap a token on the board
-        for (let i = renderedTokenHitboxes.length - 1; i >= 0; i--) {
-          const hb = renderedTokenHitboxes[i];
-          if (Math.hypot(pt.x - hb.x, pt.y - hb.y) <= hb.r) {
-            const tokenMoves = getFilteredLegalMovesForToken(hb.ownerIdx, hb.tokenId, legal);
-            if (tokenMoves.length === 0) {
-              const tk = gameState.players[hb.ownerIdx].tokens[hb.tokenId];
-              if (tk.lockedThisTurn && rulesConfig.closeGameMode) {
-                showToast('🔒 Close Game Rule: This bead just made a kill and is locked for the rest of this turn!');
-              } else {
-                showToast('This bead cannot move with the current dice.');
-              }
-              return;
-            }
+        // 2. Grab/tap a token on the board (Always prioritize the current player's own beads on shared stops!)
+        const controlledOwnerIdx = getControlledOwnerIndex(gameState.currentTurn);
+        const matchedHitboxes = renderedTokenHitboxes.filter(function (hb) {
+          return Math.hypot(pt.x - hb.x, pt.y - hb.y) <= hb.r ||
+                 Math.hypot(pt.x - hb.cellX, pt.y - hb.cellY) <= cell * 0.48;
+        });
+
+        if (matchedHitboxes.length > 0) {
+          const myMovableHits = matchedHitboxes.filter(function (hb) {
+            return hb.ownerIdx === controlledOwnerIdx &&
+                   getFilteredLegalMovesForToken(hb.ownerIdx, hb.tokenId, legal).length > 0;
+          });
+
+          if (myMovableHits.length > 0) {
+            myMovableHits.sort(function (a, b) {
+              const aSel = (gameState.selectedTokenKey === (a.ownerIdx + '_' + a.tokenId)) ? 1 : 0;
+              const bSel = (gameState.selectedTokenKey === (b.ownerIdx + '_' + b.tokenId)) ? 1 : 0;
+              if (aSel !== bSel) return bSel - aSel;
+              return Math.hypot(pt.x - a.x, pt.y - a.y) - Math.hypot(pt.x - b.x, pt.y - b.y);
+            });
+            const chosenHb = myMovableHits[0];
+            const tokenMoves = getFilteredLegalMovesForToken(chosenHb.ownerIdx, chosenHb.tokenId, legal);
             if (e.cancelable) e.preventDefault();
-            const wasAlreadySelected = (gameState.selectedTokenKey === (hb.ownerIdx + '_' + hb.tokenId));
+            const wasAlreadySelected = (gameState.selectedTokenKey === (chosenHb.ownerIdx + '_' + chosenHb.tokenId));
             pointerDownInfo = {
               startX: pt.x,
               startY: pt.y,
-              ownerIdx: hb.ownerIdx,
-              tokenId: hb.tokenId,
+              ownerIdx: chosenHb.ownerIdx,
+              tokenId: chosenHb.tokenId,
               tokenMoves: tokenMoves,
               wasAlreadySelected: wasAlreadySelected,
               movedEnoughToDrag: false
             };
-            gameState.selectedTokenKey = hb.ownerIdx + '_' + hb.tokenId;
+            gameState.selectedTokenKey = chosenHb.ownerIdx + '_' + chosenHb.tokenId;
             drawBoard();
             return;
           }
+
+          const myOwnHits = matchedHitboxes.filter(function (hb) {
+            return hb.ownerIdx === controlledOwnerIdx;
+          });
+          const fallbackHb = myOwnHits.length > 0 ? myOwnHits[0] : matchedHitboxes[matchedHitboxes.length - 1];
+          const tk = gameState.players[fallbackHb.ownerIdx].tokens[fallbackHb.tokenId];
+          if (tk.lockedThisTurn && rulesConfig.closeGameMode) {
+            showToast('🔒 Close Game Rule: This bead just made a kill and is locked for the rest of this turn!');
+          } else {
+            showToast('This bead cannot move with the current dice.');
+          }
+          return;
         }
       }
 
@@ -3615,6 +3698,10 @@
         const chkAuto2 = document.getElementById('chkAutoRollTurn');
         if (chkAuto1) chkAuto1.checked = Boolean(rulesConfig.autoRollOnTurn);
         if (chkAuto2) chkAuto2.checked = Boolean(rulesConfig.autoRollOnTurn);
+        const chkTip1 = document.getElementById('showTooltipsChk');
+        const chkTip2 = document.getElementById('chkShowTooltips');
+        if (chkTip1) chkTip1.checked = Boolean(rulesConfig.showTooltips);
+        if (chkTip2) chkTip2.checked = Boolean(rulesConfig.showTooltips);
         document.getElementById('aiDifficultySelect').value = rulesConfig.aiDifficulty;
         const presetTimers = ['0', '15', '30', '60', '120', '180'];
         const curTimerStr = String(rulesConfig.turnTimeSeconds);
@@ -4418,14 +4505,17 @@
       }
 
       let toastTimer = null;
-      function showToast(msg) {
+      function showToast(msg, forceShow) {
+        if (!rulesConfig.showTooltips && !forceShow) return;
         const t = document.getElementById('toastBanner');
-        t.textContent = msg;
+        const txt = document.getElementById('toastBannerText');
+        if (txt) txt.textContent = msg;
+        else t.textContent = msg;
         t.classList.remove('hidden');
         if (toastTimer) clearTimeout(toastTimer);
         toastTimer = setTimeout(function () {
           t.classList.add('hidden');
-        }, 2800);
+        }, 2400);
       }
 
       // --- 16. SCREEN NAVIGATION, IMMERSIVE BOARD-ONLY MODE & EVENT LISTENERS ---
@@ -4781,6 +4871,21 @@
       });
       document.getElementById('chkAutoRollTurn').addEventListener('change', function () {
         setAutoRollPreference(this.checked);
+      });
+      document.getElementById('showTooltipsChk').addEventListener('change', function () {
+        setShowTooltipsPreference(this.checked);
+      });
+      document.getElementById('chkShowTooltips').addEventListener('change', function () {
+        setShowTooltipsPreference(this.checked);
+      });
+      document.getElementById('closeToastBannerBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (toastTimer) clearTimeout(toastTimer);
+        document.getElementById('toastBanner').classList.add('hidden');
+      });
+      document.getElementById('muteTooltipsQuickBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        setShowTooltipsPreference(false);
       });
 
       document.getElementById('saveAndStartMatchBtn').addEventListener('click', function () {
