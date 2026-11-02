@@ -198,6 +198,91 @@ html, body {
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.7), 0 4px 10px rgba(0,0,0,0.5);
   transform: scale(1.12);
 }
+.token-selectable-pulse {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  box-shadow: 0 0 0 3px #facc15, 0 0 14px rgba(250, 204, 21, 0.95) !important;
+  animation: beadSelectPulse 0.85s infinite alternate ease-in-out;
+  z-index: 35 !important;
+}
+@keyframes beadSelectPulse {
+  0% { transform: scale(1.08); }
+  100% { transform: scale(1.32); }
+}
+
+/* Center Board Interactive Dice Medallion */
+.center-dice-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 28;
+  width: clamp(62px, 11vmin, 86px);
+  height: clamp(62px, 11vmin, 86px);
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 30%, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.94));
+  border: 2.5px solid rgba(16, 185, 129, 0.75);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 0 4px rgba(16, 185, 129, 0.18), inset 0 1px 3px rgba(255, 255, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+.center-dice-hub:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 14px 34px rgba(16, 185, 129, 0.45), 0 0 0 6px rgba(16, 185, 129, 0.28);
+}
+.center-dice-hub:active {
+  transform: translate(-50%, -50%) scale(0.93);
+}
+.center-dice-mini {
+  width: clamp(30px, 5.2vmin, 42px);
+  height: clamp(30px, 5.2vmin, 42px);
+  border-radius: 9px;
+  background: linear-gradient(145deg, #ffffff, #e2e8f0);
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 2px #ffffff;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 4px;
+  gap: 2px;
+}
+.center-pip {
+  width: clamp(4px, 0.8vmin, 6px);
+  height: clamp(4px, 0.8vmin, 6px);
+  border-radius: 9999px;
+  background-color: #0f172a;
+  margin: auto;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+.center-pip.pip-six {
+  background-color: #dc2626;
+}
+.center-pip.active {
+  opacity: 1;
+}
+
+/* Immersive Distraction-Free Full Gameplay Mode */
+#gameplayArenaShell.immersive-active #arenaTopHudBar,
+#gameplayArenaShell.immersive-active #arenaBottomDeckBar {
+  display: none !important;
+}
+#gameplayArenaShell.immersive-active .arena-stage {
+  padding: 2px !important;
+  height: 100dvh !important;
+  width: 100vw !important;
+}
+#gameplayArenaShell.immersive-active .board-grid {
+  width: min(98.5vw, 98.5dvh) !important;
+  height: min(98.5vw, 98.5dvh) !important;
+  border-width: 3px !important;
+}
 
 /* 3D Feel Dice Cube */
 .dice-cube {
@@ -427,8 +512,16 @@ table.dataTable tbody tr:hover {
   <!-- Sleek Top Game Bar -->
   <header class="theme-header h-14 shrink-0 border-b border-slate-800/80 px-3 sm:px-6 flex items-center justify-between gap-2 z-30">
     <div class="flex items-center gap-2.5 cursor-pointer" onclick="AppRouter.navigate('/home')">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold shadow-md">
-        <i class="fa-solid fa-staff-snake text-base"></i>
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold shadow-md" title="Khyber King Cobra Emblem">
+        <svg viewBox="0 0 64 64" class="w-6 h-6 overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 52 C6 44, 18 36, 28 40 C40 44, 52 36, 46 26 C42 19, 24 22, 28 13" stroke="#ecfdf5" stroke-width="6.5" stroke-linecap="round"/>
+          <path d="M12 52 C6 44, 18 36, 28 40 C40 44, 52 36, 46 26 C42 19, 24 22, 28 13" stroke="#10b981" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round"/>
+          <ellipse cx="29" cy="14" rx="11" ry="7" fill="#064e3b" stroke="#ecfdf5" stroke-width="2.2"/>
+          <polygon points="29,5 21,14 29,19 37,14" fill="#ecfdf5"/>
+          <circle cx="26" cy="12" r="1.6" fill="#dc2626"/>
+          <circle cx="32" cy="12" r="1.6" fill="#dc2626"/>
+          <path d="M29 5 L29 1 M29 1 L26 -2 M29 1 L32 -2" stroke="#f43f5e" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
       </div>
       <div>
         <div class="flex items-center gap-2">
@@ -559,6 +652,11 @@ table.dataTable tbody tr:hover {
                   <span id="resumeSavedMatchLabel">Resume Saved Match</span>
                 </button>
 
+                <button type="button" id="homeImmersivePlayBtn" onclick="GameEngine.startImmersiveMatch()" class="min-h-[54px] px-5 py-3 rounded-2xl bg-indigo-600/90 hover:bg-indigo-500 border border-indigo-400/50 text-white font-extrabold text-xs sm:text-sm shadow-lg flex items-center gap-2 transition" title="Launch 100% Distraction-Free Fullscreen Gameplay">
+                  <i class="fa-solid fa-eye-slash text-amber-300"></i>
+                  <span>Immersive Full Play</span>
+                </button>
+
                 <button type="button" onclick="AppRouter.navigate('/setup')" class="min-h-[54px] px-5 py-3 rounded-2xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition">
                   <i class="fa-solid fa-sliders text-emerald-400"></i>
                   <span>Customize Match</span>
@@ -624,21 +722,27 @@ table.dataTable tbody tr:hover {
             </div>
           </div>
 
-          <!-- Smart Idle Auto-Roll Quick Card -->
-          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <!-- Auto-Roll Dice (Remembered) + Idle Auto-Roll Card -->
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-2">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i>
-                <span class="font-bold text-xs sm:text-sm text-white">Idle Auto-Roll Dice</span>
+                <i class="fa-solid fa-dice-d6 text-emerald-400"></i>
+                <div>
+                  <span class="font-bold text-xs sm:text-sm text-white block leading-tight">Auto-Roll Dice (Remembered)</span>
+                  <span class="text-[10px] text-emerald-400 font-semibold">Saved across sessions</span>
+                </div>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="homeToggleAutoRoll" checked onchange="GameEngine.setIdleAutoRollEnabled(this.checked)" class="sr-only peer">
+                <input type="checkbox" id="homeToggleAlwaysAutoRoll" onchange="GameEngine.setAlwaysAutoRollEnabled(this.checked)" class="sr-only peer">
                 <div class="w-10 h-5 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
               </label>
             </div>
-            <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-800 text-xs text-slate-400">
-              <span>Idle Timer Delay:</span>
-              <select id="homeAutoRollSeconds" onchange="GameEngine.setIdleAutoRollSeconds(this.value)" class="bg-slate-800 text-white font-bold px-2.5 py-1 rounded-lg border border-slate-700 text-xs">
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs text-slate-400">
+              <label class="flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" id="homeToggleAutoRoll" checked onchange="GameEngine.setIdleAutoRollEnabled(this.checked)" class="w-3.5 h-3.5 accent-emerald-500 rounded">
+                <span>Idle Roll Delay:</span>
+              </label>
+              <select id="homeAutoRollSeconds" onchange="GameEngine.setIdleAutoRollSeconds(this.value)" class="no-select2 bg-slate-800 text-white font-bold px-2 py-1 rounded-lg border border-slate-700 text-xs">
                 <option value="5">5 Seconds</option>
                 <option value="8">8 Seconds</option>
                 <option value="10" selected>10 Seconds</option>
@@ -648,21 +752,26 @@ table.dataTable tbody tr:hover {
             </div>
           </div>
 
-          <!-- Smart Modules Quick Card (Tactical Radar & Speed) -->
-          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <!-- Multi-Beads Count, Radar & Speed Quick Card -->
+          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-2">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <i class="fa-solid fa-satellite-dish text-amber-400"></i>
-                <span class="font-bold text-xs sm:text-sm text-white">Tactical Board Radar</span>
+                <i class="fa-solid fa-coins text-amber-400"></i>
+                <span class="font-bold text-xs sm:text-sm text-white">Beads Per Player</span>
               </div>
-              <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="homeToggleRadar" checked onchange="GameEngine.setRadarEnabled(this.checked)" class="sr-only peer">
-                <div class="w-10 h-5 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-              </label>
+              <select id="homeBeadsPerPlayerSelect" onchange="GameEngine.setBeadsPerPlayer(this.value)" class="no-select2 bg-slate-800 text-emerald-300 font-extrabold px-2.5 py-1 rounded-lg border border-emerald-500/40 text-xs">
+                <option value="1" selected>1 Bead (Default)</option>
+                <option value="2">2 Beads (Jora Pair)</option>
+                <option value="3">3 Beads (Toli)</option>
+                <option value="4">4 Beads (Full Hujra)</option>
+              </select>
             </div>
-            <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-800 text-xs text-slate-400">
-              <span>Animation Speed:</span>
-              <select id="homeGameSpeedSelect" onchange="GameEngine.setGameSpeed(this.value)" class="bg-slate-800 text-white font-bold px-2.5 py-1 rounded-lg border border-slate-700 text-xs">
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs text-slate-400">
+              <label class="flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" id="homeToggleRadar" checked onchange="GameEngine.setRadarEnabled(this.checked)" class="w-3.5 h-3.5 accent-emerald-500 rounded">
+                <span>Radar</span>
+              </label>
+              <select id="homeGameSpeedSelect" onchange="GameEngine.setGameSpeed(this.value)" class="no-select2 bg-slate-800 text-white font-bold px-2 py-1 rounded-lg border border-slate-700 text-xs">
                 <option value="1">1x Normal Pace</option>
                 <option value="1.6" selected>1.6x Fast Hujra</option>
                 <option value="3">3x Turbo Blitz</option>
@@ -691,7 +800,7 @@ table.dataTable tbody tr:hover {
             </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label for="selectGameMode" class="block text-xs font-bold text-slate-700 mb-1">Opponent & Party Mode</label>
               <select id="selectGameMode" class="w-full" onchange="GameEngine.changeGameMode(this.value)">
@@ -700,6 +809,15 @@ table.dataTable tbody tr:hover {
                 <option value="local3">3 Players Hujra</option>
                 <option value="local4">4 Players Full Hujra</option>
                 <option value="webrtc">WebRTC P2P Multiplayer</option>
+              </select>
+            </div>
+            <div>
+              <label for="selectBeadsPerPlayer" class="block text-xs font-bold text-slate-700 mb-1">Beads Per Player (Gotiyan)</label>
+              <select id="selectBeadsPerPlayer" class="w-full" onchange="GameEngine.setBeadsPerPlayer(this.value)">
+                <option value="1" selected>1 Bead (Default Classic)</option>
+                <option value="2">2 Beads (Jora Pair Rules)</option>
+                <option value="3">3 Beads (Toli Rules)</option>
+                <option value="4">4 Beads (Full Hujra Ludo-Style)</option>
               </select>
             </div>
             <div>
@@ -752,6 +870,14 @@ table.dataTable tbody tr:hover {
           <div>
             <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-2.5">Smart Automation & Assist Modules</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              <label class="flex items-center justify-between p-3 rounded-xl bg-emerald-100/80 border border-emerald-300 text-xs font-bold text-slate-900 cursor-pointer">
+                <span><i class="fa-solid fa-dice text-emerald-700 mr-1.5"></i>Auto-Roll Dice (Remembered)</span>
+                <input type="checkbox" id="chkAlwaysAutoRoll" onchange="GameEngine.setAlwaysAutoRollEnabled(this.checked)" class="w-4 h-4 accent-emerald-600 rounded">
+              </label>
+              <label class="flex items-center justify-between p-3 rounded-xl bg-indigo-50/80 border border-indigo-200 text-xs font-bold text-slate-900 cursor-pointer">
+                <span><i class="fa-solid fa-eye-slash text-indigo-600 mr-1.5"></i>Immersive Distraction-Free Mode</span>
+                <input type="checkbox" id="chkImmersiveMode" onchange="GameEngine.setImmersivePreference(this.checked)" class="w-4 h-4 accent-indigo-600 rounded">
+              </label>
               <label class="flex items-center justify-between p-3 rounded-xl bg-emerald-50/60 border border-emerald-200 text-xs font-bold text-slate-900 cursor-pointer">
                 <span><i class="fa-solid fa-bolt text-emerald-600 mr-1.5"></i>Auto-Roll on Idle</span>
                 <input type="checkbox" id="chkIdleAutoRoll" checked onchange="GameEngine.setIdleAutoRollEnabled(this.checked)" class="w-4 h-4 accent-emerald-600 rounded">
@@ -926,11 +1052,18 @@ table.dataTable tbody tr:hover {
             </div>
             <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-1.5">
               <div class="flex items-center gap-2 text-rose-900 font-bold text-sm">
-                <i class="fa-solid fa-staff-snake text-rose-600"></i>
-                <span>3. Square 99 Kalamar & Pura 100</span>
+                <svg viewBox="0 0 64 64" class="w-5 h-5 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 54 C4 44, 20 36, 30 40 C44 44, 54 34, 46 24 C40 17, 24 20, 28 12" stroke="#e11d48" stroke-width="6.5" stroke-linecap="round"/>
+                  <ellipse cx="29" cy="13" rx="11" ry="6.5" fill="#881337" stroke="#e11d48" stroke-width="2"/>
+                  <polygon points="29,4 21,13 29,18 37,13" fill="#be123c"/>
+                  <circle cx="26" cy="11" r="1.6" fill="#fde047"/>
+                  <circle cx="32" cy="11" r="1.6" fill="#fde047"/>
+                  <path d="M29 4 L29 0 M29 0 L26 -3 M29 0 L32 -3" stroke="#f43f5e" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                <span>3. Square 99 Kalamar, Multi-Bead & Pura 100</span>
               </div>
               <p class="text-xs text-rose-950/80 leading-relaxed">
-                Square 99 hosts the dreaded <strong>Kalamar (Black Cobra)</strong> dropping players down to Square 4. Reaching Square 100 requires an <strong>Exact Roll ("Pura 100")</strong>.
+                Square 99 hosts the dreaded <strong>Kalamar (Black Cobra)</strong> dropping beads to Square 4. Supports <strong>1 to 4 Beads per player</strong> (1 default): each bead needs a 6 to open, friendly beads stack safely (Jora), Takkar cuts award a bonus roll, and all beads require <strong>Exact 100 ("Pura 100")</strong> to win!
               </p>
             </div>
           </div>
@@ -1163,8 +1296,24 @@ table.dataTable tbody tr:hover {
      ========================================================================= -->
 <div id="gameplayArenaShell" class="fixed inset-0 z-40 bg-slate-950 text-white flex flex-col justify-between overflow-hidden hidden no-print">
 
+  <!-- FLOATING MINIMAL CONTROL PILL FOR IMMERSIVE FULL GAMEPLAY MODE -->
+  <div id="immersiveFloatingBar" class="hidden fixed top-2.5 right-2.5 z-50 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-slate-950/75 hover:bg-slate-900/95 border border-slate-700/80 backdrop-blur-md shadow-2xl opacity-55 hover:opacity-100 transition-opacity">
+    <span id="immersiveTurnDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+    <span id="immersiveTurnText" class="text-[11px] font-extrabold text-white max-w-[115px] truncate">P1 Turn</span>
+    <button type="button" id="immersiveAutoRollBtn" onclick="GameEngine.toggleHumanAutoPlay()" class="px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-emerald-300 border border-slate-600 transition" title="Toggle Remembered Auto-Roll Dice">
+      Auto: OFF
+    </button>
+    <button type="button" onclick="GameEngine.togglePauseDrawer(true)" class="w-6 h-6 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center text-[11px]" title="Open Pause & Settings">
+      <i class="fa-solid fa-sliders"></i>
+    </button>
+    <button type="button" onclick="GameEngine.toggleImmersiveMode(false)" class="px-2 py-0.5 rounded-full bg-rose-600/80 hover:bg-rose-500 text-white text-[10px] font-extrabold flex items-center gap-1 transition" title="Exit Immersive Mode (Restore HUD)">
+      <i class="fa-solid fa-eye"></i>
+      <span>HUD</span>
+    </button>
+  </div>
+
   <!-- TOP COMPACT HUD BAR (52px height, shrink-0, zero clutter) -->
-  <div class="h-13 shrink-0 bg-slate-900/95 border-b border-slate-800 px-2.5 sm:px-4 py-1.5 flex items-center justify-between gap-2 z-30">
+  <div id="arenaTopHudBar" class="h-13 shrink-0 bg-slate-900/95 border-b border-slate-800 px-2.5 sm:px-4 py-1.5 flex items-center justify-between gap-2 z-30">
     <!-- Left: Pause/Exit + Active Rule Pill -->
     <div class="flex items-center gap-2">
       <button type="button" onclick="GameEngine.togglePauseDrawer(true)" class="min-h-[38px] px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition" title="Pause & Quick Settings (ESC)">
@@ -1214,6 +1363,12 @@ table.dataTable tbody tr:hover {
         <i class="fa-solid fa-list-ul"></i>
       </button>
 
+      <!-- Immersive Distraction-Free Full Gameplay Button -->
+      <button type="button" id="hudImmersiveBtn" onclick="GameEngine.toggleImmersiveMode(true)" class="min-h-[38px] px-2.5 rounded-xl bg-indigo-600/25 hover:bg-indigo-600/40 border border-indigo-400/40 text-indigo-200 text-[11px] font-bold flex items-center gap-1.5 transition" title="Immersive Full Gameplay Mode (Hide HUD & Distractions)">
+        <i class="fa-solid fa-eye-slash"></i>
+        <span class="hidden xl:inline">Immersive</span>
+      </button>
+
       <!-- Fullscreen Button -->
       <button type="button" onclick="AppUI.toggleBrowserFullscreen()" class="min-w-[38px] min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center justify-center text-xs transition" title="Toggle Fullscreen">
         <i class="fa-solid fa-expand"></i>
@@ -1235,15 +1390,40 @@ table.dataTable tbody tr:hover {
       <div id="floatingEmoteText" class="px-4 py-1.5 rounded-full bg-slate-900/95 border border-emerald-400 text-emerald-300 font-bold text-xs shadow-xl animate__animated animate__fadeInUp"></div>
     </div>
 
-    <!-- 10x10 Responsive Board -->
-    <div class="board-grid" id="boardGridContainer">
+    <!-- Interactive Multi-Bead Choice Bar (Appears when >1 beads have distinct valid moves) -->
+    <div id="beadChoiceBar" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-950/95 border-2 border-amber-400 rounded-2xl px-4 py-2.5 shadow-2xl flex flex-col items-center gap-2 max-w-[95vw]">
+      <div class="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+        <i class="fa-solid fa-hand-pointer animate-bounce"></i>
+        <span id="beadChoicePromptText">Select Which Bead to Move:</span>
+      </div>
+      <div id="beadChoiceButtons" class="flex flex-wrap items-center justify-center gap-2"></div>
+    </div>
+
+    <!-- 10x10 Responsive Board (Clicking Center or Board Rolls Dice) -->
+    <div class="board-grid" id="boardGridContainer" onclick="GameEngine.handleBoardGridClick(event)">
       <div id="boardCellsWrapper" class="contents"></div>
       <svg id="boardSvgOverlay" viewBox="0 0 1000 1000" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+
+      <!-- Interactive Center Dice Roll Hub (Click Center to Roll Dice!) -->
+      <button type="button" id="centerBoardDiceBtn" onclick="GameEngine.handleCenterDiceClick(event)" class="center-dice-hub" title="Click Center to Roll Dice (Space)">
+        <div id="centerDiceCubeVisual" class="center-dice-mini">
+          <span class="center-pip" id="centerPip-0"></span>
+          <span class="center-pip" id="centerPip-1"></span>
+          <span class="center-pip" id="centerPip-2"></span>
+          <span class="center-pip" id="centerPip-3"></span>
+          <span class="center-pip active" id="centerPip-4"></span>
+          <span class="center-pip" id="centerPip-5"></span>
+          <span class="center-pip" id="centerPip-6"></span>
+          <span class="center-pip" id="centerPip-7"></span>
+          <span class="center-pip" id="centerPip-8"></span>
+        </div>
+        <span id="centerDiceStatusLabel" class="mt-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-emerald-300 leading-none">ROLL</span>
+      </button>
     </div>
   </div>
 
   <!-- BOTTOM COMPACT PLAYER ROSTER & DICE CONTROL DECK (shrink-0, ~88px height) -->
-  <div class="shrink-0 bg-slate-900/95 border-t border-slate-800 px-2.5 sm:px-5 py-2 z-30">
+  <div id="arenaBottomDeckBar" class="shrink-0 bg-slate-900/95 border-t border-slate-800 px-2.5 sm:px-5 py-2 z-30">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
 
       <!-- Active Players Compact Cards Strip -->
@@ -1320,10 +1500,36 @@ table.dataTable tbody tr:hover {
 
       <!-- In-Game Toggles -->
       <div class="space-y-2 text-xs">
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-emerald-950/50 border border-emerald-500/40">
+          <div>
+            <span class="font-bold text-emerald-300 block">Auto-Roll Dice (Remembered)</span>
+            <span class="text-[10px] text-slate-400">Automatically rolls on your turn & saved</span>
+          </div>
+          <input type="checkbox" id="pauseChkAlwaysAutoRoll" onchange="GameEngine.setAlwaysAutoRollEnabled(this.checked)" class="w-4 h-4 accent-emerald-500">
+        </div>
+
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-indigo-950/50 border border-indigo-500/40">
+          <div>
+            <span class="font-bold text-indigo-300 block">Immersive Full Gameplay Mode</span>
+            <span class="text-[10px] text-slate-400">Hide all bars & roll from center dice</span>
+          </div>
+          <input type="checkbox" id="pauseChkImmersive" onchange="GameEngine.toggleImmersiveMode(this.checked)" class="w-4 h-4 accent-indigo-500">
+        </div>
+
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/80 border border-slate-700">
+          <span class="font-bold">Beads Per Player (Gotiyan)</span>
+          <select id="pauseBeadsSelect" onchange="GameEngine.setBeadsPerPlayer(this.value)" class="no-select2 bg-slate-900 text-emerald-300 font-bold px-2.5 py-1 rounded border border-slate-700 text-xs">
+            <option value="1" selected>1 Bead (Default)</option>
+            <option value="2">2 Beads (Jora)</option>
+            <option value="3">3 Beads (Toli)</option>
+            <option value="4">4 Beads (Full Hujra)</option>
+          </select>
+        </div>
+
         <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/80 border border-slate-700">
           <span class="font-bold">Auto-Roll Dice on Idle</span>
           <div class="flex items-center gap-2">
-            <select id="pauseAutoRollSec" onchange="GameEngine.setIdleAutoRollSeconds(this.value)" class="bg-slate-900 text-white px-2 py-1 rounded border border-slate-700 text-xs">
+            <select id="pauseAutoRollSec" onchange="GameEngine.setIdleAutoRollSeconds(this.value)" class="no-select2 bg-slate-900 text-white px-2 py-1 rounded border border-slate-700 text-xs">
               <option value="5">5s</option>
               <option value="8">8s</option>
               <option value="10" selected>10s</option>
@@ -1553,70 +1759,128 @@ const GameAudio = {
    ============================================================================ */
 const DBEngine = {
   db: null,
+  useMemoryFallback: false,
+  memStore: { users: [], players: [], matches: [], presets: [], settings: [] },
   async init() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(APP_CONFIG.dbName, APP_CONFIG.dbVersion);
-      req.onupgradeneeded = (e) => {
-        const db = e.target.result;
-        if (!db.objectStoreNames.contains('users')) {
-          const uStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
-          uStore.createIndex('username', 'username', { unique: false });
+    return new Promise((resolve) => {
+      try {
+        if (typeof indexedDB === 'undefined') {
+          throw new Error('IndexedDB unavailable');
         }
-        if (!db.objectStoreNames.contains('players')) {
-          db.createObjectStore('players', { keyPath: 'id', autoIncrement: true });
-        }
-        if (!db.objectStoreNames.contains('matches')) {
-          db.createObjectStore('matches', { keyPath: 'id', autoIncrement: true });
-        }
-        if (!db.objectStoreNames.contains('presets')) {
-          db.createObjectStore('presets', { keyPath: 'id', autoIncrement: true });
-        }
-        if (!db.objectStoreNames.contains('settings')) {
-          db.createObjectStore('settings', { keyPath: 'key' });
-        }
-      };
-      req.onsuccess = async (e) => {
-        this.db = e.target.result;
-        await this.seedInitialData();
-        resolve(this.db);
-      };
-      req.onerror = (e) => reject(e.target.error);
+        const req = indexedDB.open(APP_CONFIG.dbName, APP_CONFIG.dbVersion);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('users')) {
+            const uStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+            uStore.createIndex('username', 'username', { unique: false });
+          }
+          if (!db.objectStoreNames.contains('players')) {
+            db.createObjectStore('players', { keyPath: 'id', autoIncrement: true });
+          }
+          if (!db.objectStoreNames.contains('matches')) {
+            db.createObjectStore('matches', { keyPath: 'id', autoIncrement: true });
+          }
+          if (!db.objectStoreNames.contains('presets')) {
+            db.createObjectStore('presets', { keyPath: 'id', autoIncrement: true });
+          }
+          if (!db.objectStoreNames.contains('settings')) {
+            db.createObjectStore('settings', { keyPath: 'key' });
+          }
+        };
+        req.onsuccess = async (e) => {
+          this.db = e.target.result;
+          await this.seedInitialData();
+          resolve(this.db);
+        };
+        req.onerror = async () => {
+          this.useMemoryFallback = true;
+          await this.seedInitialData();
+          resolve(null);
+        };
+      } catch (err) {
+        this.useMemoryFallback = true;
+        this.seedInitialData().then(() => resolve(null));
+      }
     });
   },
+  _keyField(storeName) {
+    return storeName === 'settings' ? 'key' : 'id';
+  },
   async getAll(storeName) {
-    return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(storeName, 'readonly');
-      const store = tx.objectStore(storeName);
-      const req = store.getAll();
-      req.onsuccess = () => resolve(req.result || []);
-      req.onerror = () => reject(req.error);
+    if (this.useMemoryFallback || !this.db) {
+      return (this.memStore[storeName] || []).map(x => ({ ...x }));
+    }
+    return new Promise((resolve) => {
+      try {
+        const tx = this.db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => resolve([]);
+      } catch (e) {
+        resolve([]);
+      }
     });
   },
   async getByKey(storeName, key) {
-    return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(storeName, 'readonly');
-      const store = tx.objectStore(storeName);
-      const req = store.get(key);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
+    if (this.useMemoryFallback || !this.db) {
+      const kf = this._keyField(storeName);
+      const found = (this.memStore[storeName] || []).find(x => x[kf] === key);
+      return found ? { ...found } : undefined;
+    }
+    return new Promise((resolve) => {
+      try {
+        const tx = this.db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(undefined);
+      } catch (e) {
+        resolve(undefined);
+      }
     });
   },
   async put(storeName, item) {
-    return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(storeName, 'readwrite');
-      const store = tx.objectStore(storeName);
-      const req = store.put(item);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
+    if (this.useMemoryFallback || !this.db) {
+      const kf = this._keyField(storeName);
+      const arr = this.memStore[storeName] || (this.memStore[storeName] = []);
+      const copy = { ...item };
+      if (kf === 'id' && (copy.id === undefined || copy.id === null || copy.id === '')) {
+        const maxId = arr.reduce((m, x) => Math.max(m, Number(x.id) || 0), 0);
+        copy.id = maxId + 1;
+      }
+      const idx = arr.findIndex(x => x[kf] === copy[kf]);
+      if (idx >= 0) arr[idx] = copy; else arr.push(copy);
+      return copy[kf];
+    }
+    return new Promise((resolve) => {
+      try {
+        const tx = this.db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        const req = store.put(item);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+      } catch (e) {
+        resolve(null);
+      }
     });
   },
   async delete(storeName, key) {
-    return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(storeName, 'readwrite');
-      const store = tx.objectStore(storeName);
-      const req = store.delete(key);
-      req.onsuccess = () => resolve(true);
-      req.onerror = () => reject(req.error);
+    if (this.useMemoryFallback || !this.db) {
+      const kf = this._keyField(storeName);
+      this.memStore[storeName] = (this.memStore[storeName] || []).filter(x => x[kf] !== key);
+      return true;
+    }
+    return new Promise((resolve) => {
+      try {
+        const tx = this.db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        const req = store.delete(key);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => resolve(false);
+      } catch (e) {
+        resolve(false);
+      }
     });
   },
   async seedInitialData() {
@@ -1794,7 +2058,7 @@ const ProfileManager = {
         await this.syncProfileWithDB(profileObj);
         document.getElementById('profileOnboardingOverlay').classList.add('hidden');
         this.applyProfileToUI();
-        GameEngine.setupPlayersForMode(GameEngine.mode);
+        await GameEngine.setupPlayersForMode(GameEngine.mode);
         GameEngine.renderPlayerCards();
         AppUI.toast(`Salam ${name}! Your Hujra profile is ready.`, 'success');
       });
@@ -1932,8 +2196,7 @@ const ProfileManager = {
       const found = await DBEngine.getByKey('players', chosenId);
       if (found) {
         document.getElementById('editProfName').value = found.name;
-        document.getElementById('editProfDistrict').value = found.district;
-        $('#editProfDistrict').trigger('change.select2');
+        AppUI.syncSelectValue('editProfDistrict', found.district);
         document.getElementById('editProfRank').value = found.rank;
         document.getElementById('editProfColor').value = found.color || '#059669';
       }
@@ -1950,7 +2213,7 @@ const ProfileManager = {
       };
       await this.syncProfileWithDB(updated);
       this.applyProfileToUI();
-      GameEngine.setupPlayersForMode(GameEngine.mode);
+      await GameEngine.setupPlayersForMode(GameEngine.mode);
       GameEngine.renderPlayerCards();
       await PlayersCRUD.refreshTable();
       AppUI.forceCloseModal();
@@ -1989,16 +2252,8 @@ const ThemeEngine = {
     root.style.setProperty('--footer-bg', t.footerBg);
     root.style.setProperty('--footer-text', t.footerText);
 
-    const ff = document.getElementById('themeFontFamily');
-    if (ff) {
-      ff.value = t.fontFamily;
-      $(ff).trigger('change.select2');
-    }
-    const fs = document.getElementById('themeFontSize');
-    if (fs) {
-      fs.value = t.fontSize;
-      $(fs).trigger('change.select2');
-    }
+    AppUI.syncSelectValue('themeFontFamily', t.fontFamily);
+    AppUI.syncSelectValue('themeFontSize', t.fontSize);
     const mapIds = {
       themeHeaderBg: t.headerBg,
       themeHeaderText: t.headerText,
@@ -2058,6 +2313,13 @@ const GameEngine = {
   activePreset: null,
   inArena: false,
   isPaused: false,
+  _isSyncingUI: false,
+  _isSettingBeads: false,
+  autoRollTimer: null,
+  awaitingBeadChoice: false,
+  pendingRollValue: null,
+  pendingEligibleBeadIds: [],
+  pendingBeadMoveResolver: null,
   rules: {
     needSix: true,
     tripleSixBurn: true,
@@ -2065,10 +2327,13 @@ const GameEngine = {
     exact100: true
   },
   settings: {
+    alwaysAutoRoll: false,
     idleAutoRoll: true,
     idleTimeoutSec: 10,
     afkBotTakeover: true,
     humanAutoPlay: false,
+    immersiveMode: false,
+    beadsPerPlayer: 1,
     radarAssist: true,
     allowUndo: true,
     haptics: true,
@@ -2079,7 +2344,7 @@ const GameEngine = {
   seatAssignments: [null, null, null, null],
   currentTurnIdx: 0,
   consecutiveSixes: 0,
-  turnStartState: { pos: 0, unlocked: false },
+  turnStartState: { pos: 0, unlocked: false, beadsSnapshot: [] },
   undoSnapshot: null,
   isAnimating: false,
   totalTurnsCount: 0,
@@ -2090,11 +2355,11 @@ const GameEngine = {
   async init() {
     this.loadSavedSettings();
     const presets = await DBEngine.getAll('presets');
-    this.populatePresetDropdown(presets);
     this.activePreset = presets[0];
+    this.populatePresetDropdown(presets);
     this.syncPresetToRules();
     await this.renderSeatSelectors();
-    this.setupPlayersForMode('ai');
+    await this.setupPlayersForMode('ai');
     this.renderBoard();
     this.renderPlayerCards();
     this.bindKeyboardShortcuts();
@@ -2106,7 +2371,18 @@ const GameEngine = {
     try {
       const raw = localStorage.getItem('khyber_game_settings_v4');
       if (raw) {
-        this.settings = Object.assign(this.settings, JSON.parse(raw));
+        const parsed = JSON.parse(raw);
+        this.settings = Object.assign(this.settings, parsed);
+        if (parsed.alwaysAutoRoll !== undefined) {
+          this.settings.humanAutoPlay = !!parsed.alwaysAutoRoll;
+        } else if (parsed.humanAutoPlay !== undefined) {
+          this.settings.alwaysAutoRoll = !!parsed.humanAutoPlay;
+        }
+        if (![1, 2, 3, 4].includes(Number(this.settings.beadsPerPlayer))) {
+          this.settings.beadsPerPlayer = 1;
+        } else {
+          this.settings.beadsPerPlayer = Number(this.settings.beadsPerPlayer);
+        }
       }
     } catch (e) {}
     this.syncSettingsToUI();
@@ -2120,63 +2396,118 @@ const GameEngine = {
   },
 
   syncSettingsToUI() {
-    const s = this.settings;
-    const setChk = (id, val) => { const el = document.getElementById(id); if (el) el.checked = !!val; };
-    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = String(val); };
+    if (this._isSyncingUI) return;
+    this._isSyncingUI = true;
+    try {
+      const s = this.settings;
+      const setChk = (id, val) => { const el = document.getElementById(id); if (el) el.checked = !!val; };
 
-    setChk('homeToggleAutoRoll', s.idleAutoRoll);
-    setChk('chkIdleAutoRoll', s.idleAutoRoll);
-    setChk('pauseChkAutoRoll', s.idleAutoRoll);
-    setVal('homeAutoRollSeconds', s.idleTimeoutSec);
-    setVal('pauseAutoRollSec', s.idleTimeoutSec);
+      setChk('homeToggleAlwaysAutoRoll', s.alwaysAutoRoll);
+      setChk('chkAlwaysAutoRoll', s.alwaysAutoRoll);
+      setChk('pauseChkAlwaysAutoRoll', s.alwaysAutoRoll);
 
-    setChk('chkAfkBotTakeover', s.afkBotTakeover);
-    setChk('homeToggleRadar', s.radarAssist);
-    setChk('chkRadarAssist', s.radarAssist);
-    setChk('pauseChkRadar', s.radarAssist);
-    setChk('chkAllowUndo', s.allowUndo);
-    setChk('chkHaptics', s.haptics);
-    setChk('chkFastCamp', s.fastCamp);
-    setVal('homeGameSpeedSelect', s.speedMultiplier);
+      setChk('chkImmersiveMode', s.immersiveMode);
+      setChk('pauseChkImmersive', s.immersiveMode);
 
-    const sideBadge = document.getElementById('sidebarAutoRollBadge');
-    if (sideBadge) sideBadge.textContent = s.idleAutoRoll ? `ON (${s.idleTimeoutSec}s)` : 'OFF';
+      AppUI.syncSelectValue('homeBeadsPerPlayerSelect', s.beadsPerPlayer || 1);
+      AppUI.syncSelectValue('selectBeadsPerPlayer', s.beadsPerPlayer || 1);
+      AppUI.syncSelectValue('pauseBeadsSelect', s.beadsPerPlayer || 1);
 
-    const hudAutoBtn = document.getElementById('hudAutoRollBtn');
-    const hudAutoCount = document.getElementById('hudAutoRollCountdown');
-    if (hudAutoBtn && hudAutoCount) {
-      if (s.idleAutoRoll) {
-        hudAutoBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold flex items-center gap-1.5 transition';
-        hudAutoCount.textContent = `${s.idleTimeoutSec}s`;
-      } else {
-        hudAutoBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-[11px] font-bold flex items-center gap-1.5 transition';
-        hudAutoCount.textContent = 'OFF';
+      setChk('homeToggleAutoRoll', s.idleAutoRoll);
+      setChk('chkIdleAutoRoll', s.idleAutoRoll);
+      setChk('pauseChkAutoRoll', s.idleAutoRoll);
+      AppUI.syncSelectValue('homeAutoRollSeconds', s.idleTimeoutSec);
+      AppUI.syncSelectValue('pauseAutoRollSec', s.idleTimeoutSec);
+
+      setChk('chkAfkBotTakeover', s.afkBotTakeover);
+      setChk('homeToggleRadar', s.radarAssist);
+      setChk('chkRadarAssist', s.radarAssist);
+      setChk('pauseChkRadar', s.radarAssist);
+      setChk('chkAllowUndo', s.allowUndo);
+      setChk('chkHaptics', s.haptics);
+      setChk('chkFastCamp', s.fastCamp);
+      AppUI.syncSelectValue('homeGameSpeedSelect', s.speedMultiplier);
+
+      const sideBadge = document.getElementById('sidebarAutoRollBadge');
+      if (sideBadge) {
+        sideBadge.textContent = s.alwaysAutoRoll ? 'AUTO (SAVED)' : (s.idleAutoRoll ? `ON (${s.idleTimeoutSec}s)` : 'OFF');
       }
-    }
 
-    const hudBotBtn = document.getElementById('hudBotPlayBtn');
-    const hudBotLabel = document.getElementById('hudBotPlayLabel');
-    if (hudBotBtn && hudBotLabel) {
-      if (s.humanAutoPlay) {
-        hudBotBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-indigo-600/30 border border-indigo-400 text-indigo-200 text-[11px] font-bold flex items-center gap-1.5 transition';
-        hudBotLabel.textContent = 'Auto-Play: ON';
-      } else {
-        hudBotBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[11px] font-bold flex items-center gap-1.5 transition';
-        hudBotLabel.textContent = 'Auto-Play: OFF';
+      const hudAutoBtn = document.getElementById('hudAutoRollBtn');
+      const hudAutoCount = document.getElementById('hudAutoRollCountdown');
+      if (hudAutoBtn && hudAutoCount) {
+        if (s.idleAutoRoll) {
+          hudAutoBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold flex items-center gap-1.5 transition';
+          hudAutoCount.textContent = `${s.idleTimeoutSec}s`;
+        } else {
+          hudAutoBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-[11px] font-bold flex items-center gap-1.5 transition';
+          hudAutoCount.textContent = 'OFF';
+        }
       }
+
+      const hudBotBtn = document.getElementById('hudBotPlayBtn');
+      const hudBotLabel = document.getElementById('hudBotPlayLabel');
+      if (hudBotBtn && hudBotLabel) {
+        if (s.alwaysAutoRoll) {
+          hudBotBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-emerald-600/30 border border-emerald-400 text-emerald-200 text-[11px] font-bold flex items-center gap-1.5 transition';
+          hudBotLabel.textContent = 'Auto-Roll: ON';
+        } else {
+          hudBotBtn.className = 'min-h-[38px] px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-[11px] font-bold flex items-center gap-1.5 transition';
+          hudBotLabel.textContent = 'Auto-Roll: OFF';
+        }
+      }
+
+      const immAutoBtn = document.getElementById('immersiveAutoRollBtn');
+      if (immAutoBtn) {
+        immAutoBtn.textContent = s.alwaysAutoRoll ? 'Auto: ON ★' : 'Auto: OFF';
+        immAutoBtn.className = s.alwaysAutoRoll
+          ? 'px-2 py-0.5 rounded-full bg-emerald-600 text-slate-950 text-[10px] font-extrabold border border-emerald-300 transition'
+          : 'px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-emerald-300 border border-slate-600 transition';
+      }
+
+      const centerLbl = document.getElementById('centerDiceStatusLabel');
+      if (centerLbl && !this.awaitingBeadChoice) {
+        centerLbl.textContent = s.alwaysAutoRoll ? 'AUTO ON' : 'ROLL';
+      }
+
+      const hudSpeedBtn = document.getElementById('hudSpeedBtn');
+      if (hudSpeedBtn) hudSpeedBtn.textContent = `${s.speedMultiplier}x`;
+
+      const undoBtn = document.getElementById('undoMoveBtn');
+      if (undoBtn) {
+        undoBtn.style.display = (s.allowUndo && this.mode !== 'webrtc') ? 'inline-block' : 'none';
+      }
+
+      this.applyImmersiveShellState();
+    } finally {
+      this._isSyncingUI = false;
     }
+  },
 
-    const hudSpeedBtn = document.getElementById('hudSpeedBtn');
-    if (hudSpeedBtn) hudSpeedBtn.textContent = `${s.speedMultiplier}x`;
-
-    const undoBtn = document.getElementById('undoMoveBtn');
-    if (undoBtn) {
-      undoBtn.style.display = (s.allowUndo && this.mode !== 'webrtc') ? 'inline-block' : 'none';
+  setAlwaysAutoRollEnabled(enabled) {
+    const nextVal = !!enabled;
+    if (this.settings.alwaysAutoRoll === nextVal && this.settings.humanAutoPlay === nextVal) {
+      this.syncSettingsToUI();
+      return;
+    }
+    this.settings.alwaysAutoRoll = nextVal;
+    this.settings.humanAutoPlay = nextVal;
+    this.resetIdleTimer();
+    this.saveSettings();
+    AppUI.toast(this.settings.alwaysAutoRoll ? 'Auto-Roll Dice enabled & remembered!' : 'Auto-Roll Dice turned off (saved)', 'info');
+    if (this.settings.alwaysAutoRoll && this.inArena && !this.isPaused && !this.matchFinished) {
+      if (this.awaitingBeadChoice) {
+        this.autoPickPendingBead();
+      } else if (!this.isAnimating) {
+        this.triggerRoll(null, false, true);
+      }
     }
   },
 
   setIdleAutoRollEnabled(enabled) {
-    this.settings.idleAutoRoll = !!enabled;
+    const nextVal = !!enabled;
+    if (this.settings.idleAutoRoll === nextVal) return;
+    this.settings.idleAutoRoll = nextVal;
     this.resetIdleTimer();
     this.saveSettings();
     AppUI.toast(this.settings.idleAutoRoll ? `Idle Auto-Roll enabled (${this.settings.idleTimeoutSec}s)` : 'Idle Auto-Roll disabled', 'info');
@@ -2187,7 +2518,9 @@ const GameEngine = {
   },
 
   setIdleAutoRollSeconds(sec) {
-    this.settings.idleTimeoutSec = Math.max(3, Number(sec) || 10);
+    const parsed = Math.max(3, Number(sec) || 10);
+    if (this.settings.idleTimeoutSec === parsed) return;
+    this.settings.idleTimeoutSec = parsed;
     this.resetIdleTimer();
     this.saveSettings();
   },
@@ -2198,11 +2531,70 @@ const GameEngine = {
   },
 
   toggleHumanAutoPlay() {
-    this.settings.humanAutoPlay = !this.settings.humanAutoPlay;
+    this.setAlwaysAutoRollEnabled(!this.settings.alwaysAutoRoll);
+  },
+
+  setImmersivePreference(enabled) {
+    const nextVal = !!enabled;
+    if (this.settings.immersiveMode === nextVal) return;
+    this.settings.immersiveMode = nextVal;
     this.saveSettings();
-    AppUI.toast(this.settings.humanAutoPlay ? 'Bot Auto-Play takeover activated!' : 'Manual control restored!', 'info');
-    if (this.settings.humanAutoPlay && this.inArena && !this.isAnimating && !this.matchFinished) {
-      this.triggerRoll(null, false, true);
+    AppUI.toast(this.settings.immersiveMode ? 'Immersive Full Gameplay Mode enabled' : 'Standard Arena HUD enabled', 'info');
+  },
+
+  toggleImmersiveMode(forceState) {
+    const nextState = forceState !== undefined ? !!forceState : !this.settings.immersiveMode;
+    this.settings.immersiveMode = nextState;
+    this.saveSettings();
+    this.applyImmersiveShellState();
+    if (nextState) {
+      try {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+      AppUI.toast('Immersive Full Gameplay ON — Click center dice to roll!', 'success');
+    } else {
+      AppUI.toast('Standard HUD restored', 'info');
+    }
+  },
+
+  applyImmersiveShellState() {
+    const arena = document.getElementById('gameplayArenaShell');
+    const floatBar = document.getElementById('immersiveFloatingBar');
+    if (!arena) return;
+    if (this.settings.immersiveMode) {
+      arena.classList.add('immersive-active');
+      if (floatBar) floatBar.classList.remove('hidden');
+    } else {
+      arena.classList.remove('immersive-active');
+      if (floatBar) floatBar.classList.add('hidden');
+    }
+  },
+
+  async setBeadsPerPlayer(countVal) {
+    if (this._isSettingBeads) return;
+    const parsed = Math.min(4, Math.max(1, Number(countVal) || 1));
+    const currentBeadLen = (this.players && this.players.length > 0 && this.players[0].beads)
+      ? this.players[0].beads.length
+      : parsed;
+    if (this.settings.beadsPerPlayer === parsed && currentBeadLen === parsed) {
+      this.syncSettingsToUI();
+      return;
+    }
+    this._isSettingBeads = true;
+    try {
+      this.settings.beadsPerPlayer = parsed;
+      this.saveSettings();
+      this.updateRuleSubtext();
+      if (this.players && this.players.length > 0) {
+        await this.setupPlayersForMode(this.mode);
+        this.renderBoard();
+        this.renderPlayerCards();
+        AppUI.toast(`Configured ${parsed} ${parsed === 1 ? 'Bead (Default)' : 'Beads'} per player — KPK rules updated!`, 'success');
+      }
+    } finally {
+      this._isSettingBeads = false;
     }
   },
 
@@ -2228,7 +2620,9 @@ const GameEngine = {
   },
 
   setGameSpeed(mult) {
-    this.settings.speedMultiplier = Number(mult) || 1.6;
+    const parsed = Number(mult) || 1.6;
+    if (this.settings.speedMultiplier === parsed) return;
+    this.settings.speedMultiplier = parsed;
     this.saveSettings();
   },
 
@@ -2245,6 +2639,27 @@ const GameEngine = {
   },
 
   /* ==========================================================================
+     CENTER BOARD CLICK-TO-ROLL & BOARD INTERACTION HANDLERS
+     ========================================================================== */
+  handleCenterDiceClick(event) {
+    if (event) event.stopPropagation();
+    if (this.awaitingBeadChoice) {
+      this.autoPickPendingBead();
+      return;
+    }
+    this.triggerRoll();
+  },
+
+  handleBoardGridClick(event) {
+    if (!this.inArena || this.isPaused || this.matchFinished) return;
+    if (this.awaitingBeadChoice) return;
+    const cur = this.players[this.currentTurnIdx];
+    if (cur && !cur.isAI && !this.isAnimating) {
+      this.triggerRoll();
+    }
+  },
+
+  /* ==========================================================================
      IDLE AUTO-ROLL WATCHDOG (TICKS ONLY WHEN IN ARENA & NOT PAUSED)
      ========================================================================== */
   startIdleWatchdog() {
@@ -2255,7 +2670,7 @@ const GameEngine = {
       const bar = document.getElementById('idleProgressBar');
       const countEl = document.getElementById('hudAutoRollCountdown');
 
-      if (!this.inArena || this.isPaused || this.isAnimating || this.matchFinished || !this.settings.idleAutoRoll) {
+      if (!this.inArena || this.isPaused || (this.isAnimating && !this.awaitingBeadChoice) || this.matchFinished || !this.settings.idleAutoRoll) {
         if (bar) bar.style.width = '100%';
         if (countEl && this.settings.idleAutoRoll) countEl.textContent = `${this.settings.idleTimeoutSec}s`;
         return;
@@ -2275,15 +2690,18 @@ const GameEngine = {
 
       if (this.idleRemainingMs <= 0) {
         this.idleRemainingMs = totalMs;
+        if (this.awaitingBeadChoice) {
+          this.autoPickPendingBead();
+          return;
+        }
         currentPlayer.idleCount = (currentPlayer.idleCount || 0) + 1;
-        if (this.settings.afkBotTakeover && currentPlayer.idleCount >= 3 && !this.settings.humanAutoPlay) {
-          this.settings.humanAutoPlay = true;
-          this.syncSettingsToUI();
-          this.showFloatingEmote(`${currentPlayer.short} went AFK — Hujra Bot Auto-Play enabled!`);
+        if (this.settings.afkBotTakeover && currentPlayer.idleCount >= 3 && !this.settings.alwaysAutoRoll) {
+          this.setAlwaysAutoRollEnabled(true);
+          this.showFloatingEmote(`${currentPlayer.short} went AFK — Auto-Roll enabled!`);
         } else {
           this.showFloatingEmote(`Idle Auto-Roll triggered for ${currentPlayer.short}!`);
+          this.triggerRoll(null, false, true);
         }
-        this.triggerRoll(null, false, true);
       }
     }, 250);
   },
@@ -2303,28 +2721,42 @@ const GameEngine = {
     document.getElementById('gameHubShell').classList.add('hidden');
     document.getElementById('gameplayArenaShell').classList.remove('hidden');
     document.getElementById('arenaPauseModal').classList.add('hidden');
+    this.applyImmersiveShellState();
     this.resetIdleTimer();
     this.renderBoard();
     this.renderPlayerCards();
     this.updateRadarHint();
+    this.scheduleAutoRollIfNeeded();
   },
 
-  startNewMatchAndEnterArena() {
-    this.setupPlayersForMode(this.mode);
+  async startNewMatchAndEnterArena() {
+    await this.setupPlayersForMode(this.mode);
     this.launchArena();
   },
 
-  quickLaunchMode(selectedMode) {
-    const sel = document.getElementById('selectGameMode');
-    if (sel) {
-      sel.value = selectedMode;
-      $(sel).trigger('change.select2');
-    }
-    this.changeGameMode(selectedMode);
+  async startImmersiveMatch() {
+    this.settings.immersiveMode = true;
+    this.saveSettings();
+    await this.setupPlayersForMode(this.mode);
+    this.launchArena();
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    } catch (e) {}
+  },
+
+  async quickLaunchMode(selectedMode) {
+    AppUI.syncSelectValue('selectGameMode', selectedMode);
+    await this.changeGameMode(selectedMode);
     this.launchArena();
   },
 
   exitArenaToHub() {
+    if (this.autoRollTimer) {
+      clearTimeout(this.autoRollTimer);
+      this.autoRollTimer = null;
+    }
     this.inArena = false;
     this.isPaused = false;
     document.getElementById('arenaPauseModal').classList.add('hidden');
@@ -2338,11 +2770,18 @@ const GameEngine = {
 
   togglePauseDrawer(show) {
     this.isPaused = show !== undefined ? show : !this.isPaused;
+    if (this.isPaused && this.autoRollTimer) {
+      clearTimeout(this.autoRollTimer);
+      this.autoRollTimer = null;
+    }
     const modal = document.getElementById('arenaPauseModal');
     if (modal) {
       modal.classList.toggle('hidden', !this.isPaused);
     }
     this.resetIdleTimer();
+    if (!this.isPaused) {
+      this.scheduleAutoRollIfNeeded();
+    }
   },
 
   toggleLogDrawer(forceState) {
@@ -2350,6 +2789,25 @@ const GameEngine = {
     if (!drawer) return;
     const willShow = forceState !== undefined ? forceState : drawer.classList.contains('hidden');
     drawer.classList.toggle('hidden', !willShow);
+  },
+
+  scheduleAutoRollIfNeeded() {
+    if (this.autoRollTimer) {
+      clearTimeout(this.autoRollTimer);
+      this.autoRollTimer = null;
+    }
+    if (!this.inArena || this.isPaused || this.matchFinished || this.isAnimating || this.awaitingBeadChoice) return;
+    const cur = this.players[this.currentTurnIdx];
+    if (!cur) return;
+    if (cur.isAI || this.settings.alwaysAutoRoll || this.settings.humanAutoPlay) {
+      const waitMs = Math.round(450 / this.settings.speedMultiplier);
+      this.autoRollTimer = setTimeout(() => {
+        this.autoRollTimer = null;
+        if (this.inArena && !this.isPaused && !this.matchFinished && !this.isAnimating && !this.awaitingBeadChoice) {
+          this.executeAITurn();
+        }
+      }, waitMs);
+    }
   },
 
   async saveActiveMatchState() {
@@ -2363,6 +2821,7 @@ const GameEngine = {
       mode: this.mode,
       presetId: this.activePreset ? this.activePreset.id : 1,
       rules: this.rules,
+      beadsPerPlayer: this.settings.beadsPerPlayer || 1,
       players: this.players,
       currentTurnIdx: this.currentTurnIdx,
       consecutiveSixes: this.consecutiveSixes,
@@ -2389,13 +2848,23 @@ const GameEngine = {
     this.mode = saved.mode || 'ai';
     await this.applyPresetById(saved.presetId || 1);
     this.rules = Object.assign(this.rules, saved.rules || {});
+    if (saved.beadsPerPlayer) {
+      this.settings.beadsPerPlayer = Number(saved.beadsPerPlayer) || 1;
+      this.syncSettingsToUI();
+    }
     this.players = saved.players;
+    this.players.forEach(p => {
+      if (!p.beads || !p.beads.length) {
+        p.beads = [{ id: 0, num: 1, label: p.short, pos: p.pos || 0, unlocked: !!p.unlocked, finished: p.pos === 100 }];
+      }
+      this.syncPlayerAggregatePos(p);
+    });
     this.currentTurnIdx = saved.currentTurnIdx || 0;
     this.consecutiveSixes = saved.consecutiveSixes || 0;
     this.totalTurnsCount = saved.totalTurnsCount || 0;
     this.matchFinished = false;
-    const curP = this.players[this.currentTurnIdx] || { pos: 0, unlocked: false };
-    this.turnStartState = { pos: curP.pos, unlocked: curP.unlocked };
+    const curP = this.players[this.currentTurnIdx] || this.players[0];
+    this.snapshotTurnStart(curP);
     this.updateTurnBanner();
     this.launchArena();
     AppUI.toast(`Resumed match at Turn ${this.totalTurnsCount}`, 'success');
@@ -2408,7 +2877,10 @@ const GameEngine = {
     const sel = document.getElementById('selectRulePreset');
     if (!sel) return;
     sel.innerHTML = presets.map(p => `<option value="${p.id}">${AppUI.escapeHtml(p.name)}</option>`).join('');
-    $(sel).trigger('change.select2');
+    const targetId = this.activePreset ? this.activePreset.id : (presets[0] && presets[0].id);
+    if (targetId !== undefined) {
+      AppUI.syncSelectValue(sel, targetId);
+    }
   },
 
   async renderSeatSelectors() {
@@ -2428,7 +2900,7 @@ const GameEngine = {
       return `
         <div class="p-2.5 rounded-xl bg-white border border-slate-200 space-y-1">
           <label class="block text-[11px] font-extrabold text-slate-600">${seatLabels[idx]}</label>
-          <select onchange="GameEngine.assignSeatProfile(${idx}, this.value)" class="w-full min-h-[38px] px-2 rounded-lg border border-slate-300 text-xs font-semibold">
+          <select onchange="GameEngine.assignSeatProfile(${idx}, this.value)" class="no-select2 w-full min-h-[38px] px-2 rounded-lg border border-slate-300 text-xs font-semibold">
             ${options}
           </select>
         </div>
@@ -2446,6 +2918,9 @@ const GameEngine = {
     if (!preset) return;
     this.activePreset = preset;
     this.syncPresetToRules();
+    if (this.totalTurnsCount === 0 && this.players.length > 0) {
+      await this.setupPlayersForMode(this.mode);
+    }
     this.renderBoard();
     document.getElementById('activeRuleBadge').textContent = preset.name;
     this.addMatchLog(`Switched rule preset to "${preset.name}" (${preset.region}).`);
@@ -2471,19 +2946,35 @@ const GameEngine = {
     this.rules.knockback = document.getElementById('chkKnockback').checked;
     this.rules.exact100 = document.getElementById('chkExact100').checked;
     this.updateRuleSubtext();
+    if (this.totalTurnsCount === 0 && this.players.length > 0) {
+      this.players.forEach(p => {
+        (p.beads || []).forEach(b => {
+          b.pos = this.rules.needSix ? 0 : 1;
+          b.unlocked = !this.rules.needSix;
+          b.finished = false;
+        });
+        this.syncPlayerAggregatePos(p);
+      });
+      this.snapshotTurnStart(this.players[this.currentTurnIdx]);
+      this.renderBoard();
+      this.renderPlayerCards();
+    }
     this.addMatchLog('Updated KPK Hujra rule toggles for active match.');
   },
 
   updateRuleSubtext() {
     const parts = [];
-    parts.push(this.rules.needSix ? '6 to Open' : 'Open Any Roll');
+    const bCount = this.settings.beadsPerPlayer || 1;
+    parts.push(bCount === 1 ? '1 Bead (Default)' : `${bCount} Beads/Player (All to 100)`);
+    parts.push(this.rules.needSix ? '6 to Open Each Bead' : 'Open Any Roll');
     parts.push(this.rules.tripleSixBurn ? '3x6 Burns Turn' : 'Unlimited 6s');
-    parts.push(this.rules.knockback ? 'Takkar Cut ON' : 'No Cut');
+    parts.push(this.rules.knockback ? (bCount > 1 ? 'Takkar Cut + Bonus Roll' : 'Takkar Cut ON') : 'No Cut');
     parts.push(this.rules.exact100 ? 'Exact 100' : 'Any >=100');
-    document.getElementById('ruleSubtextDisplay').textContent = parts.join(' • ');
+    const el = document.getElementById('ruleSubtextDisplay');
+    if (el) el.textContent = parts.join(' • ');
   },
 
-  changeGameMode(mode) {
+  async changeGameMode(mode) {
     this.mode = mode;
     const modeLabels = {
       ai: 'Vs KPK Ustad Bot',
@@ -2493,22 +2984,72 @@ const GameEngine = {
       webrtc: 'WebRTC P2P Live'
     };
     document.getElementById('matchModePill').textContent = modeLabels[mode] || 'Hujra Match';
-    this.setupPlayersForMode(mode);
+    await this.setupPlayersForMode(mode);
     this.renderBoard();
     this.renderPlayerCards();
     this.syncSettingsToUI();
     this.addMatchLog(`Configured game in ${modeLabels[mode]} mode.`);
   },
 
+  createBeadsForPlayer(shortCode, beadCount) {
+    const startPos = this.rules.needSix ? 0 : 1;
+    const startUnlocked = !this.rules.needSix;
+    return Array.from({ length: beadCount }, (_, bIdx) => ({
+      id: bIdx,
+      num: bIdx + 1,
+      label: beadCount > 1 ? `${shortCode}•${bIdx + 1}` : shortCode,
+      pos: startPos,
+      unlocked: startUnlocked,
+      finished: false
+    }));
+  },
+
+  syncPlayerAggregatePos(player) {
+    if (!player || !player.beads || !player.beads.length) return;
+    player.beads.forEach(b => {
+      if (b.pos >= 100) {
+        b.pos = 100;
+        b.finished = true;
+        b.unlocked = true;
+      } else {
+        b.finished = false;
+      }
+    });
+    const unfinished = player.beads.filter(b => b.pos < 100);
+    if (unfinished.length === 0) {
+      player.pos = 100;
+      player.unlocked = true;
+    } else {
+      player.pos = Math.max(...unfinished.map(b => b.pos));
+      player.unlocked = player.beads.some(b => b.unlocked);
+    }
+    player.finishedBeadsCount = player.beads.filter(b => b.pos === 100).length;
+  },
+
+  snapshotTurnStart(player) {
+    if (!player) return;
+    this.turnStartState = {
+      pos: player.pos,
+      unlocked: player.unlocked,
+      beadsSnapshot: (player.beads || []).map(b => ({ ...b }))
+    };
+  },
+
   async setupPlayersForMode(mode) {
+    if (this.autoRollTimer) {
+      clearTimeout(this.autoRollTimer);
+      this.autoRollTimer = null;
+    }
     this.currentTurnIdx = 0;
     this.consecutiveSixes = 0;
     this.totalTurnsCount = 0;
     this.matchFinished = false;
     this.undoSnapshot = null;
+    this.hideBeadChoiceBar();
 
     const allPlayers = await DBEngine.getAll('players');
     const activeProf = ProfileManager.currentProfile;
+    const beadCount = Math.min(4, Math.max(1, Number(this.settings.beadsPerPlayer) || 1));
 
     const getSeatPlayer = (idx, fallbackName, fallbackColor) => {
       if (idx === 0 && activeProf) {
@@ -2542,23 +3083,31 @@ const GameEngine = {
     if (mode === 'local3') count = 3;
     if (mode === 'local4') count = 4;
 
-    this.players = slots.slice(0, count).map((p, idx) => ({
-      index: idx,
-      dbId: p.dbId,
-      name: p.name,
-      short: p.short,
-      color: p.color,
-      isAI: p.isAI,
-      pos: this.rules.needSix ? 0 : 1,
-      unlocked: !this.rules.needSix,
-      sixesRolled: 0,
-      cutsMade: 0,
-      snakesBitten: 0,
-      laddersClimbed: 0,
-      idleCount: 0
-    }));
+    this.players = slots.slice(0, count).map((p, idx) => {
+      const beads = this.createBeadsForPlayer(p.short, beadCount);
+      const pl = {
+        index: idx,
+        dbId: p.dbId,
+        name: p.name,
+        short: p.short,
+        color: p.color,
+        isAI: p.isAI,
+        pos: this.rules.needSix ? 0 : 1,
+        unlocked: !this.rules.needSix,
+        beads,
+        finishedBeadsCount: 0,
+        sixesRolled: 0,
+        cutsMade: 0,
+        snakesBitten: 0,
+        laddersClimbed: 0,
+        idleCount: 0
+      };
+      this.syncPlayerAggregatePos(pl);
+      return pl;
+    });
 
-    this.turnStartState = { pos: this.players[0].pos, unlocked: this.players[0].unlocked };
+    this.snapshotTurnStart(this.players[0]);
+    this.updateRuleSubtext();
     this.updateTurnBanner();
     this.renderBoard();
     this.renderPlayerCards();
@@ -2586,7 +3135,7 @@ const GameEngine = {
   },
 
   /* ==========================================================================
-     BOARD RENDERING & TACTICAL RADAR HIGHLIGHTS
+     BOARD RENDERING, LIFELIKE ANATOMICAL SNAKES & TACTICAL RADAR HIGHLIGHTS
      ========================================================================== */
   getSquareCoordinates(sq) {
     const zeroBased = sq - 1;
@@ -2606,24 +3155,27 @@ const GameEngine = {
     const radar = {};
     if (!this.settings.radarAssist || this.matchFinished || !this.players.length) return radar;
     const cur = this.players[this.currentTurnIdx];
-    if (!cur || (this.rules.needSix && !cur.unlocked)) return radar;
+    if (!cur) return radar;
 
     const ladders = (this.activePreset && this.activePreset.ladders) || {};
     const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    const activeBeads = (cur.beads || []).filter(b => b.pos > 0 && b.pos < 100 && (!this.rules.needSix || b.unlocked));
 
-    for (let d = 1; d <= 6; d++) {
-      const sq = cur.pos + d;
-      if (sq > 100) continue;
-      if (sq === 100 || ladders[sq] || APP_CONFIG.safeSquares.includes(sq)) {
-        radar[sq] = 'radar-good';
-      } else if (snakes[sq]) {
-        radar[sq] = 'radar-danger';
-      } else if (this.rules.knockback && this.players.some(other => other.index !== cur.index && other.pos === sq)) {
-        radar[sq] = 'radar-cut';
-      } else {
-        radar[sq] = 'radar-step';
+    activeBeads.forEach(bead => {
+      for (let d = 1; d <= 6; d++) {
+        const sq = bead.pos + d;
+        if (sq > 100) continue;
+        if (sq === 100 || ladders[sq] || APP_CONFIG.safeSquares.includes(sq)) {
+          radar[sq] = 'radar-good';
+        } else if (snakes[sq]) {
+          radar[sq] = 'radar-danger';
+        } else if (this.rules.knockback && this.players.some(other => other.index !== cur.index && (other.beads || []).some(ob => ob.pos === sq))) {
+          radar[sq] = 'radar-cut';
+        } else if (!radar[sq]) {
+          radar[sq] = 'radar-step';
+        }
       }
-    }
+    });
     return radar;
   },
 
@@ -2632,16 +3184,18 @@ const GameEngine = {
     if (!hintEl || !this.players.length) return;
     const cur = this.players[this.currentTurnIdx];
     if (!cur) return;
-    if (this.rules.needSix && !cur.unlocked) {
-      hintEl.textContent = `Need 6 (Chakka) to enter Sq 1`;
+    const activeBeads = (cur.beads || []).filter(b => b.pos > 0 && b.pos < 100 && (!this.rules.needSix || b.unlocked));
+    if (activeBeads.length === 0) {
+      hintEl.textContent = `Need 6 (Chakka) to unlock bead to Sq 1`;
       return;
     }
+    const leadPos = Math.max(...activeBeads.map(b => b.pos));
     const ladders = (this.activePreset && this.activePreset.ladders) || {};
     const snakes = (this.activePreset && this.activePreset.snakes) || {};
     const goodRolls = [];
     const badRolls = [];
     for (let d = 1; d <= 6; d++) {
-      const sq = cur.pos + d;
+      const sq = leadPos + d;
       if (sq === 100) goodRolls.push(`${d}→Win`);
       else if (ladders[sq]) goodRolls.push(`${d}→↑${ladders[sq]}`);
       else if (snakes[sq]) badRolls.push(`${d}→↓${snakes[sq]}`);
@@ -2649,7 +3203,7 @@ const GameEngine = {
     if (goodRolls.length || badRolls.length) {
       hintEl.textContent = `${goodRolls.length ? 'Best: ' + goodRolls.join(', ') : ''} ${badRolls.length ? '| Avoid: ' + badRolls.join(', ') : ''}`.trim();
     } else {
-      hintEl.textContent = `Clear path ahead from Sq ${cur.pos}`;
+      hintEl.textContent = `Clear path ahead from Sq ${leadPos}`;
     }
   },
 
@@ -2661,6 +3215,7 @@ const GameEngine = {
     const ladders = (this.activePreset && this.activePreset.ladders) || {};
     const snakes = (this.activePreset && this.activePreset.snakes) || {};
     const radarMap = this.computeRadarMap();
+    const beadCount = this.settings.beadsPerPlayer || 1;
 
     for (let r = 0; r < 10; r++) {
       const rowFromBottom = 9 - r;
@@ -2676,12 +3231,23 @@ const GameEngine = {
         const specialClass = isGoal ? 'cell-goal' : isKingSnake ? 'cell-king-snake' : isSafe ? 'cell-safe' : '';
         const radarClass = radarMap[sq] || '';
 
-        const tokensHere = this.players.filter(p => p.pos === sq);
-        const tokensHtml = tokensHere.map(p => {
-          const isTurn = p.index === this.currentTurnIdx && !this.matchFinished;
+        const beadTokensOnSquare = [];
+        this.players.forEach(p => {
+          (p.beads || []).forEach(b => {
+            if (b.pos === sq) {
+              const isTurn = p.index === this.currentTurnIdx && !this.matchFinished;
+              const isSelectable = isTurn && this.awaitingBeadChoice && this.pendingEligibleBeadIds.includes(b.id);
+              beadTokensOnSquare.push({ player: p, bead: b, isTurn, isSelectable });
+            }
+          });
+        });
+
+        const tokensHtml = beadTokensOnSquare.map(({ player: p, bead: b, isTurn, isSelectable }) => {
+          const clickAttr = isSelectable ? `onclick="GameEngine.selectBeadToMove(${b.id}, event)"` : '';
+          const pinText = beadCount > 1 ? `${p.short.replace('P', '')}${b.num}` : p.short;
           return `
-            <span class="token-pin ${isTurn ? 'token-active-glow' : ''}" style="background-color:${p.color}" title="${AppUI.escapeHtml(p.name)}">
-              ${p.short}
+            <span ${clickAttr} class="token-pin ${isTurn ? 'token-active-glow' : ''} ${isSelectable ? 'token-selectable-pulse' : ''}" style="background-color:${p.color}" title="${AppUI.escapeHtml(p.name)} (${b.label})">
+              ${pinText}
             </span>
           `;
         }).join('');
@@ -2692,7 +3258,11 @@ const GameEngine = {
         } else if (ladders[sq]) {
           badgeHtml = `<span class="text-[8px] sm:text-[9px] font-extrabold text-emerald-700">↑${ladders[sq]}</span>`;
         } else if (snakes[sq]) {
-          badgeHtml = `<span class="text-[8px] sm:text-[9px] font-extrabold text-rose-700">↓${snakes[sq]}</span>`;
+          badgeHtml = `
+            <span class="inline-flex items-center gap-0.5 text-[8px] sm:text-[9px] font-extrabold text-rose-700" title="Snake Head → Slides to ${snakes[sq]}">
+              <svg viewBox="0 0 32 32" class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 overflow-visible" fill="none"><path d="M5 27 C2 21, 12 18, 17 21 C23 24, 28 18, 22 13 C18 10, 12 12, 15 7" stroke="#e11d48" stroke-width="3.6" stroke-linecap="round"/><ellipse cx="16" cy="7" rx="5.2" ry="3.6" fill="#be123c"/><circle cx="14.3" cy="6.2" r="1" fill="#fde047"/><circle cx="17.7" cy="6.2" r="1" fill="#fde047"/><path d="M16 3.4 L16 0.5 M16 0.5 L14 -1.2 M16 0.5 L18 -1.2" stroke="#e11d48" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span>↓${snakes[sq]}</span>
+            </span>`;
         } else if (isSafe) {
           badgeHtml = '<i class="fa-solid fa-shield-heart text-[8px] sm:text-[9px] text-emerald-700" title="Hujra Safe Square"></i>';
         }
@@ -2715,10 +3285,172 @@ const GameEngine = {
     this.updateRadarHint();
   },
 
+  buildRealisticSnakeSvg(head, tail, p1, p2, idx) {
+    const isKing = head === 99;
+    const palettes = [
+      { id: 'viperEmerald', bodyA: '#065f46', bodyB: '#10b981', belly: '#a7f3d0', pattern: '#022c22', eye: '#fde047', outline: '#022c22' },
+      { id: 'viperCrimson', bodyA: '#9f1239', bodyB: '#f43f5e', belly: '#fecdd3', pattern: '#4c0519', eye: '#fef08a', outline: '#4c0519' },
+      { id: 'cobraGold', bodyA: '#92400e', bodyB: '#f59e0b', belly: '#fef3c7', pattern: '#451a03', eye: '#fef08a', outline: '#451a03' },
+      { id: 'viperRoyal', bodyA: '#5b21b6', bodyB: '#8b5cf6', belly: '#ede9fe', pattern: '#2e1065', eye: '#fde047', outline: '#2e1065' },
+      { id: 'viperCopper', bodyA: '#9a3412', bodyB: '#ea580c', belly: '#ffedd5', pattern: '#431407', eye: '#fde047', outline: '#431407' }
+    ];
+    const pal = isKing
+      ? { id: 'kalamarKing', bodyA: '#0f172a', bodyB: '#be123c', belly: '#fda4af', pattern: '#f43f5e', eye: '#fde047', outline: '#020617' }
+      : palettes[idx % palettes.length];
+
+    const dx = p2.cx - p1.cx;
+    const dy = p2.cy - p1.cy;
+    const dist = Math.hypot(dx, dy) || 1;
+    const ux = dx / dist;
+    const uy = dy / dist;
+    const nx = -uy;
+    const ny = ux;
+
+    const numWaves = Math.max(2.0, Math.min(3.5, dist / 165));
+    const waveAmp = Math.min(48, Math.max(24, dist * 0.11));
+    const sign = head % 2 === 0 ? 1 : -1;
+    const maxHalfWidth = isKing ? 16 : 12.5;
+    const steps = 34;
+
+    const spine = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const env = Math.pow(Math.sin(t * Math.PI), 0.78);
+      const wave = sign * waveAmp * Math.sin(t * Math.PI * numWaves) * env;
+      const sx = p1.cx + dx * t + nx * wave;
+      const sy = p1.cy + dy * t + ny * wave;
+
+      let w;
+      if (t < 0.06) {
+        w = maxHalfWidth * (0.62 + (t / 0.06) * 0.25);
+      } else if ((isKing || idx % 2 === 0) && t >= 0.06 && t <= 0.17) {
+        const hoodT = Math.sin(((t - 0.06) / 0.11) * Math.PI);
+        w = maxHalfWidth * (0.88 + hoodT * (isKing ? 0.85 : 0.55));
+      } else if (t < 0.48) {
+        w = maxHalfWidth * (0.92 + 0.12 * Math.sin(((t - 0.06) / 0.42) * Math.PI));
+      } else {
+        const tailT = (t - 0.48) / 0.52;
+        w = Math.max(1.4, maxHalfWidth * Math.pow(1 - tailT, 1.35));
+      }
+      spine.push({ sx, sy, t, w });
+    }
+
+    const leftPts = [];
+    const rightPts = [];
+    for (let i = 0; i <= steps; i++) {
+      const prev = spine[Math.max(0, i - 1)];
+      const next = spine[Math.min(steps, i + 1)];
+      let tx = next.sx - prev.sx;
+      let ty = next.sy - prev.sy;
+      const tLen = Math.hypot(tx, ty) || 1;
+      tx /= tLen;
+      ty /= tLen;
+      const pnx = -ty;
+      const pny = tx;
+      spine[i].tx = tx;
+      spine[i].ty = ty;
+      spine[i].pnx = pnx;
+      spine[i].pny = pny;
+
+      leftPts.push(`${(spine[i].sx + pnx * spine[i].w).toFixed(1)},${(spine[i].sy + pny * spine[i].w).toFixed(1)}`);
+      rightPts.push(`${(spine[i].sx - pnx * spine[i].w).toFixed(1)},${(spine[i].sy - pny * spine[i].w).toFixed(1)}`);
+    }
+
+    const bodyPolygonPath = `M ${leftPts.join(' L ')} L ${rightPts.reverse().join(' L ')} Z`;
+    const spinePath = `M ${spine.map(pt => `${pt.sx.toFixed(1)},${pt.sy.toFixed(1)}`).join(' L ')}`;
+
+    let scalesSvg = '';
+    for (let i = 3; i < steps - 3; i += 2) {
+      const pt = spine[i];
+      const rw = pt.w * 0.58;
+      const rl = pt.w * 0.78;
+      const d1x = pt.sx + pt.tx * rl;
+      const d1y = pt.sy + pt.ty * rl;
+      const d2x = pt.sx + pt.pnx * rw;
+      const d2y = pt.sy + pt.pny * rw;
+      const d3x = pt.sx - pt.tx * rl;
+      const d3y = pt.sy - pt.ty * rl;
+      const d4x = pt.sx - pt.pnx * rw;
+      const d4y = pt.sy - pt.pny * rw;
+      scalesSvg += `
+        <polygon points="${d1x.toFixed(1)},${d1y.toFixed(1)} ${d2x.toFixed(1)},${d2y.toFixed(1)} ${d3x.toFixed(1)},${d3y.toFixed(1)} ${d4x.toFixed(1)},${d4y.toFixed(1)}" fill="${pal.pattern}" opacity="0.65" stroke="${pal.belly}" stroke-width="0.9"/>
+      `;
+    }
+
+    const hPt = spine[0];
+    const neckPt = spine[2];
+    let hx = hPt.sx - neckPt.sx;
+    let hy = hPt.sy - neckPt.sy;
+    const hLen = Math.hypot(hx, hy) || 1;
+    hx /= hLen;
+    hy /= hLen;
+    const angleDeg = (Math.atan2(hy, hx) * 180) / Math.PI;
+    const headScale = isKing ? 1.28 : 1.04;
+
+    const headSvg = `
+      <g transform="translate(${p1.cx.toFixed(1)}, ${p1.cy.toFixed(1)}) rotate(${angleDeg.toFixed(1)}) scale(${headScale})">
+        <path d="M 14 0 L 26 0 M 26 0 L 32 -5 M 26 0 L 32 5" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <path d="M -12 -9 C -6 -16, 4 -14, 15 -6 C 19 -3, 19 3, 15 6 C 4 14, -6 16, -12 9 C -15 4, -15 -4, -12 -9 Z" fill="${pal.bodyA}" stroke="${pal.outline}" stroke-width="2.2"/>
+        <polygon points="-6,0 1,-6 9,0 1,6" fill="${pal.bodyB}" opacity="0.85"/>
+        <ellipse cx="4" cy="-6.8" rx="3.4" ry="2.3" fill="${pal.eye}" stroke="#020617" stroke-width="1"/>
+        <line x1="3.2" y1="-8.6" x2="4.8" y2="-5.0" stroke="#020617" stroke-width="1.5" stroke-linecap="round"/>
+        <ellipse cx="4" cy="6.8" rx="3.4" ry="2.3" fill="${pal.eye}" stroke="#020617" stroke-width="1"/>
+        <line x1="3.2" y1="5.0" x2="4.8" y2="8.6" stroke="#020617" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="13" cy="-2.4" r="1" fill="#020617"/>
+        <circle cx="13" cy="2.4" r="1" fill="#020617"/>
+      </g>
+    `;
+
+    return `
+      <g filter="url(#snakeDropShadow)" opacity="0.93">
+        <path d="${bodyPolygonPath}" fill="url(#grad_${pal.id})" stroke="${pal.outline}" stroke-width="2" stroke-linejoin="round"/>
+        <path d="${spinePath}" fill="none" stroke="${pal.belly}" stroke-width="2.2" stroke-dasharray="5 7" stroke-linecap="round" opacity="0.55"/>
+        ${scalesSvg}
+        ${headSvg}
+      </g>
+    `;
+  },
+
   renderSvgSnakesAndLadders(ladders, snakes) {
     const svg = document.getElementById('boardSvgOverlay');
     if (!svg) return;
-    let svgContent = '';
+    let svgContent = `
+      <defs>
+        <filter id="snakeDropShadow" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#020617" flood-opacity="0.45"/>
+        </filter>
+        <linearGradient id="grad_kalamarKing" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0f172a"/>
+          <stop offset="50%" stop-color="#881337"/>
+          <stop offset="100%" stop-color="#e11d48"/>
+        </linearGradient>
+        <linearGradient id="grad_viperEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#064e3b"/>
+          <stop offset="55%" stop-color="#059669"/>
+          <stop offset="100%" stop-color="#34d399"/>
+        </linearGradient>
+        <linearGradient id="grad_viperCrimson" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#881337"/>
+          <stop offset="55%" stop-color="#e11d48"/>
+          <stop offset="100%" stop-color="#fb7185"/>
+        </linearGradient>
+        <linearGradient id="grad_cobraGold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#78350f"/>
+          <stop offset="55%" stop-color="#d97706"/>
+          <stop offset="100%" stop-color="#fbbf24"/>
+        </linearGradient>
+        <linearGradient id="grad_viperRoyal" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4c1d95"/>
+          <stop offset="55%" stop-color="#7c3aed"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+        <linearGradient id="grad_viperCopper" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7c2d12"/>
+          <stop offset="55%" stop-color="#ea580c"/>
+          <stop offset="100%" stop-color="#fb923c"/>
+        </linearGradient>
+      </defs>
+    `;
 
     Object.entries(ladders).forEach(([startStr, endVal]) => {
       const start = Number(startStr);
@@ -2734,8 +3466,8 @@ const GameEngine = {
       const ny = (dx / len) * 13;
 
       svgContent += `
-        <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.84"/>
-        <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.84"/>
+        <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.86"/>
+        <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="6" stroke-linecap="round" opacity="0.86"/>
       `;
 
       const steps = Math.max(4, Math.floor(len / 42));
@@ -2744,30 +3476,18 @@ const GameEngine = {
         const rx = p1.cx + dx * t;
         const ry = p1.cy + dy * t;
         svgContent += `
-          <line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" opacity="0.9"/>
+          <line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" opacity="0.92"/>
         `;
       }
     });
 
-    Object.entries(snakes).forEach(([headStr, tailVal]) => {
+    Object.entries(snakes).forEach(([headStr, tailVal], idx) => {
       const head = Number(headStr);
       const tail = Number(tailVal);
       if (head < 1 || head > 100 || tail < 1 || tail > 100) return;
       const p1 = this.getSquareCoordinates(head);
       const p2 = this.getSquareCoordinates(tail);
-
-      const midX = (p1.cx + p2.cx) / 2 + (head % 2 === 0 ? 62 : -62);
-      const midY = (p1.cy + p2.cy) / 2;
-      const isKing = head === 99;
-      const strokeColor = isKing ? '#be123c' : '#e11d48';
-
-      svgContent += `
-        <path d="M ${p1.cx} ${p1.cy} Q ${midX} ${midY} ${p2.cx} ${p2.cy}" fill="none" stroke="${strokeColor}" stroke-width="${isKing ? 13 : 9}" stroke-linecap="round" opacity="0.8"/>
-        <path d="M ${p1.cx} ${p1.cy} Q ${midX} ${midY} ${p2.cx} ${p2.cy}" fill="none" stroke="#fecdd3" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round" opacity="0.9"/>
-        <circle cx="${p1.cx}" cy="${p1.cy}" r="${isKing ? 16 : 12}" fill="${strokeColor}" />
-        <circle cx="${p1.cx - 4}" cy="${p1.cy - 3}" r="2.5" fill="#ffffff" />
-        <circle cx="${p1.cx + 4}" cy="${p1.cy - 3}" r="2.5" fill="#ffffff" />
-      `;
+      svgContent += this.buildRealisticSnakeSvg(head, tail, p1, p2, idx);
     });
 
     svg.innerHTML = svgContent;
@@ -2776,9 +3496,23 @@ const GameEngine = {
   renderPlayerCards() {
     const container = document.getElementById('activePlayersCards');
     if (!container) return;
+    const beadCount = this.settings.beadsPerPlayer || 1;
+
     container.innerHTML = this.players.map((p, idx) => {
       const isTurn = idx === this.currentTurnIdx && !this.matchFinished;
-      const statusText = p.pos === 0 ? 'Camp (Need 6)' : `Sq ${p.pos}/100`;
+      let statusHtml = '';
+      if (beadCount === 1) {
+        const statusText = p.pos === 0 ? 'Camp (Need 6)' : `Sq ${p.pos}/100`;
+        statusHtml = `<div class="text-[10px] font-bold ${isTurn ? 'text-emerald-300' : 'text-slate-400'} truncate">${statusText}</div>`;
+      } else {
+        const pills = (p.beads || []).map(b => {
+          const isSelectable = isTurn && this.awaitingBeadChoice && this.pendingEligibleBeadIds.includes(b.id);
+          const clickAttr = isSelectable ? `onclick="GameEngine.selectBeadToMove(${b.id}, event)"` : '';
+          const valStr = b.pos === 0 ? 'Camp' : (b.pos === 100 ? '100👑' : b.pos);
+          return `<span ${clickAttr} class="px-1 rounded ${isSelectable ? 'bg-amber-400 text-slate-950 font-black cursor-pointer animate-pulse' : 'bg-slate-900/80 text-emerald-300'} text-[9px]">B${b.num}:${valStr}</span>`;
+        }).join(' ');
+        statusHtml = `<div class="flex flex-wrap items-center gap-0.5 mt-0.5">${pills}</div>`;
+      }
       return `
         <div class="px-2.5 py-1.5 rounded-xl border ${isTurn ? 'border-emerald-400 bg-emerald-950/70 ring-2 ring-emerald-400/30' : 'border-slate-800 bg-slate-800/60 opacity-80'} flex items-center justify-between gap-1.5 min-w-0 transition">
           <div class="flex items-center gap-2 min-w-0">
@@ -2790,7 +3524,7 @@ const GameEngine = {
                 <span class="truncate">${AppUI.escapeHtml(p.name)}</span>
                 ${isTurn ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping shrink-0"></span>' : ''}
               </div>
-              <div class="text-[10px] font-bold ${isTurn ? 'text-emerald-300' : 'text-slate-400'} truncate">${statusText}</div>
+              ${statusHtml}
             </div>
           </div>
           <div class="text-right text-[9px] text-slate-400 font-bold shrink-0 hidden sm:block">
@@ -2850,11 +3584,20 @@ const GameEngine = {
     const activePips = map[val] || [4];
     for (let i = 0; i < 9; i++) {
       const pip = document.getElementById(`pip-${i}`);
-      if (!pip) continue;
-      pip.className = 'pip';
-      if (activePips.includes(i)) {
-        pip.classList.add('active');
-        if (val === 6) pip.classList.add('pip-six');
+      if (pip) {
+        pip.className = 'pip';
+        if (activePips.includes(i)) {
+          pip.classList.add('active');
+          if (val === 6) pip.classList.add('pip-six');
+        }
+      }
+      const cPip = document.getElementById(`centerPip-${i}`);
+      if (cPip) {
+        cPip.className = 'center-pip';
+        if (activePips.includes(i)) {
+          cPip.classList.add('active');
+          if (val === 6) cPip.classList.add('pip-six');
+        }
       }
     }
   },
@@ -2871,10 +3614,12 @@ const GameEngine = {
   },
 
   undoLastMove() {
-    if (!this.undoSnapshot || this.isAnimating || this.matchFinished) {
+    if (!this.undoSnapshot || (this.isAnimating && !this.awaitingBeadChoice) || this.matchFinished) {
       AppUI.toast('No move available to undo', 'info');
       return;
     }
+    this.hideBeadChoiceBar();
+    this.isAnimating = false;
     this.players = this.undoSnapshot.players;
     this.currentTurnIdx = this.undoSnapshot.currentTurnIdx;
     this.consecutiveSixes = this.undoSnapshot.consecutiveSixes;
@@ -2888,7 +3633,154 @@ const GameEngine = {
     AppUI.toast('Last turn undone!', 'info');
   },
 
+  /* ==========================================================================
+     MULTI-BEAD ELIGIBILITY, TACTICAL EVALUATION & INTERACTIVE CHOICE
+     ========================================================================== */
+  getEligibleBeadsForRoll(player, roll) {
+    if (!player || !player.beads) return [];
+    return player.beads.filter(b => {
+      if (b.pos >= 100 || b.finished) return false;
+      if (this.rules.needSix && !b.unlocked) {
+        return roll === 6;
+      }
+      const targetPos = b.pos + roll;
+      if (this.rules.exact100 && targetPos > 100) return false;
+      return true;
+    });
+  },
+
+  chooseBestTacticalBead(player, eligibleBeads, roll) {
+    if (!eligibleBeads || !eligibleBeads.length) return null;
+    if (eligibleBeads.length === 1) return eligibleBeads[0];
+
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+
+    let bestBead = eligibleBeads[0];
+    let bestScore = -99999;
+
+    eligibleBeads.forEach(b => {
+      let score = 0;
+      if (this.rules.needSix && !b.unlocked && roll === 6) {
+        score = 85;
+      } else {
+        const rawTarget = Math.min(100, b.pos + roll);
+        let finalPos = rawTarget;
+        if (ladders[rawTarget]) {
+          finalPos = ladders[rawTarget];
+          score += (finalPos - b.pos) * 3 + 60;
+        } else if (snakes[rawTarget]) {
+          finalPos = snakes[rawTarget];
+          score -= (b.pos - finalPos) * 4 + 90;
+        } else {
+          score += roll * 2;
+        }
+        if (finalPos === 100) score += 500;
+        if (APP_CONFIG.safeSquares.includes(finalPos)) score += 25;
+        if (this.rules.knockback && finalPos > 1 && finalPos < 100 && !APP_CONFIG.safeSquares.includes(finalPos)) {
+          const cutsEnemy = this.players.some(other => other.index !== player.index && (other.beads || []).some(ob => ob.pos === finalPos));
+          if (cutsEnemy) score += 140;
+        }
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestBead = b;
+      }
+    });
+    return bestBead;
+  },
+
+  promptUserForBeadSelection(player, eligibleBeads, roll) {
+    return new Promise((resolve) => {
+      this.awaitingBeadChoice = true;
+      this.pendingRollValue = roll;
+      this.pendingEligibleBeadIds = eligibleBeads.map(b => b.id);
+      this.pendingBeadMoveResolver = resolve;
+      this.resetIdleTimer();
+
+      const centerLbl = document.getElementById('centerDiceStatusLabel');
+      if (centerLbl) centerLbl.textContent = 'PICK BEAD';
+
+      const bar = document.getElementById('beadChoiceBar');
+      const promptEl = document.getElementById('beadChoicePromptText');
+      const btnsEl = document.getElementById('beadChoiceButtons');
+      const ladders = (this.activePreset && this.activePreset.ladders) || {};
+      const snakes = (this.activePreset && this.activePreset.snakes) || {};
+
+      if (promptEl) {
+        promptEl.textContent = `${player.name} rolled ${roll} — Click a bead or choose below:`;
+      }
+      if (btnsEl) {
+        btnsEl.innerHTML = eligibleBeads.map(b => {
+          let desc = '';
+          if (this.rules.needSix && !b.unlocked && roll === 6) {
+            desc = `Camp → Sq 1 (Open!)`;
+          } else {
+            const tPos = Math.min(100, b.pos + roll);
+            if (tPos === 100) desc = `Sq ${b.pos} → 100👑`;
+            else if (ladders[tPos]) desc = `Sq ${b.pos} → ↑${ladders[tPos]} Ladder`;
+            else if (snakes[tPos]) desc = `Sq ${b.pos} → ↓${snakes[tPos]} Snake!`;
+            else desc = `Sq ${b.pos} → Sq ${tPos}`;
+          }
+          return `
+            <button type="button" onclick="GameEngine.selectBeadToMove(${b.id}, event)" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-md flex items-center gap-1.5 transition">
+              <span class="w-4 h-4 rounded-full bg-slate-950 text-white text-[10px] flex items-center justify-center">${b.num}</span>
+              <span>Bead #${b.num}: ${desc}</span>
+            </button>
+          `;
+        }).join('');
+      }
+      if (bar) bar.classList.remove('hidden');
+      this.renderBoard();
+      this.renderPlayerCards();
+    });
+  },
+
+  hideBeadChoiceBar() {
+    this.awaitingBeadChoice = false;
+    this.pendingRollValue = null;
+    this.pendingEligibleBeadIds = [];
+    this.pendingBeadMoveResolver = null;
+    const bar = document.getElementById('beadChoiceBar');
+    if (bar) bar.classList.add('hidden');
+    const centerLbl = document.getElementById('centerDiceStatusLabel');
+    if (centerLbl) centerLbl.textContent = this.settings.alwaysAutoRoll ? 'AUTO ON' : 'ROLL';
+  },
+
+  selectBeadToMove(beadId, event) {
+    if (event) event.stopPropagation();
+    if (!this.awaitingBeadChoice || !this.pendingBeadMoveResolver) return;
+    const cur = this.players[this.currentTurnIdx];
+    if (!cur) return;
+    const chosen = (cur.beads || []).find(b => b.id === Number(beadId));
+    if (!chosen || !this.pendingEligibleBeadIds.includes(chosen.id)) return;
+    const resolver = this.pendingBeadMoveResolver;
+    this.hideBeadChoiceBar();
+    resolver(chosen);
+  },
+
+  autoPickPendingBead() {
+    if (!this.awaitingBeadChoice || !this.pendingBeadMoveResolver) return;
+    const cur = this.players[this.currentTurnIdx];
+    const eligible = (cur.beads || []).filter(b => this.pendingEligibleBeadIds.includes(b.id));
+    const best = this.chooseBestTacticalBead(cur, eligible, this.pendingRollValue || 1);
+    if (best) {
+      this.selectBeadToMove(best.id);
+    }
+  },
+
+  /* ==========================================================================
+     DICE ROLL EXECUTION & MULTI-BEAD TURN OUTCOME
+     ========================================================================== */
   async triggerRoll(forcedRollValue = null, fromRemotePeer = false, isAutoTriggered = false) {
+    if (this.autoRollTimer) {
+      clearTimeout(this.autoRollTimer);
+      this.autoRollTimer = null;
+    }
+    if (this.awaitingBeadChoice) {
+      if (isAutoTriggered) this.autoPickPendingBead();
+      return;
+    }
     if (this.isAnimating || this.matchFinished || this.isPaused) return;
     const currentPlayer = this.players[this.currentTurnIdx];
     if (!currentPlayer) return;
@@ -2904,49 +3796,51 @@ const GameEngine = {
     this.isAnimating = true;
 
     const cube = document.getElementById('diceRollButton');
+    const centerCube = document.getElementById('centerDiceCubeVisual');
     const primaryBtn = document.getElementById('primaryRollBtn');
     if (cube) cube.classList.add('dice-rolling');
+    if (centerCube) centerCube.classList.add('dice-rolling');
     if (primaryBtn) primaryBtn.disabled = true;
 
     GameAudio.diceRoll();
 
-    const shakeMs = Math.round(380 / this.settings.speedMultiplier);
+    const shakeMs = Math.round(360 / this.settings.speedMultiplier);
     await new Promise(r => setTimeout(r, shakeMs));
     if (cube) cube.classList.remove('dice-rolling');
+    if (centerCube) centerCube.classList.remove('dice-rolling');
 
     const roll = forcedRollValue || (Math.floor(Math.random() * 6) + 1);
     this.setDiceVisual(roll);
     document.getElementById('lastRollLabel').textContent = `${currentPlayer.short} Rolled: ${roll}`;
+    const centerLbl = document.getElementById('centerDiceStatusLabel');
+    if (centerLbl) centerLbl.textContent = `ROLLED ${roll}`;
 
     if (!fromRemotePeer && this.mode === 'webrtc') {
       P2PEngine.broadcastGameAction({ type: 'ROLL', roll, playerIdx: this.currentTurnIdx });
     }
 
-    await this.processRollOutcome(currentPlayer, roll);
+    await this.processRollOutcome(currentPlayer, roll, isAutoTriggered);
     await this.saveActiveMatchState();
 
     if (primaryBtn) primaryBtn.disabled = false;
     this.isAnimating = false;
+    if (centerLbl && !this.awaitingBeadChoice) {
+      centerLbl.textContent = this.settings.alwaysAutoRoll ? 'AUTO ON' : 'ROLL';
+    }
     this.resetIdleTimer();
 
     if (!this.matchFinished) {
-      const nextP = this.players[this.currentTurnIdx];
-      if (nextP && (nextP.isAI || (!nextP.isAI && this.settings.humanAutoPlay))) {
-        const botWait = Math.round(550 / this.settings.speedMultiplier);
-        setTimeout(() => {
-          this.executeAITurn();
-        }, botWait);
-      }
+      this.scheduleAutoRollIfNeeded();
     }
   },
 
   async executeAITurn() {
-    if (this.matchFinished || this.isAnimating || this.isPaused) return;
+    if (this.matchFinished || this.isAnimating || this.isPaused || this.awaitingBeadChoice) return;
     const aiRoll = Math.floor(Math.random() * 6) + 1;
     await this.triggerRoll(aiRoll, false, true);
   },
 
-  async processRollOutcome(player, roll) {
+  async processRollOutcome(player, roll, isAutoTriggered = false) {
     this.totalTurnsCount += 1;
 
     if (roll === 6) {
@@ -2959,13 +3853,18 @@ const GameEngine = {
     document.getElementById('streakBadge').textContent = `6-Streak: ${this.consecutiveSixes}/3`;
 
     if (this.rules.tripleSixBurn && this.consecutiveSixes === 3) {
-      player.pos = this.turnStartState.pos;
-      player.unlocked = this.turnStartState.unlocked;
+      if (this.turnStartState && this.turnStartState.beadsSnapshot && this.turnStartState.beadsSnapshot.length) {
+        player.beads = this.turnStartState.beadsSnapshot.map(b => ({ ...b }));
+      } else {
+        player.pos = this.turnStartState.pos;
+        player.unlocked = this.turnStartState.unlocked;
+      }
+      this.syncPlayerAggregatePos(player);
       this.consecutiveSixes = 0;
       document.getElementById('streakBadge').textContent = '6-Streak: 0/3';
       this.showFloatingCallout('TEEN CHAKKAY BARSI! (3x6 BURN)', 'bg-rose-600 border-rose-300 text-white');
-      this.setCommentary(`Teen Chakkay Barsi! ${player.name} rolled 6-6-6! Reverted to ${player.pos === 0 ? 'Camp' : 'Sq ' + player.pos}.`);
-      this.addMatchLog(`${player.name} rolled 6-6-6 (Teen Chakkay Barsi). Reverted to ${player.pos === 0 ? 'Camp' : 'Square ' + player.pos}.`);
+      this.setCommentary(`Teen Chakkay Barsi! ${player.name} rolled 6-6-6! Turn burned & reverted.`);
+      this.addMatchLog(`${player.name} rolled 6-6-6 (Teen Chakkay Barsi). Reverted to turn-start state.`);
       GameAudio.snakeBite();
       this.renderBoard();
       this.renderPlayerCards();
@@ -2973,45 +3872,63 @@ const GameEngine = {
       return;
     }
 
-    if (this.rules.needSix && !player.unlocked) {
-      if (roll === 6) {
-        player.unlocked = true;
-        player.pos = 1;
-        this.showFloatingCallout('CHAKKA 6! DAKHILA OPENED!', 'bg-emerald-600 border-emerald-300 text-white');
-        this.setCommentary(`Mashallah Chakka! ${player.name} entered Square 1 + Bonus Roll!`);
-        this.addMatchLog(`${player.name} rolled 6 to enter Square 1 (Dakhila) + Bonus Roll.`);
-        GameAudio.stepHop();
-        this.renderBoard();
-        this.renderPlayerCards();
-        return;
+    const eligibleBeads = this.getEligibleBeadsForRoll(player, roll);
+
+    if (eligibleBeads.length === 0) {
+      const anyInCamp = (player.beads || []).some(b => !b.unlocked && b.pos === 0);
+      if (this.rules.needSix && anyInCamp && roll !== 6) {
+        this.setCommentary(`${player.name} rolled ${roll}. Needs 6 (Chakka) to unlock from Camp!`);
+        this.addMatchLog(`${player.name} rolled ${roll} (No legal move / Camp requires 6).`);
       } else {
-        this.setCommentary(`${player.name} rolled ${roll}. Needs 6 (Chakka) to enter from Camp!`);
-        this.addMatchLog(`${player.name} rolled ${roll} in Camp (Needs 6).`);
-        this.renderPlayerCards();
-        this.advanceToNextPlayer();
-        return;
+        this.setCommentary(`Pura 100 Required! ${player.name} rolled ${roll} (No eligible bead move).`);
+        this.addMatchLog(`${player.name} rolled ${roll} (Overshot 100).`);
       }
+      this.renderPlayerCards();
+      if (roll !== 6) {
+        this.advanceToNextPlayer();
+      }
+      return;
+    }
+
+    const distinctStates = new Set(eligibleBeads.map(b => `${b.unlocked ? 'U' : 'L'}_${b.pos}`));
+    let chosenBead = eligibleBeads[0];
+
+    if (distinctStates.size > 1) {
+      if (player.isAI || isAutoTriggered || this.settings.alwaysAutoRoll || this.settings.humanAutoPlay) {
+        chosenBead = this.chooseBestTacticalBead(player, eligibleBeads, roll);
+      } else {
+        chosenBead = await this.promptUserForBeadSelection(player, eligibleBeads, roll);
+      }
+    }
+
+    let earnedBonusTurn = (roll === 6);
+    const beadTag = (this.settings.beadsPerPlayer > 1) ? ` (${chosenBead.label})` : '';
+
+    if (this.rules.needSix && !chosenBead.unlocked && roll === 6) {
+      chosenBead.unlocked = true;
+      chosenBead.pos = 1;
+      this.syncPlayerAggregatePos(player);
+      this.showFloatingCallout(`CHAKKA 6! ${chosenBead.label} OPENED!`, 'bg-emerald-600 border-emerald-300 text-white');
+      this.setCommentary(`Mashallah Chakka! ${player.name}${beadTag} entered Square 1 + Bonus Roll!`);
+      this.addMatchLog(`${player.name}${beadTag} rolled 6 to enter Square 1 (Dakhila) + Bonus Roll.`);
+      GameAudio.stepHop();
+      this.renderBoard();
+      this.renderPlayerCards();
+      this.updateTurnBanner();
+      return;
     }
 
     if (roll === 6) {
       this.showFloatingCallout('CHAKKA 6! BONUS ROLL!', 'bg-emerald-600 border-emerald-300 text-white');
     }
 
-    const targetPos = player.pos + roll;
-    if (this.rules.exact100 && targetPos > 100) {
-      this.setCommentary(`Pura 100 Required! ${player.name} needed ${100 - player.pos} but rolled ${roll}.`);
-      this.addMatchLog(`${player.name} overshot 100 with a ${roll}.`);
-      if (roll !== 6) {
-        this.advanceToNextPlayer();
-      }
-      this.renderPlayerCards();
-      return;
-    }
-
+    const targetPos = chosenBead.pos + roll;
     const finalStepPos = Math.min(100, targetPos);
-    const stepDelay = Math.round(90 / this.settings.speedMultiplier);
-    for (let step = player.pos + 1; step <= finalStepPos; step++) {
-      player.pos = step;
+    const stepDelay = Math.round(85 / this.settings.speedMultiplier);
+
+    for (let step = chosenBead.pos + 1; step <= finalStepPos; step++) {
+      chosenBead.pos = step;
+      this.syncPlayerAggregatePos(player);
       GameAudio.stepHop();
       this.renderBoard();
       await new Promise(r => setTimeout(r, stepDelay));
@@ -3020,51 +3937,76 @@ const GameEngine = {
     const ladders = (this.activePreset && this.activePreset.ladders) || {};
     const snakes = (this.activePreset && this.activePreset.snakes) || {};
 
-    if (ladders[player.pos]) {
-      const dest = ladders[player.pos];
-      this.showFloatingCallout(`SEEDHI CLIMB! ${player.pos} → ${dest}`, 'bg-teal-600 border-teal-200 text-white');
-      this.setCommentary(`Daaltay Rasha! ${player.name} climbed ladder ${player.pos} → ${dest}!`);
-      this.addMatchLog(`${player.name} climbed ladder ${player.pos} → ${dest}.`);
-      player.pos = dest;
+    if (ladders[chosenBead.pos]) {
+      const dest = ladders[chosenBead.pos];
+      this.showFloatingCallout(`SEEDHI CLIMB! ${chosenBead.pos} → ${dest}`, 'bg-teal-600 border-teal-200 text-white');
+      this.setCommentary(`Daaltay Rasha! ${player.name}${beadTag} climbed ladder ${chosenBead.pos} → ${dest}!`);
+      this.addMatchLog(`${player.name}${beadTag} climbed ladder ${chosenBead.pos} → ${dest}.`);
+      chosenBead.pos = dest;
       player.laddersClimbed += 1;
+      this.syncPlayerAggregatePos(player);
       GameAudio.ladderClimb();
       this.renderBoard();
-      await new Promise(r => setTimeout(r, Math.round(240 / this.settings.speedMultiplier)));
-    } else if (snakes[player.pos]) {
-      const dest = snakes[player.pos];
-      const isKalamar = player.pos === 99;
-      this.showFloatingCallout(isKalamar ? `WAH KALAMAR 99! → ${dest}` : `SAANP BITE! ${player.pos} → ${dest}`, 'bg-rose-700 border-rose-300 text-white');
-      this.setCommentary(`${isKalamar ? 'WAH KALAMAR 99!' : 'Saanp Bite!'} ${player.name} slid ${player.pos} → ${dest}!`);
-      this.addMatchLog(`${player.name} bitten by snake at ${player.pos} → ${dest}.`);
-      player.pos = dest;
+      await new Promise(r => setTimeout(r, Math.round(230 / this.settings.speedMultiplier)));
+    } else if (snakes[chosenBead.pos]) {
+      const dest = snakes[chosenBead.pos];
+      const isKalamar = chosenBead.pos === 99;
+      this.showFloatingCallout(isKalamar ? `WAH KALAMAR 99! → ${dest}` : `SAANP BITE! ${chosenBead.pos} → ${dest}`, 'bg-rose-700 border-rose-300 text-white');
+      this.setCommentary(`${isKalamar ? 'WAH KALAMAR 99!' : 'Saanp Bite!'} ${player.name}${beadTag} slid ${chosenBead.pos} → ${dest}!`);
+      this.addMatchLog(`${player.name}${beadTag} bitten by snake at ${chosenBead.pos} → ${dest}.`);
+      chosenBead.pos = dest;
       player.snakesBitten += 1;
+      this.syncPlayerAggregatePos(player);
       GameAudio.snakeBite();
       this.renderBoard();
-      await new Promise(r => setTimeout(r, Math.round(240 / this.settings.speedMultiplier)));
+      await new Promise(r => setTimeout(r, Math.round(230 / this.settings.speedMultiplier)));
     }
 
-    if (this.rules.knockback && player.pos > 0 && player.pos < 100 && !APP_CONFIG.safeSquares.includes(player.pos)) {
-      const victims = this.players.filter(other => other.index !== player.index && other.pos === player.pos);
-      if (victims.length > 0) {
-        victims.forEach(v => {
-          v.pos = 1;
-          player.cutsMade += 1;
-          this.showFloatingCallout(`KPK TAKKAR! CUT ${v.short} TO SQ 1!`, 'bg-amber-600 border-amber-200 text-slate-950');
-          this.setCommentary(`KPK TAKKAR CUT! ${player.name} knocked ${v.name} back to Square 1!`);
-          this.addMatchLog(`TAKKAR! ${player.name} knocked ${v.name} back to Square 1.`);
+    if (this.rules.knockback && chosenBead.pos > 0 && chosenBead.pos < 100 && !APP_CONFIG.safeSquares.includes(chosenBead.pos)) {
+      let cutOccurred = false;
+      this.players.forEach(other => {
+        if (other.index === player.index) return;
+        (other.beads || []).forEach(ob => {
+          if (ob.pos === chosenBead.pos) {
+            ob.pos = 1;
+            ob.unlocked = true;
+            player.cutsMade += 1;
+            cutOccurred = true;
+            this.showFloatingCallout(`KPK TAKKAR! CUT ${ob.label} TO SQ 1!`, 'bg-amber-600 border-amber-200 text-slate-950');
+            this.setCommentary(`KPK TAKKAR CUT! ${player.name}${beadTag} knocked ${other.name} (${ob.label}) to Square 1!`);
+            this.addMatchLog(`TAKKAR! ${player.name}${beadTag} knocked ${other.name} (${ob.label}) back to Square 1.`);
+          }
         });
+        this.syncPlayerAggregatePos(other);
+      });
+      if (cutOccurred) {
+        if ((this.settings.beadsPerPlayer || 1) > 1) {
+          earnedBonusTurn = true;
+        }
         GameAudio.takkarCut();
         this.renderBoard();
       }
     }
 
-    if (player.pos === 100) {
+    this.syncPlayerAggregatePos(player);
+
+    if (chosenBead.pos === 100 && player.finishedBeadsCount < (player.beads || []).length) {
+      chosenBead.finished = true;
+      earnedBonusTurn = true;
+      GameAudio.ladderClimb();
+      this.showFloatingCallout(`${chosenBead.label} CROWNED AT 100! (${player.finishedBeadsCount}/${player.beads.length})`, 'bg-amber-500 border-white text-slate-950');
+      this.setCommentary(`Shabash! ${player.name}'s ${chosenBead.label} reached 100 (${player.finishedBeadsCount}/${player.beads.length}) + Bonus Roll!`);
+      this.addMatchLog(`${player.name}'s ${chosenBead.label} crowned at Square 100 (${player.finishedBeadsCount}/${player.beads.length}).`);
+    }
+
+    const allBeadsFinished = (player.beads || []).every(b => b.pos === 100);
+    if (allBeadsFinished) {
       this.matchFinished = true;
       await DBEngine.delete('settings', 'saved_match_v4');
       GameAudio.victoryFanfare();
       this.showFloatingCallout(`MUBARAK! ${player.name} WINS!`, 'bg-amber-500 border-white text-slate-950');
-      this.setCommentary(`MUBARAK SHA! ${player.name} conquered Square 100!`);
-      this.addMatchLog(`VICTORY! ${player.name} reached Square 100 in ${this.totalTurnsCount} turns.`);
+      this.setCommentary(`MUBARAK SHA! ${player.name} conquered Square 100 with all beads!`);
+      this.addMatchLog(`VICTORY! ${player.name} crowned all ${(player.beads || []).length} bead(s) at Square 100 in ${this.totalTurnsCount} turns.`);
       this.renderBoard();
       this.renderPlayerCards();
       await this.recordCompletedMatchAndStats(player);
@@ -3072,7 +4014,7 @@ const GameEngine = {
       Swal.fire({
         icon: 'success',
         title: `Mubarak! ${player.name} Wins!`,
-        html: `Completed under <strong>${AppUI.escapeHtml(this.activePreset.name)}</strong> in <strong>${this.totalTurnsCount}</strong> turns.<br>Takkar Knockbacks: <strong>${player.cutsMade}</strong> • Ladders: <strong>${player.laddersClimbed}</strong>`,
+        html: `Completed under <strong>${AppUI.escapeHtml(this.activePreset.name)}</strong> (${(player.beads || []).length} Bead Mode) in <strong>${this.totalTurnsCount}</strong> turns.<br>Takkar Knockbacks: <strong>${player.cutsMade}</strong> • Ladders: <strong>${player.laddersClimbed}</strong>`,
         showCancelButton: true,
         confirmButtonColor: '#059669',
         cancelButtonColor: '#334155',
@@ -3083,6 +4025,7 @@ const GameEngine = {
           await this.setupPlayersForMode(this.mode);
           this.renderBoard();
           this.renderPlayerCards();
+          this.scheduleAutoRollIfNeeded();
         } else {
           this.exitArenaToHub();
         }
@@ -3091,9 +4034,12 @@ const GameEngine = {
     }
 
     this.renderPlayerCards();
+    this.updateTurnBanner();
 
-    if (roll === 6) {
-      this.setCommentary(`Chakka Bonus! ${player.name} rolled a 6 and gets another turn!`);
+    if (earnedBonusTurn) {
+      if (roll === 6) {
+        this.setCommentary(`Chakka Bonus! ${player.name} rolled a 6 and gets another turn!`);
+      }
     } else {
       this.advanceToNextPlayer();
     }
@@ -3104,7 +4050,7 @@ const GameEngine = {
     document.getElementById('streakBadge').textContent = '6-Streak: 0/3';
     this.currentTurnIdx = (this.currentTurnIdx + 1) % this.players.length;
     const nextP = this.players[this.currentTurnIdx];
-    this.turnStartState = { pos: nextP.pos, unlocked: nextP.unlocked };
+    this.snapshotTurnStart(nextP);
     this.updateTurnBanner();
     this.renderBoard();
     this.renderPlayerCards();
@@ -3113,7 +4059,22 @@ const GameEngine = {
   updateTurnBanner() {
     const p = this.players[this.currentTurnIdx];
     if (!p) return;
-    document.getElementById('turnBannerText').textContent = `${p.name} (${p.pos === 0 ? 'Camp' : 'Sq ' + p.pos})`;
+    const bCount = this.settings.beadsPerPlayer || 1;
+    const posSummary = bCount === 1
+      ? (p.pos === 0 ? 'Camp' : 'Sq ' + p.pos)
+      : `${p.finishedBeadsCount || 0}/${bCount} Crowned`;
+    const bannerEl = document.getElementById('turnBannerText');
+    if (bannerEl) bannerEl.textContent = `${p.name} (${posSummary})`;
+
+    const immText = document.getElementById('immersiveTurnText');
+    const immDot = document.getElementById('immersiveTurnDot');
+    if (immText) immText.textContent = `${p.short}: ${posSummary}`;
+    if (immDot) immDot.style.backgroundColor = p.color;
+
+    const centerBtn = document.getElementById('centerBoardDiceBtn');
+    if (centerBtn) {
+      centerBtn.style.borderColor = p.color;
+    }
   },
 
   setCommentary(msg) {
@@ -3138,11 +4099,10 @@ const GameEngine = {
       winner: winnerPlayer.name,
       presetName: this.activePreset ? this.activePreset.name : 'KPK Hujra Rules',
       turns: this.totalTurnsCount,
-      notes: `Takkar Cuts: ${winnerPlayer.cutsMade}, Ladders: ${winnerPlayer.laddersClimbed}, Snakes: ${winnerPlayer.snakesBitten}`
+      notes: `Beads: ${this.settings.beadsPerPlayer || 1}, Takkar Cuts: ${winnerPlayer.cutsMade}, Ladders: ${winnerPlayer.laddersClimbed}, Snakes: ${winnerPlayer.snakesBitten}`
     };
     await DBEngine.put('matches', newMatch);
 
-    // Update career stats in DB for all participating non-AI players
     const allPlayers = await DBEngine.getAll('players');
     for (const p of this.players) {
       if (p.isAI) continue;
@@ -3171,23 +4131,26 @@ const GameEngine = {
     document.getElementById('printReportDate').textContent = `Date: ${nowStr}`;
     document.getElementById('printReportId').textContent = `Preset: ${this.activePreset ? this.activePreset.name : 'KPK Hujra'}`;
 
-    const rows = this.players.map(p => `
-      <tr>
-        <td style="border:1px solid #000;padding:8px;font-weight:bold;">${AppUI.escapeHtml(p.name)}</td>
-        <td style="border:1px solid #000;padding:8px;">Square ${p.pos} / 100</td>
-        <td style="border:1px solid #000;padding:8px;">${p.sixesRolled}</td>
-        <td style="border:1px solid #000;padding:8px;">${p.cutsMade}</td>
-        <td style="border:1px solid #000;padding:8px;">${p.laddersClimbed} / ${p.snakesBitten}</td>
-      </tr>
-    `).join('');
+    const rows = this.players.map(p => {
+      const beadPosStr = (p.beads || []).map(b => `${b.label}: Sq ${b.pos}`).join(', ');
+      return `
+        <tr>
+          <td style="border:1px solid #000;padding:8px;font-weight:bold;">${AppUI.escapeHtml(p.name)}</td>
+          <td style="border:1px solid #000;padding:8px;">${AppUI.escapeHtml(beadPosStr)}</td>
+          <td style="border:1px solid #000;padding:8px;">${p.sixesRolled}</td>
+          <td style="border:1px solid #000;padding:8px;">${p.cutsMade}</td>
+          <td style="border:1px solid #000;padding:8px;">${p.laddersClimbed} / ${p.snakesBitten}</td>
+        </tr>
+      `;
+    }).join('');
 
     document.getElementById('printReportBody').innerHTML = `
-      <p><strong>Active KPK Regulations:</strong> Need 6: ${this.rules.needSix ? 'Yes' : 'No'} | 3x6 Burn: ${this.rules.tripleSixBurn ? 'Yes' : 'No'} | Takkar Knockback: ${this.rules.knockback ? 'Yes' : 'No'} | Exact 100: ${this.rules.exact100 ? 'Yes' : 'No'}</p>
+      <p><strong>Active KPK Regulations:</strong> Beads/Player: ${this.settings.beadsPerPlayer || 1} | Need 6: ${this.rules.needSix ? 'Yes' : 'No'} | 3x6 Burn: ${this.rules.tripleSixBurn ? 'Yes' : 'No'} | Takkar Knockback: ${this.rules.knockback ? 'Yes' : 'No'} | Exact 100: ${this.rules.exact100 ? 'Yes' : 'No'}</p>
       <table style="width:100%;border-collapse:collapse;margin-top:12px;">
         <thead>
           <tr style="background:#f1f5f9;">
             <th style="border:1px solid #000;padding:8px;text-align:left;">Player</th>
-            <th style="border:1px solid #000;padding:8px;text-align:left;">Position</th>
+            <th style="border:1px solid #000;padding:8px;text-align:left;">Bead Positions</th>
             <th style="border:1px solid #000;padding:8px;text-align:left;">Chakkas (6s)</th>
             <th style="border:1px solid #000;padding:8px;text-align:left;">Takkar Cuts</th>
             <th style="border:1px solid #000;padding:8px;text-align:left;">Ladders / Snakes</th>
@@ -3204,12 +4167,30 @@ const GameEngine = {
       const activeTag = document.activeElement ? document.activeElement.tagName : '';
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag)) return;
 
+      if (this.inArena && this.awaitingBeadChoice && ['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(e.code)) {
+        e.preventDefault();
+        const bIdx = Number(e.code.replace('Digit', '')) - 1;
+        this.selectBeadToMove(bIdx);
+        return;
+      }
+
       if (e.code === 'Space' && this.inArena && !this.isPaused) {
         e.preventDefault();
-        this.triggerRoll();
+        if (this.awaitingBeadChoice) {
+          this.autoPickPendingBead();
+        } else {
+          this.triggerRoll();
+        }
+      } else if (e.code === 'KeyI' && this.inArena && !this.isPaused) {
+        e.preventDefault();
+        this.toggleImmersiveMode();
       } else if (e.code === 'Escape' && this.inArena) {
         e.preventDefault();
-        this.togglePauseDrawer();
+        if (this.settings.immersiveMode && !this.isPaused) {
+          this.toggleImmersiveMode(false);
+        } else {
+          this.togglePauseDrawer();
+        }
       }
     });
   }
@@ -3227,12 +4208,14 @@ const P2PEngine = {
   localChannel: null,
 
   init() {
-    if ('BroadcastChannel' in window) {
-      this.localChannel = new BroadcastChannel('khyber_saanp_seedhi_p2p');
-      this.localChannel.onmessage = (event) => {
-        this.handleIncomingData(event.data);
-      };
-    }
+    try {
+      if ('BroadcastChannel' in window) {
+        this.localChannel = new BroadcastChannel('khyber_saanp_seedhi_p2p');
+        this.localChannel.onmessage = (event) => {
+          this.handleIncomingData(event.data);
+        };
+      }
+    } catch (e) {}
   },
 
   initPeerSession() {
@@ -4245,20 +5228,50 @@ const AppUI = {
     }
   },
 
+  _suppressSelectChange: false,
+
+  syncSelectValue(elOrId, val) {
+    const el = typeof elOrId === 'string' ? document.getElementById(elOrId) : elOrId;
+    if (!el || val === undefined || val === null) return;
+    const strVal = String(val);
+    if (el.value !== strVal) {
+      el.value = strVal;
+    }
+    if (window.jQuery && $(el).hasClass('select2-hidden-accessible')) {
+      this._suppressSelectChange = true;
+      const savedNative = el.onchange;
+      el.onchange = null;
+      try {
+        $(el).trigger('change.select2');
+      } catch (e) {}
+      el.onchange = savedNative;
+      this._suppressSelectChange = false;
+    }
+  },
+
   initAllSelect2() {
+    if (!window.jQuery || !$.fn || !$.fn.select2) return;
     $('select').each(function () {
       const $el = $(this);
-      if (this.id && (this.id.startsWith('home') || this.id.startsWith('pause') || this.id.startsWith('onboard') || this.id.startsWith('editProf') || this.id === 'quickSwitchProfileSelect')) {
+      if (
+        this.classList.contains('no-select2') ||
+        (this.id && (this.id.startsWith('home') || this.id.startsWith('pause') || this.id.startsWith('onboard') || this.id.startsWith('editProf') || this.id === 'quickSwitchProfileSelect'))
+      ) {
         return;
       }
       if (!$el.hasClass('select2-hidden-accessible')) {
+        // Move inline onchange to a guarded reference so jQuery .trigger('change.select2') never causes recursive native onchange calls
+        if (typeof this.onchange === 'function') {
+          this._select2ChangeHandler = this.onchange;
+          this.onchange = null;
+        }
         $el.select2({
           width: '100%',
           minimumResultsForSearch: 6
-        }).on('change', function () {
-          const nativeOnchange = this.getAttribute('onchange');
-          if (nativeOnchange && typeof this.onchange === 'function') {
-            this.onchange();
+        }).on('change', function (e) {
+          if (AppUI._suppressSelectChange) return;
+          if (typeof this._select2ChangeHandler === 'function') {
+            this._select2ChangeHandler.call(this, e);
           }
         });
       }
@@ -4266,6 +5279,10 @@ const AppUI = {
   },
 
   initDataTable(selector) {
+    if (!window.jQuery || !$.fn || !$.fn.DataTable) return null;
+    if ($.fn.DataTable.isDataTable(selector)) {
+      $(selector).DataTable().destroy();
+    }
     return $(selector).DataTable({
       responsive: true,
       pageLength: 5,

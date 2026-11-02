@@ -23,9 +23,17 @@
       width: 100%;
       height: 100dvh;
       overflow: hidden;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'UrduCalibri', 'Inter', system-ui, -apple-system, sans-serif;
       background: radial-gradient(circle at 50% 0%, #fffbeb 0%, #fef3c7 52%, #fde68a 100%);
       color: #1e293b;
+    }
+    @font-face {
+      font-family: 'UrduCalibri';
+      src: local('Calibri'), local('Calibri Regular'), local('Calibri Bold');
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    .font-calibri {
+      font-family: 'Calibri', sans-serif !important;
     }
     button, select, label {
       white-space: nowrap;
@@ -333,7 +341,7 @@
             </span>
           </div>
           <div class="text-[11px] font-semibold text-slate-500 flex items-center gap-2">
-            <span id="homeQuickStats">🏆 3 Wins • ⚔️ 11 Kills</span>
+            <span id="homeQuickStats">🏆 0 Wins • ⚔️ 0 Kills</span>
           </div>
         </div>
       </div>
@@ -453,7 +461,7 @@
       </button>
       <button id="navNetworkBtn" type="button" class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition">
         <span>📡</span><span>Wi-Fi &amp; QR Room</span>
-        <span id="lanPeerCountBadge" class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-[10px]">2</span>
+        <span id="lanPeerCountBadge" class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-[10px]">0</span>
       </button>
       <button id="navStatsBtn" type="button" class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition">
         <span>🏆</span><span>Stats &amp; Backup</span>
@@ -913,7 +921,7 @@
             <div class="flex items-center justify-between mb-1.5">
               <span class="text-xs font-bold uppercase text-slate-500">Nearby Wi-Fi Players</span>
               <button id="simulateLanPlayerBtn" type="button" class="text-xs text-emerald-700 font-bold underline">
-                + Spawn Test Wi-Fi Peer
+                🔄 Scan Radar Now
               </button>
             </div>
             <div id="lanPlayersList" class="space-y-1.5 max-h-32 overflow-y-auto"></div>
@@ -1362,17 +1370,14 @@
       // --- 3. PERSISTENT CAREER STATS & PROFILE ---
       const DEFAULT_STATS = {
         playerName: 'Bannu Champion',
-        matches: 4,
-        wins: 3,
-        kills: 11,
-        doubleSixes: 5,
-        teamWins: 2,
-        hardAiWins: 2,
-        streak: 3,
-        history: [
-          { date: '2026-11-01', mode: '2v2 Bannu Close Game', result: 'Won (Team 1)', kills: 4 },
-          { date: '2026-11-01', mode: '2-Dice vs Hard AI', result: 'Won', kills: 3 }
-        ]
+        matches: 0,
+        wins: 0,
+        kills: 0,
+        doubleSixes: 0,
+        teamWins: 0,
+        hardAiWins: 0,
+        streak: 0,
+        history: []
       };
       let careerStats = Object.assign({}, DEFAULT_STATS);
 
@@ -3686,10 +3691,211 @@
       let discoveredPeers = new Map();
       let peerJsInstance = null;
       let peerJsConnections = [];
+      let radarHubPeer = null;
+      let radarHubConn = null;
+      let radarHubClients = new Map();
+      let pendingIncomingInvite = null;
       let activeRtcConnections = {};
       let myRoomId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
       let cameraStream = null;
       let qrScanRaf = null;
+      const RADAR_HUB_ID = 'BANNU-ROYALE-RADAR-HUB-V2';
+
+      function hashPeerPosition(idStr, idx) {
+        let h = 0;
+        for (let i = 0; i < idStr.length; i++) {
+          h = (h * 31 + idStr.charCodeAt(i)) % 360;
+        }
+        return {
+          angle: (h + idx * 67) % 360,
+          dist: 48 + (h % 28)
+        };
+      }
+
+      function upsertDiscoveredPeer(peerInfo) {
+        if (!peerInfo || !peerInfo.id || peerInfo.id === myRoomId) return;
+        const existing = discoveredPeers.get(peerInfo.id);
+        const pos = existing || hashPeerPosition(peerInfo.id, discoveredPeers.size);
+        discoveredPeers.set(peerInfo.id, {
+          id: peerInfo.id,
+          name: peerInfo.name || ('Player ' + peerInfo.id),
+          mode: peerInfo.mode || rulesConfig.presetName,
+          angle: pos.angle,
+          dist: pos.dist,
+          lastSeen: Date.now()
+        });
+        renderRadarPeers();
+      }
+
+      function removeDiscoveredPeer(peerId) {
+        if (discoveredPeers.delete(peerId)) {
+          renderRadarPeers();
+        }
+      }
+
+      function broadcastPresencePing() {
+        const myMeta = {
+          id: myRoomId,
+          name: careerStats.playerName,
+          mode: rulesConfig.presetName
+        };
+        try {
+          if (localBroadcastChannel) {
+            localBroadcastChannel.postMessage({
+              type: 'PING',
+              senderId: myRoomId,
+              name: myMeta.name,
+              mode: myMeta.mode
+            });
+          }
+        } catch (e) {}
+        try {
+          if (radarHubConn && radarHubConn.open) {
+            radarHubConn.send({ type: 'ANNOUNCE', peer: myMeta });
+          }
+          if (radarHubPeer) {
+            radarHubClients.set(myRoomId, { peer: myMeta, conn: null, lastSeen: Date.now() });
+            broadcastRadarHubPeerList();
+          }
+        } catch (e) {}
+      }
+
+      function broadcastRadarHubPeerList() {
+        const list = [];
+        const now = Date.now();
+        radarHubClients.forEach(function (val, key) {
+          if (now - val.lastSeen > 35000 && key !== myRoomId) {
+            radarHubClients.delete(key);
+            return;
+          }
+          list.push(val.peer);
+          if (key !== myRoomId) upsertDiscoveredPeer(val.peer);
+        });
+        radarHubClients.forEach(function (val) {
+          if (val.conn && val.conn.open) {
+            val.conn.send({ type: 'PEER_LIST', peers: list });
+          }
+        });
+      }
+
+      function connectOrHostRadarHub() {
+        if (!window.Peer || !peerJsInstance) return;
+        try {
+          const conn = peerJsInstance.connect(RADAR_HUB_ID);
+          radarHubConn = conn;
+          conn.on('open', function () {
+            conn.send({
+              type: 'ANNOUNCE',
+              peer: { id: myRoomId, name: careerStats.playerName, mode: rulesConfig.presetName }
+            });
+          });
+          conn.on('data', function (data) {
+            if (data && data.type === 'PEER_LIST' && Array.isArray(data.peers)) {
+              const activeIds = new Set();
+              data.peers.forEach(function (p) {
+                if (p && p.id && p.id !== myRoomId) {
+                  activeIds.add(p.id);
+                  upsertDiscoveredPeer(p);
+                }
+              });
+            }
+          });
+          conn.on('close', function () {
+            radarHubConn = null;
+          });
+        } catch (e) {}
+      }
+
+      function startRadarHubServer() {
+        if (!window.Peer || radarHubPeer) return;
+        try {
+          const hub = new window.Peer(RADAR_HUB_ID);
+          hub.on('open', function () {
+            radarHubPeer = hub;
+            radarHubClients.set(myRoomId, {
+              peer: { id: myRoomId, name: careerStats.playerName, mode: rulesConfig.presetName },
+              conn: null,
+              lastSeen: Date.now()
+            });
+          });
+          hub.on('connection', function (c) {
+            c.on('data', function (data) {
+              if (data && data.type === 'ANNOUNCE' && data.peer && data.peer.id) {
+                radarHubClients.set(data.peer.id, {
+                  peer: data.peer,
+                  conn: c,
+                  lastSeen: Date.now()
+                });
+                upsertDiscoveredPeer(data.peer);
+                broadcastRadarHubPeerList();
+              } else if (data && data.type === 'LEAVE' && data.senderId) {
+                radarHubClients.delete(data.senderId);
+                removeDiscoveredPeer(data.senderId);
+                broadcastRadarHubPeerList();
+              }
+            });
+            c.on('close', function () {
+              radarHubClients.forEach(function (v, k) {
+                if (v.conn === c) {
+                  radarHubClients.delete(k);
+                  removeDiscoveredPeer(k);
+                }
+              });
+              broadcastRadarHubPeerList();
+            });
+          });
+          hub.on('error', function () {
+            try { hub.destroy(); } catch (e) {}
+            radarHubPeer = null;
+          });
+        } catch (e) {}
+      }
+
+      function bindPeerConnectionEvents(conn) {
+        if (!conn || conn._bannuBound) return;
+        conn._bannuBound = true;
+        peerJsConnections.push(conn);
+        conn.on('data', function (data) {
+          if (!data) return;
+          if (data.type === 'HELLO' && data.peer) {
+            upsertDiscoveredPeer(data.peer);
+          } else if (data.type === 'INVITE') {
+            upsertDiscoveredPeer({ id: data.senderId || conn.peer, name: data.senderName, mode: data.matchType });
+            showIncomingLanInvite(data.senderName || 'Wi-Fi Player', data.matchType || '2v2 Team Match', data.senderId || conn.peer, conn);
+          } else if (data.type === 'INVITE_ACCEPTED') {
+            launchVerifiedLanMatch(data.responderId || conn.peer, data.responderName || 'Wi-Fi Friend', data.matchType || '2v2 Team Match');
+          } else if (data.type === 'INVITE_DECLINED') {
+            showToast((data.responderName || 'Player') + ' declined the match request.');
+          } else if (data.type === 'GAME_ACTION') {
+            handleRemoteNetworkAction(data.payload);
+          }
+        });
+        conn.on('close', function () {
+          removeDiscoveredPeer(conn.peer);
+          if (gameState.isMatchActive) {
+            handlePlayerDisconnectOrLeave(1, 'connection lost');
+          }
+        });
+      }
+
+      function launchVerifiedLanMatch(remoteId, remoteName, matchType) {
+        if (matchType && matchType.includes('2v2')) {
+          rulesConfig.teamMode = true;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: remoteName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: remoteName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        }
+        document.getElementById('connectionStatusPill').textContent = '🟢 Wi-Fi P2P (' + remoteName + ')';
+        switchNavigationTab('viewPlay');
+        initNewMatch('Connected with ' + remoteName + ' (' + remoteId + ') for ' + matchType + '!', false);
+      }
 
       function initLanRadarAndWebRtc() {
         document.getElementById('myPeerIdDisplay').textContent = myRoomId;
@@ -3702,14 +3908,12 @@
               const msg = ev.data;
               if (!msg || msg.senderId === myRoomId) return;
               if (msg.type === 'PING' || msg.type === 'PONG' || msg.type === 'ROOM_HOST') {
-                discoveredPeers.set(msg.senderId, {
+                upsertDiscoveredPeer({
                   id: msg.senderId,
                   name: msg.name || ('Player ' + msg.senderId),
-                  mode: msg.mode || '2v2 Bannu Rules',
-                  lastSeen: Date.now()
+                  mode: msg.mode || rulesConfig.presetName
                 });
-                renderRadarPeers();
-                if (msg.type === 'PING') {
+                if (msg.type === 'PING' || msg.type === 'ROOM_HOST') {
                   localBroadcastChannel.postMessage({
                     type: 'PONG',
                     senderId: myRoomId,
@@ -3718,19 +3922,20 @@
                   });
                 }
               } else if (msg.type === 'INVITE' && msg.targetId === myRoomId) {
-                showIncomingLanInvite(msg.senderName, msg.matchType);
+                showIncomingLanInvite(msg.senderName, msg.matchType, msg.senderId, null);
+              } else if (msg.type === 'INVITE_ACCEPTED' && msg.targetId === myRoomId) {
+                launchVerifiedLanMatch(msg.senderId, msg.responderName, msg.matchType);
+              } else if (msg.type === 'INVITE_DECLINED' && msg.targetId === myRoomId) {
+                showToast((msg.responderName || 'Player') + ' declined the match request.');
               } else if (msg.type === 'GAME_ACTION') {
                 handleRemoteNetworkAction(msg.payload);
               } else if (msg.type === 'PEER_LEFT') {
-                handlePlayerDisconnectOrLeave(msg.slot || 1, 'closed tab / left game');
+                removeDiscoveredPeer(msg.senderId);
+                if (gameState.isMatchActive) {
+                  handlePlayerDisconnectOrLeave(msg.slot || 1, 'closed tab / left game');
+                }
               }
             };
-            localBroadcastChannel.postMessage({
-              type: 'PING',
-              senderId: myRoomId,
-              name: careerStats.playerName,
-              mode: rulesConfig.presetName
-            });
           }
         } catch (e) {}
 
@@ -3738,28 +3943,36 @@
           if (window.Peer) {
             peerJsInstance = new window.Peer(myRoomId);
             peerJsInstance.on('open', function () {
-              document.getElementById('wifiRadarStatusBadge').textContent = '🟢 Wi-Fi & PeerJS Live';
+              document.getElementById('wifiRadarStatusBadge').textContent = '🟢 Wi-Fi & PeerJS Live (' + myRoomId + ')';
+              startRadarHubServer();
+              setTimeout(connectOrHostRadarHub, 400);
             });
             peerJsInstance.on('connection', function (conn) {
-              peerJsConnections.push(conn);
-              conn.on('data', function (data) {
-                if (data && data.type === 'INVITE') {
-                  showIncomingLanInvite(data.senderName || 'Wi-Fi Friend', data.matchType || '2v2 Team Match');
-                } else if (data && data.type === 'GAME_ACTION') {
-                  handleRemoteNetworkAction(data.payload);
-                }
-              });
-              conn.on('close', function () {
-                handlePlayerDisconnectOrLeave(1, 'connection lost');
-              });
+              bindPeerConnectionEvents(conn);
             });
-            peerJsInstance.on('error', function () {
-              document.getElementById('wifiRadarStatusBadge').textContent = '📡 Local LAN Mode';
+            peerJsInstance.on('error', function (err) {
+              if (err && err.type === 'peer-unavailable') {
+                startRadarHubServer();
+                return;
+              }
+              document.getElementById('wifiRadarStatusBadge').textContent = '📡 Local LAN Broadcast Mode';
             });
           }
         } catch (e) {}
 
-        // Offline / Online Browser Network Resilience Listeners
+        setInterval(function () {
+          const now = Date.now();
+          let changed = false;
+          discoveredPeers.forEach(function (peer, key) {
+            if (now - (peer.lastSeen || 0) > 35000) {
+              discoveredPeers.delete(key);
+              changed = true;
+            }
+          });
+          if (changed) renderRadarPeers();
+          broadcastPresencePing();
+        }, 8000);
+
         window.addEventListener('offline', function () {
           const badge = document.getElementById('networkResilienceBadge');
           if (badge) {
@@ -3775,35 +3988,24 @@
             badge.textContent = '🟢 Online & Offline Ready';
             badge.className = 'px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
           }
+          broadcastPresencePing();
           showToast('🟢 Network reconnected seamlessly!');
         });
 
-        // Save match & notify peers if user closes or refreshes tab
         window.addEventListener('beforeunload', function () {
           saveActiveMatchSnapshot();
           try {
-            if (localBroadcastChannel && gameState.isMatchActive) {
+            if (localBroadcastChannel) {
               localBroadcastChannel.postMessage({ type: 'PEER_LEFT', senderId: myRoomId, slot: 1 });
+            }
+            if (radarHubConn && radarHubConn.open) {
+              radarHubConn.send({ type: 'LEAVE', senderId: myRoomId });
             }
           } catch (e) {}
         });
 
-        discoveredPeers.set('BANNU-7742', {
-          id: 'BANNU-7742',
-          name: 'Ahmad Khan (Wi-Fi)',
-          mode: '2v2 Bannu Close Game',
-          angle: 45,
-          dist: 58
-        });
-        discoveredPeers.set('BANNU-3190', {
-          id: 'BANNU-3190',
-          name: 'Saifullah (Wi-Fi)',
-          mode: '2-Dice Pashtun Rules',
-          angle: 215,
-          dist: 66
-        });
+        broadcastPresencePing();
         renderRadarPeers();
-
         generateOfflineWebRtcQrCode('offer');
       }
 
@@ -3816,6 +4018,14 @@
 
         const peersArr = Array.from(discoveredPeers.values());
         badge.textContent = String(peersArr.length);
+
+        if (peersArr.length === 0) {
+          list.innerHTML =
+            '<div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-[11px] text-slate-500">' +
+              'No active Wi-Fi players detected yet. Open this game on another device/tab or enter a Friend\'s Room ID above.' +
+            '</div>';
+          return;
+        }
 
         peersArr.forEach(function (peer, idx) {
           const angleDeg = peer.angle !== undefined ? peer.angle : ((idx * 115 + 40) % 360);
@@ -3858,11 +4068,13 @@
       }
 
       function sendLanMatchInvite(peer, matchType) {
-        showToast('📡 Sent ' + matchType + ' request to ' + peer.name + ' over Wi-Fi...');
+        if (!peer || !peer.id) return;
+        showToast('📡 Sent ' + matchType + ' invite to ' + peer.name + ' (' + peer.id + ') — waiting for acceptance...');
         if (localBroadcastChannel) {
           localBroadcastChannel.postMessage({
             type: 'INVITE',
             targetId: peer.id,
+            senderId: myRoomId,
             senderName: careerStats.playerName,
             matchType: matchType
           });
@@ -3870,39 +4082,29 @@
         try {
           if (peerJsInstance) {
             const conn = peerJsInstance.connect(peer.id);
+            bindPeerConnectionEvents(conn);
             conn.on('open', function () {
-              peerJsConnections.push(conn);
-              conn.send({ type: 'INVITE', senderName: careerStats.playerName, matchType: matchType });
+              conn.send({
+                type: 'INVITE',
+                senderId: myRoomId,
+                senderName: careerStats.playerName,
+                matchType: matchType
+              });
             });
           }
         } catch (e) {}
-
-        setTimeout(function () {
-          if (matchType.includes('2v2')) {
-            rulesConfig.teamMode = true;
-            seatConfig[1].name = peer.name;
-            seatConfig[1].type = 'ai';
-            seatConfig[1].active = true;
-            seatConfig[2].active = true;
-            seatConfig[3].active = true;
-          } else {
-            rulesConfig.teamMode = false;
-            seatConfig[1].active = false;
-            seatConfig[2].name = peer.name;
-            seatConfig[2].type = 'ai';
-            seatConfig[2].active = true;
-            seatConfig[3].active = false;
-          }
-          document.getElementById('connectionStatusPill').textContent = '🟢 Wi-Fi P2P (' + peer.name + ')';
-          switchNavigationTab('viewPlay');
-          initNewMatch('Connected with ' + peer.name + ' over local Wi-Fi (' + matchType + ')!', false);
-        }, 600);
       }
 
-      function showIncomingLanInvite(senderName, matchType) {
+      function showIncomingLanInvite(senderName, matchType, senderId, conn) {
+        pendingIncomingInvite = {
+          senderName: senderName || 'Wi-Fi Player',
+          matchType: matchType || '2v2 Team Match',
+          senderId: senderId || 'BANNU-PEER',
+          conn: conn || null
+        };
         const modal = document.getElementById('lanInviteModal');
         document.getElementById('lanInviteModalText').textContent =
-          senderName + ' invited you to play a ' + matchType + ' on the local Wi-Fi network.';
+          pendingIncomingInvite.senderName + ' (' + pendingIncomingInvite.senderId + ') invited you to play a ' + pendingIncomingInvite.matchType + '.';
         modal.classList.remove('hidden');
       }
 
@@ -4625,22 +4827,20 @@
         showToast('📋 Copied Wi-Fi Room ID: ' + text);
       });
       document.getElementById('connectPeerIdBtn').addEventListener('click', function () {
-        const code = document.getElementById('joinPeerIdInput').value.trim() || 'BANNU-PEER';
-        sendLanMatchInvite({ id: code, name: 'Friend (' + code + ')' }, '2v2 Team Match');
+        const code = document.getElementById('joinPeerIdInput').value.trim().toUpperCase();
+        if (!code || code === myRoomId) {
+          showToast('⚠️ Enter a valid Friend\'s Room ID (e.g. BANNU-4821).');
+          return;
+        }
+        const existing = discoveredPeers.get(code) || { id: code, name: 'Player ' + code, mode: rulesConfig.presetName };
+        upsertDiscoveredPeer(existing);
+        sendLanMatchInvite(existing, rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
       });
       document.getElementById('simulateLanPlayerBtn').addEventListener('click', function () {
-        const randId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
-        const names = ['Tariq Wazir', 'Hamza Bannuchi', 'Bilal Khattak', 'Usman Afridi'];
-        const pick = names[Math.floor(Math.random() * names.length)];
-        discoveredPeers.set(randId, {
-          id: randId,
-          name: pick + ' (Wi-Fi)',
-          mode: '2v2 Bannu Rules',
-          angle: Math.floor(Math.random() * 360),
-          dist: 52 + Math.floor(Math.random() * 30)
-        });
+        broadcastPresencePing();
+        connectOrHostRadarHub();
         renderRadarPeers();
-        showToast('📡 Discovered ' + pick + ' on local Wi-Fi radar!');
+        showToast('🔄 Scanning Wi-Fi & PeerJS Radar for active players...');
       });
 
       document.getElementById('qrHostModeBtn').addEventListener('click', function () {
@@ -4703,11 +4903,48 @@
 
       document.getElementById('declineLanInviteBtn').addEventListener('click', function () {
         document.getElementById('lanInviteModal').classList.add('hidden');
+        if (pendingIncomingInvite) {
+          if (localBroadcastChannel) {
+            localBroadcastChannel.postMessage({
+              type: 'INVITE_DECLINED',
+              targetId: pendingIncomingInvite.senderId,
+              senderId: myRoomId,
+              responderName: careerStats.playerName
+            });
+          }
+          if (pendingIncomingInvite.conn && pendingIncomingInvite.conn.open) {
+            pendingIncomingInvite.conn.send({
+              type: 'INVITE_DECLINED',
+              responderId: myRoomId,
+              responderName: careerStats.playerName
+            });
+          }
+          pendingIncomingInvite = null;
+        }
       });
       document.getElementById('acceptLanInviteBtn').addEventListener('click', function () {
         document.getElementById('lanInviteModal').classList.add('hidden');
-        switchNavigationTab('viewPlay');
-        initNewMatch('Accepted local Wi-Fi match invite!', false);
+        if (!pendingIncomingInvite) return;
+        const inv = pendingIncomingInvite;
+        pendingIncomingInvite = null;
+        if (localBroadcastChannel) {
+          localBroadcastChannel.postMessage({
+            type: 'INVITE_ACCEPTED',
+            targetId: inv.senderId,
+            senderId: myRoomId,
+            responderName: careerStats.playerName,
+            matchType: inv.matchType
+          });
+        }
+        if (inv.conn && inv.conn.open) {
+          inv.conn.send({
+            type: 'INVITE_ACCEPTED',
+            responderId: myRoomId,
+            responderName: careerStats.playerName,
+            matchType: inv.matchType
+          });
+        }
+        launchVerifiedLanMatch(inv.senderId, inv.senderName, inv.matchType);
       });
 
       document.getElementById('saveProfileNameBtn').addEventListener('click', function () {
@@ -4715,6 +4952,8 @@
         if (val) {
           careerStats.playerName = val;
           seatConfig[0].name = val;
+          document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
+          broadcastPresencePing();
           saveCareerStats();
           updateAllUI();
           showToast('✅ Profile name saved!');
