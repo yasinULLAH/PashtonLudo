@@ -1727,12 +1727,14 @@
 
       let gameState = {
         isMatchActive: false,
+        isPaused: false,
         players: [],
         currentTurn: 0,
-        phase: 'ROLL', // 'ROLL', 'MOVE', 'ANIMATING', 'CAPTURE_CHOICE', 'GAME_OVER'
+        phase: 'ROLL',
         dicePool: [],
         earnedKillBonusThisTurn: false,
-        lastMovedTrail: null, // { ownerIdx, tokenId, startRC, endRC, pathCoords, delta }
+        earnedHomeBonusThisTurn: false,
+        lastMovedTrail: null,
         preferredDieFilter: null,
         selectedTokenKey: null,
         draggingToken: null,
@@ -1741,6 +1743,28 @@
         turnCountdown: 30,
         turnInterval: null
       };
+
+      function setGamePaused(paused) {
+        gameState.isPaused = Boolean(paused);
+        if (gameState.isPaused) {
+          if (gameState.aiTimer) {
+            clearTimeout(gameState.aiTimer);
+            gameState.aiTimer = null;
+          }
+          if (autoMoveTimer) {
+            clearTimeout(autoMoveTimer);
+            autoMoveTimer = null;
+          }
+        } else if (gameState.isMatchActive && gameState.phase !== 'GAME_OVER') {
+          if (gameState.phase === 'MOVE') {
+            if (!checkAndTriggerAutoMoveIfForced()) {
+              scheduleAiIfNeeded();
+            }
+          } else if (gameState.phase === 'ROLL') {
+            scheduleAiIfNeeded();
+          }
+        }
+      }
 
       function saveActiveMatchSnapshot() {
         if (!gameState.isMatchActive || gameState.phase === 'GAME_OVER' || gameState.isScenarioDrill) return;
@@ -1754,6 +1778,7 @@
             phase: gameState.phase === 'ANIMATING' ? 'MOVE' : gameState.phase,
             dicePool: gameState.dicePool,
             earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
+            earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
             lastMovedTrail: gameState.lastMovedTrail
           };
           localStorage.setItem('bannu_ludo_saved_match_v1', JSON.stringify(payload));
@@ -1804,7 +1829,9 @@
           gameState.phase = data.phase || 'ROLL';
           gameState.dicePool = data.dicePool || [{ id: 0, value: 6, used: true }, { id: 1, value: 6, used: true }];
           gameState.earnedKillBonusThisTurn = Boolean(data.earnedKillBonusThisTurn);
+          gameState.earnedHomeBonusThisTurn = Boolean(data.earnedHomeBonusThisTurn);
           gameState.lastMovedTrail = data.lastMovedTrail || null;
+          gameState.isPaused = false;
           gameState.isMatchActive = true;
           syncRulesStudioControls();
           switchNavigationTab('viewPlay');
@@ -1882,6 +1909,7 @@
           phase: gameState.phase,
           dicePool: gameState.dicePool,
           earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
+          earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
           lastMovedTrail: gameState.lastMovedTrail
         });
       }
@@ -1903,6 +1931,7 @@
         gameState.phase = snap.phase;
         gameState.dicePool = snap.dicePool;
         gameState.earnedKillBonusThisTurn = Boolean(snap.earnedKillBonusThisTurn);
+        gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
         gameState.lastMovedTrail = snap.lastMovedTrail || null;
         gameState.selectedTokenKey = null;
         gameState.draggingToken = null;
@@ -1947,6 +1976,7 @@
           clearTimeout(gameState.aiTimer);
           gameState.aiTimer = null;
         }
+        gameState.isPaused = false;
         gameState.players = [0, 1, 2, 3].map(createPlayerObject);
         gameState.currentTurn = 0;
         gameState.phase = 'ROLL';
@@ -1955,6 +1985,7 @@
           { id: 1, value: 6, used: true }
         ];
         gameState.earnedKillBonusThisTurn = false;
+        gameState.earnedHomeBonusThisTurn = false;
         gameState.lastMovedTrail = null;
         gameState.selectedTokenKey = null;
         gameState.draggingToken = null;
@@ -1979,7 +2010,6 @@
         }
       }
 
-      // --- 5. TURN COUNTDOWN TIMER ---
       function resetTurnCountdown() {
         if (gameState.turnInterval) {
           clearInterval(gameState.turnInterval);
@@ -2005,7 +2035,7 @@
         if (!gameState.isMatchActive) return;
 
         gameState.turnInterval = setInterval(function () {
-          if (!gameState.isMatchActive || gameState.phase === 'GAME_OVER' || gameState.phase === 'ANIMATING') return;
+          if (!gameState.isMatchActive || gameState.isPaused || gameState.phase === 'GAME_OVER' || gameState.phase === 'ANIMATING') return;
           gameState.turnCountdown = Math.max(0, gameState.turnCountdown - 1);
           if (badge) badge.textContent = gameState.turnCountdown + 's';
           const activeBar = document.getElementById('turnTimerBar' + gameState.currentTurn);
@@ -2038,6 +2068,13 @@
         const p = gameState.players[playerIdx];
         if (!p || !p.active) return true;
         return p.tokens.every(function (tk) { return tk.state === 'completed'; });
+      }
+
+      function isAllBeadsInsideHome(ownerIdx) {
+        const p = gameState.players[ownerIdx];
+        if (!p || !p.active) return false;
+        return p.tokens.some(function (tk) { return tk.state === 'home_stretch'; }) &&
+               p.tokens.every(function (tk) { return tk.state === 'home_stretch' || tk.state === 'completed'; });
       }
 
       function getControlledOwnerIndex(actorIdx) {
@@ -2351,7 +2388,7 @@
           clearTimeout(autoMoveTimer);
           autoMoveTimer = null;
         }
-        if (!gameState.isMatchActive || gameState.phase !== 'MOVE') return false;
+        if (!gameState.isMatchActive || gameState.isPaused || gameState.phase !== 'MOVE') return false;
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return false;
 
@@ -2493,7 +2530,10 @@
         token.state = move.sim.newState;
         token.steps = move.sim.newSteps;
         token.homeStep = move.sim.newHomeStep;
-        if (token.state === 'completed') playSound('home');
+        if (token.state === 'completed') {
+          playSound('home');
+          gameState.earnedHomeBonusThisTurn = true;
+        }
 
         if (move.sim.isSpawn) {
           addGameLog(owner.name + ' spawned Bead #' + (token.id + 1) + ' onto start.', 'info');
@@ -2501,7 +2541,7 @@
           addGameLog(owner.name + ' has 0 kills! Bead #' + (token.id + 1) + ' looped past Home Entry for another full lap.', 'warn');
           showToast('⚠️ No kill yet! Bead loops past Home Gate for another lap.');
         } else if (token.state === 'completed') {
-          addGameLog('🎉 ' + owner.name + ' completed Bead #' + (token.id + 1) + ' into Home!', 'gold');
+          addGameLog('🎉 ' + owner.name + ' completed Bead #' + (token.id + 1) + ' into Home! (+Bonus Re-Roll Earned!)', 'gold');
         } else {
           addGameLog(owner.name + ' moved Bead #' + (token.id + 1) + ' forward by ' + move.delta + '.', 'info');
         }
@@ -2663,19 +2703,20 @@
           return;
         }
 
-        // Check Bonus Roll conditions:
-        // 1. Dice Six Bonus (Single 6 in 1-Die mode, or Double 6+6 in 2-Dice mode)
-        // 2. Kill Bonus Re-Roll (Eating/killing an opponent bead when bonusRollOnKill is enabled!)
-        const rolledDiceBonus = (rulesConfig.diceCount === 1 && gameState.dicePool[0].value === 6) ||
-                                (rulesConfig.diceCount === 2 && gameState.dicePool.length === 2 && gameState.dicePool[0].value === 6 && gameState.dicePool[1].value === 6);
+        const rolledDiceBonus = (gameState.dicePool.length === 1 && gameState.dicePool[0].value === 6) ||
+                                (gameState.dicePool.length === 2 && gameState.dicePool[0].value === 6 && gameState.dicePool[1].value === 6);
         const earnedKillBonus = Boolean(rulesConfig.bonusRollOnKill && gameState.earnedKillBonusThisTurn);
+        const earnedHomeBonus = Boolean(gameState.earnedHomeBonusThisTurn);
 
-        if (rolledDiceBonus || earnedKillBonus) {
+        if (rolledDiceBonus || earnedKillBonus || earnedHomeBonus) {
           const curP = gameState.players[gameState.currentTurn];
-          const reason = earnedKillBonus
-            ? 'for eating/killing an enemy bead (شکار پر دوبارہ باری)!'
-            : (rulesConfig.diceCount === 2 ? 'for Double Six (6+6)!' : 'for rolling a 6!');
+          const reason = earnedHomeBonus
+            ? 'for completing a bead into Home (گھر پہنچنے پر دوبارہ باری)!'
+            : (earnedKillBonus
+              ? 'for eating/killing an enemy bead (شکار پر دوبارہ باری)!'
+              : (gameState.dicePool.length === 2 ? 'for Double Six (6+6)!' : 'for rolling a 6!'));
           gameState.earnedKillBonusThisTurn = false;
+          gameState.earnedHomeBonusThisTurn = false;
           addGameLog('🔥 Bonus Re-Roll granted to ' + curP.name + ' ' + reason, 'gold');
           showToast('🔥 Bonus Re-Roll: ' + reason);
           gameState.phase = 'ROLL';
@@ -2698,6 +2739,7 @@
       function advanceToNextTurn() {
         resetTokenLocksForPlayer(getControlledOwnerIndex(gameState.currentTurn));
         gameState.earnedKillBonusThisTurn = false;
+        gameState.earnedHomeBonusThisTurn = false;
         for (let step = 1; step <= 4; step++) {
           const cand = (gameState.currentTurn + step) % 4;
           const p = gameState.players[cand];
@@ -2717,15 +2759,17 @@
       }
 
       function rollDiceForCurrentPlayer(forcedValues, isRemoteSync) {
-        if (gameState.phase !== 'ROLL') return;
+        if (gameState.phase !== 'ROLL' || gameState.isPaused) return;
         const actor = gameState.players[gameState.currentTurn];
+        const targetOwnerIdx = getControlledOwnerIndex(actor.id);
 
         const needsAssistSixRoll = rulesConfig.teamMode &&
                                    rulesConfig.teamAssistRequiresSix &&
                                    hasPlayerCompletedAllTokens(actor.id) &&
                                    !actor.assistUnlocked;
+        const allInHomeSingleDie = isAllBeadsInsideHome(targetOwnerIdx);
 
-        const effectiveDiceCount = needsAssistSixRoll ? 1 : rulesConfig.diceCount;
+        const effectiveDiceCount = (needsAssistSixRoll || allInHomeSingleDie) ? 1 : rulesConfig.diceCount;
 
         playSound('roll');
         const dSlot0 = document.getElementById('dieSlot0');
@@ -2865,7 +2909,7 @@
           clearTimeout(gameState.aiTimer);
           gameState.aiTimer = null;
         }
-        if (!gameState.isMatchActive) return;
+        if (!gameState.isMatchActive || gameState.isPaused) return;
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || !actor.active) return;
 
@@ -2971,7 +3015,7 @@
         const starIndices = [8, 21, 34, 47];
         starIndices.forEach(function (tIdx) {
           const rc = MAIN_TRACK[tIdx];
-          ctx.fillStyle = '#fef3c7';
+          ctx.fillStyle = '#fde68a';
           ctx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
         });
 
@@ -2989,13 +3033,36 @@
 
         SAFE_TRACK_INDICES.forEach(function (tIdx) {
           const rc = MAIN_TRACK[tIdx];
+          const x = rc[1] * cellW;
+          const y = rc[0] * cellH;
           const cx = (rc[1] + 0.5) * cellW;
           const cy = (rc[0] + 0.5) * cellH;
-          ctx.fillStyle = START_TRACK_INDEX.includes(tIdx) ? '#ffffff' : '#d97706';
-          ctx.font = 'bold ' + Math.round(cell * 0.52) + 'px Inter, sans-serif';
+          const isStartStop = START_TRACK_INDEX.includes(tIdx);
+
+          ctx.save();
+          ctx.strokeStyle = isStartStop ? '#ffffff' : '#b45309';
+          ctx.lineWidth = Math.max(2, cell * 0.055);
+          ctx.strokeRect(x + cellW * 0.07, y + cellH * 0.07, cellW * 0.86, cellH * 0.86);
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, cell * 0.36, 0, Math.PI * 2);
+          ctx.fillStyle = isStartStop ? 'rgba(255, 255, 255, 0.22)' : 'rgba(217, 119, 6, 0.18)';
+          ctx.fill();
+          ctx.setLineDash([3, 2]);
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = isStartStop ? '#fef08a' : '#d97706';
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = isStartStop ? '#ffffff' : '#92400e';
+          ctx.font = '900 ' + Math.round(cell * 0.42) + 'px Inter, sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText('★', cx, cy);
+          ctx.fillText('★', cx, cy - cellH * 0.07);
+
+          ctx.font = '900 ' + Math.round(cell * 0.17) + 'px Inter, sans-serif';
+          ctx.fillText('STOP', cx, cy + cellH * 0.27);
+          ctx.restore();
         });
 
         const gateArrows = [
@@ -3253,6 +3320,22 @@
           const baseY = (baseRC[0] + 0.5) * cellH;
           const isSafeStopCell = group[0].state === 'board' && SAFE_TRACK_INDICES.has(getOuterTrackIndex(group[0]));
 
+          if (isSafeStopCell) {
+            const cellLeft = baseRC[1] * cellW;
+            const cellTop = baseRC[0] * cellH;
+            ctx.save();
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = Math.max(3, cell * 0.08);
+            ctx.strokeRect(cellLeft + 1.5, cellTop + 1.5, cellW - 3, cellH - 3);
+            ctx.beginPath();
+            ctx.arc(baseX, baseY, cell * 0.44, 0, Math.PI * 2);
+            ctx.setLineDash([4, 3]);
+            ctx.lineWidth = 2.2;
+            ctx.strokeStyle = '#f59e0b';
+            ctx.stroke();
+            ctx.restore();
+          }
+
           group.forEach(function (tk, idx) {
             if (gameState.draggingToken && gameState.draggingToken.ownerIdx === tk.owner && gameState.draggingToken.tokenId === tk.id) {
               return;
@@ -3365,20 +3448,40 @@
             });
           });
 
-          if (isSafeStopCell || group.length > 1) {
+          if (group.length > 1) {
             ctx.save();
             ctx.beginPath();
             ctx.arc(baseX, baseY, cell * 0.15, 0, Math.PI * 2);
-            ctx.fillStyle = isSafeStopCell ? 'rgba(254, 243, 199, 0.96)' : 'rgba(15, 23, 42, 0.85)';
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
             ctx.fill();
             ctx.lineWidth = 1.5;
-            ctx.strokeStyle = isSafeStopCell ? '#d97706' : '#ffffff';
+            ctx.strokeStyle = '#ffffff';
             ctx.stroke();
-            ctx.fillStyle = isSafeStopCell ? '#b45309' : '#ffffff';
+            ctx.fillStyle = '#ffffff';
             ctx.font = '900 ' + Math.round(cell * 0.19) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(isSafeStopCell ? '★' : String(group.length), baseX, baseY);
+            ctx.fillText(String(group.length), baseX, baseY);
+            ctx.restore();
+          }
+          if (isSafeStopCell) {
+            ctx.save();
+            const pillW = cellW * 0.86;
+            const pillH = Math.max(10, cellH * 0.24);
+            const pillX = baseX - pillW / 2;
+            const pillY = (baseRC[0] + 1) * cellH - pillH - 1;
+            ctx.fillStyle = '#065f46';
+            ctx.beginPath();
+            ctx.roundRect(pillX, pillY, pillW, pillH, 4);
+            ctx.fill();
+            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = '#fde047';
+            ctx.stroke();
+            ctx.fillStyle = '#fde047';
+            ctx.font = '900 ' + Math.round(cell * 0.16) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('★ SAFE', baseX, pillY + pillH / 2);
             ctx.restore();
           }
         });
@@ -3755,7 +3858,8 @@
         if (!actor) return;
         const targetIdx = getControlledOwnerIndex(actor.id);
         const needsAssistSix = rulesConfig.teamMode && rulesConfig.teamAssistRequiresSix && hasPlayerCompletedAllTokens(actor.id) && !actor.assistUnlocked;
-        const effectiveDiceCount = needsAssistSix ? 1 : rulesConfig.diceCount;
+        const allInHomeSingleDie = isAllBeadsInsideHome(targetIdx);
+        const effectiveDiceCount = (needsAssistSix || allInHomeSingleDie) ? 1 : rulesConfig.diceCount;
 
         document.getElementById('turnBannerText').textContent =
           '⚡ ' + actor.name + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
@@ -4825,6 +4929,7 @@
         toggleImmersiveBoardOnlyMode();
       });
       document.getElementById('enterImmersiveFromMenuBtn').addEventListener('click', function () {
+        setGamePaused(false);
         toggleImmersiveBoardOnlyMode(true);
       });
       document.getElementById('exitImmersiveBtn').addEventListener('click', function () {
@@ -4930,16 +5035,20 @@
       });
 
       document.getElementById('openPauseMenuBtn').addEventListener('click', function () {
+        setGamePaused(true);
         renderSeatTakeoverControls();
         document.getElementById('pauseMenuModal').classList.remove('hidden');
       });
       document.getElementById('closePauseMenuBtn').addEventListener('click', function () {
         document.getElementById('pauseMenuModal').classList.add('hidden');
+        setGamePaused(false);
       });
       document.getElementById('resumeGameBtn').addEventListener('click', function () {
         document.getElementById('pauseMenuModal').classList.add('hidden');
+        setGamePaused(false);
       });
       document.getElementById('exitToHomeBtn').addEventListener('click', function () {
+        setGamePaused(false);
         saveActiveMatchSnapshot();
         document.getElementById('pauseMenuModal').classList.add('hidden');
         switchNavigationTab('viewHome');
@@ -5066,6 +5175,7 @@
       });
       document.getElementById('closeRefereeLogModalBtn').addEventListener('click', function () {
         document.getElementById('refereeLogModal').classList.add('hidden');
+        setGamePaused(false);
       });
 
       document.querySelectorAll('.rule-dice-btn').forEach(function (btn) {
@@ -5145,6 +5255,20 @@
         }
         queuedCheatDice = vals;
         closeCrownCheatModal();
+      });
+
+      document.getElementById('crownPasswordInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('unlockCrownAuthBtn').click();
+        }
+      });
+
+      document.getElementById('crownDiceValuesInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('applyComingDiceBtn').click();
+        }
       });
 
       document.getElementById('autoRollTurnChk').addEventListener('change', function () {
