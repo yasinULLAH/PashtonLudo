@@ -796,6 +796,9 @@
 <button class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm" id="exitScenarioDrillBtn" title="Exit Drill &amp; Return to Match" type="button">
           🔙 Match
         </button>
+<button class="hidden px-2 py-1 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-[10px] border border-amber-300 shadow-sm animate-pulse" id="reclaimSeatTopBtn" title="Reclaim Your Seat from AI Bot" type="button">
+          👤 Reclaim Seat
+        </button>
 </div>
 <div class="col-span-4 relative royal-card rounded-xl px-2 py-1 border-2 border-emerald-300 flex flex-col justify-center h-full transition-all" id="playerCard1">
 <div class="hidden absolute top-11 right-1 z-30 px-2 py-0.5 rounded-lg bg-emerald-400 text-slate-950 font-black text-[10px] shadow" id="emoteBubble1"></div>
@@ -864,6 +867,7 @@
 <span class="truncate text-amber-950" id="turnBannerText">Red's Turn</span>
 <span class="font-mono text-slate-900" id="turnCountdownBadge">30s</span>
 </div>
+<div class="hidden flex-wrap items-center gap-0.5 mt-0.5" id="stackedDiceQueueBar"></div>
 </div>
 <button class="w-8 h-9 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 flex items-center justify-center text-xs flex-shrink-0" id="toggleEmoteTrayBtn" title="Quick Taunts" type="button">
           💬
@@ -1086,6 +1090,98 @@
 <div>
 <div class="font-bold text-xs text-slate-900">💬 Show Top Tooltips &amp; Preview Hints (ٹول ٹپس دکھائیں)</div>
 <p class="text-[11px] text-slate-600">Show top hint banners and floating move labels. Disable to keep the board 100% clear (saved across reloads).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkThreeConsecutiveSixes" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🚫 Three Consecutive Sixes Penalty (لگاتار 3 چھکے یا 3 ڈبل سکس باری ضائع — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">If a player rolls 6 three times in a row (in 1-Die mode) or 6+6 three times in a row (in 2-Dice mode), their entire turn is canceled and passes to the next player.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSingleSixBonusTwoDice" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🎲 Single Six Re-Roll in 2-Dice Mode (دو دانوں میں ایک چھکے پر بھی باری — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Normally in 2-Dice Bannu Ludo you only get a bonus roll on Double Six (6+6). Enabling this grants a bonus roll even if just one of the two dice is a 6 (e.g., 6+4).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkStackRollBeforeMoving" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">📚 Stack Roll / Accumulate Sixes Before Moving (پہلے تمام باری چلنا پھر اکٹھا چلنا — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Queues all bonus rolls (including 6+6 and after-kill bonus rolls while keeping remaining dice stacked) before moving, then lets you distribute all rolled numbers across your beads.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSpawnOnOneAndSix" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">1️⃣ Spawn on 1 as well as 6 (1 یا 6 دونوں پر گوٹی کھلنا — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Allows bringing a bead out of the hand/yard on either a 1 or a 6 (popular in fast matches).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkDoubleSixSpawnsTwo" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⚡ Double-Six Spawns Two Beads Automatically (ڈبل سکس پر دو گوٹیاں باہر آنا — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">When rolling 6+6 with 2+ beads in hand, forces bringing 2 separate beads out of hand automatically (when OFF, you may spawn 1 bead and move it by 6).</p>
+</div>
+</label>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkFirstBeadOnBoard" type="checkbox"/>
+<div class="flex-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkFirstBeadOnBoard">🚀 First Bead Starts Already on Board (پہلی گوٹی پہلے سے باہر ہونا — Default: OFF)</label>
+<select aria-label="Starting Beads on Board" class="bg-amber-50 border border-amber-300 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-900" id="initialBeadsOnBoardSelect">
+<option selected="" value="1">1 Bead Out</option>
+<option value="2">2 Beads Out</option>
+<option value="3">3 Beads Out</option>
+<option value="4">4 Beads Out</option>
+</select>
+</div>
+<p class="text-[11px] text-slate-600 mt-0.5">Every player starts the match with 1 (or set number) bead already placed on their starting square so the match begins immediately without waiting for a 6.</p>
+</div>
+</div>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkPairBlockadeRule" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🧱 Pair Blockade / Wall Rule (جوڑا راستہ بند کرنا — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">When 2 beads of the same player (or same team) sit on the same square, they form a "Jora" (wall). Opponent beads cannot jump over a Jora until it breaks.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkKillAllStackedEnemies" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">💥 Kill All Stacked Enemies on One Square (ایک خانے پر موجود تمام مخالف گوٹیاں مارنا — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Instead of eating only 1 chosen bead when landing on stacked enemies, a single landing eats all enemy beads sitting on that unprotected square.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkTwoKillsForHome" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⚔️⚔️ Two Kills Required for Home Entry (گھر جانے کے لیے 2 شکار لازمی — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Upgrades the blood-gate requirement from 1 kill to 2 kills before a player's home gate opens.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOneDieWhenOneBeadLeft" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">1️⃣ Must Use 1 Die When Only 1 Bead Remains on Board (صرف آخری ایک گوٹی رہنے پر 1 ڈائس استعمال کرنا — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">As soon as a player has completed all but 1 bead (only 1 bead left anywhere on the board), they roll only 1 Die instead of 2.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMandatoryCapture" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🎯 Mandatory Capture / Must Kill if Possible (شکار ممکن ہو تو مارنا لازمی / پھونک — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">If your dice roll allows you to kill an opponent's bead, you must make the capture move (the referee highlights and forces it).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkThreeTimeoutsBotTakeover" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🤖 3-Timeouts Auto-Bot Takeover (3 بار وقت ختم ہونے پر بوٹ کنٹرول — Default: ON)</div>
+<p class="text-[11px] text-slate-600">If a human player lets the turn timer run out 3 turns in a row without touching the screen, the AI Bot automatically takes over their seat until they tap "Reclaim Seat".</p>
 </div>
 </label>
 </div>
@@ -1418,8 +1514,16 @@
 <p class="text-slate-700">In Close Game, a bead that kills an enemy locks on that square for the rest of your turn if another bead can move or spawn.</p>
 </div>
 <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">6. Disconnect / Close Protection &amp; AI Takeover</h3>
-<p class="text-slate-700">Every turn is auto-saved so closing or refreshing the app lets you resume immediately. If a player loses connection or leaves mid-match, an intelligent AI Bot automatically takes over their seat!</p>
+<h3 class="font-bold text-amber-900 mb-1">6. Disconnect / 3-Timeouts Bot Takeover &amp; Reclaim Seat</h3>
+<p class="text-slate-700">Every turn is auto-saved. If a player misses 3 turn timers in a row (Default ON) or disconnects, an AI Bot takes over their seat until they tap "👤 Reclaim Seat"!</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">7. Dice &amp; Spawn Variants (Optional in Rules)</h3>
+<p class="text-slate-700">Customize with 3 Consecutive Sixes Penalty, Single-Six Re-Roll in 2-Dice, Stack Roll (queue bonus rolls &amp; kill bonuses before moving), Spawn on 1 &amp; 6, Double-Six Auto-Spawn 2 Beads, or Start with 1–4 Beads on Board.</p>
+</div>
+<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
+<h3 class="font-bold text-amber-900 mb-1">8. Tactical Combat Variants (Optional in Rules)</h3>
+<p class="text-slate-700">Enable Pair Blockade / Jora Wall (opponents cannot jump over 2 stacked same-team beads), Kill All Stacked Enemies, 2 Kills Required for Home, 1-Die on Last Remaining Bead, or Mandatory Capture (Phoonk).</p>
 </div>
 </div>
 </div>
@@ -1728,6 +1832,19 @@
         teamMode: true,
         strictHomeRemainder: true,
         teamAssistRequiresSix: true,
+        threeConsecutiveSixesPenalty: false,
+        singleSixBonusInTwoDice: false,
+        stackRollBeforeMoving: false,
+        spawnOnOneAndSix: false,
+        doubleSixSpawnsTwoBeads: false,
+        firstBeadStartsOnBoard: false,
+        initialBeadsOnBoardCount: 1,
+        pairBlockadeRule: false,
+        killAllStackedEnemies: false,
+        twoKillsForHome: false,
+        oneDieWhenOneBeadLeft: false,
+        mandatoryCapture: false,
+        threeTimeoutsBotTakeover: true,
         autoRollOnTurn: savedAutoRollPref,
         showTooltips: savedShowTooltipsPref,
         turnTimeSeconds: 30,
@@ -1810,6 +1927,11 @@
         dicePool: [],
         earnedKillBonusThisTurn: false,
         earnedHomeBonusThisTurn: false,
+        earnedSixBonusThisRoll: false,
+        consecutiveBonusSixRolls: 0,
+        spawnedBeadsThisRoll: 0,
+        rolledDoubleSixThisBatch: false,
+        turnStartSnapshot: null,
         lastMovedTrail: null,
         preferredDieFilter: null,
         selectedTokenKey: null,
@@ -1941,6 +2063,7 @@
           // Reclaim seat back to Human!
           p.type = 'human';
           p.isBotTakeover = false;
+          p.consecutiveTimeouts = 0;
           seatConfig[seatIdx].type = 'human';
           seatConfig[seatIdx].isBotTakeover = false;
           const msg = '👤 ' + p.name + ' reclaimed their seat from AI Bot!';
@@ -2022,11 +2145,14 @@
       function createPlayerObject(idx) {
         const cfg = seatConfig[idx];
         const tokens = [];
+        const startOutCount = rulesConfig.firstBeadStartsOnBoard
+          ? Math.min(rulesConfig.tokensPerPlayer, Math.max(1, Number(rulesConfig.initialBeadsOnBoardCount) || 1))
+          : 0;
         for (let t = 0; t < rulesConfig.tokensPerPlayer; t++) {
           tokens.push({
             owner: idx,
             id: t,
-            state: 'yard',
+            state: (cfg.active && t < startOutCount) ? 'board' : 'yard',
             steps: 0,
             homeStep: 0,
             lockedThisTurn: false,
@@ -2038,6 +2164,7 @@
           name: cfg.name,
           type: cfg.type,
           isBotTakeover: Boolean(cfg.isBotTakeover),
+          consecutiveTimeouts: 0,
           active: cfg.active,
           team: PLAYER_META[idx].team,
           partner: PLAYER_META[idx].partner,
@@ -2062,6 +2189,11 @@
         ];
         gameState.earnedKillBonusThisTurn = false;
         gameState.earnedHomeBonusThisTurn = false;
+        gameState.earnedSixBonusThisRoll = false;
+        gameState.consecutiveBonusSixRolls = 0;
+        gameState.spawnedBeadsThisRoll = 0;
+        gameState.rolledDoubleSixThisBatch = false;
+        gameState.turnStartSnapshot = null;
         gameState.lastMovedTrail = null;
         gameState.selectedTokenKey = null;
         gameState.draggingToken = null;
@@ -2120,6 +2252,17 @@
             activeBar.style.width = pct + '%';
           }
           if (gameState.turnCountdown === 0) {
+            const curP = gameState.players[gameState.currentTurn];
+            if (curP && curP.active && curP.type === 'human') {
+              curP.consecutiveTimeouts = (curP.consecutiveTimeouts || 0) + 1;
+              if (rulesConfig.threeTimeoutsBotTakeover && curP.consecutiveTimeouts >= 3) {
+                curP.consecutiveTimeouts = 0;
+                handlePlayerDisconnectOrLeave(gameState.currentTurn, '3 consecutive turn timeouts');
+                return;
+              } else if (rulesConfig.threeTimeoutsBotTakeover) {
+                showToast('⏰ Turn Timeout (' + curP.consecutiveTimeouts + '/3)! AI Bot takes over after 3 missed turns.');
+              }
+            }
             const autoChk = document.getElementById('autoPlayTimeoutChk');
             if (autoChk && autoChk.checked) {
               if (gameState.phase === 'ROLL') {
@@ -2133,6 +2276,8 @@
                   advanceToNextTurn();
                 }
               }
+            } else {
+              advanceToNextTurn();
             }
           }
         }, 1000);
@@ -2153,6 +2298,64 @@
                p.tokens.every(function (tk) { return tk.state === 'home_stretch' || tk.state === 'completed'; });
       }
 
+      function isOnlyOneBeadRemainingOnBoardOrYard(ownerIdx) {
+        const p = gameState.players[ownerIdx];
+        if (!p || !p.active) return false;
+        const remaining = p.tokens.filter(function (tk) { return tk.state !== 'completed'; });
+        return remaining.length === 1;
+      }
+
+      function getEffectiveDiceCountForOwner(actorIdx, targetOwnerIdx) {
+        const actor = gameState.players[actorIdx];
+        const needsAssistSixRoll = rulesConfig.teamMode &&
+                                   rulesConfig.teamAssistRequiresSix &&
+                                   hasPlayerCompletedAllTokens(actorIdx) &&
+                                   actor && !actor.assistUnlocked;
+        const allInHomeSingleDie = isAllBeadsInsideHome(targetOwnerIdx);
+        const lastBeadSingleDie = Boolean(rulesConfig.oneDieWhenOneBeadLeft && isOnlyOneBeadRemainingOnBoardOrYard(targetOwnerIdx));
+        return (needsAssistSixRoll || allInHomeSingleDie || lastBeadSingleDie) ? 1 : rulesConfig.diceCount;
+      }
+
+      function isSpawnDieValue(val) {
+        return val === 6 || (Boolean(rulesConfig.spawnOnOneAndSix) && val === 1);
+      }
+
+      function getRequiredKillsForHome() {
+        if (rulesConfig.twoKillsForHome) return 2;
+        if (rulesConfig.killRequiredForHome) return 1;
+        return 0;
+      }
+
+      function isTrackSquareBlockedByOpponentJora(moverOwnerIdx, trackIdx) {
+        if (!rulesConfig.pairBlockadeRule) return false;
+        const moverMeta = PLAYER_META[moverOwnerIdx];
+        if (rulesConfig.teamMode) {
+          let oppTeamCount = 0;
+          gameState.players.forEach(function (pl) {
+            if (!pl.active || pl.team === moverMeta.team) return;
+            pl.tokens.forEach(function (tk) {
+              if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+                oppTeamCount += 1;
+              }
+            });
+          });
+          return oppTeamCount >= 2;
+        } else {
+          for (let i = 0; i < gameState.players.length; i++) {
+            const pl = gameState.players[i];
+            if (!pl || !pl.active || pl.id === moverOwnerIdx) continue;
+            let count = 0;
+            pl.tokens.forEach(function (tk) {
+              if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+                count += 1;
+              }
+            });
+            if (count >= 2) return true;
+          }
+          return false;
+        }
+      }
+
       function getControlledOwnerIndex(actorIdx) {
         const actor = gameState.players[actorIdx];
         if (!hasPlayerCompletedAllTokens(actorIdx)) return actorIdx;
@@ -2169,9 +2372,10 @@
       }
 
       function canOwnerEnterHomeStretch(ownerIdx) {
-        if (!rulesConfig.killRequiredForHome) return true;
+        const reqKills = getRequiredKillsForHome();
+        if (reqKills <= 0) return true;
         const owner = gameState.players[ownerIdx];
-        return owner && owner.kills > 0;
+        return Boolean(owner && owner.kills >= reqKills);
       }
 
       function getOuterTrackIndex(token) {
@@ -2196,7 +2400,7 @@
           return { valid: false, reason: 'Already completed' };
         }
         if (token.state === 'yard') {
-          if (delta === 6) {
+          if (isSpawnDieValue(delta)) {
             return {
               valid: true,
               isSpawn: true,
@@ -2205,7 +2409,7 @@
               newHomeStep: 0
             };
           }
-          return { valid: false, reason: 'Needs a 6 to spawn from hand/yard' };
+          return { valid: false, reason: rulesConfig.spawnOnOneAndSix ? 'Needs a 1 or 6 to spawn from hand/yard' : 'Needs a 6 to spawn from hand/yard' };
         }
 
         if (token.lockedThisTurn && rulesConfig.closeGameMode) {
@@ -2227,6 +2431,17 @@
 
         const posInLap = token.steps % 52;
         const stepsToHomeGate = 50 - posInLap;
+
+        if (rulesConfig.pairBlockadeRule && token.state === 'board') {
+          const entersHomeColumn = (stepsToHomeGate >= 0 && delta > stepsToHomeGate && eligibleHome && !(forceOuterLoop && rulesConfig.allowOptionalLoopAfterKill));
+          const maxOuterStep = entersHomeColumn ? stepsToHomeGate : (delta - 1);
+          for (let s = 1; s <= maxOuterStep; s++) {
+            const stepTrackIdx = (START_TRACK_INDEX[token.owner] + token.steps + s) % 52;
+            if (isTrackSquareBlockedByOpponentJora(token.owner, stepTrackIdx)) {
+              return { valid: false, reason: 'Blocked by opponent Jora (Pair Wall) — cannot jump over!' };
+            }
+          }
+        }
 
         if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
           if (eligibleHome) {
@@ -2306,7 +2521,7 @@
           });
           if (!unlockedPlayable) {
             const otherGroundCount = simTokens.filter(function (t) { return !t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); }).length;
-            const canSpawn = secondDieValue === 6 && simTokens.some(function (t) { return t.state === 'yard'; });
+            const canSpawn = isSpawnDieValue(secondDieValue) && simTokens.some(function (t) { return t.state === 'yard'; });
             if (otherGroundCount === 0 && !canSpawn) {
               locked.forEach(function (t) { t.lockedThisTurn = false; });
             }
@@ -2344,25 +2559,38 @@
         const lockedTokens = groundTokens.filter(function (t) { return t.lockedThisTurn; });
         if (lockedTokens.length > 0 && rulesConfig.closeGameMode) {
           const otherGround = groundTokens.filter(function (t) { return !t.lockedThisTurn; });
-          const canSpawnYard = yardTokens.length > 0 && unusedDice.some(function (d) { return d.value === 6; });
+          const canSpawnYard = yardTokens.length > 0 && unusedDice.some(function (d) { return isSpawnDieValue(d.value); });
           if (otherGround.length === 0 && !canSpawnYard) {
             lockedTokens.forEach(function (t) { t.lockedThisTurn = false; });
           }
         }
 
-        const hasUnusedSix = unusedDice.some(function (d) { return d.value === 6; });
-        if (rulesConfig.mandatoryYardSpawn && yardTokens.length > 0 && hasUnusedSix) {
-          const sixDie = unusedDice.find(function (d) { return d.value === 6; });
+        const hasUnusedSix = unusedDice.some(function (d) { return isSpawnDieValue(d.value); });
+        const forceDoubleSixTwoSpawns = Boolean(
+          rulesConfig.doubleSixSpawnsTwoBeads &&
+          gameState.rolledDoubleSixThisBatch &&
+          yardTokens.length > 0 &&
+          gameState.spawnedBeadsThisRoll < 2 &&
+          unusedDice.some(function (d) { return d.value === 6; })
+        );
+        const allowSecondSixMoveWhenOptionOff = Boolean(
+          !rulesConfig.doubleSixSpawnsTwoBeads &&
+          gameState.rolledDoubleSixThisBatch &&
+          gameState.spawnedBeadsThisRoll >= 1 &&
+          groundTokens.length > 0
+        );
+        if ((forceDoubleSixTwoSpawns || (rulesConfig.mandatoryYardSpawn && !allowSecondSixMoveWhenOptionOff)) && yardTokens.length > 0 && hasUnusedSix) {
+          const spawnDie = unusedDice.find(function (d) { return d.value === 6; }) || unusedDice.find(function (d) { return isSpawnDieValue(d.value); });
           return yardTokens.map(function (yt) {
-            const sim = simulateTokenAdvance(yt, 6, undefined, tokens, false);
+            const sim = simulateTokenAdvance(yt, spawnDie.value, undefined, tokens, false);
             return {
               tokenId: yt.id,
               ownerIdx: targetOwnerIdx,
-              diceIds: [sixDie.id],
-              delta: 6,
+              diceIds: [spawnDie.id],
+              delta: spawnDie.value,
               isMandatorySpawn: true,
               destRC: getDestinationGridCoordForSim(targetOwnerIdx, sim),
-              label: 'Spawn Bead #' + (yt.id + 1) + ' (+6)',
+              label: 'Spawn Bead #' + (yt.id + 1) + ' (+' + spawnDie.value + ')',
               sim: sim
             };
           });
@@ -2408,7 +2636,9 @@
               lockedThisTurn: locksAfterMove
             };
           });
-          const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || (sim.newState === 'board' && getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52).length > 0);
+          const simEnemies = sim.newState === 'board' ? getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52) : [];
+          const addedKills = rulesConfig.killAllStackedEnemies ? simEnemies.length : (simEnemies.length > 0 ? 1 : 0);
+          const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || ((owner.kills + addedKills) >= getRequiredKillsForHome());
           return canPlaySecondDieOnSimulatedState(simTokens, otherDie.value, willHomeBeEligible);
         }
 
@@ -2429,7 +2659,7 @@
                 delta: die.value,
                 allowsSecondDie: evaluateSecondDieAllowance(tk, die, sim),
                 destRC: getDestinationGridCoordForSim(targetOwnerIdx, sim),
-                label: sim.isSpawn ? 'Spawn (+6)' : ('+' + die.value),
+                label: sim.isSpawn ? ('Spawn (+' + die.value + ')') : ('+' + die.value),
                 sim: sim
               });
             }
@@ -2460,46 +2690,53 @@
             }
           });
 
-          if (unusedDice.length === 2 && (tk.state === 'board' || tk.state === 'home_stretch')) {
-            const d0 = unusedDice[0];
-            const d1 = unusedDice[1];
-            const sumDelta = d0.value + d1.value;
-            const simCombined = simulateTokenAdvance(tk, sumDelta, undefined, tokens, false);
-            if (simCombined.valid) {
-              candidateCombinedMoves.push({
-                tokenId: tk.id,
-                ownerIdx: targetOwnerIdx,
-                diceIds: [d0.id, d1.id],
-                delta: sumDelta,
-                isCombined: true,
-                allowsSecondDie: true,
-                destRC: getDestinationGridCoordForSim(targetOwnerIdx, simCombined),
-                label: '+' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
-                sim: simCombined
-              });
-            }
-            if (
-              tk.state === 'board' &&
-              rulesConfig.allowOptionalLoopAfterKill &&
-              canOwnerEnterHomeStretch(targetOwnerIdx)
-            ) {
-              const posInLap = tk.steps % 52;
-              const stepsToGate = 50 - posInLap;
-              if (stepsToGate >= 0 && sumDelta > stepsToGate) {
-                const loopCombined = simulateTokenAdvance(tk, sumDelta, true, tokens, true);
-                if (loopCombined.valid) {
+          if (unusedDice.length >= 2 && (tk.state === 'board' || tk.state === 'home_stretch')) {
+            const seenCombinedSums = new Set();
+            for (let i = 0; i < unusedDice.length; i++) {
+              for (let j = i + 1; j < unusedDice.length; j++) {
+                const d0 = unusedDice[i];
+                const d1 = unusedDice[j];
+                const sumDelta = d0.value + d1.value;
+                if (seenCombinedSums.has(sumDelta)) continue;
+                seenCombinedSums.add(sumDelta);
+                const simCombined = simulateTokenAdvance(tk, sumDelta, undefined, tokens, false);
+                if (simCombined.valid) {
                   candidateCombinedMoves.push({
                     tokenId: tk.id,
                     ownerIdx: targetOwnerIdx,
                     diceIds: [d0.id, d1.id],
                     delta: sumDelta,
                     isCombined: true,
-                    isOptionalLoop: true,
                     allowsSecondDie: true,
-                    destRC: getDestinationGridCoordForSim(targetOwnerIdx, loopCombined),
-                    label: 'Loop +' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
-                    sim: loopCombined
+                    destRC: getDestinationGridCoordForSim(targetOwnerIdx, simCombined),
+                    label: '+' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
+                    sim: simCombined
                   });
+                }
+                if (
+                  tk.state === 'board' &&
+                  rulesConfig.allowOptionalLoopAfterKill &&
+                  canOwnerEnterHomeStretch(targetOwnerIdx)
+                ) {
+                  const posInLap = tk.steps % 52;
+                  const stepsToGate = 50 - posInLap;
+                  if (stepsToGate >= 0 && sumDelta > stepsToGate) {
+                    const loopCombined = simulateTokenAdvance(tk, sumDelta, true, tokens, true);
+                    if (loopCombined.valid) {
+                      candidateCombinedMoves.push({
+                        tokenId: tk.id,
+                        ownerIdx: targetOwnerIdx,
+                        diceIds: [d0.id, d1.id],
+                        delta: sumDelta,
+                        isCombined: true,
+                        isOptionalLoop: true,
+                        allowsSecondDie: true,
+                        destRC: getDestinationGridCoordForSim(targetOwnerIdx, loopCombined),
+                        label: 'Loop +' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
+                        sim: loopCombined
+                      });
+                    }
+                  }
                 }
               }
             }
@@ -2519,12 +2756,24 @@
           }
         }
 
-        return filteredSingles.concat(candidateCombinedMoves);
+        const allLegalMoves = filteredSingles.concat(candidateCombinedMoves);
+        if (rulesConfig.mandatoryCapture && allLegalMoves.length > 0) {
+          const captureMoves = allLegalMoves.filter(function (mv) {
+            if (!mv.sim || mv.sim.newState !== 'board') return false;
+            const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
+            return getCaptureCandidatesAtTrackIndex(mv.ownerIdx, destTrack).length > 0;
+          });
+          if (captureMoves.length > 0) {
+            captureMoves.forEach(function (cm) { cm.isMandatoryCapture = true; });
+            return captureMoves;
+          }
+        }
+        return allLegalMoves;
       }
 
       // Describe the tactical outcome of a move for Single-Click Outcome Preview
       function getMoveOutcomePreviewTag(move) {
-        if (move.sim.isSpawn) return { tag: '⚡ SPAWN (+6)', color: '#d97706' };
+        if (move.sim.isSpawn) return { tag: '⚡ SPAWN (+' + move.delta + ')', color: '#d97706' };
         if (move.sim.newState === 'completed') return { tag: '🏠 COMPLETE! (+' + move.delta + ')', color: '#059669' };
         if (move.sim.newState === 'home_stretch') return { tag: '🏠 HOME PATH (+' + move.delta + ')', color: '#059669' };
         if (move.sim.loopedPastHome) return { tag: '🔄 LOOP (+' + move.delta + ')', color: '#7c3aed' };
@@ -2718,7 +2967,8 @@
         }
 
         if (move.sim.isSpawn) {
-          addGameLog(owner.name + ' spawned Bead #' + (token.id + 1) + ' onto start.', 'info');
+          gameState.spawnedBeadsThisRoll = (gameState.spawnedBeadsThisRoll || 0) + 1;
+          addGameLog(owner.name + ' spawned Bead #' + (token.id + 1) + ' onto start (+' + move.delta + ').', 'info');
         } else if (move.sim.loopedPastHome) {
           addGameLog(owner.name + ' has 0 kills! Bead #' + (token.id + 1) + ' looped past Home Entry for another full lap.', 'warn');
           showToast('⚠️ No kill yet! Bead loops past Home Gate for another lap.');
@@ -2734,18 +2984,25 @@
           if (enemies.length === 1) {
             performSingleCapture(move.ownerIdx, token, enemies[0]);
           } else if (enemies.length > 1) {
-            const actorPlayer = gameState.players[actorIdx];
-            if (actorPlayer.type === 'human') {
-              promptCaptureChoiceModal(move.ownerIdx, token, enemies);
-              updateAllUI();
-              return;
-            } else {
-              enemies.sort(function (a, b) {
-                const tkA = gameState.players[a.ownerIdx].tokens[a.tokenId];
-                const tkB = gameState.players[b.ownerIdx].tokens[b.tokenId];
-                return tkB.steps - tkA.steps;
+            if (rulesConfig.killAllStackedEnemies) {
+              enemies.forEach(function (enemy) {
+                performSingleCapture(move.ownerIdx, token, enemy);
               });
-              performSingleCapture(move.ownerIdx, token, enemies[0]);
+              showToast('💥 Multi-Kill! Ate all ' + enemies.length + ' stacked enemy beads!');
+            } else {
+              const actorPlayer = gameState.players[actorIdx];
+              if (actorPlayer.type === 'human') {
+                promptCaptureChoiceModal(move.ownerIdx, token, enemies);
+                updateAllUI();
+                return;
+              } else {
+                enemies.sort(function (a, b) {
+                  const tkA = gameState.players[a.ownerIdx].tokens[a.tokenId];
+                  const tkB = gameState.players[b.ownerIdx].tokens[b.tokenId];
+                  return tkB.steps - tkA.steps;
+                });
+                performSingleCapture(move.ownerIdx, token, enemies[0]);
+              }
             }
           }
         }
@@ -2875,6 +3132,25 @@
           return;
         }
 
+        const earnedKillBonus = Boolean(rulesConfig.bonusRollOnKill && gameState.earnedKillBonusThisTurn);
+        const earnedHomeBonus = Boolean(rulesConfig.bonusRollOnHome && gameState.earnedHomeBonusThisTurn);
+
+        // If Stack Roll is ON and player just earned a Kill or Home bonus while other dice remain unused, queue the re-roll immediately!
+        if (rulesConfig.stackRollBeforeMoving && (earnedKillBonus || earnedHomeBonus) && gameState.dicePool.some(function (d) { return !d.used; })) {
+          const curP = gameState.players[gameState.currentTurn];
+          const stackReason = earnedKillBonus ? 'Kill Bonus (شکار باری)' : 'Home Bonus (گھر باری)';
+          gameState.earnedKillBonusThisTurn = false;
+          gameState.earnedHomeBonusThisTurn = false;
+          addGameLog('📚 Stack Roll (' + stackReason + '): ' + curP.name + ' keeps remaining dice stacked and rolls bonus turn now!', 'gold');
+          showToast('📚 ' + stackReason + ' Stacked! Roll bonus dice now & use all numbers together!');
+          gameState.phase = 'ROLL';
+          saveActiveMatchSnapshot();
+          resetTurnCountdown();
+          updateAllUI();
+          scheduleAiIfNeeded();
+          return;
+        }
+
         const remainingMoves = computeLegalMoves();
         if (remainingMoves.length > 0) {
           saveActiveMatchSnapshot();
@@ -2885,12 +3161,7 @@
           return;
         }
 
-        const rolledDiceBonus = Boolean(rulesConfig.doubleSixBonusRoll) && (
-          (gameState.dicePool.length === 1 && gameState.dicePool[0].value === 6) ||
-          (gameState.dicePool.length === 2 && gameState.dicePool[0].value === 6 && gameState.dicePool[1].value === 6)
-        );
-        const earnedKillBonus = Boolean(rulesConfig.bonusRollOnKill && gameState.earnedKillBonusThisTurn);
-        const earnedHomeBonus = Boolean(rulesConfig.bonusRollOnHome && gameState.earnedHomeBonusThisTurn);
+        const rolledDiceBonus = Boolean(gameState.earnedSixBonusThisRoll);
 
         if (rolledDiceBonus || earnedKillBonus || earnedHomeBonus) {
           const curP = gameState.players[gameState.currentTurn];
@@ -2898,9 +3169,10 @@
             ? 'for completing a bead into Home (گھر پہنچنے پر دوبارہ باری)!'
             : (earnedKillBonus
               ? 'for eating/killing an enemy bead (شکار پر دوبارہ باری)!'
-              : (gameState.dicePool.length === 2 ? 'for Double Six (6+6)!' : 'for rolling a 6!'));
+              : (rulesConfig.diceCount === 2 && !rulesConfig.singleSixBonusInTwoDice ? 'for Double Six (6+6)!' : 'for rolling a 6!'));
           gameState.earnedKillBonusThisTurn = false;
           gameState.earnedHomeBonusThisTurn = false;
+          gameState.earnedSixBonusThisRoll = false;
           addGameLog('🔥 Bonus Re-Roll granted to ' + curP.name + ' ' + reason, 'gold');
           showToast('🔥 Bonus Re-Roll: ' + reason);
           gameState.phase = 'ROLL';
@@ -2924,6 +3196,11 @@
         resetTokenLocksForPlayer(getControlledOwnerIndex(gameState.currentTurn));
         gameState.earnedKillBonusThisTurn = false;
         gameState.earnedHomeBonusThisTurn = false;
+        gameState.earnedSixBonusThisRoll = false;
+        gameState.consecutiveBonusSixRolls = 0;
+        gameState.spawnedBeadsThisRoll = 0;
+        gameState.rolledDoubleSixThisBatch = false;
+        gameState.turnStartSnapshot = null;
         for (let step = 1; step <= 4; step++) {
           const cand = (gameState.currentTurn + step) % 4;
           const p = gameState.players[cand];
@@ -2947,13 +3224,14 @@
         const actor = gameState.players[gameState.currentTurn];
         const targetOwnerIdx = getControlledOwnerIndex(actor.id);
 
+        if (!gameState.turnStartSnapshot) {
+          gameState.turnStartSnapshot = cloneStateSnapshot();
+        }
         const needsAssistSixRoll = rulesConfig.teamMode &&
                                    rulesConfig.teamAssistRequiresSix &&
                                    hasPlayerCompletedAllTokens(actor.id) &&
                                    !actor.assistUnlocked;
-        const allInHomeSingleDie = isAllBeadsInsideHome(targetOwnerIdx);
-
-        const effectiveDiceCount = (needsAssistSixRoll || allInHomeSingleDie) ? 1 : rulesConfig.diceCount;
+        const effectiveDiceCount = getEffectiveDiceCountForOwner(actor.id, targetOwnerIdx);
 
         playSound('roll');
         const dSlot0 = document.getElementById('dieSlot0');
@@ -2973,27 +3251,70 @@
           const v1 = forcedValues ? forcedValues[0] : (Math.floor(Math.random() * 6) + 1);
           const v2 = forcedValues && forcedValues[1] ? forcedValues[1] : (Math.floor(Math.random() * 6) + 1);
 
-          if (effectiveDiceCount === 1) {
-            gameState.dicePool = [{ id: 0, value: v1, used: false }];
-          } else {
-            gameState.dicePool = [
-              { id: 0, value: v1, used: false },
-              { id: 1, value: v2, used: false }
-            ];
-            if (v1 === 6 && v2 === 6) {
-              triggerPlayerEmote(actor.id, '🔥 ڈبل سکس! (6+6)');
-              if (actor.id === 0) {
-                careerStats.doubleSixes += 1;
-                saveCareerStats();
-              }
+          const newlyRolledDice = (effectiveDiceCount === 1)
+            ? [{ id: 0, value: v1, used: false }]
+            : [{ id: 0, value: v1, used: false }, { id: 1, value: v2, used: false }];
+
+          if (effectiveDiceCount === 2 && v1 === 6 && v2 === 6) {
+            triggerPlayerEmote(actor.id, '🔥 ڈبل سکس! (6+6)');
+            if (actor.id === 0) {
+              careerStats.doubleSixes += 1;
+              saveCareerStats();
             }
           }
 
+          const hasUnusedQueued = rulesConfig.stackRollBeforeMoving && gameState.dicePool.some(function (d) { return !d.used; });
+          if (hasUnusedQueued) {
+            const keptUnused = gameState.dicePool.filter(function (d) { return !d.used; });
+            const combinedPool = keptUnused.concat(newlyRolledDice);
+            gameState.dicePool = combinedPool.map(function (d, idx) {
+              return { id: idx, value: d.value, used: false };
+            });
+          } else {
+            gameState.dicePool = newlyRolledDice;
+          }
+
+          gameState.spawnedBeadsThisRoll = 0;
+          gameState.rolledDoubleSixThisBatch = (effectiveDiceCount === 2 && v1 === 6 && v2 === 6);
+
+          const isSixBonusRoll = Boolean(rulesConfig.doubleSixBonusRoll) && (
+            (effectiveDiceCount === 1 && v1 === 6) ||
+            (effectiveDiceCount === 2 && ((v1 === 6 && v2 === 6) || (rulesConfig.singleSixBonusInTwoDice && (v1 === 6 || v2 === 6))))
+          );
+          const isConsecutiveSixRoll = (effectiveDiceCount === 1)
+            ? (v1 === 6)
+            : ((v1 === 6 && v2 === 6) || (rulesConfig.singleSixBonusInTwoDice && (v1 === 6 || v2 === 6)));
+
+          if (isConsecutiveSixRoll) {
+            gameState.consecutiveBonusSixRolls = (gameState.consecutiveBonusSixRolls || 0) + 1;
+          } else {
+            gameState.consecutiveBonusSixRolls = 0;
+          }
+
+          gameState.earnedSixBonusThisRoll = isSixBonusRoll;
           gameState.preferredDieFilter = null;
           gameState.selectedTokenKey = null;
 
           if (!isRemoteSync) {
             broadcastNetworkAction({ type: 'ROLL', values: [v1, v2] });
+          }
+
+          // Three Consecutive Sixes Penalty check
+          if (rulesConfig.threeConsecutiveSixesPenalty && gameState.consecutiveBonusSixRolls >= 3) {
+            if (gameState.turnStartSnapshot) {
+              try {
+                const startSnap = JSON.parse(gameState.turnStartSnapshot);
+                gameState.players = startSnap.players;
+                gameState.lastMovedTrail = startSnap.lastMovedTrail || null;
+              } catch (e) {}
+            }
+            gameState.dicePool.forEach(function (d) { d.used = true; });
+            addGameLog('🚫 Three Consecutive Sixes Penalty! ' + actor.name + ' rolled 3 consecutive sixes — entire turn canceled!', 'warn');
+            showToast('🚫 3 Consecutive Sixes Penalty! Entire turn canceled.', true);
+            triggerPlayerEmote(actor.id, '🚫 3 چھکے باری ضائع!');
+            updateAllUI();
+            setTimeout(advanceToNextTurn, 850);
+            return;
           }
 
           if (needsAssistSixRoll) {
@@ -3015,6 +3336,20 @@
               setTimeout(advanceToNextTurn, 750);
               return;
             }
+          }
+
+          // Stack Roll / Accumulate Sixes Before Moving check
+          if (rulesConfig.stackRollBeforeMoving && isSixBonusRoll) {
+            const curStackStr = gameState.dicePool.filter(function (d) { return !d.used; }).map(function (d) { return d.value; }).join(' + ');
+            gameState.earnedSixBonusThisRoll = false;
+            gameState.phase = 'ROLL';
+            addGameLog('📚 Stack Roll: ' + actor.name + ' queued [' + curStackStr + '] — Bonus roll earned! Roll again before moving.', 'gold');
+            showToast('📚 Queued [' + curStackStr + ']! Roll your bonus turn first, then move all together!');
+            saveActiveMatchSnapshot();
+            resetTurnCountdown();
+            updateAllUI();
+            scheduleAiIfNeeded();
+            return;
           }
 
           gameState.phase = 'MOVE';
@@ -3339,15 +3674,18 @@
             ctx.stroke();
           }
 
-          if (pl && pl.active && rulesConfig.killRequiredForHome) {
-            const badgeText = pl.kills > 0 ? '🔓 HOME OPEN (⚔️' + pl.kills + ')' : '🔒 NEED 1 KILL';
+          const reqKillsForYard = getRequiredKillsForHome();
+          if (pl && pl.active && reqKillsForYard > 0) {
+            const badgeText = pl.kills >= reqKillsForYard
+              ? ('🔓 HOME OPEN (⚔️' + pl.kills + ')')
+              : ('🔒 NEED ' + reqKillsForYard + (reqKillsForYard === 1 ? ' KILL' : ' KILLS (⚔️' + pl.kills + '/2)'));
             const badgeW = sizeW - cellW * 1.2;
             const badgeH = Math.max(cellH * 0.48, cell * 0.5);
             const badgeX = x + (sizeW - badgeW) / 2;
             const badgeY = y + sizeH - cellH * 0.58 - badgeH;
 
             ctx.save();
-            ctx.fillStyle = pl.kills > 0 ? '#065f46' : '#881337';
+            ctx.fillStyle = pl.kills >= reqKillsForYard ? '#065f46' : '#881337';
             ctx.beginPath();
             ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
             ctx.fill();
@@ -3648,6 +3986,40 @@
             ctx.fillText(String(group.length), baseX, baseY);
             ctx.restore();
           }
+          const isJoraWallCell = Boolean(
+            rulesConfig.pairBlockadeRule &&
+            group.length >= 2 &&
+            group[0].state === 'board' &&
+            (function () {
+              const counts = {};
+              for (let gi = 0; gi < group.length; gi++) {
+                const gk = rulesConfig.teamMode ? ('team_' + PLAYER_META[group[gi].owner].team) : ('owner_' + group[gi].owner);
+                counts[gk] = (counts[gk] || 0) + 1;
+                if (counts[gk] >= 2) return true;
+              }
+              return false;
+            })()
+          );
+          if (isJoraWallCell) {
+            ctx.save();
+            const pillW = cellW * 0.92;
+            const pillH = Math.max(10, cellH * 0.25);
+            const pillX = baseX - pillW / 2;
+            const pillY = baseRC[0] * cellH + 1;
+            ctx.fillStyle = '#7c2d12';
+            ctx.beginPath();
+            ctx.roundRect(pillX, pillY, pillW, pillH, 4);
+            ctx.fill();
+            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = '#fde047';
+            ctx.stroke();
+            ctx.fillStyle = '#fde047';
+            ctx.font = '900 ' + Math.round(cell * 0.16) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🧱 JORA', baseX, pillY + pillH / 2);
+            ctx.restore();
+          }
           if (isSafeStopCell) {
             ctx.save();
             const pillW = cellW * 0.86;
@@ -3812,6 +4184,7 @@
 
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+        actor.consecutiveTimeouts = 0;
 
         if (gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer();
@@ -4023,7 +4396,8 @@
           card.classList.remove('opacity-40');
           nameEl.textContent = p.name + (p.isBotTakeover ? ' 🤖' : '');
           teamEl.textContent = rulesConfig.teamMode ? PLAYER_META[i].teamTag : 'FFA';
-          killsEl.textContent = '⚔️ ' + p.kills + (rulesConfig.killRequiredForHome && p.kills === 0 ? ' 🔒' : ' 🔓');
+          const reqK = getRequiredKillsForHome();
+          killsEl.textContent = '⚔️ ' + p.kills + (reqK === 2 ? '/2' : '') + (reqK > 0 && p.kills < reqK ? ' 🔒' : ' 🔓');
           const doneCount = p.tokens.filter(function (t) { return t.state === 'completed'; }).length;
           homeEl.textContent = '🏠 ' + doneCount + '/' + rulesConfig.tokensPerPlayer;
 
@@ -4038,39 +4412,79 @@
           }
         }
 
+        const reclaimBtn = document.getElementById('reclaimSeatTopBtn');
+        if (reclaimBtn) {
+          const anyBotTakeover = gameState.players.some(function (pl) { return pl && pl.active && pl.isBotTakeover; });
+          reclaimBtn.classList.toggle('hidden', !anyBotTakeover);
+        }
+
         const actor = gameState.players[gameState.currentTurn];
         if (!actor) return;
         const targetIdx = getControlledOwnerIndex(actor.id);
         const needsAssistSix = rulesConfig.teamMode && rulesConfig.teamAssistRequiresSix && hasPlayerCompletedAllTokens(actor.id) && !actor.assistUnlocked;
-        const allInHomeSingleDie = isAllBeadsInsideHome(targetIdx);
-        const effectiveDiceCount = (needsAssistSix || allInHomeSingleDie) ? 1 : rulesConfig.diceCount;
+        const effectiveDiceCount = getEffectiveDiceCountForOwner(actor.id, targetIdx);
 
         document.getElementById('turnBannerText').textContent =
           '⚡ ' + actor.name + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
 
-        const d0 = gameState.dicePool[0] || { value: 6, used: true };
-        const d1 = gameState.dicePool[1] || { value: 6, used: true };
+        const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
+        const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : (gameState.dicePool[0] || { id: 0, value: 6, used: true });
+        const d1 = (gameState.dicePool.length > 2 && activePool.length > 1) ? activePool[1] : (gameState.dicePool[1] || { id: 1, value: 6, used: true });
         renderDieFace('dieFace0', d0.value, d0.used && gameState.phase === 'MOVE');
-        document.getElementById('dieStatus0').textContent = (d0.used && gameState.phase === 'MOVE') ? '✓' : ('D1:' + d0.value);
+        document.getElementById('dieStatus0').textContent = (d0.used && gameState.phase === 'MOVE') ? '✓' : ('D' + (d0.id + 1) + ':' + d0.value);
 
         const dieSlot0 = document.getElementById('dieSlot0');
         const dieSlot1 = document.getElementById('dieSlot1');
         const divider = document.getElementById('dicePlusDivider');
 
         dieSlot0.className = 'relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 flex flex-col items-center justify-center transition ' +
-          (gameState.preferredDieFilter === 0 ? 'border-sky-500 ring-2 ring-sky-300' : 'border-amber-400');
+          (gameState.preferredDieFilter === d0.id ? 'border-sky-500 ring-2 ring-sky-300' : 'border-amber-400');
 
-        if (effectiveDiceCount === 2) {
+        if (effectiveDiceCount === 2 || (gameState.dicePool.length >= 2 && activePool.length >= 2)) {
           dieSlot1.classList.remove('hidden');
           divider.classList.remove('hidden');
           renderDieFace('dieFace1', d1.value, d1.used && gameState.phase === 'MOVE');
-          document.getElementById('dieStatus1').textContent = (d1.used && gameState.phase === 'MOVE') ? '✓' : ('D2:' + d1.value);
-          document.getElementById('diceSumBadge').textContent = '=' + (d0.value + d1.value);
+          document.getElementById('dieStatus1').textContent = (d1.used && gameState.phase === 'MOVE') ? '✓' : ('D' + (d1.id + 1) + ':' + d1.value);
+          const totalUnusedSum = activePool.length >= 2
+            ? activePool.reduce(function (acc, item) { return acc + item.value; }, 0)
+            : (d0.value + d1.value);
+          document.getElementById('diceSumBadge').textContent = '=' + totalUnusedSum;
           dieSlot1.className = 'relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 flex flex-col items-center justify-center transition ' +
-            (gameState.preferredDieFilter === 1 ? 'border-sky-500 ring-2 ring-sky-300' : 'border-amber-400');
+            (gameState.preferredDieFilter === d1.id ? 'border-sky-500 ring-2 ring-sky-300' : 'border-amber-400');
         } else {
           dieSlot1.classList.add('hidden');
           divider.classList.add('hidden');
+        }
+
+        const stackBar = document.getElementById('stackedDiceQueueBar');
+        if (stackBar) {
+          if (gameState.dicePool.length > 2 || (rulesConfig.stackRollBeforeMoving && gameState.dicePool.some(function (d) { return !d.used; }))) {
+            stackBar.classList.remove('hidden');
+            stackBar.classList.add('flex');
+            stackBar.innerHTML = '';
+            gameState.dicePool.forEach(function (dieItem) {
+              const chip = document.createElement('button');
+              chip.type = 'button';
+              const isSelected = gameState.preferredDieFilter === dieItem.id;
+              chip.className = 'px-1.5 py-0.2 rounded text-[8px] font-black border transition ' +
+                (dieItem.used
+                  ? 'bg-slate-200 text-slate-400 border-slate-300 line-through'
+                  : (isSelected ? 'bg-sky-500 text-white border-sky-300' : 'bg-amber-200 text-slate-950 border-amber-500'));
+              chip.textContent = dieItem.value;
+              if (!dieItem.used) {
+                chip.addEventListener('click', function () {
+                  if (gameState.phase === 'MOVE') {
+                    gameState.preferredDieFilter = (gameState.preferredDieFilter === dieItem.id ? null : dieItem.id);
+                    updateAllUI();
+                  }
+                });
+              }
+              stackBar.appendChild(chip);
+            });
+          } else {
+            stackBar.classList.add('hidden');
+            stackBar.classList.remove('flex');
+          }
         }
 
         const rollBtn = document.getElementById('rollDiceBtn');
@@ -4247,6 +4661,32 @@
         if (chkDblSix) chkDblSix.checked = Boolean(rulesConfig.doubleSixBonusRoll);
         const chkSafeImm = document.getElementById('chkSafeStopImmunity');
         if (chkSafeImm) chkSafeImm.checked = Boolean(rulesConfig.safeStopImmunity);
+        const chk3Six = document.getElementById('chkThreeConsecutiveSixes');
+        if (chk3Six) chk3Six.checked = Boolean(rulesConfig.threeConsecutiveSixesPenalty);
+        const chkSingle6 = document.getElementById('chkSingleSixBonusTwoDice');
+        if (chkSingle6) chkSingle6.checked = Boolean(rulesConfig.singleSixBonusInTwoDice);
+        const chkStackRoll = document.getElementById('chkStackRollBeforeMoving');
+        if (chkStackRoll) chkStackRoll.checked = Boolean(rulesConfig.stackRollBeforeMoving);
+        const chkSpawn16 = document.getElementById('chkSpawnOnOneAndSix');
+        if (chkSpawn16) chkSpawn16.checked = Boolean(rulesConfig.spawnOnOneAndSix);
+        const chkDbl6Two = document.getElementById('chkDoubleSixSpawnsTwo');
+        if (chkDbl6Two) chkDbl6Two.checked = Boolean(rulesConfig.doubleSixSpawnsTwoBeads);
+        const chkFirstOut = document.getElementById('chkFirstBeadOnBoard');
+        if (chkFirstOut) chkFirstOut.checked = Boolean(rulesConfig.firstBeadStartsOnBoard);
+        const selInitOut = document.getElementById('initialBeadsOnBoardSelect');
+        if (selInitOut) selInitOut.value = String(rulesConfig.initialBeadsOnBoardCount || 1);
+        const chkJora = document.getElementById('chkPairBlockadeRule');
+        if (chkJora) chkJora.checked = Boolean(rulesConfig.pairBlockadeRule);
+        const chkKillAll = document.getElementById('chkKillAllStackedEnemies');
+        if (chkKillAll) chkKillAll.checked = Boolean(rulesConfig.killAllStackedEnemies);
+        const chk2Kills = document.getElementById('chkTwoKillsForHome');
+        if (chk2Kills) chk2Kills.checked = Boolean(rulesConfig.twoKillsForHome);
+        const chk1DieLast = document.getElementById('chkOneDieWhenOneBeadLeft');
+        if (chk1DieLast) chk1DieLast.checked = Boolean(rulesConfig.oneDieWhenOneBeadLeft);
+        const chkMandCap = document.getElementById('chkMandatoryCapture');
+        if (chkMandCap) chkMandCap.checked = Boolean(rulesConfig.mandatoryCapture);
+        const chk3TimeoutBot = document.getElementById('chkThreeTimeoutsBotTakeover');
+        if (chk3TimeoutBot) chk3TimeoutBot.checked = Boolean(rulesConfig.threeTimeoutsBotTakeover);
         const chkAuto1 = document.getElementById('autoRollTurnChk');
         const chkAuto2 = document.getElementById('chkAutoRollTurn');
         if (chkAuto1) chkAuto1.checked = Boolean(rulesConfig.autoRollOnTurn);
@@ -4307,6 +4747,19 @@
         rulesConfig.teamMode = true;
         rulesConfig.strictHomeRemainder = true;
         rulesConfig.teamAssistRequiresSix = true;
+        rulesConfig.threeConsecutiveSixesPenalty = false;
+        rulesConfig.singleSixBonusInTwoDice = false;
+        rulesConfig.stackRollBeforeMoving = false;
+        rulesConfig.spawnOnOneAndSix = false;
+        rulesConfig.doubleSixSpawnsTwoBeads = false;
+        rulesConfig.firstBeadStartsOnBoard = false;
+        rulesConfig.initialBeadsOnBoardCount = 1;
+        rulesConfig.pairBlockadeRule = false;
+        rulesConfig.killAllStackedEnemies = false;
+        rulesConfig.twoKillsForHome = false;
+        rulesConfig.oneDieWhenOneBeadLeft = false;
+        rulesConfig.mandatoryCapture = false;
+        rulesConfig.threeTimeoutsBotTakeover = true;
         saveRulesPreferences(true);
         syncRulesStudioControls();
         if (restartNow) {
@@ -4330,6 +4783,19 @@
         rulesConfig.teamMode = false;
         rulesConfig.strictHomeRemainder = false;
         rulesConfig.teamAssistRequiresSix = false;
+        rulesConfig.threeConsecutiveSixesPenalty = false;
+        rulesConfig.singleSixBonusInTwoDice = false;
+        rulesConfig.stackRollBeforeMoving = false;
+        rulesConfig.spawnOnOneAndSix = false;
+        rulesConfig.doubleSixSpawnsTwoBeads = false;
+        rulesConfig.firstBeadStartsOnBoard = false;
+        rulesConfig.initialBeadsOnBoardCount = 1;
+        rulesConfig.pairBlockadeRule = false;
+        rulesConfig.killAllStackedEnemies = false;
+        rulesConfig.twoKillsForHome = false;
+        rulesConfig.oneDieWhenOneBeadLeft = false;
+        rulesConfig.mandatoryCapture = false;
+        rulesConfig.threeTimeoutsBotTakeover = true;
         saveRulesPreferences(true);
         syncRulesStudioControls();
         if (restartNow) {
@@ -5492,28 +5958,46 @@
         });
       });
 
+      document.getElementById('reclaimSeatTopBtn').addEventListener('click', function () {
+        gameState.players.forEach(function (pl, idx) {
+          if (pl && pl.active && pl.isBotTakeover) {
+            handlePlayerDisconnectOrLeave(idx, 'reclaimed seat');
+          }
+        });
+      });
+
       document.getElementById('rollDiceBtn').addEventListener('click', function () {
-        if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
-          rollDiceForCurrentPlayer();
+        const actor = gameState.players[gameState.currentTurn];
+        if (actor && actor.type === 'human') {
+          actor.consecutiveTimeouts = 0;
+          if (gameState.phase === 'ROLL') {
+            rollDiceForCurrentPlayer();
+          }
         }
       });
       document.getElementById('dieSlot0').addEventListener('click', function () {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+        actor.consecutiveTimeouts = 0;
+        const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
+        const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : gameState.dicePool[0];
         if (gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer();
-        } else if (gameState.phase === 'MOVE' && gameState.dicePool[0] && !gameState.dicePool[0].used) {
-          gameState.preferredDieFilter = (gameState.preferredDieFilter === 0 ? null : 0);
+        } else if (gameState.phase === 'MOVE' && d0 && !d0.used) {
+          gameState.preferredDieFilter = (gameState.preferredDieFilter === d0.id ? null : d0.id);
           updateAllUI();
         }
       });
       document.getElementById('dieSlot1').addEventListener('click', function () {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+        actor.consecutiveTimeouts = 0;
+        const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
+        const d1 = (gameState.dicePool.length > 2 && activePool.length > 1) ? activePool[1] : gameState.dicePool[1];
         if (gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer();
-        } else if (gameState.phase === 'MOVE' && gameState.dicePool[1] && !gameState.dicePool[1].used) {
-          gameState.preferredDieFilter = (gameState.preferredDieFilter === 1 ? null : 1);
+        } else if (gameState.phase === 'MOVE' && d1 && !d1.used) {
+          gameState.preferredDieFilter = (gameState.preferredDieFilter === d1.id ? null : d1.id);
           updateAllUI();
         }
       });
@@ -5691,6 +6175,19 @@
         rulesConfig.teamMode = document.getElementById('chkTeamMode').checked;
         rulesConfig.strictHomeRemainder = document.getElementById('chkStrictRemainder').checked;
         rulesConfig.teamAssistRequiresSix = document.getElementById('chkTeamAssistSix').checked;
+        rulesConfig.threeConsecutiveSixesPenalty = document.getElementById('chkThreeConsecutiveSixes').checked;
+        rulesConfig.singleSixBonusInTwoDice = document.getElementById('chkSingleSixBonusTwoDice').checked;
+        rulesConfig.stackRollBeforeMoving = document.getElementById('chkStackRollBeforeMoving').checked;
+        rulesConfig.spawnOnOneAndSix = document.getElementById('chkSpawnOnOneAndSix').checked;
+        rulesConfig.doubleSixSpawnsTwoBeads = document.getElementById('chkDoubleSixSpawnsTwo').checked;
+        rulesConfig.firstBeadStartsOnBoard = document.getElementById('chkFirstBeadOnBoard').checked;
+        rulesConfig.initialBeadsOnBoardCount = Math.max(1, Math.min(4, Number(document.getElementById('initialBeadsOnBoardSelect').value) || 1));
+        rulesConfig.pairBlockadeRule = document.getElementById('chkPairBlockadeRule').checked;
+        rulesConfig.killAllStackedEnemies = document.getElementById('chkKillAllStackedEnemies').checked;
+        rulesConfig.twoKillsForHome = document.getElementById('chkTwoKillsForHome').checked;
+        rulesConfig.oneDieWhenOneBeadLeft = document.getElementById('chkOneDieWhenOneBeadLeft').checked;
+        rulesConfig.mandatoryCapture = document.getElementById('chkMandatoryCapture').checked;
+        rulesConfig.threeTimeoutsBotTakeover = document.getElementById('chkThreeTimeoutsBotTakeover').checked;
         setAutoRollPreference(document.getElementById('chkAutoRollTurn').checked);
         setShowTooltipsPreference(document.getElementById('chkShowTooltips').checked);
         rulesConfig.aiDifficulty = document.getElementById('aiDifficultySelect').value;
