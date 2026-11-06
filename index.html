@@ -695,7 +695,10 @@
 <option selected="" value="2v2_ai">🤝 2v2 Teams (vs AI)</option>
 <option value="1v1_ai">⚔️ 1v1 Duel (vs AI)</option>
 <option value="4p_ai">👑 4-Player FFA (vs AI)</option>
-<option value="pass_play">👥 Pass &amp; Play (Humans)</option>
+<option value="pass_2p">👥 2P Same Device (1v1)</option>
+<option value="pass_3p">👥 3P Same Device (3 Players)</option>
+<option value="pass_4p_ffa">👥 4P Same Device (FFA)</option>
+<option value="pass_play">👥 4P Same Device (2v2 Teams)</option>
 </select>
 </div>
 <div>
@@ -1043,6 +1046,41 @@
 <p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
 </div>
 </label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOptionalLoopAfterKill" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔄 Optional Outer Loop After Kill (شکار کے بعد اندر جانے یا باہر گھومنے کی مرضی)</div>
+<p class="text-[11px] text-slate-600">Default OFF (must enter Home once kill is done). Enable to let players with a kill choose between entering Home or looping around the outer board again.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkWaitAllGroundAtGate" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⏳ No-Kill Gate Wait Until All Ground Beads Gather (بغیر شکار تمام میدانی گوٹیاں جمع ہونے تک رکنا)</div>
+<p class="text-[11px] text-slate-600">Default OFF (loop immediately if no kill). Enable so a player with 0 kills cannot enter Home or loop past the gate until all of their on-ground beads have reached the gate area.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkBonusOnHome" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🏠 Bonus Re-Roll on Bead Home Completion (گوٹی گھر پہنچنے پر دوبارہ باری — Default ON)</div>
+<p class="text-[11px] text-slate-600">Grants an extra dice re-roll when any of your beads reaches the final Home triangle.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkDoubleSixBonus" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🎲 Bonus Re-Roll on 6 / Double 6 (چھکا یا ڈبل سکس پر دوبارہ باری — Default ON)</div>
+<p class="text-[11px] text-slate-600">Grants an extra dice re-roll on 6+6 (in 2-Dice mode) or 6 (in 1-Die mode).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSafeStopImmunity" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">★ Star Stop Safe Immunity (سٹاپ پر گوٹی محفوظ رہنا — Default ON)</div>
+<p class="text-[11px] text-slate-600">Beads on Star/Stop squares cannot be captured. Disable if only colored starting squares should be safe.</p>
+</div>
+</label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
 <input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkShowTooltips" type="checkbox"/>
 <div>
@@ -1110,10 +1148,18 @@
 </div>
 </div>
 </div>
-<div class="flex justify-end gap-2">
-<button class="px-6 py-2.5 rounded-xl font-black text-sm emerald-play-btn shadow-lg" id="saveAndStartMatchBtn" type="button">
-          ▶️ Save &amp; Start Match Now
+<div class="flex flex-wrap justify-between items-center gap-2">
+<button class="px-4 py-2.5 rounded-xl font-bold text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300" id="resetDefaultRulesBtn" type="button">
+          🔄 Restore Default Bannu Rules
         </button>
+<div class="flex gap-2">
+<button class="px-4 py-2.5 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-600 text-white shadow" id="syncRulesToPeersBtn" type="button">
+            📡 Sync Rules to Multiplayer Room
+          </button>
+<button class="px-6 py-2.5 rounded-xl font-black text-sm emerald-play-btn shadow-lg" id="saveAndStartMatchBtn" type="button">
+            ▶️ Save &amp; Start Match Now
+          </button>
+</div>
 </div>
 </div>
 </section>
@@ -1657,7 +1703,6 @@
         renderStatsView();
       }
 
-      // --- 4. RULES CONFIGURATION & GAME STATE ---
       let savedAutoRollPref = false;
       let savedShowTooltipsPref = true;
       try {
@@ -1667,7 +1712,7 @@
         }
       } catch (e) {}
 
-      let rulesConfig = {
+      const DEFAULT_RULES_CONFIG = {
         presetName: 'بنوں روایتی رولز (Bannu Rules)',
         diceCount: 2,
         tokensPerPlayer: 4,
@@ -1675,6 +1720,11 @@
         bonusRollOnKill: true,
         mandatoryYardSpawn: true,
         killRequiredForHome: true,
+        allowOptionalLoopAfterKill: false,
+        waitAllGroundAtGateBeforeLoop: false,
+        bonusRollOnHome: true,
+        doubleSixBonusRoll: true,
+        safeStopImmunity: true,
         teamMode: true,
         strictHomeRemainder: true,
         teamAssistRequiresSix: true,
@@ -1684,15 +1734,43 @@
         aiDifficulty: 'hard'
       };
 
+      let rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG);
+
+      function loadRulesPreferences() {
+        try {
+          const raw = localStorage.getItem('bannu_ludo_rules_v2');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, parsed);
+          }
+          if (localStorage.getItem('bannu_ludo_auto_roll_v1') !== null) {
+            rulesConfig.autoRollOnTurn = localStorage.getItem('bannu_ludo_auto_roll_v1') === 'true';
+          }
+          if (localStorage.getItem('bannu_ludo_show_tooltips_v1') !== null) {
+            rulesConfig.showTooltips = localStorage.getItem('bannu_ludo_show_tooltips_v1') === 'true';
+          }
+        } catch (e) {}
+      }
+
+      function saveRulesPreferences(broadcastToPeers) {
+        try {
+          localStorage.setItem('bannu_ludo_rules_v2', JSON.stringify(rulesConfig));
+          localStorage.setItem('bannu_ludo_auto_roll_v1', rulesConfig.autoRollOnTurn ? 'true' : 'false');
+          localStorage.setItem('bannu_ludo_show_tooltips_v1', rulesConfig.showTooltips ? 'true' : 'false');
+        } catch (e) {}
+        if (broadcastToPeers) {
+          broadcastSettingsSync();
+        }
+      }
+
       let queuedCheatDice = null;
       let crownTapTimestamps = [];
       let preDrillMatchBackup = null;
+      let isMultiplayerHost = true;
 
       function setAutoRollPreference(enabled) {
         rulesConfig.autoRollOnTurn = Boolean(enabled);
-        try {
-          localStorage.setItem('bannu_ludo_auto_roll_v1', rulesConfig.autoRollOnTurn ? 'true' : 'false');
-        } catch (e) {}
+        saveRulesPreferences(false);
         const chk1 = document.getElementById('autoRollTurnChk');
         const chk2 = document.getElementById('chkAutoRollTurn');
         if (chk1) chk1.checked = rulesConfig.autoRollOnTurn;
@@ -1705,9 +1783,7 @@
 
       function setShowTooltipsPreference(enabled) {
         rulesConfig.showTooltips = Boolean(enabled);
-        try {
-          localStorage.setItem('bannu_ludo_show_tooltips_v1', rulesConfig.showTooltips ? 'true' : 'false');
-        } catch (e) {}
+        saveRulesPreferences(false);
         const chk1 = document.getElementById('showTooltipsChk');
         const chk2 = document.getElementById('chkShowTooltips');
         if (chk1) chk1.checked = rulesConfig.showTooltips;
@@ -2102,7 +2178,20 @@
         return (START_TRACK_INDEX[token.owner] + token.steps) % 52;
       }
 
-      function simulateTokenAdvance(token, delta, customEligibleHome) {
+      function canNoKillBeadLoopAroundBoard(token, customTokensList) {
+        if (!rulesConfig.waitAllGroundAtGateBeforeLoop) return true;
+        const ownerObj = gameState.players[token.owner];
+        const tokensRef = customTokensList || (ownerObj ? ownerObj.tokens : []);
+        const otherGroundBeads = tokensRef.filter(function (t) {
+          return t.id !== token.id && t.state === 'board';
+        });
+        if (otherGroundBeads.length === 0) return true;
+        return otherGroundBeads.every(function (t) {
+          return (t.steps % 52) === 50;
+        });
+      }
+
+      function simulateTokenAdvance(token, delta, customEligibleHome, customTokensList, forceOuterLoop) {
         if (token.state === 'completed') {
           return { valid: false, reason: 'Already completed' };
         }
@@ -2141,6 +2230,16 @@
 
         if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
           if (eligibleHome) {
+            if (forceOuterLoop && rulesConfig.allowOptionalLoopAfterKill) {
+              return {
+                valid: true,
+                loopedPastHome: true,
+                optionalOuterLoop: true,
+                newState: 'board',
+                newSteps: token.steps + delta,
+                newHomeStep: 0
+              };
+            }
             const intoHome = delta - stepsToHomeGate;
             if (intoHome === 6) {
               return { valid: true, newState: 'completed', newSteps: token.steps + stepsToHomeGate, newHomeStep: 6 };
@@ -2150,6 +2249,12 @@
               return { valid: false, reason: 'Overshoots Home goal' };
             }
           } else {
+            if (!canNoKillBeadLoopAroundBoard(token, customTokensList)) {
+              return {
+                valid: false,
+                reason: 'No kill yet & other ground beads have not all gathered at Home Gate'
+              };
+            }
             return {
               valid: true,
               loopedPastHome: true,
@@ -2169,7 +2274,11 @@
       }
 
       function getCaptureCandidatesAtTrackIndex(moverOwnerIdx, trackIdx) {
-        if (SAFE_TRACK_INDICES.has(trackIdx)) return [];
+        if (rulesConfig.safeStopImmunity) {
+          if (SAFE_TRACK_INDICES.has(trackIdx)) return [];
+        } else {
+          if (START_TRACK_INDEX.includes(trackIdx)) return [];
+        }
         const moverMeta = PLAYER_META[moverOwnerIdx];
         const candidates = [];
 
@@ -2192,7 +2301,8 @@
         if (locked.length > 0 && rulesConfig.closeGameMode) {
           const unlockedPlayable = simTokens.some(function (t) {
             if (t.lockedThisTurn) return false;
-            return simulateTokenAdvance(t, secondDieValue, eligibleHome).valid;
+            return simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, false).valid ||
+                   (eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
           });
           if (!unlockedPlayable) {
             const otherGroundCount = simTokens.filter(function (t) { return !t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); }).length;
@@ -2204,7 +2314,8 @@
         }
 
         return simTokens.some(function (t) {
-          return simulateTokenAdvance(t, secondDieValue, eligibleHome).valid;
+          return simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, false).valid ||
+                 (eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
         });
       }
 
@@ -2239,12 +2350,11 @@
           }
         }
 
-        // RULE 1: Mandatory Hand/Yard Spawn on 6
         const hasUnusedSix = unusedDice.some(function (d) { return d.value === 6; });
         if (rulesConfig.mandatoryYardSpawn && yardTokens.length > 0 && hasUnusedSix) {
           const sixDie = unusedDice.find(function (d) { return d.value === 6; });
           return yardTokens.map(function (yt) {
-            const sim = simulateTokenAdvance(yt, 6);
+            const sim = simulateTokenAdvance(yt, 6, undefined, tokens, false);
             return {
               tokenId: yt.id,
               ownerIdx: targetOwnerIdx,
@@ -2258,7 +2368,6 @@
           });
         }
 
-        // RULE 2: Strict Near-Home Remainder Check when only 1 bead is on the ground
         if (
           rulesConfig.strictHomeRemainder &&
           unusedDice.length === 2 &&
@@ -2267,8 +2376,11 @@
         ) {
           const soleToken = groundTokens[0];
           const sumVal = unusedDice[0].value + unusedDice[1].value;
-          const combinedSim = simulateTokenAdvance(soleToken, sumVal);
-          if (!combinedSim.valid) {
+          const combinedSim = simulateTokenAdvance(soleToken, sumVal, undefined, tokens, false);
+          const combinedLoopSim = (canOwnerEnterHomeStretch(targetOwnerIdx) && rulesConfig.allowOptionalLoopAfterKill)
+            ? simulateTokenAdvance(soleToken, sumVal, true, tokens, true)
+            : { valid: false };
+          if (!combinedSim.valid && !combinedLoopSim.valid) {
             return [];
           }
         }
@@ -2276,57 +2388,83 @@
         const candidateSingleMoves = [];
         const candidateCombinedMoves = [];
 
+        function evaluateSecondDieAllowance(tk, die, sim) {
+          if (unusedDice.length !== 2) return true;
+          const otherDie = unusedDice.find(function (d) { return d.id !== die.id; });
+          const simTokens = tokens.map(function (orig) {
+            if (orig.id !== tk.id) return Object.assign({}, orig);
+            let locksAfterMove = orig.lockedThisTurn;
+            if (sim.newState === 'board') {
+              const destTrack = (START_TRACK_INDEX[orig.owner] + sim.newSteps) % 52;
+              const enemies = getCaptureCandidatesAtTrackIndex(targetOwnerIdx, destTrack);
+              if (enemies.length > 0 && rulesConfig.closeGameMode) locksAfterMove = true;
+            }
+            return {
+              owner: orig.owner,
+              id: orig.id,
+              state: sim.newState,
+              steps: sim.newSteps,
+              homeStep: sim.newHomeStep,
+              lockedThisTurn: locksAfterMove
+            };
+          });
+          const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || (sim.newState === 'board' && getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52).length > 0);
+          return canPlaySecondDieOnSimulatedState(simTokens, otherDie.value, willHomeBeEligible);
+        }
+
         tokens.forEach(function (tk) {
           if (tk.state === 'completed') return;
 
           const seenSingleValues = new Set();
           unusedDice.forEach(function (die) {
             if (seenSingleValues.has(die.value)) return;
-            const sim = simulateTokenAdvance(tk, die.value);
-            if (!sim.valid) return;
+            seenSingleValues.add(die.value);
 
-            let allowsSecondDie = true;
-            if (unusedDice.length === 2) {
-              const otherDie = unusedDice.find(function (d) { return d.id !== die.id; });
-              const simTokens = tokens.map(function (orig) {
-                if (orig.id !== tk.id) return Object.assign({}, orig);
-                let locksAfterMove = orig.lockedThisTurn;
-                if (sim.newState === 'board') {
-                  const destTrack = (START_TRACK_INDEX[orig.owner] + sim.newSteps) % 52;
-                  const enemies = getCaptureCandidatesAtTrackIndex(targetOwnerIdx, destTrack);
-                  if (enemies.length > 0 && rulesConfig.closeGameMode) locksAfterMove = true;
-                }
-                return {
-                  owner: orig.owner,
-                  id: orig.id,
-                  state: sim.newState,
-                  steps: sim.newSteps,
-                  homeStep: sim.newHomeStep,
-                  lockedThisTurn: locksAfterMove
-                };
+            const sim = simulateTokenAdvance(tk, die.value, undefined, tokens, false);
+            if (sim.valid) {
+              candidateSingleMoves.push({
+                tokenId: tk.id,
+                ownerIdx: targetOwnerIdx,
+                diceIds: [die.id],
+                delta: die.value,
+                allowsSecondDie: evaluateSecondDieAllowance(tk, die, sim),
+                destRC: getDestinationGridCoordForSim(targetOwnerIdx, sim),
+                label: sim.isSpawn ? 'Spawn (+6)' : ('+' + die.value),
+                sim: sim
               });
-              const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || (sim.newState === 'board' && getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52).length > 0);
-              allowsSecondDie = canPlaySecondDieOnSimulatedState(simTokens, otherDie.value, willHomeBeEligible);
             }
 
-            seenSingleValues.add(die.value);
-            candidateSingleMoves.push({
-              tokenId: tk.id,
-              ownerIdx: targetOwnerIdx,
-              diceIds: [die.id],
-              delta: die.value,
-              allowsSecondDie: allowsSecondDie,
-              destRC: getDestinationGridCoordForSim(targetOwnerIdx, sim),
-              label: sim.isSpawn ? 'Spawn (+6)' : ('+' + die.value),
-              sim: sim
-            });
+            if (
+              tk.state === 'board' &&
+              rulesConfig.allowOptionalLoopAfterKill &&
+              canOwnerEnterHomeStretch(targetOwnerIdx)
+            ) {
+              const posInLap = tk.steps % 52;
+              const stepsToGate = 50 - posInLap;
+              if (stepsToGate >= 0 && die.value > stepsToGate) {
+                const loopSim = simulateTokenAdvance(tk, die.value, true, tokens, true);
+                if (loopSim.valid) {
+                  candidateSingleMoves.push({
+                    tokenId: tk.id,
+                    ownerIdx: targetOwnerIdx,
+                    diceIds: [die.id],
+                    delta: die.value,
+                    isOptionalLoop: true,
+                    allowsSecondDie: evaluateSecondDieAllowance(tk, die, loopSim),
+                    destRC: getDestinationGridCoordForSim(targetOwnerIdx, loopSim),
+                    label: 'Loop +' + die.value,
+                    sim: loopSim
+                  });
+                }
+              }
+            }
           });
 
           if (unusedDice.length === 2 && (tk.state === 'board' || tk.state === 'home_stretch')) {
             const d0 = unusedDice[0];
             const d1 = unusedDice[1];
             const sumDelta = d0.value + d1.value;
-            const simCombined = simulateTokenAdvance(tk, sumDelta);
+            const simCombined = simulateTokenAdvance(tk, sumDelta, undefined, tokens, false);
             if (simCombined.valid) {
               candidateCombinedMoves.push({
                 tokenId: tk.id,
@@ -2339,6 +2477,31 @@
                 label: '+' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
                 sim: simCombined
               });
+            }
+            if (
+              tk.state === 'board' &&
+              rulesConfig.allowOptionalLoopAfterKill &&
+              canOwnerEnterHomeStretch(targetOwnerIdx)
+            ) {
+              const posInLap = tk.steps % 52;
+              const stepsToGate = 50 - posInLap;
+              if (stepsToGate >= 0 && sumDelta > stepsToGate) {
+                const loopCombined = simulateTokenAdvance(tk, sumDelta, true, tokens, true);
+                if (loopCombined.valid) {
+                  candidateCombinedMoves.push({
+                    tokenId: tk.id,
+                    ownerIdx: targetOwnerIdx,
+                    diceIds: [d0.id, d1.id],
+                    delta: sumDelta,
+                    isCombined: true,
+                    isOptionalLoop: true,
+                    allowsSecondDie: true,
+                    destRC: getDestinationGridCoordForSim(targetOwnerIdx, loopCombined),
+                    label: 'Loop +' + sumDelta + ' (' + d0.value + '+' + d1.value + ')',
+                    sim: loopCombined
+                  });
+                }
+              }
             }
           }
         });
@@ -2409,7 +2572,26 @@
           return true;
         }
 
-        // CASE B: Player has ONLY 1 movable bead on the ground (no other bead option!)
+        const allSpawnOnly = legal.every(function (m) { return m.sim && m.sim.isSpawn; });
+        if (allSpawnOnly && legal.length > 0) {
+          const firstSpawn = legal[0];
+          gameState.selectedTokenKey = firstSpawn.ownerIdx + '_' + firstSpawn.tokenId;
+          drawBoard();
+          autoMoveTimer = setTimeout(function () {
+            if (gameState.phase === 'MOVE') {
+              showToast('⚡ Auto-Placed Pocket Bead on 6!');
+              executeMove(firstSpawn);
+            }
+          }, 300);
+          return true;
+        }
+
+        const hasOptionalLoopChoice = legal.some(function (m) { return m.isOptionalLoop; }) &&
+                                      legal.some(function (m) { return !m.isOptionalLoop && (m.sim.newState === 'home_stretch' || m.sim.newState === 'completed'); });
+        if (hasOptionalLoopChoice) {
+          return false;
+        }
+
         const uniqueTokenKeys = Array.from(new Set(legal.map(function (m) { return m.ownerIdx + '_' + m.tokenId; })));
         if (uniqueTokenKeys.length === 1) {
           let chosenMove = legal[0];
@@ -2445,7 +2627,7 @@
           return [MAIN_TRACK[START_TRACK_INDEX[token.owner]]];
         }
         const coords = [];
-        const eligibleHome = canOwnerEnterHomeStretch(token.owner);
+        const eligibleHome = canOwnerEnterHomeStretch(token.owner) && !simResult.optionalOuterLoop;
         let curState = token.state;
         let curSteps = token.steps;
         let curHomeStep = token.homeStep;
@@ -2703,10 +2885,12 @@
           return;
         }
 
-        const rolledDiceBonus = (gameState.dicePool.length === 1 && gameState.dicePool[0].value === 6) ||
-                                (gameState.dicePool.length === 2 && gameState.dicePool[0].value === 6 && gameState.dicePool[1].value === 6);
+        const rolledDiceBonus = Boolean(rulesConfig.doubleSixBonusRoll) && (
+          (gameState.dicePool.length === 1 && gameState.dicePool[0].value === 6) ||
+          (gameState.dicePool.length === 2 && gameState.dicePool[0].value === 6 && gameState.dicePool[1].value === 6)
+        );
         const earnedKillBonus = Boolean(rulesConfig.bonusRollOnKill && gameState.earnedKillBonusThisTurn);
-        const earnedHomeBonus = Boolean(gameState.earnedHomeBonusThisTurn);
+        const earnedHomeBonus = Boolean(rulesConfig.bonusRollOnHome && gameState.earnedHomeBonusThisTurn);
 
         if (rolledDiceBonus || earnedKillBonus || earnedHomeBonus) {
           const curP = gameState.players[gameState.currentTurn];
@@ -4047,12 +4231,22 @@
             rulesConfig.autoRollOnTurn = localStorage.getItem('bannu_ludo_auto_roll_v1') === 'true';
           }
         } catch (e) {}
-        document.getElementById('chkBonusOnKill').checked = rulesConfig.bonusRollOnKill;
-        document.getElementById('chkMandatorySpawn').checked = rulesConfig.mandatoryYardSpawn;
-        document.getElementById('chkKillForHome').checked = rulesConfig.killRequiredForHome;
-        document.getElementById('chkTeamMode').checked = rulesConfig.teamMode;
-        document.getElementById('chkStrictRemainder').checked = rulesConfig.strictHomeRemainder;
-        document.getElementById('chkTeamAssistSix').checked = rulesConfig.teamAssistRequiresSix;
+        document.getElementById('chkBonusOnKill').checked = Boolean(rulesConfig.bonusRollOnKill);
+        document.getElementById('chkMandatorySpawn').checked = Boolean(rulesConfig.mandatoryYardSpawn);
+        document.getElementById('chkKillForHome').checked = Boolean(rulesConfig.killRequiredForHome);
+        document.getElementById('chkTeamMode').checked = Boolean(rulesConfig.teamMode);
+        document.getElementById('chkStrictRemainder').checked = Boolean(rulesConfig.strictHomeRemainder);
+        document.getElementById('chkTeamAssistSix').checked = Boolean(rulesConfig.teamAssistRequiresSix);
+        const chkOptLoop = document.getElementById('chkOptionalLoopAfterKill');
+        if (chkOptLoop) chkOptLoop.checked = Boolean(rulesConfig.allowOptionalLoopAfterKill);
+        const chkWaitGate = document.getElementById('chkWaitAllGroundAtGate');
+        if (chkWaitGate) chkWaitGate.checked = Boolean(rulesConfig.waitAllGroundAtGateBeforeLoop);
+        const chkHomeBon = document.getElementById('chkBonusOnHome');
+        if (chkHomeBon) chkHomeBon.checked = Boolean(rulesConfig.bonusRollOnHome);
+        const chkDblSix = document.getElementById('chkDoubleSixBonus');
+        if (chkDblSix) chkDblSix.checked = Boolean(rulesConfig.doubleSixBonusRoll);
+        const chkSafeImm = document.getElementById('chkSafeStopImmunity');
+        if (chkSafeImm) chkSafeImm.checked = Boolean(rulesConfig.safeStopImmunity);
         const chkAuto1 = document.getElementById('autoRollTurnChk');
         const chkAuto2 = document.getElementById('chkAutoRollTurn');
         if (chkAuto1) chkAuto1.checked = Boolean(rulesConfig.autoRollOnTurn);
@@ -4105,9 +4299,15 @@
         rulesConfig.bonusRollOnKill = true;
         rulesConfig.mandatoryYardSpawn = true;
         rulesConfig.killRequiredForHome = true;
+        rulesConfig.allowOptionalLoopAfterKill = false;
+        rulesConfig.waitAllGroundAtGateBeforeLoop = false;
+        rulesConfig.bonusRollOnHome = true;
+        rulesConfig.doubleSixBonusRoll = true;
+        rulesConfig.safeStopImmunity = true;
         rulesConfig.teamMode = true;
         rulesConfig.strictHomeRemainder = true;
         rulesConfig.teamAssistRequiresSix = true;
+        saveRulesPreferences(true);
         syncRulesStudioControls();
         if (restartNow) {
           initNewMatch('Loaded Bannu Cultural Rules (2 Dice, Kill Bonus Re-Roll, Kill Lock, Mandatory 6 Spawn, 2v2 Teams).', !gameState.isMatchActive);
@@ -4122,9 +4322,15 @@
         rulesConfig.bonusRollOnKill = true;
         rulesConfig.mandatoryYardSpawn = false;
         rulesConfig.killRequiredForHome = false;
+        rulesConfig.allowOptionalLoopAfterKill = false;
+        rulesConfig.waitAllGroundAtGateBeforeLoop = false;
+        rulesConfig.bonusRollOnHome = true;
+        rulesConfig.doubleSixBonusRoll = true;
+        rulesConfig.safeStopImmunity = true;
         rulesConfig.teamMode = false;
         rulesConfig.strictHomeRemainder = false;
         rulesConfig.teamAssistRequiresSix = false;
+        saveRulesPreferences(true);
         syncRulesStudioControls();
         if (restartNow) {
           initNewMatch('Loaded Yalla Classic Rules (1 Die, Open Game, Kill Bonus Re-Roll).', !gameState.isMatchActive);
@@ -4438,9 +4644,24 @@
           showToast('🟢 Network reconnected seamlessly!');
         });
 
-        window.addEventListener('beforeunload', function () {
+        function handlePageLifecycleSave() {
           saveActiveMatchSnapshot();
+          saveRulesPreferences(false);
+        }
+
+        window.addEventListener('pagehide', handlePageLifecycleSave);
+        document.addEventListener('visibilitychange', function () {
+          if (document.visibilityState === 'hidden') {
+            handlePageLifecycleSave();
+          } else if (document.visibilityState === 'visible' && gameState.isMatchActive) {
+            broadcastNetworkAction({ type: 'REQUEST_RESYNC', senderId: myRoomId, playerName: careerStats.playerName });
+          }
+        });
+
+        window.addEventListener('beforeunload', function () {
+          handlePageLifecycleSave();
           try {
+            broadcastNetworkAction({ type: 'PEER_DISCONNECTING', senderId: myRoomId, playerName: careerStats.playerName });
             if (localBroadcastChannel) {
               localBroadcastChannel.postMessage({ type: 'PEER_LEFT', senderId: myRoomId, slot: 1 });
             }
@@ -4704,6 +4925,34 @@
         showToast('✅ Linked ' + parsedPeerName + ' on Seat #' + (slot + 1) + '!');
       }
 
+      let remotePeerHeartbeats = {};
+
+      function getFullNetworkSnapshot() {
+        return {
+          rulesConfig: rulesConfig,
+          seatConfig: seatConfig,
+          players: gameState.players,
+          currentTurn: gameState.currentTurn,
+          phase: gameState.phase === 'ANIMATING' ? 'MOVE' : gameState.phase,
+          dicePool: gameState.dicePool,
+          earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
+          earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
+          lastMovedTrail: gameState.lastMovedTrail,
+          isMatchActive: gameState.isMatchActive
+        };
+      }
+
+      function broadcastSettingsSync() {
+        broadcastNetworkAction({
+          type: 'SYNC_SETTINGS',
+          senderId: myRoomId,
+          hostName: careerStats.playerName,
+          rulesConfig: rulesConfig,
+          seatConfig: seatConfig,
+          snapshot: gameState.isMatchActive ? getFullNetworkSnapshot() : null
+        });
+      }
+
       function broadcastNetworkAction(payload) {
         try {
           if (localBroadcastChannel) {
@@ -4721,11 +4970,106 @@
 
       function handleRemoteNetworkAction(payload) {
         if (!payload) return;
+        if (payload.senderId) {
+          remotePeerHeartbeats[payload.senderId] = {
+            lastSeen: Date.now(),
+            playerName: payload.playerName || payload.hostName || 'Remote Player'
+          };
+        }
+        if (payload.type === 'HEARTBEAT') {
+          if (payload.playerName && gameState.isMatchActive) {
+            gameState.players.forEach(function (pl, idx) {
+              if (pl && pl.isBotTakeover && pl.name === payload.playerName) {
+                handlePlayerDisconnectOrLeave(idx, 'reconnected');
+              }
+            });
+          }
+          return;
+        }
+        if (payload.type === 'PEER_DISCONNECTING') {
+          if (gameState.isMatchActive && payload.playerName) {
+            gameState.players.forEach(function (pl, idx) {
+              if (pl && pl.active && pl.type === 'human' && pl.name === payload.playerName) {
+                handlePlayerDisconnectOrLeave(idx, 'left or device shut down');
+              }
+            });
+          }
+          return;
+        }
+        if (payload.type === 'REQUEST_RESYNC') {
+          if (isMultiplayerHost && gameState.isMatchActive) {
+            if (payload.playerName) {
+              gameState.players.forEach(function (pl, idx) {
+                if (pl && pl.isBotTakeover && pl.name === payload.playerName) {
+                  handlePlayerDisconnectOrLeave(idx, 'rejoined match');
+                }
+              });
+            }
+            broadcastNetworkAction({
+              type: 'SYNC_SNAPSHOT',
+              senderId: myRoomId,
+              snapshot: getFullNetworkSnapshot()
+            });
+          }
+          return;
+        }
+        if (payload.type === 'SYNC_SETTINGS') {
+          if (payload.rulesConfig) {
+            const keepAuto = rulesConfig.autoRollOnTurn;
+            const keepTips = rulesConfig.showTooltips;
+            rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, payload.rulesConfig, {
+              autoRollOnTurn: keepAuto,
+              showTooltips: keepTips
+            });
+            saveRulesPreferences(false);
+          }
+          if (payload.seatConfig) {
+            seatConfig = payload.seatConfig;
+          }
+          if (payload.snapshot && payload.snapshot.players && payload.snapshot.players.length === 4) {
+            gameState.players = payload.snapshot.players;
+            gameState.currentTurn = payload.snapshot.currentTurn;
+            gameState.phase = payload.snapshot.phase;
+            gameState.dicePool = payload.snapshot.dicePool;
+            gameState.earnedKillBonusThisTurn = Boolean(payload.snapshot.earnedKillBonusThisTurn);
+            gameState.earnedHomeBonusThisTurn = Boolean(payload.snapshot.earnedHomeBonusThisTurn);
+            gameState.lastMovedTrail = payload.snapshot.lastMovedTrail || null;
+          }
+          syncRulesStudioControls();
+          resetTurnCountdown();
+          updateAllUI();
+          showToast('⚙️ Host (' + (payload.hostName || 'Host') + ') synced match rules & settings!', true);
+          return;
+        }
+        if (payload.type === 'SYNC_SNAPSHOT' && payload.snapshot) {
+          const snap = payload.snapshot;
+          if (snap.rulesConfig) {
+            rulesConfig = Object.assign({}, rulesConfig, snap.rulesConfig);
+          }
+          if (snap.seatConfig) seatConfig = snap.seatConfig;
+          if (snap.players && snap.players.length === 4) {
+            gameState.players = snap.players;
+            gameState.currentTurn = snap.currentTurn || 0;
+            gameState.phase = snap.phase || 'ROLL';
+            gameState.dicePool = snap.dicePool || gameState.dicePool;
+            gameState.earnedKillBonusThisTurn = Boolean(snap.earnedKillBonusThisTurn);
+            gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
+            gameState.lastMovedTrail = snap.lastMovedTrail || null;
+            gameState.isMatchActive = Boolean(snap.isMatchActive);
+            saveActiveMatchSnapshot();
+            syncRulesStudioControls();
+            resetTurnCountdown();
+            updateAllUI();
+          }
+          return;
+        }
         if (payload.type === 'ROLL' && gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer(payload.values, true);
         } else if (payload.type === 'MOVE' && gameState.phase === 'MOVE') {
           const legal = computeLegalMoves();
           const match = legal.find(function (m) {
+            return m.tokenId === payload.tokenId && m.ownerIdx === payload.ownerIdx && m.delta === payload.delta && Boolean(m.isOptionalLoop) === Boolean(payload.isOptionalLoop);
+          }) || legal.find(function (m) {
             return m.tokenId === payload.tokenId && m.ownerIdx === payload.ownerIdx && m.delta === payload.delta;
           });
           if (match) executeMove(match, true);
@@ -4733,6 +5077,28 @@
           triggerPlayerEmote(payload.playerIdx || 0, payload.text);
         }
       }
+
+      setInterval(function () {
+        if (!gameState.isMatchActive) return;
+        broadcastNetworkAction({
+          type: 'HEARTBEAT',
+          senderId: myRoomId,
+          playerName: careerStats.playerName,
+          ts: Date.now()
+        });
+        const now = Date.now();
+        Object.keys(remotePeerHeartbeats).forEach(function (peerId) {
+          const info = remotePeerHeartbeats[peerId];
+          if (info && now - info.lastSeen > 12000) {
+            delete remotePeerHeartbeats[peerId];
+            gameState.players.forEach(function (pl, idx) {
+              if (idx > 0 && pl && pl.active && pl.type === 'human' && pl.name.indexOf(info.playerName) !== -1) {
+                handlePlayerDisconnectOrLeave(idx, 'connection timed out');
+              }
+            });
+          }
+        });
+      }, 3500);
 
       // --- 14. STATS VIEW, ACHIEVEMENTS, MATCH HISTORY & HD PICTURE GENERATOR ---
       function renderStatsView() {
@@ -4988,6 +5354,24 @@
           seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
           seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
           seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === 'pass_2p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 2 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'pass_3p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'pass_4p_ffa') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
         } else if (fmt === 'pass_play') {
           rulesConfig.teamMode = true;
           seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
@@ -4996,8 +5380,10 @@
           seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
         }
 
+        saveRulesPreferences(true);
         switchNavigationTab('viewPlay');
         initNewMatch('Match started! Roll the dice and drag or tap your beads on the board.', false);
+        broadcastSettingsSync();
       });
 
       document.getElementById('navRulesBtn').addEventListener('click', function () {
@@ -5293,14 +5679,20 @@
         setShowTooltipsPreference(false);
       });
 
-      document.getElementById('saveAndStartMatchBtn').addEventListener('click', function () {
+      function readRulesFormIntoConfig() {
         rulesConfig.bonusRollOnKill = document.getElementById('chkBonusOnKill').checked;
         rulesConfig.mandatoryYardSpawn = document.getElementById('chkMandatorySpawn').checked;
         rulesConfig.killRequiredForHome = document.getElementById('chkKillForHome').checked;
+        rulesConfig.allowOptionalLoopAfterKill = document.getElementById('chkOptionalLoopAfterKill').checked;
+        rulesConfig.waitAllGroundAtGateBeforeLoop = document.getElementById('chkWaitAllGroundAtGate').checked;
+        rulesConfig.bonusRollOnHome = document.getElementById('chkBonusOnHome').checked;
+        rulesConfig.doubleSixBonusRoll = document.getElementById('chkDoubleSixBonus').checked;
+        rulesConfig.safeStopImmunity = document.getElementById('chkSafeStopImmunity').checked;
         rulesConfig.teamMode = document.getElementById('chkTeamMode').checked;
         rulesConfig.strictHomeRemainder = document.getElementById('chkStrictRemainder').checked;
         rulesConfig.teamAssistRequiresSix = document.getElementById('chkTeamAssistSix').checked;
         setAutoRollPreference(document.getElementById('chkAutoRollTurn').checked);
+        setShowTooltipsPreference(document.getElementById('chkShowTooltips').checked);
         rulesConfig.aiDifficulty = document.getElementById('aiDifficultySelect').value;
         const rulesTimerVal = document.getElementById('turnTimerSelect').value;
         rulesConfig.turnTimeSeconds = rulesTimerVal === 'custom'
@@ -5315,8 +5707,31 @@
           seatConfig[i].active = typeVal !== 'none';
           seatConfig[i].isBotTakeover = false;
         }
+        saveRulesPreferences(true);
+      }
+
+      document.getElementById('resetDefaultRulesBtn').addEventListener('click', function () {
+        const keepAuto = rulesConfig.autoRollOnTurn;
+        const keepTips = rulesConfig.showTooltips;
+        rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, {
+          autoRollOnTurn: keepAuto,
+          showTooltips: keepTips
+        });
+        saveRulesPreferences(true);
+        syncRulesStudioControls();
+        showToast('🔄 Restored Default Bannu Rules & saved preferences!', true);
+      });
+
+      document.getElementById('syncRulesToPeersBtn').addEventListener('click', function () {
+        readRulesFormIntoConfig();
+        showToast('📡 Rules & Player Settings synced to all connected multiplayer peers!', true);
+      });
+
+      document.getElementById('saveAndStartMatchBtn').addEventListener('click', function () {
+        readRulesFormIntoConfig();
         switchNavigationTab('viewPlay');
         initNewMatch('Started custom match (' + rulesConfig.diceCount + ' Dice, ' + rulesConfig.tokensPerPlayer + ' Beads).', false);
+        broadcastSettingsSync();
       });
 
       document.getElementById('createWifiRoomBtn').addEventListener('click', function () {
@@ -5551,6 +5966,7 @@
 
       window.addEventListener('load', function () {
         loadCareerStats();
+        loadRulesPreferences();
         syncRulesStudioControls();
         initNewMatch('Ready on Home Lobby.', true);
         initLanRadarAndWebRtc();
