@@ -1163,11 +1163,11 @@
 <p class="text-[11px] text-slate-600">Upgrades the blood-gate requirement from 1 kill to 2 kills before a player's home gate opens.</p>
 </div>
 </label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOneDieWhenOneBeadLeft" type="checkbox"/>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOneDieWhenOneBeadLeft" type="checkbox"/>
 <div>
-<div class="font-bold text-xs text-slate-900">1️⃣ Must Use 1 Die When Only 1 Bead Remains on Board (صرف آخری ایک گوٹی رہنے پر 1 ڈائس استعمال کرنا — Default: OFF)</div>
-<p class="text-[11px] text-slate-600">As soon as a player has completed all but 1 bead (only 1 bead left anywhere on the board), they roll only 1 Die instead of 2.</p>
+<div class="font-bold text-xs text-slate-900">1️⃣ Must Use 1 Die When Only 1 Bead Remains on Board (صرف آخری ایک گوٹی رہنے پر 1 ڈائس استعمال کرنا — Default: ON)</div>
+<p class="text-[11px] text-slate-600">As soon as a player has completed all but 1 bead (only 1 bead left anywhere on the board), they roll only 1 Die instead of 2. Even if turned OFF, reaching the Home stretch or the final point needing 1 automatically switches to 1 Die.</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -1483,49 +1483,38 @@
 </div>
 </div>
 </section>
-<!-- ==================== SCREEN 5: BANNU CULTURAL RULEBOOK GUIDE ==================== -->
+<!-- ==================== SCREEN 5: COMPREHENSIVE BILINGUAL BANNU CULTURAL RULEBOOK GUIDE ==================== -->
 <section class="hidden w-full h-dvh overflow-y-auto p-3 sm:p-5" id="viewGuide">
-<div class="royal-card rounded-3xl p-5 max-w-4xl w-full mx-auto space-y-4">
-<div class="flex items-center justify-between border-b border-amber-200 pb-3">
-<h2 class="text-lg sm:text-2xl font-black text-amber-800">📖 Bannu &amp; Pashtun Cultural Rules</h2>
-<button class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-amber-100 text-amber-900 font-bold text-xs" type="button">
+<div class="royal-card rounded-3xl p-4 sm:p-6 max-w-5xl w-full mx-auto space-y-4">
+<div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200 pb-3">
+<div>
+<h2 class="text-lg sm:text-2xl font-black text-amber-800">📖 Complete Bannu &amp; Pashtun Ludo Rulebook (مکمل قوانین اور مثالیں)</h2>
+<p class="text-xs text-slate-600 mt-0.5">Detailed guide in English &amp; اردو — how every rule works, what happens when you Enable (ON) or Disable (OFF) it, and real board examples.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow" id="guideToRulesStudioBtn" type="button">
+          ⚙️ Customize Rules
+        </button>
+<button class="back-to-home-btn px-3.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs" type="button">
           ⬅️ Back to Home
         </button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">1. Two-Dice Tactical Play &amp; Kill Re-Roll</h3>
-<p class="text-slate-700">With 2 dice (e.g. 5 &amp; 3), drag or tap a bead to move by one die or combine both dice on one bead. Rolling Double Six (6+6) OR eating/killing an enemy bead grants a bonus re-roll!</p>
 </div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">2. Mandatory Hand Spawn on 6 (پہلے ہاتھ والی بیڈ لگانا)</h3>
-<p class="text-slate-700">If you have beads in your hand/yard and roll a 6 (e.g. 6+1), you must spawn a bead from your hand first before moving existing board beads.</p>
+
+<!-- Category Filter Bar & Search -->
+<div class="flex flex-wrap items-center justify-between gap-2 bg-amber-50/80 p-2.5 rounded-2xl border border-amber-200">
+<div class="flex flex-wrap items-center gap-1.5" id="guideCategoryTabs">
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Rules (25)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="core" type="button">🏔️ Core Bannu Rules</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 Dice &amp; Spawn Rules</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ Kill, Jora &amp; Home</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="system" type="button">🤖 Timer, Bot &amp; Teams</button>
 </div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">3. Kill Required for Home + Loop (بغیر شکار اندر جانا منع)</h3>
-<p class="text-slate-700">Cannot enter the home column without capturing at least 1 enemy bead. Reaching home entry with 0 kills forces another full 52-square lap!</p>
+<input class="w-full sm:w-56 bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-900" id="guideSearchInput" placeholder="🔍 Search rule (English / اردو)..." type="text"/>
 </div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">4. 2v2 Teams &amp; Single-Capture Choice (ٹیم میچ)</h3>
-<p class="text-slate-700">Opposite corners are teammates (Red+Yellow ♦T1 vs Green+Blue ★T2). Teammates stack safely; an enemy landing on stacked teammates can only eat 1 chosen bead.</p>
-</div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">5. Close Game vs Open Game (کلوز گیم بمقابلہ اوپن گیم)</h3>
-<p class="text-slate-700">In Close Game, a bead that kills an enemy locks on that square for the rest of your turn if another bead can move or spawn.</p>
-</div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">6. Disconnect / 3-Timeouts Bot Takeover &amp; Reclaim Seat</h3>
-<p class="text-slate-700">Every turn is auto-saved. If a player misses 3 turn timers in a row (Default ON) or disconnects, an AI Bot takes over their seat until they tap "👤 Reclaim Seat"!</p>
-</div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">7. Dice &amp; Spawn Variants (Optional in Rules)</h3>
-<p class="text-slate-700">Customize with 3 Consecutive Sixes Penalty, Single-Six Re-Roll in 2-Dice, Stack Roll (queue bonus rolls &amp; kill bonuses before moving), Spawn on 1 &amp; 6, Double-Six Auto-Spawn 2 Beads, or Start with 1–4 Beads on Board.</p>
-</div>
-<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200">
-<h3 class="font-bold text-amber-900 mb-1">8. Tactical Combat Variants (Optional in Rules)</h3>
-<p class="text-slate-700">Enable Pair Blockade / Jora Wall (opponents cannot jump over 2 stacked same-team beads), Kill All Stacked Enemies, 2 Kills Required for Home, 1-Die on Last Remaining Bead, or Mandatory Capture (Phoonk).</p>
-</div>
-</div>
+
+<!-- Dynamic Comprehensive Rule Cards Container -->
+<div class="grid grid-cols-1 gap-3.5" id="comprehensiveGuideList"></div>
 </div>
 </section>
 <!-- ==================== MODAL: SCENARIO TESTER DRAWER ==================== -->
@@ -1842,7 +1831,7 @@
         pairBlockadeRule: false,
         killAllStackedEnemies: false,
         twoKillsForHome: false,
-        oneDieWhenOneBeadLeft: false,
+        oneDieWhenOneBeadLeft: true,
         mandatoryCapture: false,
         threeTimeoutsBotTakeover: true,
         autoRollOnTurn: savedAutoRollPref,
@@ -1865,6 +1854,10 @@
           }
           if (localStorage.getItem('bannu_ludo_show_tooltips_v1') !== null) {
             rulesConfig.showTooltips = localStorage.getItem('bannu_ludo_show_tooltips_v1') === 'true';
+          }
+          if (localStorage.getItem('bannu_ludo_onedie_default_v3') !== 'migrated') {
+            rulesConfig.oneDieWhenOneBeadLeft = true;
+            localStorage.setItem('bannu_ludo_onedie_default_v3', 'migrated');
           }
         } catch (e) {}
       }
@@ -2305,6 +2298,23 @@
         return remaining.length === 1;
       }
 
+      function hasReachedLastPointNeedingOne(ownerIdx) {
+        const p = gameState.players[ownerIdx];
+        if (!p || !p.active) return false;
+        const remaining = p.tokens.filter(function (tk) { return tk.state !== 'completed'; });
+        if (remaining.length === 0) return false;
+        // If only 1 bead remains and it is at the final square before Home (homeStep === 5, needing 1) or inside Home stretch,
+        // OR if any bead is at the last point needing 1 (homeStep === 5) and no other bead can use a second die:
+        const anyAtLastPoint = remaining.some(function (tk) {
+          return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1;
+        });
+        if (remaining.length === 1 && anyAtLastPoint) return true;
+        const allAtLastPoint = remaining.every(function (tk) {
+          return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1;
+        });
+        return allAtLastPoint;
+      }
+
       function getEffectiveDiceCountForOwner(actorIdx, targetOwnerIdx) {
         const actor = gameState.players[actorIdx];
         const needsAssistSixRoll = rulesConfig.teamMode &&
@@ -2312,8 +2322,9 @@
                                    hasPlayerCompletedAllTokens(actorIdx) &&
                                    actor && !actor.assistUnlocked;
         const allInHomeSingleDie = isAllBeadsInsideHome(targetOwnerIdx);
+        const lastPointNeedsOneSingleDie = hasReachedLastPointNeedingOne(targetOwnerIdx);
         const lastBeadSingleDie = Boolean(rulesConfig.oneDieWhenOneBeadLeft && isOnlyOneBeadRemainingOnBoardOrYard(targetOwnerIdx));
-        return (needsAssistSixRoll || allInHomeSingleDie || lastBeadSingleDie) ? 1 : rulesConfig.diceCount;
+        return (needsAssistSixRoll || allInHomeSingleDie || lastPointNeedsOneSingleDie || lastBeadSingleDie) ? 1 : rulesConfig.diceCount;
       }
 
       function isSpawnDieValue(val) {
@@ -4757,7 +4768,7 @@
         rulesConfig.pairBlockadeRule = false;
         rulesConfig.killAllStackedEnemies = false;
         rulesConfig.twoKillsForHome = false;
-        rulesConfig.oneDieWhenOneBeadLeft = false;
+        rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         saveRulesPreferences(true);
@@ -4793,7 +4804,7 @@
         rulesConfig.pairBlockadeRule = false;
         rulesConfig.killAllStackedEnemies = false;
         rulesConfig.twoKillsForHome = false;
-        rulesConfig.oneDieWhenOneBeadLeft = false;
+        rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         saveRulesPreferences(true);
@@ -5709,6 +5720,524 @@
         }, 2400);
       }
 
+      // --- 15B. COMPREHENSIVE BILINGUAL (ENGLISH + URDU) RULEBOOK GUIDE RENDERER ---
+      const COMPREHENSIVE_GUIDE_ITEMS = [
+        {
+          id: 'dice_count',
+          cat: 'core',
+          ruleKey: 'diceCount',
+          defaultBadge: 'Default: 2 Dice (Bannu) / 1 Die (Yalla)',
+          titleEn: '1. Two-Dice Tactical Play vs 1-Die Classic',
+          titleUr: 'دو دانوں والا روایتی کھیل بمقابلہ ایک دانہ (2 ڈائس یا 1 ڈائس)',
+          enDesc: 'In Bannu Ludo, each player rolls 2 dice together. You can either split the two dice across two different beads OR combine the sum of both dice on a single bead.',
+          urDesc: 'بنوں لڈو میں باری پر ایک ساتھ 2 دانے (ڈائس) پھینکے جاتے ہیں۔ آپ دونوں نمبر دو الگ گوٹیوں پر بھی چل سکتے ہیں اور ایک ہی گوٹی پر دونوں نمبروں کو جمع کر کے اکٹھا بھی چل سکتے ہیں۔',
+          onEffectEn: '2-Dice Mode: Roll 2 dice per turn; split across 2 beads or combine on 1 bead.',
+          onEffectUr: '2 ڈائس موڈ: ہر باری پر 2 دانے آئیں گے جنہیں الگ یا جوڑ کر چلا جا سکتا ہے۔',
+          offEffectEn: '1-Die Mode: Classic single-die Ludo where only 1 die is rolled each turn.',
+          offEffectUr: '1 ڈائس موڈ: عام لڈو کی طرح صرف ایک دانہ پھینکا جائے گا۔',
+          exampleEn: 'You roll 5 + 3. You can move Bead #1 by 5 and Bead #2 by 3, OR move Bead #1 by 8 (5+3) in one hop.',
+          exampleUr: 'مثال: آپ کا نمبر 5 اور 3 آیا۔ آپ گوٹی نمبر 1 کو 5 اور گوٹی نمبر 2 کو 3 خانے چلا سکتے ہیں، یا ایک ہی گوٹی کو اکٹھا 8 (3+5) خانے چلا سکتے ہیں۔'
+        },
+        {
+          id: 'one_die_last_bead',
+          cat: 'dice',
+          ruleKey: 'oneDieWhenOneBeadLeft',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '2. Must Use 1 Die When Only 1 Bead Remains (+ Auto 1-Die at Last Point)',
+          titleUr: 'صرف آخری ایک گوٹی رہنے پر (یا آخری خانے پر) 1 ڈائس استعمال کرنا',
+          enDesc: 'As soon as 3 of your beads have reached Home and only 1 bead remains anywhere on the board (or in hand), your roll automatically switches from 2 Dice to 1 Die. Even if you turn this rule OFF, once your bead enters the Home column or reaches the last point where it needs 1 to finish, it automatically switches to 1 Die so you never get stuck!',
+          urDesc: 'جب کھلاڑی کی 3 گوٹیاں گھر (پکی) ہو جائیں اور پورے بورڈ پر صرف آخری 1 گوٹی باقی رہ جائے تو خودکار طور پر 2 کی بجائے 1 ڈائس استعمال ہوتا ہے۔ اگر آپ اس اصول کو آف (OFF) بھی کر دیں، تب بھی جب گوٹی گھر کی لائن میں داخل ہو جائے یا آخری پوائنٹ پر پہنچ جائے جہاں جیتنے کے لیے صرف 1 نمبر درکار ہو (کیونکہ 2 ڈائس میں کم از کم 2 آتا ہے)، تو گیم خودکار طور پر 1 ڈائس پر آ جاتی ہے تاکہ گوٹی کبھی پھنسے نہیں۔',
+          onEffectEn: 'ENABLED (Default ON): Switches to 1 Die immediately as soon as only 1 uncompleted bead remains anywhere on the board.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): جیسے ہی صرف آخری ایک گوٹی بورڈ پر باقی رہے گی، کھلاڑی 2 کی بجائے 1 ڈائس پھینکے گا۔',
+          offEffectEn: 'DISABLED (OFF): Keeps rolling 2 Dice while the last bead is on the outer track, but STILL automatically switches to 1 Die inside the Home column or at the last point needing 1.',
+          offEffectUr: 'آف (OFF): آخری گوٹی جب تک باہر کے راستے پر ہے 2 ڈائس چلیں گے، لیکن گھر کی لائن یا آخری پوائنٹ (جہاں 1 نمبر چاہیے) پر پہنچتے ہی خودکار طور پر 1 ڈائس ہو جائے گا۔',
+          exampleEn: 'With 4-bead match: 3 beads are Home and Bead #4 is on outer track step 20. When ON, you roll 1 Die. When OFF, you roll 2 Dice until Bead #4 enters the Home stretch (or reaches step 5 of Home where it needs 1), then it switches to 1 Die.',
+          exampleUr: 'مثال: آپ کی 3 گوٹیاں پکی ہو چکیں اور چوتھی گوٹی باہر چل رہی ہے۔ یہ رول آن ہو تو آپ فوراً 1 ڈائس پھینکیں گے۔ اگر آف ہو تو باہر 2 ڈائس چلیں گے لیکن آخری پوائنٹ جہاں صرف 1 چاہیے وہاں خودکار طور پر 1 ڈائس ہو جائے گا۔'
+        },
+        {
+          id: 'close_game_mode',
+          cat: 'core',
+          ruleKey: 'closeGameMode',
+          defaultBadge: 'Default: Close Game ON (کلوز گیم آن)',
+          titleEn: '3. Close Game vs Open Game Capture Lock',
+          titleUr: 'کلوز گیم بمقابلہ اوپن گیم (شکار کرنے والی گوٹی کا لاک ہونا)',
+          enDesc: 'Determines whether a bead that captures an opponent on the first die can keep moving with the second die during the same turn.',
+          urDesc: 'کلوز گیم میں جب آپ کی کوئی گوٹی پہلے ڈائس کے نمبر سے مخالف کی گوٹی مارتی (شکار کرتی) ہے تو وہ گوٹی اس باری کے بقیہ حصے کے لیے اسی خانے پر لاک (🔒) ہو جاتی ہے اگر دوسری کوئی گوٹی چل سکتی ہو۔',
+          onEffectEn: 'CLOSE GAME (ON): Capturing bead locks (🔒) on the kill square for the rest of that roll if you have another bead that can move or spawn.',
+          onEffectUr: 'کلوز گیم (آن): شکار کرنے والی گوٹی اسی خانے پر لاک ہو جائے گی اور دوسرا نمبر کسی دوسری گوٹی پر چلنا ہو گا (البتہ اگر پورے بورڈ پر وہی اکیلی گوٹی ہو تو لاک کھل جاتا ہے)۔',
+          offEffectEn: 'OPEN GAME (OFF): The capturing bead never locks—it can immediately use the second die to run away after killing.',
+          offEffectUr: 'اوپن گیم (آف): شکار کرنے والی گوٹی لاک نہیں ہوتی بلکہ دوسرے نمبر سے آگے بھاگ سکتی ہے۔',
+          exampleEn: 'You roll 3 + 4. Bead #1 moves +3 and kills Green. In Close Game, Bead #1 locks there and Bead #2 must play the +4. In Open Game, Bead #1 can kill with +3 and immediately move +4 further.',
+          exampleUr: 'مثال: آپ کا 3 اور 4 آیا۔ گوٹی نمبر 1 نے 3 چل کر مخالف کو مارا۔ کلوز گیم میں گوٹی نمبر 1 وہیں رک جائے گی اور 4 کا نمبر دوسری گوٹی چلے گی، جبکہ اوپن گیم میں وہی گوٹی 4 خانے مزید آگے جا سکتی ہے۔'
+        },
+        {
+          id: 'bonus_on_kill',
+          cat: 'core',
+          ruleKey: 'bonusRollOnKill',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '4. Bonus Re-Roll on Kill / Capture',
+          titleUr: 'شکار کرنے پر دوبارہ باری ملنا (کِل بونس)',
+          enDesc: 'Rewards aggressive play by granting an extra dice roll whenever you capture an opponent bead.',
+          urDesc: 'مخالف کی گوٹی مارنے (شکار کرنے) پر کھلاڑی کو انعام کے طور پر دوبارہ ڈائس پھینکنے کی اضافی باری ملتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Capturing an enemy bead awards a bonus re-roll after completing your current dice.',
+          onEffectUr: 'آن (ON): دشمن کی گوٹی کھانے پر موجودہ ڈائس چلنے کے بعد دوبارہ باری ملے گی۔',
+          offEffectEn: 'DISABLED (OFF): Capturing an enemy bead does not grant an extra roll; turn passes normally.',
+          offEffectUr: 'آف (OFF): گوٹی مارنے پر اضافی باری نہیں ملے گی۔',
+          exampleEn: 'You roll 4 + 2, use 4 to kill Blue, and move another bead by 2. Because you made a kill, you get to roll the dice again!',
+          exampleUr: 'مثال: آپ نے 4 اور 2 پھینکا، 4 سے نیلی گوٹی ماری اور 2 دوسری گوٹی پر چلا۔ شکار کرنے کی وجہ سے آپ کو دوبارہ ڈائس رول کرنے کی باری ملے گی۔'
+        },
+        {
+          id: 'mandatory_yard_spawn',
+          cat: 'core',
+          ruleKey: 'mandatoryYardSpawn',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '5. Mandatory Hand / Yard Spawn on 6',
+          titleUr: 'چھکا آنے پر پہلے ہاتھ (کھڈے) والی گوٹی نکالنا لازمی',
+          enDesc: 'In authentic Bannu rules, if you have unplaced beads in your hand/yard and roll a 6, you must bring a bead out of your hand before moving any bead already on the board.',
+          urDesc: 'بنوں کے روایتی اصول کے مطابق اگر آپ کے ہاتھ (گھر/کھڈے) میں ابھی گوٹیاں بند ہیں اور آپ کا 6 آ جائے تو پہلے ہاتھ والی گوٹی باہر نکالنا لازمی ہے، پہلے سے باہر موجود گوٹی پر وہ 6 نہیں چلا سکتے۔',
+          onEffectEn: 'ENABLED (ON): Rolling a 6 while any bead is in the yard automatically/mandatorily spawns a yard bead first.',
+          onEffectUr: 'آن (ON): جب تک ہاتھ میں گوٹی موجود ہے، 6 آنے پر پہلے نئی گوٹی باہر آئے گی۔',
+          offEffectEn: 'DISABLED (OFF): You may freely choose whether to spawn a bead from the yard OR move an existing board bead by 6.',
+          offEffectUr: 'آف (OFF): آپ کی مرضی ہو گی کہ 6 سے نئی گوٹی باہر نکالیں یا پہلے سے باہر چلتی ہوئی گوٹی کو 6 خانے آگے بڑھائیں۔',
+          exampleEn: 'You have 2 beads in hand and 2 on the board, and roll 6 + 3. When ON, the 6 must bring a 3rd bead out of hand, and the 3 moves any board bead.',
+          exampleUr: 'مثال: آپ کی 2 گوٹیاں اندر ہیں اور 2 باہر، اور آپ کا 6+3 آیا۔ آن ہونے کی صورت میں 6 سے نئی گوٹی باہر نکالنا لازمی ہو گا۔'
+        },
+        {
+          id: 'kill_for_home',
+          cat: 'core',
+          ruleKey: 'killRequiredForHome',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '6. Blood Gate: 1 Kill Required for Home + Outer Loop',
+          titleUr: 'بغیر شکار گھر جانا منع — پورا چکر دوبارہ لگانا',
+          enDesc: 'A player cannot enter their colored Home column until they have made at least 1 enemy kill (شکار). If a bead reaches the Home entry gate with 0 kills, it must pass the gate and loop around all 52 outer squares again!',
+          urDesc: 'جب تک کھلاڑی کم از کم 1 مخالف گوٹی کا شکار نہ کر لے، اس کا گھر کا دروازہ بند (🔒) رہتا ہے۔ اگر بغیر شکار کیے گوٹی اپنے گھر کے دروازے پر پہنچ جائے تو وہ اندر جانے کے بجائے باہر سے پورے بورڈ کا دوبارہ چکر لگائے گی۔',
+          onEffectEn: 'ENABLED (ON): Home gate stays locked (🔒 NEED 1 KILL) until you capture at least 1 opponent bead; beads with 0 kills loop around the outer track.',
+          onEffectUr: 'آن (ON): کم از کم ایک شکار کیے بغیر کوئی گوٹی سرخی/رنگین گھر والی لائن میں داخل نہیں ہو سکتی اور باہر چکر کاٹے گی۔',
+          offEffectEn: 'DISABLED (OFF): Home gate is open from the start of the match without needing any kills (unless 2-Kills rule is ON).',
+          offEffectUr: 'آف (OFF): شکار کی شرط ختم ہو جائے گی اور گوٹی سیدھی اپنے گھر جا سکے گی۔',
+          exampleEn: 'Red has 0 kills and is 2 steps before Red Home Gate. Red rolls 5: instead of entering Home, Red hops past the gate onto Red Start and continues another 52-square lap.',
+          exampleUr: 'مثال: لال کھلاڑی کا ابھی کوئی شکار نہیں اور گوٹی دروازے سے 2 خانے پیچھے ہے۔ 5 آنے پر گوٹی اندر جانے کے بجائے دروازہ کراس کر کے دوبارہ پورے بورڈ کے چکر پر نکل جائے گی۔'
+        },
+        {
+          id: 'two_kills_for_home',
+          cat: 'combat',
+          ruleKey: 'twoKillsForHome',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '7. Two Kills Required for Home Entry',
+          titleUr: 'گھر جانے کے لیے 2 شکار لازمی (ڈبل شکار شرط)',
+          enDesc: 'Upgrades the blood-gate requirement from 1 kill to 2 kills before a player’s Home gate opens.',
+          urDesc: 'گھر کا دروازہ کھولنے کے لیے 1 کی بجائے 2 مخالف گوٹیوں کا شکار لازمی کر دیتا ہے۔',
+          onEffectEn: 'ENABLED (ON): Yard badge shows "🔒 NEED 2 KILLS (⚔️0/2)". You must capture 2 enemy beads before any of your beads can enter the Home column.',
+          onEffectUr: 'آن (ON): جب تک کھلاڑی 2 شکار مکمل نہیں کرتا، اس کی کوئی گوٹی گھر کے اندر داخل نہیں ہو سکتی۔',
+          offEffectEn: 'DISABLED (OFF): Uses the standard 1-kill requirement (or 0 kills if Blood Gate is also OFF).',
+          offEffectUr: 'آف (OFF): صرف 1 شکار کرنے پر ہی گھر کا دروازہ کھل جائے گا۔',
+          exampleEn: 'You have 1 kill (⚔️1/2). Your bead reaches the Home gate—since 2 kills are required, the gate is still locked and your bead loops around the board until you get your 2nd kill!',
+          exampleUr: 'مثال: آپ نے 1 گوٹی ماری ہے (⚔️1/2)۔ جب یہ رول آن ہو گا تو دروازہ ابھی بند رہے گا؛ دوسری گوٹی مارنے کے بعد ہی دروازہ کھلے گا۔'
+        },
+        {
+          id: 'strict_home_remainder',
+          cat: 'core',
+          ruleKey: 'strictHomeRemainder',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '8. Strict Near-Home Remainder Rule',
+          titleUr: 'گھر کے قریب بقایا نمبر کا اصول (دونوں دانے پورے استعمال ہونا)',
+          enDesc: 'When rolling 2 dice near Home, you cannot play one die into Home if the second die (the remainder) cannot be legally used by any bead on the board.',
+          urDesc: 'اگر آپ کے پاس 2 ڈائس ہیں اور ایک نمبر چلنے سے گوٹی پکی ہوتی ہے لیکن دوسرے ڈائس کا نمبر چلنے کے لیے پورے بورڈ پر کوئی دوسری گوٹی موجود نہیں (یعنی دوسرا نمبر ضائع ہو رہا ہے)، تو ایسی ادھوری چال منع ہے اور باری ضائع ہو جائے گی۔',
+          onEffectEn: 'ENABLED (ON): Both dice must be legally playable across your beads; you cannot waste a leftover die near Home.',
+          onEffectUr: 'آن (ON): دونوں دانوں کے نمبر پورے چلنا لازمی ہیں؛ اگر ایک نمبر سے گوٹی اندر جائے اور دوسرا نمبر چلنے کے لیے کوئی گوٹی نہ ہو تو چال نہیں چلی جا سکتی۔',
+          offEffectEn: 'DISABLED (OFF): Allows using just one die to enter/finish Home and forfeiting the leftover die.',
+          offEffectUr: 'آف (OFF): ایک نمبر استعمال کر کے دوسرا فالتو نمبر چھوڑنے کی اجازت مل جاتی ہے۔',
+          exampleEn: 'You have only 1 bead on the board needing 6 steps to finish Home, and you roll 5 + 4 (total 9). With 1 bead, moving 5 leaves 4 with nowhere to go—so the move is blocked! (If you had a 2nd bead on the board, Bead #1 could move 5 and Bead #2 could move 4).',
+          exampleUr: 'مثال: آپ کی صرف ایک گوٹی ہے جسے پکا ہونے کے لیے 6 چاہیے اور آپ کا 5+4 (کل 9) آ گیا۔ چونکہ 5 چلنے کے بعد 4 چلنے کے لیے کوئی دوسری گوٹی نہیں، اس لیے یہ چال نہیں ہو سکے گی۔'
+        },
+        {
+          id: 'three_consecutive_sixes',
+          cat: 'dice',
+          ruleKey: 'threeConsecutiveSixesPenalty',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '9. Three Consecutive Sixes Penalty',
+          titleUr: 'لگاتار 3 چھکے یا 3 ڈبل سکس پر باری ضائع ہونا',
+          enDesc: 'If a player rolls 6 three times in a row (in 1-Die mode) or 6+6 three times in a row (in 2-Dice mode), their entire turn is canceled and passes to the next player.',
+          urDesc: 'اگر کوئی کھلاڑی ایک ہی باری میں لگاتار تین بار چھکا (1 ڈائس موڈ میں 6، یا 2 ڈائس موڈ میں لگاتار تین بار ڈبل سکس 6+6) پھینک دے تو اس کی پوری باری منسوخ (ضائع) ہو جاتی ہے اور باری اگلے کھلاڑی کو منتقل ہو جاتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Rolling 3 consecutive bonus-six rolls reverts/cancels the turn immediately and passes the dice.',
+          onEffectUr: 'آن (ON): تیسری بار لگاتار چھکا/ڈبل سکس آتے ہی اس باری کی تمام چالیں واپس ہو کر باری ضائع ہو جائے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): No limit on consecutive sixes! You can roll as many 6s or 6+6s in a row as luck allows.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): جتنے مرضی چھکے یا ڈبل سکس لگاتار آئیں، باری ضائع نہیں ہوتی۔',
+          exampleEn: 'In 2-Dice mode with this rule ON: you roll 6+6 (1st), then 6+6 (2nd), and then 6+6 (3rd)—your turn is busted and canceled!',
+          exampleUr: 'مثال: یہ رول آن ہو اور آپ پہلی بار 6+6، دوسری بار 6+6 اور تیسری بار بھی 6+6 پھینکیں تو باری ختم ہو کر اگلے کھلاڑی کے پاس چلی جائے گی۔'
+        },
+        {
+          id: 'single_six_bonus_two_dice',
+          cat: 'dice',
+          ruleKey: 'singleSixBonusInTwoDice',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '10. Single Six Re-Roll in 2-Dice Mode',
+          titleUr: 'دو دانوں میں ایک چھکے پر بھی دوبارہ باری ملنا',
+          enDesc: 'Normally in 2-Dice Bannu Ludo, you only earn a six-bonus roll when both dice are 6 (Double Six 6+6). Enabling this grants a bonus roll even if just one of the two dice is a 6.',
+          urDesc: 'عام طور پر 2 ڈائس بنوں لڈو میں صرف ڈبل سکس (6+6) پر دوبارہ باری ملتی ہے۔ اس آپشن کو آن کرنے سے اگر دو دانوں میں سے ایک دانہ بھی 6 آ جائے (جیسے 6+4 یا 6+2) تب بھی دوبارہ باری ملے گی۔',
+          onEffectEn: 'ENABLED (ON): Rolling 6+1, 6+2, 6+3, 6+4, 6+5, or 6+6 in 2-Dice mode all grant a bonus roll!',
+          onEffectUr: 'آن (ON): دو ڈائس میں ایک چھکا (مثلاً 6+3) آنے پر بھی دوبارہ باری ملے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): In 2-Dice mode, only Double Six (6+6) grants a six-bonus roll.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): دو ڈائس میں صرف ڈبل سکس (6+6) پر ہی چھکے کی دوبارہ باری ملے گی۔',
+          exampleEn: 'You roll 6 + 4. When OFF, you play 6 and 4 and your turn ends. When ON, after playing 6 and 4, you get a bonus roll because of the single 6!',
+          exampleUr: 'مثال: آپ کا 6 اور 4 آیا۔ اگر یہ اصول آن ہے تو 6 اور 4 چلنے کے بعد آپ کو ایک چھکے کی وجہ سے دوبارہ باری ملے گی۔'
+        },
+        {
+          id: 'stack_roll_before_moving',
+          cat: 'dice',
+          ruleKey: 'stackRollBeforeMoving',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '11. Stack Roll / Accumulate Sixes & Kill Bonus Before Moving',
+          titleUr: 'پہلے تمام باری اکٹھی رول کرنا پھر اکٹھا چلنا (اسٹیک رول)',
+          enDesc: 'Instead of moving immediately after rolling 6+6, all bonus rolls are rolled first and queued up in the Stack Bar, and then you distribute all rolled numbers across your beads. The same applies to a Kill Bonus: if you kill an enemy with your first die, your remaining die stays stacked while you immediately roll your bonus turn and use all numbers together!',
+          urDesc: 'ڈبل سکس (6+6) آنے پر فوراً گوٹی چلانے کے بجائے پہلے تمام بونس باریاں پھینک کر نمبر جمع (Stack) کر لیے جاتے ہیں، اور آخر میں تمام جمع شدہ نمبروں کو اپنی مرضی سے گوٹیوں پر تقسیم کیا جاتا ہے۔ اسی طرح اگر آپ نے ایک نمبر سے دشمن کو مارا تو بقیہ نمبر محفوظ رہے گا اور آپ فوراً شکار والی بونس باری رول کر کے سارے نمبر اکٹھے استعمال کر سکیں گے۔',
+          onEffectEn: 'ENABLED (ON): Bonus rolls on 6/6+6 and mid-turn Kill/Home bonuses are rolled immediately into a multi-dice queue bar before you finish moving.',
+          onEffectUr: 'آن (ON): چھکے اور شکار کی تمام اضافی باریاں پہلے اکٹھی رول ہوں گی اور ڈائس بار میں جمع ہو جائیں گی۔',
+          offEffectEn: 'DISABLED (Default OFF): You must finish moving your current dice first before rolling your bonus turn.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): پہلے موجودہ ڈائس کے نمبر چلیں گے، اس کے بعد اگلی بونس باری رول ہو گی۔',
+          exampleEn: '1) You roll 6+6 → it queues [6, 6] and lets you roll again right away (say 5+2) → now you have [6, 6, 5, 2] to play! 2) Or you roll 4+3, use 4 to kill an enemy → the 3 stays queued, you immediately roll your kill bonus (say 6+1), and now you have [3, 6, 1] all ready to play!',
+          exampleUr: 'مثال: آپ کا 4 اور 3 آیا۔ آپ نے 4 سے مخالف کی گوٹی ماری تو 3 وہیں اسٹیک میں محفوظ رہے گا اور آپ کو فوراً شکار کی باری رول کرنے کو ملے گی (فرض کریں 5 اور 2 آیا)؛ اب آپ کے پاس 3، 5 اور 2 تینوں نمبر اکٹھے چلنے کے لیے موجود ہوں گے!'
+        },
+        {
+          id: 'spawn_on_one_and_six',
+          cat: 'dice',
+          ruleKey: 'spawnOnOneAndSix',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '12. Spawn on 1 as well as 6',
+          titleUr: '1 یا 6 دونوں نمبروں پر ہاتھ سے گوٹی کھلنا',
+          enDesc: 'Allows bringing a bead out of the hand/yard onto the starting square on either a 1 or a 6 (great for faster-paced matches).',
+          urDesc: 'اس اصول کو آن کرنے سے ہاتھ (کھڈے) میں بند گوٹی 6 کے علاوہ 1 آنے پر بھی باہر نکل سکتی ہے، جس سے گیم تیز اور دلچسپ ہو جاتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Both 1 and 6 can spawn beads from your hand/yard.',
+          onEffectUr: 'آن (ON): ڈائس پر 1 آئے یا 6، دونوں سے بند گوٹی باہر آ سکتی ہے۔',
+          offEffectEn: 'DISABLED (Default OFF): Only a 6 can bring a bead out of the hand/yard.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): صرف 6 آنے پر ہی ہاتھ سے گوٹی باہر نکلے گی۔',
+          exampleEn: 'All your beads are in your yard and you roll 1 + 4. When ON, the 1 spawns a bead onto your start square and the 4 moves it 4 steps forward!',
+          exampleUr: 'مثال: آپ کی تمام گوٹیاں بند ہیں اور آپ کا 1+4 آ گیا۔ یہ رول آن ہو تو 1 سے گوٹی باہر آ جائے گی اور 4 سے وہی گوٹی 4 خانے آگے چل پڑے گی۔'
+        },
+        {
+          id: 'double_six_spawns_two',
+          cat: 'dice',
+          ruleKey: 'doubleSixSpawnsTwoBeads',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '13. Double-Six Spawns Two Beads Automatically',
+          titleUr: 'ڈبل سکس (6+6) پر ہاتھ سے دو الگ گوٹیاں باہر آنا',
+          enDesc: 'Controls whether rolling 6+6 with 2 or more beads in hand forces you to bring 2 separate beads out of hand, or lets you bring 1 bead out and move it by 6.',
+          urDesc: 'جب ہاتھ میں 2 یا زیادہ گوٹیاں بند ہوں اور ڈبل سکس (6+6) آ جائے تو کیا دونوں چھکوں سے 2 الگ گوٹیاں باہر نکالنا لازمی ہے یا ایک گوٹی نکال کر دوسرے 6 سے اسے چلایا جا سکتا ہے۔',
+          onEffectEn: 'ENABLED (ON): Rolling 6+6 with 2+ beads in hand forces both 6s to spawn 2 separate beads onto your starting square.',
+          onEffectUr: 'آن (ON): ڈبل سکس آنے پر ہاتھ میں موجود 2 الگ الگ گوٹیاں خودکار طور پر باہر سٹاپ پر آ جائیں گی۔',
+          offEffectEn: 'DISABLED (Default OFF): After the first 6 spawns 1 bead from hand, the second 6 can either spawn a 2nd bead OR move a board bead by 6.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): پہلے 6 سے ایک گوٹی باہر نکلے گی اور دوسرے 6 سے آپ چاہیں تو دوسری گوٹی نکالیں یا اسی گوٹی کو 6 خانے آگے چلا لیں۔',
+          exampleEn: 'You have 4 beads in hand and roll 6+6. When ON, 2 beads spawn onto your start square. When OFF, 1 bead spawns on the first 6, and you can either spawn a 2nd bead or move the 1st bead 6 steps.',
+          exampleUr: 'مثال: ہاتھ میں 4 گوٹیاں ہیں اور 6+6 آیا۔ آن ہونے پر 2 گوٹیاں باہر آئیں گی؛ آف ہونے پر آپ 1 گوٹی نکال کر دوسرے 6 سے اسے آگے بھی بڑھا سکتے ہیں۔'
+        },
+        {
+          id: 'first_bead_on_board',
+          cat: 'dice',
+          ruleKey: 'firstBeadStartsOnBoard',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '14. First Bead Starts Already on Board (1–4 Beads)',
+          titleUr: 'میچ کے آغاز سے پہلی گوٹی (یا مقررہ گوٹیاں) پہلے سے باہر ہونا',
+          enDesc: 'Every active player starts the match with 1 (or your chosen number: 1, 2, 3, or 4) bead already placed on their starting square so action begins on Turn 1 without waiting for a 6.',
+          urDesc: 'میچ شروع ہوتے ہی ہر کھلاڑی کی 1 (یا آپ کی منتخب کردہ 1 تا 4) گوٹی پہلے سے اس کے سٹارٹ والے خانے پر موجود ہوتی ہے تاکہ چھکے کا انتظار کیے بغیر پہلی باری سے ہی کھیل شروع ہو جائے۔',
+          onEffectEn: 'ENABLED (ON): Places 1–4 beads per player on their starting Stop square at the start of a new match.',
+          onEffectUr: 'آن (ON): نیا میچ شروع ہوتے ہی منتخب تعداد کے مطابق گوٹیاں پہلے سے باہر سٹاپ پر کھڑی ہوں گی۔',
+          offEffectEn: 'DISABLED (Default OFF): All beads start inside the hand/yard and require rolling a 6 (or 1) to come out.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): تمام گوٹیاں شروع میں ہاتھ/کھڈے کے اندر بند ہوں گی۔',
+          exampleEn: 'Enable this rule and pick "2 Beads Out"—when the match starts, every player already has 2 beads sitting on their starting square and 2 in hand.',
+          exampleUr: 'مثال: اگر آپ اسے آن کر کے "2 Beads Out" منتخب کریں تو میچ کے آغاز پر ہر کھلاڑی کی 2 گوٹیاں باہر اور 2 اندر ہوں گی۔'
+        },
+        {
+          id: 'pair_blockade_rule',
+          cat: 'combat',
+          ruleKey: 'pairBlockadeRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '15. Pair Blockade / Jora Wall Rule',
+          titleUr: 'جوڑا (دیوار) بننے پر مخالف کا راستہ بند ہونا',
+          enDesc: 'When 2 or more beads of the same player (or same 2v2 team) sit on the same outer-track square, they form a "Jora" (🧱 JORA wall). Opponent beads cannot jump over a Jora until it breaks!',
+          urDesc: 'جب ایک ہی کھلاڑی (یا 2v2 ٹیم میچ میں ایک ہی ٹیم) کی 2 گوٹیاں کسی ایک خانے پر اکٹھی بیٹھ جائیں تو وہ "جوڑا" (🧱 دیوار) بنا لیتی ہیں۔ جب تک وہ جوڑا ٹوٹ نہ جائے، مخالف کی کوئی گوٹی اس کے اوپر سے چھلانگ لگا کر آگے نہیں گزر سکتی۔',
+          onEffectEn: 'ENABLED (ON): Displays a "🧱 JORA" badge on stacked same-player/team pairs and blocks opponent beads from jumping past that square.',
+          onEffectUr: 'آن (ON): دو ہم رنگ یا ہم ٹیم گوٹیاں مل کر راستہ بلاک کر دیتی ہیں اور مخالف گوٹی ان کے اوپر سے نہیں گزر سکتی۔',
+          offEffectEn: 'DISABLED (Default OFF): Stacked beads do not block the path; opponents can freely jump over any square.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): دو گوٹیاں اکٹھی ہونے سے راستہ بند نہیں ہوتا، مخالف گوٹی اوپر سے گزر سکتی ہے۔',
+          exampleEn: 'Green has 2 beads on square 15 (forming a 🧱 JORA). Red is on square 13 and rolls a 5 (which would jump over square 15 to square 18)—when ON, Red cannot jump over square 15 with that bead!',
+          exampleUr: 'مثال: ہرے کھلاڑی کی 2 گوٹیاں خانہ نمبر 15 پر بیٹھی ہیں (🧱 جوڑا)۔ لال گوٹی خانہ 13 پر ہے اور 5 کا نمبر آتا ہے؛ یہ رول آن ہو تو لال گوٹی خانہ 15 کے اوپر سے چھلانگ نہیں لگا سکتی۔'
+        },
+        {
+          id: 'kill_all_stacked_enemies',
+          cat: 'combat',
+          ruleKey: 'killAllStackedEnemies',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '16. Kill All Stacked Enemies on One Square',
+          titleUr: 'ایک خانے پر موجود تمام مخالف گوٹیاں ایک ساتھ مارنا',
+          enDesc: 'Controls what happens when you land on an unprotected square where multiple enemy beads are stacked together.',
+          urDesc: 'جب کسی غیر محفوظ خانے پر مخالف کی 2 یا زیادہ گوٹیاں اکٹھی کھڑی ہوں اور آپ کی گوٹی اس خانے پر آ جائے تو کیا ایک گوٹی مرے گی یا ساری۔',
+          onEffectEn: 'ENABLED (ON): Landing on stacked enemies wipes out ALL enemy beads on that square in a single hit (counting every kill toward your stats and blood gate)!',
+          onEffectUr: 'آن (ON): ایک ہی حملے میں اس خانے پر موجود تمام مخالف گوٹیاں اکٹھی مر جائیں گی اور آپ کو ہر گوٹی کا شکار پوائنٹ ملے گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Authentic Bannu Team choice—landing on stacked enemies opens a popup letting you pick 1 enemy bead to eat while leaving the others standing.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): بنوں رولز کے مطابق آپ سے پوچھا جائے گا کہ آپ کون سی صرف 1 مخالف گوٹی مارنا چاہتے ہیں، باقی کھڑی رہیں گی۔',
+          exampleEn: 'Green Bead #1 and Blue Bead #2 are stacked on an unprotected square. Red lands there: when OFF, Red chooses whether to eat Green or Blue; when ON, Red eats BOTH Green and Blue at once (+2 kills)!',
+          exampleUr: 'مثال: ایک عام خانے پر ہری اور نیلی دو گوٹیاں کھڑی ہیں۔ لال گوٹی وہاں پہنچی: آف ہو تو صرف 1 منتخب گوٹی مرے گی، آن ہو تو دونوں گوٹیاں ایک ساتھ مر جائیں گی (2 شکار)!'
+        },
+        {
+          id: 'mandatory_capture',
+          cat: 'combat',
+          ruleKey: 'mandatoryCapture',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '17. Mandatory Capture / Must Kill if Possible (Phoonk)',
+          titleUr: 'شکار ممکن ہو تو مارنا لازمی (پھونک کا اصول)',
+          enDesc: 'If your rolled dice allow any of your beads to capture an opponent bead, you are required to make the capture move rather than playing a peaceful move.',
+          urDesc: 'اگر آپ کے ڈائس کے نمبر سے مخالف کی کوئی گوٹی مر سکتی ہو (شکار ممکن ہو)، تو شکار والی چال چلنا لازمی ہو گا؛ آپ شکار چھوڑ کر کوئی دوسری عام چال نہیں چل سکتے۔',
+          onEffectEn: 'ENABLED (ON): Referee automatically filters and highlights only capture moves whenever a legal kill is available.',
+          onEffectUr: 'آن (ON): جب بھی کسی نمبر سے مخالف گوٹی مر رہی ہو گی، ریفری صرف شکار والی چال کو ہی ہائی لائٹ کرے گا اور شکار کرنا لازمی ہو گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Capturing is optional; you can ignore an available kill and move a different bead.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): شکار کرنا آپ کی اپنی مرضی پر منحصر ہے، آپ شکار چھوڑ کر دوسری گوٹی بھی چلا سکتے ہیں۔',
+          exampleEn: 'You roll 4 + 2. Bead #1 can move +4 to kill Green, while Bead #2 can move +4 safely. When ON, you must play Bead #1 (+4) to execute the kill!',
+          exampleUr: 'مثال: آپ کا 4 اور 2 آیا۔ گوٹی نمبر 1 چار خانے چل کر مخالف کو مار سکتی ہے؛ یہ اصول آن ہو تو آپ کو لازمی گوٹی نمبر 1 سے شکار ہی کرنا پڑے گا۔'
+        },
+        {
+          id: 'optional_loop_after_kill',
+          cat: 'combat',
+          ruleKey: 'allowOptionalLoopAfterKill',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '18. Optional Outer Loop After Kill',
+          titleUr: 'شکار کرنے کے بعد گھر جانے یا باہر گھومنے کی مرضی',
+          enDesc: 'Normally, once you have at least 1 kill, a bead passing its Home gate automatically turns inside the Home column. Enabling this lets you choose whether to enter Home OR loop around the outer board again to hunt more enemies.',
+          urDesc: 'عام طور پر جب کھلاڑی کا شکار مکمل ہو جائے تو گوٹی دروازے پر پہنچ کر سیدھی گھر کے اندر جاتی ہے۔ اس آپشن کو آن کرنے سے کھلاڑی کو اختیار ملتا ہے کہ وہ چاہے تو گوٹی گھر کے اندر ڈالے یا مزید شکار کے لیے دوبارہ باہر کے چکر پر گھمائے۔',
+          onEffectEn: 'ENABLED (ON): Shows two target rings at the Home gate—one inside Home (+delta) and one continuing around the outer loop (Loop +delta).',
+          onEffectUr: 'آن (ON): دروازے کے قریب گوٹی سلیکٹ کرنے پر اندر جانے اور باہر گھومنے دونوں کے نشان نظر آئیں گے۔',
+          offEffectEn: 'DISABLED (Default OFF): Eligible beads with a kill always turn into their Home column.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): شکار ہونے کے بعد گوٹی لازمی اپنے گھر کی لائن میں ہی داخل ہو گی۔',
+          exampleEn: 'You already have 1 kill, and your partner needs help hunting an enemy ahead of your start square. With this ON, you can choose "Loop +4" to bypass your Home gate and chase the enemy!',
+          exampleUr: 'مثال: آپ کا شکار ہو چکا ہے لیکن آپ آگے کھڑی مخالف گوٹی کو مارنا چاہتے ہیں؛ آن ہونے پر آپ گھر جانے کے بجائے باہر کا چکر منتخب کر سکتے ہیں۔'
+        },
+        {
+          id: 'wait_all_ground_at_gate',
+          cat: 'combat',
+          ruleKey: 'waitAllGroundAtGateBeforeLoop',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '19. No-Kill Gate Wait Until All Ground Beads Gather',
+          titleUr: 'بغیر شکار تمام میدانی گوٹیاں دروازے پر جمع ہونے تک رکنا',
+          enDesc: 'For players with 0 kills: instead of immediately looping past the Home gate with a single bead, a bead at the gate must wait until all of your other on-ground beads also reach the gate area before looping.',
+          urDesc: 'اگر کھلاڑی کا ابھی کوئی شکار نہیں ہوا اور ایک گوٹی گھر کے دروازے پر پہنچ گئی، تو وہ اکیلی اگلا چکر شروع نہیں کرے گی بلکہ انتظار کرے گی جب تک میدان میں موجود باقی گوٹیاں بھی دروازے پر جمع نہ ہو جائیں۔',
+          onEffectEn: 'ENABLED (ON): A 0-kill bead at step 50 (Home gate) waits until all other board beads of that player gather at step 50 before looping.',
+          onEffectUr: 'آن (ON): بغیر شکار والی گوٹی دروازے پر دوسری میدانی گوٹیوں کا انتظار کرے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Any 0-kill bead reaching the gate immediately loops past the gate on its own.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): بغیر شکار والی گوٹی دروازے پر رکے بغیر فوراً اپنا اگلا چکر شروع کر لیتی ہے۔',
+          exampleEn: 'You have 0 kills, Bead #1 is at step 50 (gate), and Bead #2 is at step 12. When ON, Bead #1 waits at the gate while you advance Bead #2.',
+          exampleUr: 'مثال: آپ کا 0 شکار ہے، گوٹی نمبر 1 دروازے پر ہے اور گوٹی نمبر 2 پیچھے ہے؛ آن ہونے پر پہلے گوٹی نمبر 2 کو آگے لانا ہو گا۔'
+        },
+        {
+          id: 'team_mode',
+          cat: 'system',
+          ruleKey: 'teamMode',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '20. 2v2 Opposite-Corner Teams & Safe Partner Stacking',
+          titleUr: '2v2 آمنے سامنے کی ٹیمیں اور پارٹنر کی گوٹی کے ساتھ محفوظ بیٹھنا',
+          enDesc: 'Opposite corners form 2v2 teams: Red + Yellow (♦Team 1) vs Green + Blue (★Team 2). Teammates never kill each other and can stack together safely on any square.',
+          urDesc: 'آمنے سامنے والے کھلاڑی ایک ٹیم ہوتے ہیں: لال اور پیلا (♦ٹیم 1) بمقابلہ ہرا اور نیلا (★ٹیم 2)۔ ٹیم پارٹنر ایک دوسرے کی گوٹی نہیں مارتے بلکہ ایک ہی خانے پر اکٹھے بیٹھ سکتے ہیں۔',
+          onEffectEn: 'ENABLED (ON): 2v2 partnership active; victory is achieved when BOTH partners complete all their beads.',
+          onEffectUr: 'آن (ON): جیت تب ہو گی جب دونوں پارٹنرز کی تمام گوٹیاں گھر پہنچ کر پکی ہو جائیں۔',
+          offEffectEn: 'DISABLED (OFF): Free-For-All (FFA)—every player fights for themselves and can capture any other color.',
+          offEffectUr: 'آف (OFF): ہر کھلاڑی اکیلا کھیلے گا اور کسی بھی دوسرے رنگ کی گوٹی کو مار سکے گا۔',
+          exampleEn: 'Red and Yellow sit on the same square—they do not capture each other, and once Red finishes all 4 beads, Red helps move Yellow’s beads!',
+          exampleUr: 'مثال: لال اور پیلے کھلاڑی ایک ہی خانے پر بیٹھ کر محفوظ رہتے ہیں اور لال کی اپنی گوٹیاں مکمل ہونے کے بعد لال پیلے کی گوٹیاں چلاتا ہے۔'
+        },
+        {
+          id: 'team_assist_six',
+          cat: 'system',
+          ruleKey: 'teamAssistRequiresSix',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '21. Teammate Assist Requires Rolling a 1-Die Six First',
+          titleUr: 'پارٹنر کی مدد شروع کرنے کے لیے پہلے 1 ڈائس پر 6 لانا لازمی',
+          enDesc: 'In 2v2 Team Mode, after you complete all of your own beads, you must first roll a 6 using 1 Die on your turn to unlock 2-Dice control of your teammate’s beads.',
+          urDesc: '2v2 ٹیم میچ میں جب ایک کھلاڑی اپنی تمام گوٹیاں پکی کر لیتا ہے تو اپنے پارٹنر کی گوٹیاں چلانے سے پہلے اسے اپنی باری پر 1 ڈائس سے 6 لانا پڑتا ہے، جس کے بعد اس کی مدد (Assist) کھل جاتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Finished player rolls 1 Die until they roll a 6; rolling 6 immediately unlocks 2-Dice partner control.',
+          onEffectUr: 'آن (ON): اپنی گوٹیاں مکمل کرنے کے بعد پہلے ایک ڈائس پر 6 لانا ہو گا، 6 آتے ہی پارٹنر کی گوٹیوں پر 2 ڈائس کی باری شروع ہو جائے گی۔',
+          offEffectEn: 'DISABLED (OFF): As soon as you finish your last bead, you can control your teammate’s beads on your very next turn without needing to roll a 6 first.',
+          offEffectUr: 'آف (OFF): اپنی گوٹیاں مکمل ہوتے ہی بغیر 6 کے انتظار کے اگلی باری سے پارٹنر کی گوٹیاں چلا سکیں گے۔',
+          exampleEn: 'Red completes all 4 beads. On Red’s next turn, Red rolls 1 Die and gets a 6 → Partner Assist unlocks and Red immediately rolls 2 Dice for Yellow!',
+          exampleUr: 'مثال: لال کی چاروں گوٹیاں پکی ہو گئیں۔ اگلی باری پر لال نے 1 ڈائس پھینکا اور 6 آ گیا؛ اب لال پیلے پارٹنر کے لیے 2 ڈائس پھینکے گا۔'
+        },
+        {
+          id: 'bonus_on_home',
+          cat: 'core',
+          ruleKey: 'bonusRollOnHome',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '22. Bonus Re-Roll on Bead Home Completion',
+          titleUr: 'گوٹی گھر (پکی) پہنچنے پر دوبارہ باری ملنا',
+          enDesc: 'Grants an extra bonus roll whenever one of your beads reaches the final center Home triangle (step 6 of the Home stretch).',
+          urDesc: 'جب آپ کی کوئی بھی گوٹی اپنے گھر کے آخری تکون میں پہنچ کر پکی (مکمل) ہوتی ہے تو آپ کو انعام میں دوبارہ ڈائس پھینکنے کی باری ملتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Completing any bead into Home awards a bonus re-roll.',
+          onEffectUr: 'آن (ON): گوٹی پکی ہونے پر اضافی باری ملے گی۔',
+          offEffectEn: 'DISABLED (OFF): Completing a bead does not grant a bonus roll.',
+          offEffectUr: 'آف (OFF): گوٹی پکی ہونے پر دوبارہ باری نہیں ملے گی۔',
+          exampleEn: 'Your bead is 3 steps from Home and you roll 3 + 2. You move 3 to finish that bead into Home and 2 on another bead—then you get a bonus roll!',
+          exampleUr: 'مثال: آپ کی گوٹی کو پکا ہونے کے لیے 3 چاہیے، آپ نے 3 چلا کر گوٹی پکی کی تو آپ کو دوبارہ باری ملے گی۔'
+        },
+        {
+          id: 'double_six_bonus',
+          cat: 'core',
+          ruleKey: 'doubleSixBonusRoll',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '23. Bonus Re-Roll on 6 / Double 6',
+          titleUr: 'چھکا یا ڈبل سکس (6+6) آنے پر دوبارہ باری ملنا',
+          enDesc: 'Master toggle for whether rolling 6 (in 1-Die mode) or 6+6 (in 2-Dice mode) grants another roll.',
+          urDesc: '1 ڈائس موڈ میں چھکا (6) اور 2 ڈائس موڈ میں ڈبل سکس (6+6) آنے پر دوبارہ باری ملنے کا بنیادی اصول۔',
+          onEffectEn: 'ENABLED (ON): Rolling 6 (1-Die) or 6+6 (2-Dice) grants a bonus roll.',
+          onEffectUr: 'آن (ON): چھکے یا ڈبل سکس پر دوبارہ باری ملتی ہے۔',
+          offEffectEn: 'DISABLED (OFF): Rolling 6 or 6+6 gives no extra turn.',
+          offEffectUr: 'آف (OFF): چھکے یا ڈبل سکس پر دوبارہ باری نہیں ملے گی۔',
+          exampleEn: 'You roll 6+6 in 2-Dice mode, move your beads, and roll again!',
+          exampleUr: 'مثال: 6+6 آنے پر آپ کو دوبارہ ڈائس پھینکنے کی باری ملے گی۔'
+        },
+        {
+          id: 'safe_stop_immunity',
+          cat: 'core',
+          ruleKey: 'safeStopImmunity',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '24. Star / Stop Square Safe Immunity',
+          titleUr: 'سٹار / سٹاپ (★ STOP) خانوں پر گوٹی کا محفوظ رہنا',
+          enDesc: 'Controls whether the 4 inner Star squares (★ STOP at indices 8, 21, 34, 47) protect beads from being captured just like the 4 colored Start squares.',
+          urDesc: 'بورڈ پر موجود 4 رنگین سٹارٹ خانوں کے علاوہ جو 4 سٹار (★ STOP) خانے ہیں، ان پر بیٹھی گوٹی کو کوئی مار نہیں سکتا۔',
+          onEffectEn: 'ENABLED (ON): All 8 Stop squares (4 colored starts + 4 Star stops) are 100% immune to capture.',
+          onEffectUr: 'آن (ON): تمام 8 سٹاپ خانوں (4 سٹارٹ اور 4 سٹار خانوں) پر گوٹی مکمل محفوظ رہتی ہے۔',
+          offEffectEn: 'DISABLED (OFF): Only the 4 colored Starting squares are safe; beads sitting on the 4 yellow Star squares CAN be captured!',
+          offEffectUr: 'آف (OFF): صرف 4 رنگین سٹارٹ خانے محفوظ رہیں گے جبکہ سٹار والے خانوں پر گوٹی ماری جا سکے گی۔',
+          exampleEn: 'When ON, multiple rival beads can sit peacefully together on any ★ STOP square. When OFF, landing on a rival at a yellow ★ square captures them!',
+          exampleUr: 'مثال: آن ہونے پر سٹار خانے پر دشمن آپ کی گوٹی نہیں مار سکتا؛ آف کرنے پر سٹار خانے پر بھی شکار ہو سکتا ہے۔'
+        },
+        {
+          id: 'three_timeouts_bot',
+          cat: 'system',
+          ruleKey: 'threeTimeoutsBotTakeover',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '25. 3-Timeouts Auto-Bot Takeover & One-Tap Reclaim Seat',
+          titleUr: '3 بار وقت ختم ہونے پر خودکار بوٹ کنٹرول اور سیٹ واپس لینا',
+          enDesc: 'If a human player lets the turn countdown timer run out 3 turns in a row without touching the screen, the smart AI Bot automatically takes over their seat so the match never stalls—until the player taps "👤 Reclaim Seat".',
+          urDesc: 'اگر کوئی انسانی کھلاڑی لگاتار 3 بار اپنی باری کا ٹائمر ختم ہونے دے اور اسکرین کو نہ چھوئے، تو گیم رکنے سے بچانے کے لیے زیرک AI بوٹ خودکار طور پر اس کی سیٹ سنبھال لیتا ہے، اور کھلاڑی جب چاہے اوپر موجود "👤 Reclaim Seat" بٹن دبا کر اپنی سیٹ واپس لے سکتا ہے۔',
+          onEffectEn: 'ENABLED (Default ON): 3 consecutive turn timeouts switch the seat to AI Bot and display a pulsing "👤 Reclaim Seat" button in the top bar.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): لگاتار 3 ٹائم آؤٹ پر بوٹ باری سنبھال لے گا اور اوپر "👤 Reclaim Seat" کا بٹن آ جائے گا۔',
+          offEffectEn: 'DISABLED (OFF): Even after 3+ timeouts, the seat stays assigned to the human player (using only single-turn timeout auto-move if enabled).',
+          offEffectUr: 'آف (OFF): ٹائمر ختم ہونے پر مستقل بوٹ کنٹرول نہیں ہو گا۔',
+          exampleEn: 'You step away for a phone call; after 3 missed 30s timers, AI Bot plays for you so your friends aren’t stuck waiting. When you return, tap "👤 Reclaim Seat" to resume playing!',
+          exampleUr: 'مثال: اگر آپ کسی کام سے اٹھ گئے تو 3 ٹائم آؤٹ کے بعد بوٹ آپ کی جگہ کھیلتا رہے گا اور واپس آ کر آپ ایک کلک سے اپنی باری واپس لے سکتے ہیں۔'
+        }
+      ];
+
+      let currentGuideCategory = 'all';
+
+      function getRuleLiveStatusInfo(item) {
+        if (item.ruleKey === 'diceCount') {
+          const is2D = rulesConfig.diceCount === 2;
+          return {
+            isOn: is2D,
+            label: is2D ? 'Active: 2 Dice (دو دانے)' : 'Active: 1 Die (ایک دانہ)',
+            canToggle: true
+          };
+        }
+        const val = Boolean(rulesConfig[item.ruleKey]);
+        return {
+          isOn: val,
+          label: val ? '🟢 Currently ON (فعال)' : '⚪ Currently OFF (بند)',
+          canToggle: true
+        };
+      }
+
+      function renderComprehensiveGuide() {
+        const container = document.getElementById('comprehensiveGuideList');
+        if (!container) return;
+        const searchInput = document.getElementById('guideSearchInput');
+        const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+        const filtered = COMPREHENSIVE_GUIDE_ITEMS.filter(function (item) {
+          if (currentGuideCategory !== 'all' && item.cat !== currentGuideCategory) return false;
+          if (!query) return true;
+          const hay = (
+            item.titleEn + ' ' + item.titleUr + ' ' +
+            item.enDesc + ' ' + item.urDesc + ' ' +
+            item.exampleEn + ' ' + item.exampleUr
+          ).toLowerCase();
+          return hay.indexOf(query) !== -1;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = '<div class="p-6 rounded-2xl bg-amber-50 border border-amber-200 text-center text-xs font-bold text-slate-600">No matching rules found. Try another keyword or select "All Rules".</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+        filtered.forEach(function (item) {
+          const status = getRuleLiveStatusInfo(item);
+          const card = document.createElement('div');
+          card.className = 'p-4 rounded-2xl border-2 transition ' +
+            (status.isOn ? 'bg-amber-50/85 border-amber-400 shadow-sm' : 'bg-white border-slate-200');
+
+          card.innerHTML =
+            '<div class="flex flex-wrap items-start justify-between gap-2 pb-2.5 border-b border-amber-200/80">' +
+              '<div class="space-y-0.5">' +
+                '<div class="flex flex-wrap items-center gap-1.5">' +
+                  '<h3 class="font-black text-sm sm:text-base text-slate-900">' + item.titleEn + '</h3>' +
+                  '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300">' + item.defaultBadge + '</span>' +
+                '</div>' +
+                '<div class="font-bold text-xs sm:text-sm text-amber-900" dir="rtl">' + item.titleUr + '</div>' +
+              '</div>' +
+              '<button type="button" data-rule-key="' + item.ruleKey + '" class="guide-toggle-rule-btn px-3 py-1.5 rounded-xl text-xs font-black border transition cursor-pointer ' +
+                (status.isOn
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-700 shadow-sm'
+                  : 'bg-slate-100 hover:bg-amber-100 text-slate-700 border-slate-300') + '">' +
+                status.label + ' (Tap to Toggle)' +
+              '</button>' +
+            '</div>' +
+            '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-2.5 text-xs">' +
+              '<div class="p-2.5 rounded-xl bg-white/90 border border-amber-200/70 space-y-1">' +
+                '<div class="font-extrabold text-[10px] uppercase tracking-wider text-slate-500">🇬🇧 How It Works (English)</div>' +
+                '<p class="text-slate-800 leading-relaxed">' + item.enDesc + '</p>' +
+              '</div>' +
+              '<div class="p-2.5 rounded-xl bg-white/90 border border-amber-200/70 space-y-1 text-right" dir="rtl">' +
+                '<div class="font-extrabold text-[10px] text-amber-800">🇵🇰 اصول کی تفصیل (اردو)</div>' +
+                '<p class="text-slate-800 leading-relaxed font-semibold">' + item.urDesc + '</p>' +
+              '</div>' +
+            '</div>' +
+            '<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-2.5 text-[11px]">' +
+              '<div class="p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-200 space-y-1">' +
+                '<div class="font-black text-emerald-900">✅ Effect When ENABLED (آن کرنے کا اثر):</div>' +
+                '<div class="text-emerald-950">' + item.onEffectEn + '</div>' +
+                '<div class="text-emerald-900 font-semibold text-right" dir="rtl">' + item.onEffectUr + '</div>' +
+              '</div>' +
+              '<div class="p-2.5 rounded-xl bg-rose-50/80 border border-rose-200 space-y-1">' +
+                '<div class="font-black text-rose-900">🚫 Effect When DISABLED (آف کرنے کا اثر):</div>' +
+                '<div class="text-rose-950">' + item.offEffectEn + '</div>' +
+                '<div class="text-rose-900 font-semibold text-right" dir="rtl">' + item.offEffectUr + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-xl bg-indigo-50/90 border border-indigo-200 text-[11px] space-y-1">' +
+              '<div class="font-black text-indigo-950">💡 Practical Board Example (عملی مثال):</div>' +
+              '<div class="text-indigo-950">' + item.exampleEn + '</div>' +
+              '<div class="text-indigo-900 font-semibold text-right" dir="rtl">' + item.exampleUr + '</div>' +
+            '</div>';
+
+          const toggleBtn = card.querySelector('.guide-toggle-rule-btn');
+          if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+              const rKey = item.ruleKey;
+              if (rKey === 'diceCount') {
+                rulesConfig.diceCount = (rulesConfig.diceCount === 2 ? 1 : 2);
+              } else {
+                rulesConfig[rKey] = !rulesConfig[rKey];
+              }
+              rulesConfig.presetName = 'Custom Rules';
+              saveRulesPreferences(true);
+              syncRulesStudioControls();
+              updateAllUI();
+              renderComprehensiveGuide();
+              showToast('⚙️ Updated rule: ' + item.titleEn, true);
+            });
+          }
+
+          container.appendChild(card);
+        });
+      }
+
       // --- 16. SCREEN NAVIGATION, IMMERSIVE BOARD-ONLY MODE & EVENT LISTENERS ---
       const SCREENS = ['viewHome', 'viewPlay', 'viewRules', 'viewNetwork', 'viewStats', 'viewGuide'];
 
@@ -5737,6 +6266,7 @@
         });
         if (targetViewId === 'viewHome') checkSavedMatchBanner();
         if (targetViewId === 'viewStats') renderStatsView();
+        if (targetViewId === 'viewGuide') renderComprehensiveGuide();
         if (targetViewId === 'viewPlay') {
           requestAnimationFrame(function () { drawBoard(); });
         }
@@ -5864,6 +6394,24 @@
       });
       document.getElementById('navGuideBtn').addEventListener('click', function () {
         switchNavigationTab('viewGuide');
+      });
+      document.getElementById('guideToRulesStudioBtn').addEventListener('click', function () {
+        syncRulesStudioControls();
+        switchNavigationTab('viewRules');
+      });
+      document.querySelectorAll('.guide-cat-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          currentGuideCategory = btn.dataset.cat || 'all';
+          document.querySelectorAll('.guide-cat-btn').forEach(function (b) {
+            const active = (b.dataset.cat === currentGuideCategory);
+            b.className = 'guide-cat-btn px-3 py-1.5 rounded-xl text-xs transition ' +
+              (active ? 'font-black bg-amber-500 text-white shadow-sm' : 'font-bold bg-white text-slate-700 border border-amber-200');
+          });
+          renderComprehensiveGuide();
+        });
+      });
+      document.getElementById('guideSearchInput').addEventListener('input', function () {
+        renderComprehensiveGuide();
       });
 
       document.querySelectorAll('.back-to-home-btn').forEach(function (btn) {
@@ -6472,5 +7020,5 @@
       });
     })();
   </script>
-<script src="./pwa-register.js" type="module"></script></body>
+</body>
 </html>
