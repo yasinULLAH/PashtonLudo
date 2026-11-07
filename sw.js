@@ -57,8 +57,16 @@ if (workbox) {
         "revision": "d3ceb161cfab9e9c5f40a93e15e5be27"
     },
     {
+        "url": "client_readme.md",
+        "revision": "a948841dc24600f346df574188ab9571"
+    },
+    {
+        "url": "feature_report.md",
+        "revision": "4ff030576beb954fd5b59b26d3898424"
+    },
+    {
         "url": "index.html",
-        "revision": "e99ec41ae4a2cf3b6fc542141b6bc87f"
+        "revision": "7bd4accc89f8e20ea7a01027e43ec6cd"
     },
     {
         "url": "manifest.json",
@@ -73,12 +81,16 @@ if (workbox) {
         "revision": "3ec872e4f752840ad8f85922ff6cebe7"
     },
     {
+        "url": "readme.md",
+        "revision": "8a7dbae2a4acbeb3f7330615c6f673fa"
+    },
+    {
         "url": "snakes.html",
-        "revision": "1b8ce0bba99df08ac724eea75c842ccc"
+        "revision": "db66e837daead91de4b25d9f5ef24420"
     },
     {
         "url": "sw.js",
-        "revision": "bbb9e1a934f0d74e88f5c466eb55865e"
+        "revision": "aa6a44fb121befe4afe462637cbaa7a5"
     },
     {
         "url": "transcript of the vioces.txt",

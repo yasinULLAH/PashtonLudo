@@ -1329,11 +1329,14 @@
                   </button>
 </div>
 </div>
-<div class="flex gap-2">
-<input class="flex-1 min-w-0 bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-slate-900" id="joinPeerIdInput" placeholder="Friend's Room ID (e.g. BANNU-4821)" type="text"/>
-<button class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white" id="connectPeerIdBtn" type="button">
-                  Send Request
-                </button>
+<div class="flex flex-wrap gap-2">
+<input class="flex-1 min-w-[140px] bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-slate-900" id="joinPeerIdInput" placeholder="Friend's Room ID (e.g. BANNU-4821)" type="text"/>
+<button class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white whitespace-nowrap" id="connectPeerIdBtn" type="button">
+  🤝 Connect 2v2
+</button>
+<button class="px-2.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-xs font-bold text-white whitespace-nowrap" id="connectPeerId1v1Btn" type="button">
+  ⚔️ 1v1
+</button>
 </div>
 </div>
 </div>
@@ -1969,6 +1972,15 @@
       let crownTapTimestamps = [];
       let preDrillMatchBackup = null;
       let isMultiplayerHost = true;
+      let netMatch = {
+        isActive: false,
+        isHost: true,
+        myLocalSeat: 0,
+        remoteSeat: 2,
+        remoteName: '',
+        remoteId: '',
+        matchType: '2v2'
+      };
 
       let multiMouseState = {
         wizardStep: null,
@@ -2562,6 +2574,14 @@
           }
           if (gameState.turnCountdown === 0) {
             const curP = gameState.players[gameState.currentTurn];
+            if (netMatch.isActive) {
+              if (curP && curP.type === 'human' && gameState.currentTurn !== netMatch.myLocalSeat) {
+                return;
+              }
+              if (curP && curP.type === 'ai' && !netMatch.isHost) {
+                return;
+              }
+            }
             if (curP && curP.active && curP.type === 'human') {
               curP.consecutiveTimeouts = (curP.consecutiveTimeouts || 0) + 1;
               if (rulesConfig.threeTimeoutsBotTakeover && curP.consecutiveTimeouts >= 3) {
@@ -3549,6 +3569,11 @@
       function rollDiceForCurrentPlayer(forcedValues, isRemoteSync) {
         if (gameState.phase !== 'ROLL' || gameState.isPaused) return;
         const actor = gameState.players[gameState.currentTurn];
+        if (!actor) return;
+        if (!isRemoteSync && netMatch.isActive) {
+          if (actor.type === 'human' && gameState.currentTurn !== netMatch.myLocalSeat) return;
+          if (actor.type === 'ai' && !netMatch.isHost) return;
+        }
         const targetOwnerIdx = getControlledOwnerIndex(actor.id);
 
         if (!gameState.turnStartSnapshot) {
@@ -3760,9 +3785,13 @@
         if (!actor || !actor.active) return;
 
         if (actor.type === 'human') {
+          if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+            return;
+          }
           if (rulesConfig.autoRollOnTurn && gameState.phase === 'ROLL') {
             gameState.aiTimer = setTimeout(function () {
               if (gameState.isMatchActive && gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+                if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) return;
                 rollDiceForCurrentPlayer();
               }
             }, 350);
@@ -3770,6 +3799,7 @@
           return;
         }
         if (actor.type !== 'ai') return;
+        if (netMatch.isActive && !netMatch.isHost) return;
 
         if (gameState.phase === 'ROLL') {
           gameState.aiTimer = setTimeout(function () {
@@ -4512,6 +4542,12 @@
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
 
+        if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+          if (e.cancelable) e.preventDefault();
+          showToast('⏳ Waiting for ' + actor.name + '\'s turn (' + PLAYER_META[actor.id].colorName + ')...');
+          return;
+        }
+
         if (!verifyMultiMouseAccess(e.pointerId, 'touch the board or roll dice')) {
           if (e.cancelable) e.preventDefault();
           return;
@@ -4736,7 +4772,8 @@
             continue;
           }
           card.classList.remove('opacity-40');
-          nameEl.textContent = p.name + (p.isBotTakeover ? ' 🤖' : '');
+          const isLocalDeviceSeat = netMatch.isActive && netMatch.myLocalSeat === i;
+          nameEl.textContent = p.name + (isLocalDeviceSeat ? ' (YOU)' : '') + (p.isBotTakeover ? ' 🤖' : '');
           teamEl.textContent = rulesConfig.teamMode ? PLAYER_META[i].teamTag : 'FFA';
           const reqK = getRequiredKillsForHome();
           killsEl.textContent = '⚔️ ' + p.kills + (reqK === 2 ? '/2' : '') + (reqK > 0 && p.kills < reqK ? ' 🔒' : ' 🔓');
@@ -4766,8 +4803,18 @@
         const needsAssistSix = rulesConfig.teamMode && rulesConfig.teamAssistRequiresSix && hasPlayerCompletedAllTokens(actor.id) && !actor.assistUnlocked;
         const effectiveDiceCount = getEffectiveDiceCountForOwner(actor.id, targetIdx);
 
-        document.getElementById('turnBannerText').textContent =
-          '⚡ ' + actor.name + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
+        if (netMatch.isActive) {
+          if (gameState.currentTurn === netMatch.myLocalSeat) {
+            document.getElementById('turnBannerText').textContent =
+              '⚡ YOUR TURN (' + PLAYER_META[netMatch.myLocalSeat].colorName + ')' + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
+          } else {
+            document.getElementById('turnBannerText').textContent =
+              '⏳ Waiting for ' + actor.name + ' (' + PLAYER_META[actor.id].colorName + ')' + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
+          }
+        } else {
+          document.getElementById('turnBannerText').textContent =
+            '⚡ ' + actor.name + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
+        }
 
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
         const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : (gameState.dicePool[0] || { id: 0, value: 6, used: true });
@@ -4832,7 +4879,8 @@
         const rollBtn = document.getElementById('rollDiceBtn');
         const rollLabel = document.getElementById('rollDiceBtnLabel');
         const immRollLabel = document.getElementById('immersiveRollLabel');
-        if (gameState.phase === 'ROLL' && actor.type === 'human') {
+        const isMyTurn = netMatch.isActive ? (gameState.currentTurn === netMatch.myLocalSeat) : (actor.type === 'human');
+        if (gameState.phase === 'ROLL' && isMyTurn) {
           rollBtn.disabled = false;
           rollBtn.classList.remove('opacity-50', 'cursor-not-allowed');
           const lbl = needsAssistSix ? 'Roll 6' : (effectiveDiceCount === 2 ? 'Roll 2 Dice' : 'Roll Die');
@@ -4841,7 +4889,10 @@
         } else {
           rollBtn.disabled = true;
           rollBtn.classList.add('opacity-50', 'cursor-not-allowed');
-          const lbl = actor.type === 'ai' ? 'AI Turn...' : 'Drag/Tap Bead';
+          let lbl = actor.type === 'ai' ? 'AI Turn...' : 'Drag/Tap Bead';
+          if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+            lbl = '⏳ ' + actor.name + '...';
+          }
           rollLabel.textContent = lbl;
           if (immRollLabel) immRollLabel.textContent = lbl;
         }
@@ -5161,6 +5212,16 @@
       let cameraStream = null;
       let qrScanRaf = null;
       const RADAR_HUB_ID = 'BANNU-ROYALE-RADAR-HUB-V2';
+      const PEER_ICE_CONFIG = {
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+            { urls: 'stun:stun.cloudflare.com:3478' }
+          ]
+        }
+      };
 
       function hashPeerPosition(idStr, idx) {
         let h = 0;
@@ -5242,7 +5303,7 @@
       function connectOrHostRadarHub() {
         if (!window.Peer || !peerJsInstance) return;
         try {
-          const conn = peerJsInstance.connect(RADAR_HUB_ID);
+          const conn = peerJsInstance.connect(RADAR_HUB_ID, { reliable: true });
           radarHubConn = conn;
           conn.on('open', function () {
             conn.send({
@@ -5270,7 +5331,7 @@
       function startRadarHubServer() {
         if (!window.Peer || radarHubPeer) return;
         try {
-          const hub = new window.Peer(RADAR_HUB_ID);
+          const hub = new window.Peer(RADAR_HUB_ID, PEER_ICE_CONFIG);
           hub.on('open', function () {
             radarHubPeer = hub;
             radarHubClients.set(myRoomId, {
@@ -5324,7 +5385,7 @@
             upsertDiscoveredPeer({ id: data.senderId || conn.peer, name: data.senderName, mode: data.matchType });
             showIncomingLanInvite(data.senderName || 'Wi-Fi Player', data.matchType || '2v2 Team Match', data.senderId || conn.peer, conn);
           } else if (data.type === 'INVITE_ACCEPTED') {
-            launchVerifiedLanMatch(data.responderId || conn.peer, data.responderName || 'Wi-Fi Friend', data.matchType || '2v2 Team Match');
+            launchVerifiedLanMatch(data.responderId || conn.peer, data.responderName || 'Wi-Fi Friend', data.matchType || '2v2 Team Match', true);
           } else if (data.type === 'INVITE_DECLINED') {
             showToast((data.responderName || 'Player') + ' declined the match request.');
           } else if (data.type === 'GAME_ACTION') {
@@ -5333,29 +5394,63 @@
         });
         conn.on('close', function () {
           removeDiscoveredPeer(conn.peer);
-          if (gameState.isMatchActive) {
-            handlePlayerDisconnectOrLeave(1, 'connection lost');
+          if (gameState.isMatchActive && netMatch.isActive) {
+            handlePlayerDisconnectOrLeave(netMatch.remoteSeat, 'connection lost');
           }
         });
       }
 
-      function launchVerifiedLanMatch(remoteId, remoteName, matchType) {
-        if (matchType && matchType.includes('2v2')) {
-          rulesConfig.teamMode = true;
-          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: remoteName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
+      function launchVerifiedLanMatch(remoteId, remoteName, matchType, isHost) {
+        netMatch.isActive = true;
+        netMatch.isHost = Boolean(isHost);
+        netMatch.remoteId = remoteId;
+        netMatch.remoteName = remoteName;
+        netMatch.matchType = matchType || (rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
+
+        const is2v2 = netMatch.matchType.includes('2v2');
+        rulesConfig.teamMode = is2v2;
+
+        const hostPlayerName = isHost ? careerStats.playerName : remoteName;
+        const guestPlayerName = isHost ? remoteName : careerStats.playerName;
+
+        if (is2v2) {
+          netMatch.myLocalSeat = isHost ? 0 : 2;
+          netMatch.remoteSeat = isHost ? 2 : 0;
+          seatConfig[0] = { name: hostPlayerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: guestPlayerName, type: 'human', active: true, isBotTakeover: false };
           seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
         } else {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          netMatch.myLocalSeat = isHost ? 0 : 2;
+          netMatch.remoteSeat = isHost ? 2 : 0;
+          seatConfig[0] = { name: hostPlayerName, type: 'human', active: true, isBotTakeover: false };
           seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-          seatConfig[2] = { name: remoteName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: guestPlayerName, type: 'human', active: true, isBotTakeover: false };
           seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
         }
-        document.getElementById('connectionStatusPill').textContent = '🟢 Wi-Fi P2P (' + remoteName + ')';
+
+        const myColor = netMatch.myLocalSeat === 0 ? 'Red' : 'Yellow';
+        const roleLabel = is2v2 ? ('2v2 Partner (' + myColor + ')') : ('1v1 (' + myColor + ')');
+        const pill = document.getElementById('connectionStatusPill');
+        if (pill) pill.textContent = '🟢 P2P: ' + remoteName + ' • ' + roleLabel;
+
         switchNavigationTab('viewPlay');
-        initNewMatch('Connected with ' + remoteName + ' (' + remoteId + ') for ' + matchType + '!', false);
+        initNewMatch('Connected with ' + remoteName + ' (' + remoteId + ')! You play ' + myColor + ' beads.', false);
+
+        if (isHost) {
+          setTimeout(function () {
+            broadcastNetworkAction({
+              type: 'START_MATCH',
+              senderId: myRoomId,
+              hostName: hostPlayerName,
+              guestName: guestPlayerName,
+              matchType: netMatch.matchType,
+              seatConfig: seatConfig,
+              rulesConfig: rulesConfig,
+              snapshot: getFullNetworkSnapshot()
+            });
+          }, 250);
+        }
       }
 
       function initLanRadarAndWebRtc() {
@@ -5385,7 +5480,7 @@
               } else if (msg.type === 'INVITE' && msg.targetId === myRoomId) {
                 showIncomingLanInvite(msg.senderName, msg.matchType, msg.senderId, null);
               } else if (msg.type === 'INVITE_ACCEPTED' && msg.targetId === myRoomId) {
-                launchVerifiedLanMatch(msg.senderId, msg.responderName, msg.matchType);
+                launchVerifiedLanMatch(msg.senderId, msg.responderName, msg.matchType, true);
               } else if (msg.type === 'INVITE_DECLINED' && msg.targetId === myRoomId) {
                 showToast((msg.responderName || 'Player') + ' declined the match request.');
               } else if (msg.type === 'GAME_ACTION') {
@@ -5402,8 +5497,13 @@
 
         try {
           if (window.Peer) {
-            peerJsInstance = new window.Peer(myRoomId);
-            peerJsInstance.on('open', function () {
+            peerJsInstance = new window.Peer(myRoomId, PEER_ICE_CONFIG);
+            peerJsInstance.on('open', function (id) {
+              if (id) {
+                myRoomId = id;
+                document.getElementById('myPeerIdDisplay').textContent = myRoomId;
+                document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
+              }
               document.getElementById('wifiRadarStatusBadge').textContent = '🟢 Wi-Fi & PeerJS Live (' + myRoomId + ')';
               startRadarHubServer();
               setTimeout(connectOrHostRadarHub, 400);
@@ -5412,6 +5512,24 @@
               bindPeerConnectionEvents(conn);
             });
             peerJsInstance.on('error', function (err) {
+              if (err && err.type === 'unavailable-id') {
+                myRoomId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
+                document.getElementById('myPeerIdDisplay').textContent = myRoomId;
+                document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
+                try {
+                  peerJsInstance = new window.Peer(myRoomId, PEER_ICE_CONFIG);
+                  peerJsInstance.on('open', function (id) {
+                    if (id) myRoomId = id;
+                    document.getElementById('myPeerIdDisplay').textContent = myRoomId;
+                    document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
+                    document.getElementById('wifiRadarStatusBadge').textContent = '🟢 Wi-Fi & PeerJS Live (' + myRoomId + ')';
+                  });
+                  peerJsInstance.on('connection', function (conn) {
+                    bindPeerConnectionEvents(conn);
+                  });
+                } catch (e) {}
+                return;
+              }
               if (err && err.type === 'peer-unavailable') {
                 startRadarHubServer();
                 return;
@@ -5556,8 +5674,8 @@
           });
         }
         try {
-          if (peerJsInstance) {
-            const conn = peerJsInstance.connect(peer.id);
+          if (peerJsInstance && !peerJsInstance.destroyed) {
+            const conn = peerJsInstance.connect(peer.id, { reliable: true });
             bindPeerConnectionEvents(conn);
             conn.on('open', function () {
               conn.send({
@@ -5566,6 +5684,9 @@
                 senderName: careerStats.playerName,
                 matchType: matchType
               });
+            });
+            conn.on('error', function () {
+              showToast('⚠️ Could not connect to Room ' + peer.id + '. Please verify the ID.');
             });
           }
         } catch (e) {}
@@ -5820,6 +5941,47 @@
               snapshot: getFullNetworkSnapshot()
             });
           }
+          return;
+        }
+        if (payload.type === 'START_MATCH') {
+          netMatch.isActive = true;
+          netMatch.isHost = false;
+          netMatch.myLocalSeat = 2;
+          netMatch.remoteSeat = 0;
+          netMatch.remoteName = payload.hostName || 'Host';
+          netMatch.matchType = payload.matchType || (rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
+          if (payload.rulesConfig) {
+            const keepAuto = rulesConfig.autoRollOnTurn;
+            const keepTips = rulesConfig.showTooltips;
+            rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, payload.rulesConfig, {
+              autoRollOnTurn: keepAuto,
+              showTooltips: keepTips
+            });
+            saveRulesPreferences(false);
+          }
+          if (payload.seatConfig) {
+            seatConfig = payload.seatConfig;
+          }
+          if (payload.snapshot && payload.snapshot.players && payload.snapshot.players.length === 4) {
+            gameState.players = payload.snapshot.players;
+            gameState.currentTurn = payload.snapshot.currentTurn || 0;
+            gameState.phase = payload.snapshot.phase || 'ROLL';
+            gameState.dicePool = payload.snapshot.dicePool || gameState.dicePool;
+            gameState.earnedKillBonusThisTurn = Boolean(payload.snapshot.earnedKillBonusThisTurn);
+            gameState.earnedHomeBonusThisTurn = Boolean(payload.snapshot.earnedHomeBonusThisTurn);
+            gameState.lastMovedTrail = payload.snapshot.lastMovedTrail || null;
+            gameState.isMatchActive = true;
+          }
+          const is2v2 = netMatch.matchType.includes('2v2');
+          const myColor = 'Yellow';
+          const roleLabel = is2v2 ? ('2v2 Partner (' + myColor + ')') : ('1v1 (' + myColor + ')');
+          const pill = document.getElementById('connectionStatusPill');
+          if (pill) pill.textContent = '🟢 P2P: ' + netMatch.remoteName + ' • ' + roleLabel;
+          switchNavigationTab('viewPlay');
+          syncRulesStudioControls();
+          resetTurnCountdown();
+          updateAllUI();
+          showToast('🎮 Match started! You play ' + myColor + ' beads.', true);
           return;
         }
         if (payload.type === 'SYNC_SETTINGS') {
@@ -6647,6 +6809,11 @@
       });
       document.getElementById('immersiveRollBtn').addEventListener('pointerdown', function (e) {
         if (!verifyMultiMouseAccess(e.pointerId, 'roll the dice')) return;
+        if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+          const actor = gameState.players[gameState.currentTurn];
+          showToast('⏳ Waiting for ' + (actor ? actor.name : 'other player') + '\'s turn...');
+          return;
+        }
         if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
           rollDiceForCurrentPlayer();
         }
@@ -6673,6 +6840,7 @@
       });
 
       document.getElementById('startMatchHeroBtn').addEventListener('click', function () {
+        netMatch.isActive = false;
         const fmt = document.getElementById('homeQuickFormatSelect').value;
         rulesConfig.tokensPerPlayer = Number(document.getElementById('homeQuickTokensSelect').value);
         rulesConfig.closeGameMode = (document.getElementById('homeQuickCloseSelect').value === 'close');
@@ -6866,6 +7034,10 @@
       document.getElementById('rollDiceBtn').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (actor && actor.type === 'human') {
+          if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+            showToast('⏳ Waiting for ' + actor.name + '\'s turn (' + PLAYER_META[actor.id].colorName + ')...');
+            return;
+          }
           if (!verifyMultiMouseAccess(e.pointerId, 'roll the dice')) return;
           actor.consecutiveTimeouts = 0;
           if (gameState.phase === 'ROLL') {
@@ -6876,6 +7048,12 @@
       document.getElementById('dieSlot0').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+
+        if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+          if (e.cancelable) e.preventDefault();
+          showToast('⏳ Waiting for ' + actor.name + '\'s turn (' + PLAYER_META[actor.id].colorName + ')...');
+          return;
+        }
         if (!verifyMultiMouseAccess(e.pointerId, 'use Die 1')) return;
         actor.consecutiveTimeouts = 0;
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
@@ -6890,6 +7068,12 @@
       document.getElementById('dieSlot1').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+
+        if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+          if (e.cancelable) e.preventDefault();
+          showToast('⏳ Waiting for ' + actor.name + '\'s turn (' + PLAYER_META[actor.id].colorName + ')...');
+          return;
+        }
         if (!verifyMultiMouseAccess(e.pointerId, 'use Die 2')) return;
         actor.consecutiveTimeouts = 0;
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
@@ -6904,6 +7088,12 @@
       document.getElementById('dicePlusDivider').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+
+        if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+          if (e.cancelable) e.preventDefault();
+          showToast('⏳ Waiting for ' + actor.name + '\'s turn (' + PLAYER_META[actor.id].colorName + ')...');
+          return;
+        }
         if (!verifyMultiMouseAccess(e.pointerId, 'combine dice')) return;
         if (gameState.phase === 'MOVE') {
           gameState.preferredDieFilter = (gameState.preferredDieFilter === 'combined' ? null : 'combined');
@@ -6918,6 +7108,7 @@
       window.addEventListener('keydown', function (e) {
         if (e.code === 'Space' && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
           if (gameState.isMatchActive && gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+            if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) return;
             e.preventDefault();
             rollDiceForCurrentPlayer();
           }
@@ -6928,7 +7119,10 @@
       document.getElementById('presetYallaQuickBtn').addEventListener('click', function () { applyYallaClassicPreset(true); });
       document.getElementById('applyBannuPresetBtn').addEventListener('click', function () { applyBannuRulesPreset(false); });
       document.getElementById('applyYallaPresetBtn').addEventListener('click', function () { applyYallaClassicPreset(false); });
-      document.getElementById('newMatchQuickBtn').addEventListener('click', function () { initNewMatch(null, false); });
+      document.getElementById('newMatchQuickBtn').addEventListener('click', function () {
+        netMatch.isActive = false;
+        initNewMatch(null, false);
+      });
 
       document.getElementById('demoScenarioBtn').addEventListener('click', function () {
         document.getElementById('scenarioDrawer').classList.toggle('hidden');
@@ -7211,16 +7405,36 @@
         navigator.clipboard?.writeText(text).catch(function(){});
         showToast('📋 Copied Wi-Fi Room ID: ' + text);
       });
-      document.getElementById('connectPeerIdBtn').addEventListener('click', function () {
-        const code = document.getElementById('joinPeerIdInput').value.trim().toUpperCase();
+      function resolveTargetPeerFromInput() {
+        let code = document.getElementById('joinPeerIdInput').value.trim().toUpperCase();
+        if (/^\d{4}$/.test(code)) {
+          code = 'BANNU-' + code;
+        }
         if (!code || code === myRoomId) {
-          showToast('⚠️ Enter a valid Friend\'s Room ID (e.g. BANNU-4821).');
-          return;
+          showToast('⚠️ Enter a valid Friend\'s Room ID (e.g. BANNU-4821 or 4821).');
+          return null;
         }
         const existing = discoveredPeers.get(code) || { id: code, name: 'Player ' + code, mode: rulesConfig.presetName };
         upsertDiscoveredPeer(existing);
-        sendLanMatchInvite(existing, rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
+        return existing;
+      }
+      document.getElementById('connectPeerIdBtn').addEventListener('click', function () {
+        const target = resolveTargetPeerFromInput();
+        if (target) {
+          rulesConfig.teamMode = true;
+          sendLanMatchInvite(target, '2v2 Team Match');
+        }
       });
+      const c1v1 = document.getElementById('connectPeerId1v1Btn');
+      if (c1v1) {
+        c1v1.addEventListener('click', function () {
+          const target = resolveTargetPeerFromInput();
+          if (target) {
+            rulesConfig.teamMode = false;
+            sendLanMatchInvite(target, '1v1 Match');
+          }
+        });
+      }
       document.getElementById('simulateLanPlayerBtn').addEventListener('click', function () {
         broadcastPresencePing();
         connectOrHostRadarHub();
@@ -7329,7 +7543,7 @@
             matchType: inv.matchType
           });
         }
-        launchVerifiedLanMatch(inv.senderId, inv.senderName, inv.matchType);
+        launchVerifiedLanMatch(inv.senderId, inv.senderName, inv.matchType, false);
       });
 
       document.getElementById('saveProfileNameBtn').addEventListener('click', function () {
