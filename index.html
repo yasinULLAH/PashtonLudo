@@ -3716,13 +3716,7 @@
           gameState.spawnedBeadsThisRoll < 2 &&
           unusedDice.some(function (d) { return d.value === 6; })
         );
-        const allowSecondSixMoveWhenOptionOff = Boolean(
-          !rulesConfig.doubleSixSpawnsTwoBeads &&
-          gameState.rolledDoubleSixThisBatch &&
-          gameState.spawnedBeadsThisRoll >= 1 &&
-          groundTokens.length > 0
-        );
-        if ((forceDoubleSixTwoSpawns || (rulesConfig.mandatoryYardSpawn && !allowSecondSixMoveWhenOptionOff)) && yardTokens.length > 0 && hasUnusedSix) {
+        if ((rulesConfig.mandatoryYardSpawn || forceDoubleSixTwoSpawns) && yardTokens.length > 0 && hasUnusedSix) {
           const spawnDie = unusedDice.find(function (d) { return d.value === 6; }) || unusedDice.find(function (d) { return isSpawnDieValue(d.value); });
           return yardTokens.map(function (yt) {
             const sim = simulateTokenAdvance(yt, spawnDie.value, undefined, tokens, false);
