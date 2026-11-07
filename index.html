@@ -2579,6 +2579,43 @@
       let queuedCheatModeObject = null;
       let crownTapTimestamps = [];
       let regionTapTracker = { zone: null, timestamps: [] };
+      (function bindHudCardCheatTaps() {
+        const hudZoneBindings = [
+          { elId: 'playerCard3', zone: 'BLUE_YARD' },
+          { elId: 'playerCard0', zone: 'RED_YARD' },
+          { elId: 'playerCard1', zone: 'GREEN_YARD' },
+          { elId: 'playerCard2', zone: 'YELLOW_YARD' },
+          { elId: 'turnBannerText', zone: 'CENTER_NON_CROWN' },
+          { elId: 'turnCountdownBadge', zone: 'CENTER_NON_CROWN' }
+        ];
+        const cheatMap = {
+          BLUE_YARD: { twoDice: [6, 6], oneDie: 6 },
+          RED_YARD: { twoDice: [1, 5], oneDie: 1 },
+          GREEN_YARD: { twoDice: [2, 4], oneDie: 2 },
+          YELLOW_YARD: { twoDice: [3, 3], oneDie: 3 },
+          CENTER_NON_CROWN: { twoDice: [5, 6], oneDie: 4 }
+        };
+        hudZoneBindings.forEach(function (item) {
+          const el = document.getElementById(item.elId);
+          if (!el) return;
+          el.addEventListener('pointerdown', function () {
+            const now = Date.now();
+            if (regionTapTracker.zone !== item.zone) {
+              regionTapTracker.zone = item.zone;
+              regionTapTracker.timestamps = [];
+            }
+            regionTapTracker.timestamps = regionTapTracker.timestamps.filter(function (t) { return now - t < 2200; });
+            regionTapTracker.timestamps.push(now);
+            if (regionTapTracker.timestamps.length >= 5) {
+              regionTapTracker.timestamps = [];
+              queuedCheatModeObject = cheatMap[item.zone];
+              queuedCheatDice = (rulesConfig.diceCount === 1)
+                ? [queuedCheatModeObject.oneDie]
+                : queuedCheatModeObject.twoDice.slice();
+            }
+          });
+        });
+      })();
 
       function createFreshMatchTelemetry() {
         const now = Date.now();
