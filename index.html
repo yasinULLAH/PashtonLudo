@@ -1159,11 +1159,11 @@
 <p class="text-[11px] text-slate-600">When 2 beads of the same player (or same team) sit on the same square, they form a "Jora" (wall). Opponent beads cannot jump over a Jora until it breaks.</p>
 </div>
 </label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkKillAllStackedEnemies" type="checkbox"/>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkKillAllStackedEnemies" type="checkbox"/>
 <div>
-<div class="font-bold text-xs text-slate-900">💥 Kill All Stacked Enemies on One Square (ایک خانے پر موجود تمام مخالف گوٹیاں مارنا — Default: OFF)</div>
-<p class="text-[11px] text-slate-600">Instead of eating only 1 chosen bead when landing on stacked enemies, a single landing eats all enemy beads sitting on that unprotected square.</p>
+<div class="font-bold text-xs text-slate-900">💥 Kill All Stacked Enemy Beads of Same Player (ایک خانے پر موجود ایک ہی کھلاڑی کی تمام گوٹیاں مارنا — Default: ON)</div>
+<p class="text-[11px] text-slate-600">If two or more beads of the same player (not teammates) are on the same unprotected square outside safe zones, an opponent landing on them kills both/all of that player's beads.</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -1923,7 +1923,7 @@
         firstBeadStartsOnBoard: false,
         initialBeadsOnBoardCount: 1,
         pairBlockadeRule: false,
-        killAllStackedEnemies: false,
+        killAllStackedEnemies: true,
         twoKillsForHome: false,
         oneDieWhenOneBeadLeft: true,
         mandatoryCapture: false,
@@ -1953,6 +1953,10 @@
           if (localStorage.getItem('bannu_ludo_onedie_default_v3') !== 'migrated') {
             rulesConfig.oneDieWhenOneBeadLeft = true;
             localStorage.setItem('bannu_ludo_onedie_default_v3', 'migrated');
+          }
+          if (localStorage.getItem('bannu_ludo_kill_stacked_v1') !== 'migrated') {
+            rulesConfig.killAllStackedEnemies = true;
+            localStorage.setItem('bannu_ludo_kill_stacked_v1', 'migrated');
           }
         } catch (e) {}
       }
@@ -3435,15 +3439,37 @@
           if (enemies.length === 1) {
             performSingleCapture(move.ownerIdx, token, enemies[0]);
           } else if (enemies.length > 1) {
-            if (rulesConfig.killAllStackedEnemies) {
+            const uniqueOwners = Array.from(new Set(enemies.map(function (e) { return e.ownerIdx; })));
+            if (uniqueOwners.length === 1 && rulesConfig.killAllStackedEnemies) {
               enemies.forEach(function (enemy) {
                 performSingleCapture(move.ownerIdx, token, enemy);
               });
-              showToast('💥 Multi-Kill! Ate all ' + enemies.length + ' stacked enemy beads!');
+              showToast('💥 Pair Kill! Ate both stacked enemy beads of ' + enemies[0].playerName + '!');
+            } else if (uniqueOwners.length > 1 && rulesConfig.killAllStackedEnemies) {
+              const actorPlayer = gameState.players[actorIdx];
+              if (actorPlayer.type === 'human') {
+                promptCaptureChoiceModal(move.ownerIdx, token, enemies, true);
+                updateAllUI();
+                return;
+              } else {
+                enemies.sort(function (a, b) {
+                  const tkA = gameState.players[a.ownerIdx].tokens[a.tokenId];
+                  const tkB = gameState.players[b.ownerIdx].tokens[b.tokenId];
+                  return tkB.steps - tkA.steps;
+                });
+                const targetOwner = enemies[0].ownerIdx;
+                const victims = enemies.filter(function (e) { return e.ownerIdx === targetOwner; });
+                victims.forEach(function (enemy) {
+                  performSingleCapture(move.ownerIdx, token, enemy);
+                });
+                if (victims.length > 1) {
+                  showToast('💥 Pair Kill! Ate both stacked enemy beads of ' + victims[0].playerName + '!');
+                }
+              }
             } else {
               const actorPlayer = gameState.players[actorIdx];
               if (actorPlayer.type === 'human') {
-                promptCaptureChoiceModal(move.ownerIdx, token, enemies);
+                promptCaptureChoiceModal(move.ownerIdx, token, enemies, false);
                 updateAllUI();
                 return;
               } else {
@@ -3495,27 +3521,45 @@
         }
       }
 
-      function promptCaptureChoiceModal(capturerOwnerIdx, capturingToken, enemies) {
+      function promptCaptureChoiceModal(capturerOwnerIdx, capturingToken, enemies, killSameOwnerGroup) {
         gameState.phase = 'CAPTURE_CHOICE';
         const modal = document.getElementById('captureChoiceModal');
         const list = document.getElementById('captureChoiceButtons');
         list.innerHTML = '';
 
+        const displayedOwners = new Set();
         enemies.forEach(function (enemy) {
+          if (killSameOwnerGroup) {
+            if (displayedOwners.has(enemy.ownerIdx)) return;
+            displayedOwners.add(enemy.ownerIdx);
+          }
+          const samePlayerBeads = enemies.filter(function (e) { return e.ownerIdx === enemy.ownerIdx; });
           const vToken = gameState.players[enemy.ownerIdx].tokens[enemy.tokenId];
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'w-full p-3 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-300 flex items-center justify-between text-left transition';
+          const label = killSameOwnerGroup && samePlayerBeads.length > 1
+            ? ('Eat BOTH ' + enemy.playerName + ' (' + enemy.colorName + ') Beads')
+            : ('Eat ' + enemy.playerName + ' (' + enemy.colorName + ' Bead #' + (enemy.tokenId + 1) + ')');
           btn.innerHTML =
             '<div>' +
-              '<div class="font-bold text-sm text-slate-900">Eat ' + enemy.playerName + ' (' + enemy.colorName + ' Bead #' + (enemy.tokenId + 1) + ')</div>' +
+              '<div class="font-bold text-sm text-slate-900">' + label + '</div>' +
               '<div class="text-xs text-slate-500">Progress: ' + vToken.steps + ' steps from start</div>' +
             '</div>' +
             '<span class="px-3 py-1 rounded-xl bg-rose-600 text-white text-xs font-bold">Capture ⚔️</span>';
           btn.addEventListener('click', function () {
             modal.classList.add('hidden');
             gameState.phase = 'MOVE';
-            performSingleCapture(capturerOwnerIdx, capturingToken, enemy);
+            if (killSameOwnerGroup) {
+              samePlayerBeads.forEach(function (victim) {
+                performSingleCapture(capturerOwnerIdx, capturingToken, victim);
+              });
+              if (samePlayerBeads.length > 1) {
+                showToast('💥 Pair Kill! Ate both stacked enemy beads of ' + enemy.playerName + '!');
+              }
+            } else {
+              performSingleCapture(capturerOwnerIdx, capturingToken, enemy);
+            }
             continueTurnAfterMove();
           });
           list.appendChild(btn);
@@ -5257,7 +5301,7 @@
         rulesConfig.firstBeadStartsOnBoard = false;
         rulesConfig.initialBeadsOnBoardCount = 1;
         rulesConfig.pairBlockadeRule = false;
-        rulesConfig.killAllStackedEnemies = false;
+        rulesConfig.killAllStackedEnemies = true;
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.mandatoryCapture = false;
@@ -5293,7 +5337,7 @@
         rulesConfig.firstBeadStartsOnBoard = false;
         rulesConfig.initialBeadsOnBoardCount = 1;
         rulesConfig.pairBlockadeRule = false;
-        rulesConfig.killAllStackedEnemies = false;
+        rulesConfig.killAllStackedEnemies = true;
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.mandatoryCapture = false;
@@ -6613,17 +6657,17 @@
           id: 'kill_all_stacked_enemies',
           cat: 'combat',
           ruleKey: 'killAllStackedEnemies',
-          defaultBadge: 'Default: OFF (پہلے سے آف)',
-          titleEn: '16. Kill All Stacked Enemies on One Square',
-          titleUr: 'ایک خانے پر موجود تمام مخالف گوٹیاں ایک ساتھ مارنا',
-          enDesc: 'Controls what happens when you land on an unprotected square where multiple enemy beads are stacked together.',
-          urDesc: 'جب کسی غیر محفوظ خانے پر مخالف کی 2 یا زیادہ گوٹیاں اکٹھی کھڑی ہوں اور آپ کی گوٹی اس خانے پر آ جائے تو کیا ایک گوٹی مرے گی یا ساری۔',
-          onEffectEn: 'ENABLED (ON): Landing on stacked enemies wipes out ALL enemy beads on that square in a single hit (counting every kill toward your stats and blood gate)!',
-          onEffectUr: 'آن (ON): ایک ہی حملے میں اس خانے پر موجود تمام مخالف گوٹیاں اکٹھی مر جائیں گی اور آپ کو ہر گوٹی کا شکار پوائنٹ ملے گا۔',
-          offEffectEn: 'DISABLED (Default OFF): Authentic Bannu Team choice—landing on stacked enemies opens a popup letting you pick 1 enemy bead to eat while leaving the others standing.',
-          offEffectUr: 'آف (OFF — ڈیفالٹ): بنوں رولز کے مطابق آپ سے پوچھا جائے گا کہ آپ کون سی صرف 1 مخالف گوٹی مارنا چاہتے ہیں، باقی کھڑی رہیں گی۔',
-          exampleEn: 'Green Bead #1 and Blue Bead #2 are stacked on an unprotected square. Red lands there: when OFF, Red chooses whether to eat Green or Blue; when ON, Red eats BOTH Green and Blue at once (+2 kills)!',
-          exampleUr: 'مثال: ایک عام خانے پر ہری اور نیلی دو گوٹیاں کھڑی ہیں۔ لال گوٹی وہاں پہنچی: آف ہو تو صرف 1 منتخب گوٹی مرے گی، آن ہو تو دونوں گوٹیاں ایک ساتھ مر جائیں گی (2 شکار)!'
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '16. Kill All Stacked Enemy Beads of Same Player',
+          titleUr: 'ایک خانے پر موجود ایک ہی کھلاڑی کی تمام گوٹیاں مارنا',
+          enDesc: 'If two or more beads belonging to the same player (not teammates) are stacked together on an unprotected square outside safes, an opponent landing on them kills both/all of that player\'s beads.',
+          urDesc: 'اگر کسی عام خانے پر (سیف کے علاوہ) ایک ہی کھلاڑی کی 2 یا زیادہ گوٹیاں کھڑی ہوں (نہ کہ ٹیم ساتھی کی) اور مخالف گوٹی وہاں پہنچ جائے تو اس کھلاڑی کی دونوں گوٹیاں اکٹھی مر جائیں گی۔',
+          onEffectEn: 'ENABLED (Default ON): Landing on stacked beads of the same player kills both/all of that player\'s beads together.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): ایک ہی کھلاڑی کی اکٹھی کھڑی گوٹیاں ایک ہی حملے میں اکٹھی مر جائیں گی۔',
+          offEffectEn: 'DISABLED (OFF): Landing on stacked beads only eats 1 chosen bead.',
+          offEffectUr: 'آف (OFF): ایک وقت میں صرف ایک گوٹی مرے گی۔',
+          exampleEn: 'Green Player has 2 beads on square 25. Red lands there: both Green beads are killed and sent to yard (+2 kills)! (If Green and Blue teammates share a square, Red chooses 1 teammate to eat).',
+          exampleUr: 'مثال: ہری 2 گوٹیاں ایک خانے پر ہیں۔ لال وہاں پہنچی تو ہری کی دونوں گوٹیاں اکٹھی مر جائیں گی (2 شکار)۔ اگر ہری اور نیلی (پارٹنر) اکٹھی ہوں تو صرف ایک ماری جائے گی۔'
         },
         {
           id: 'mandatory_capture',
