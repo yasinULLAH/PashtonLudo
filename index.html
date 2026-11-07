@@ -941,6 +941,15 @@
 <div class="text-[10px] font-extrabold uppercase text-amber-900">🤖 Player Left / Disconnect Bot Takeover</div>
 <div class="grid grid-cols-2 gap-1.5" id="seatTakeoverButtons"></div>
 </div>
+<div class="p-2.5 rounded-2xl bg-indigo-50/90 border border-indigo-300 space-y-1.5">
+<label class="flex items-center justify-between text-xs font-bold text-indigo-950 cursor-pointer">
+<span>🖱️ Multi-Mouse Lock (2–4 Mice)</span>
+<input class="accent-indigo-600 rounded w-4 h-4" id="pauseMultiMouseChk" type="checkbox"/>
+</label>
+<button class="w-full py-1.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[11px] shadow-sm" id="openMultiMouseFromPauseBtn" type="button">
+        🖱️ Calibrate 2–4 Mice &amp; Setup Guide
+      </button>
+</div>
 <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-xs font-bold text-slate-900 cursor-pointer">
 <span>🎲 Auto-Roll Dice on My Turn</span>
 <input class="accent-amber-600 rounded w-4 h-4" id="autoRollTurnChk" type="checkbox"/>
@@ -1185,6 +1194,21 @@
 <p class="text-[11px] text-slate-600">If a human player lets the turn timer run out 3 turns in a row without touching the screen, the AI Bot automatically takes over their seat until they tap "Reclaim Seat".</p>
 </div>
 </label>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-indigo-50/90 border-2 border-indigo-400 whitespace-normal md:col-span-2">
+<input class="mt-1 w-4 h-4 accent-indigo-600 rounded cursor-pointer" id="chkMultiMouseLock" type="checkbox"/>
+<div class="flex-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkMultiMouseLock">🖱️ Multi-Mouse Per-Player Hardware Lock — 2, 3, or 4 Mice (ہر کھلاڑی کے لیے الگ ماؤس لاک — Default: OFF)</label>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-white text-indigo-900 border border-indigo-300" id="multiMouseStatusPill">0 Mice Linked</span>
+<button class="px-3 py-1 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[11px] shadow-sm" id="openMultiMouseModalBtn" type="button">
+                🖱️ Setup 2–4 Mice &amp; Guide
+              </button>
+</div>
+</div>
+<p class="text-[11px] text-slate-600 mt-1">Connect 2, 3, or 4 USB/wireless mice to your laptop using a Multi-Pointer driver (TeamPlayer4 / MouseMux on Windows, or native <code>xinput</code> on Linux). Assigns each physical mouse (via <code>event.pointerId</code>) to a specific player so each mouse can only roll and touch its own beads on its turn!</p>
+</div>
+</div>
 </div>
 <div class="bg-amber-50/70 rounded-2xl p-3.5 border border-amber-200 mb-4">
 <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
@@ -1617,6 +1641,74 @@
 </div>
 </div>
 </div>
+<div class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" id="multiMouseModal">
+<div class="royal-card rounded-3xl p-4 sm:p-5 max-w-2xl w-full max-h-[90dvh] overflow-y-auto border-2 border-indigo-500 shadow-2xl space-y-3.5">
+<div class="flex items-center justify-between border-b border-indigo-200 pb-2.5">
+<div>
+<h3 class="text-base sm:text-lg font-black text-slate-900">🖱️ Multi-Mouse Hardware Setup &amp; Calibration (2–4 Mice)</h3>
+<p class="text-[11px] text-slate-600">Lock each physical mouse (<code>event.pointerId</code>) to a specific player seat so nobody can roll or touch another player's beads.</p>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 flex-shrink-0" id="closeMultiMouseModalBtn" type="button">✕</button>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-indigo-50 border border-indigo-300">
+<label class="flex items-center gap-2 text-xs sm:text-sm font-black text-indigo-950 cursor-pointer">
+<input class="w-4 h-4 accent-indigo-600 rounded" id="modalMultiMouseEnableChk" type="checkbox"/>
+<span>Enable Multi-Mouse Per-Player Lock</span>
+</label>
+<div class="flex flex-wrap items-center gap-1.5">
+<button class="mm-preset-btn px-2.5 py-1 rounded-xl bg-white hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-[11px] font-extrabold" data-count="2" type="button">2 Mice (1v1)</button>
+<button class="mm-preset-btn px-2.5 py-1 rounded-xl bg-white hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-[11px] font-extrabold" data-count="3" type="button">3 Mice (3P)</button>
+<button class="mm-preset-btn px-2.5 py-1 rounded-xl bg-white hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-[11px] font-extrabold" data-count="4" type="button">4 Mice (4P)</button>
+<button class="px-2.5 py-1 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-800 border border-rose-300 text-[11px] font-bold" id="clearAllMiceBtn" type="button">🗑️ Reset IDs</button>
+</div>
+</div>
+<div class="p-3 rounded-2xl bg-slate-900 text-white border border-amber-400/60 flex flex-wrap items-center justify-between gap-2">
+<div class="text-xs font-bold text-amber-300" id="mmWizardPromptText">
+        👆 Click any player's target box below using that player's physical mouse to bind its Hardware Pointer ID!
+      </div>
+<button class="px-3 py-1.5 rounded-xl gold-gradient-btn text-xs font-black" id="startMmWizardBtn" type="button">
+        ▶️ Step-by-Step Wizard
+      </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="mmSeatCalibrationGrid"></div>
+<div class="rounded-2xl border border-amber-300 bg-amber-50/70 p-3.5 space-y-2.5 text-xs text-slate-800">
+<div class="font-black text-sm text-amber-950">📖 Complete Factual Step-by-Step Setup Guide (Windows &amp; Linux)</div>
+<p class="text-[11px] text-slate-700 leading-relaxed">
+        By default, Windows and macOS merge all plugged-in mice into a single cursor (`pointerId: 1`). To make your browser receive a separate `event.pointerId` for each physical mouse on a single laptop, follow these exact steps:
+      </p>
+<div class="space-y-1.5 bg-white p-3 rounded-xl border border-amber-200">
+<div class="font-black text-indigo-900">🪟 Method A: Windows (2, 3, or 4 Mice)</div>
+<ol class="list-decimal list-inside space-y-1 text-[11px] text-slate-700">
+<li>Plug in <b>2, 3, or 4 USB/Wireless mice</b> into your Windows laptop.</li>
+<li>Install and launch a multi-cursor driver utility such as <b>TeamPlayer4</b> (by Dicolab/IdeaCom) or <b>MouseMux</b>.</li>
+<li>Enable <b>Independent Native Pointer / Multi-Pointer Injection</b> in the driver settings so each physical mouse gets its own colored cursor and unique Windows Pointer ID.</li>
+<li>Click <b>"2 Mice"</b>, <b>"3 Mice"</b>, or <b>"4 Mice"</b> above, then have each player click their respective colored box above with their own mouse.</li>
+</ol>
+</div>
+<div class="space-y-1.5 bg-white p-3 rounded-xl border border-amber-200">
+<div class="font-black text-emerald-900">🐧 Method B: Linux (Built-in Native XInput — No Extra Software Needed!)</div>
+<ol class="list-decimal list-inside space-y-1 text-[11px] text-slate-700">
+<li>Plug in your extra mice and open a terminal. Run <code>xinput list</code> to see each mouse's device ID (e.g., <code>id=12</code>, <code>id=13</code>).</li>
+<li>Create an independent master cursor for each additional player:<br/>
+<code class="bg-slate-900 text-emerald-300 px-1.5 py-0.5 rounded font-mono text-[10px]">xinput create-master Player2</code> (and <code>Player3</code>, <code>Player4</code>)</li>
+<li>Run <code>xinput list</code> again to find the new Master Pointer ID (e.g., <code>Player2 pointer [id=18]</code>).</li>
+<li>Attach the physical mouse to its new master cursor:<br/>
+<code class="bg-slate-900 text-emerald-300 px-1.5 py-0.5 rounded font-mono text-[10px]">xinput reattach 12 18</code></li>
+<li>Now open this game in Chrome/Edge/Firefox and click each player's calibration box above!</li>
+</ol>
+</div>
+<div class="space-y-1 bg-white p-3 rounded-xl border border-amber-200 text-[11px] text-slate-700">
+<div class="font-black text-rose-900">🛡️ How Enforcement Works During Match:</div>
+<p>• When it is <b>Red's turn</b>, only Red's calibrated mouse (`pointerId`) can click <b>🎲 Roll Dice</b>, filter dice, or drag/tap Red's beads on the board.</p>
+<p>• If Green, Yellow, or Blue tries to click the dice or touch any bead during Red's turn, their hardware `pointerId` is rejected with a warning banner.</p>
+<p>• If a player's seat is left uncalibrated (`Unassigned`), any mouse is allowed for that seat as a safe fallback so you never get stuck.</p>
+</div>
+</div>
+<div class="flex justify-end gap-2 pt-1">
+<button class="px-5 py-2 rounded-xl font-black text-xs emerald-play-btn" id="doneMultiMouseModalBtn" type="button">✅ Done &amp; Save</button>
+</div>
+</div>
+</div>
 <!-- REACT NATIVE ANDROID BOTTOM TAB NAVIGATION BAR (Mobile < 820px) -->
 <nav aria-label="Mobile Navigation" id="mobileAndroidBottomNav">
 <button class="android-tab-btn active" data-target-view="viewHome" id="mobTabHomeBtn" type="button">
@@ -1833,6 +1925,7 @@
         oneDieWhenOneBeadLeft: true,
         mandatoryCapture: false,
         threeTimeoutsBotTakeover: true,
+        multiMouseLock: false,
         autoRollOnTurn: savedAutoRollPref,
         showTooltips: savedShowTooltipsPref,
         turnTimeSeconds: 30,
@@ -1876,6 +1969,230 @@
       let crownTapTimestamps = [];
       let preDrillMatchBackup = null;
       let isMultiplayerHost = true;
+
+      let multiMouseState = {
+        wizardStep: null,
+        playerPointerIds: { 0: null, 1: null, 2: null, 3: null },
+        lastDetectedPointerId: null
+      };
+
+      try {
+        const savedMmMap = localStorage.getItem('bannu_ludo_multimouse_map_v1');
+        if (savedMmMap) {
+          multiMouseState.playerPointerIds = Object.assign({ 0: null, 1: null, 2: null, 3: null }, JSON.parse(savedMmMap));
+        }
+      } catch (e) {}
+
+      function saveMultiMouseMap() {
+        try {
+          localStorage.setItem('bannu_ludo_multimouse_map_v1', JSON.stringify(multiMouseState.playerPointerIds));
+        } catch (e) {}
+        updateMultiMouseStatusUI();
+      }
+
+      function setMultiMouseLockPreference(enabled) {
+        rulesConfig.multiMouseLock = Boolean(enabled);
+        saveRulesPreferences(false);
+        updateMultiMouseStatusUI();
+      }
+
+      function getLinkedMiceCount() {
+        return [0, 1, 2, 3].filter(function (i) {
+          return multiMouseState.playerPointerIds[i] !== null && multiMouseState.playerPointerIds[i] !== undefined;
+        }).length;
+      }
+
+      function updateMultiMouseStatusUI() {
+        const count = getLinkedMiceCount();
+        const pill = document.getElementById('multiMouseStatusPill');
+        if (pill) {
+          pill.textContent = count + (count === 1 ? ' Mouse Linked' : ' Mice Linked');
+          pill.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold border ' +
+            (rulesConfig.multiMouseLock && count > 0
+              ? 'bg-emerald-100 text-emerald-900 border-emerald-400'
+              : 'bg-white text-indigo-900 border-indigo-300');
+        }
+        const chkRules = document.getElementById('chkMultiMouseLock');
+        if (chkRules) chkRules.checked = Boolean(rulesConfig.multiMouseLock);
+        const chkPause = document.getElementById('pauseMultiMouseChk');
+        if (chkPause) chkPause.checked = Boolean(rulesConfig.multiMouseLock);
+        const chkModal = document.getElementById('modalMultiMouseEnableChk');
+        if (chkModal) chkModal.checked = Boolean(rulesConfig.multiMouseLock);
+        renderMultiMouseCalibrationGrid();
+      }
+
+      function verifyMultiMouseAccess(incomingPointerId, actionContext) {
+        if (!rulesConfig.multiMouseLock) return true;
+        const actorIdx = gameState.currentTurn;
+        const actor = gameState.players[actorIdx];
+        if (!actor || actor.type !== 'human') return true;
+
+        const expectedPointerId = multiMouseState.playerPointerIds[actorIdx];
+        if (expectedPointerId === null || expectedPointerId === undefined) {
+          return true;
+        }
+        if (incomingPointerId === undefined || incomingPointerId === null) {
+          return true;
+        }
+        if (incomingPointerId !== expectedPointerId) {
+          const meta = PLAYER_META[actorIdx];
+          showToast('⛔ Mouse Locked! Only ' + actor.name + ' (' + meta.colorName + ', Mouse ID #' + expectedPointerId + ') can ' + (actionContext || 'play on this turn') + ' — Rejected Mouse ID #' + incomingPointerId + '!', true);
+          return false;
+        }
+        return true;
+      }
+
+      function renderMultiMouseCalibrationGrid() {
+        const grid = document.getElementById('mmSeatCalibrationGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        const borderColors = ['border-rose-400 bg-rose-50/70', 'border-emerald-400 bg-emerald-50/70', 'border-amber-400 bg-amber-50/70', 'border-blue-400 bg-blue-50/70'];
+        const icons = ['🔴', '🟢', '🟡', '🔵'];
+
+        [0, 1, 2, 3].forEach(function (idx) {
+          const meta = PLAYER_META[idx];
+          const seat = seatConfig[idx] || { name: meta.colorName, type: 'human', active: true };
+          const assignedId = multiMouseState.playerPointerIds[idx];
+          const isWizardActive = (multiMouseState.wizardStep === idx);
+
+          const card = document.createElement('div');
+          card.className = 'p-3 rounded-2xl border-2 transition flex flex-col justify-between gap-2 ' +
+            borderColors[idx] + (isWizardActive ? ' ring-4 ring-indigo-500 scale-[1.01]' : '');
+
+          const statusBadge = (assignedId !== null && assignedId !== undefined)
+            ? '<span class="px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-mono text-[10px] font-black">🖱️ ID #' + assignedId + '</span>'
+            : '<span class="px-2 py-0.5 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-bold">Unassigned</span>';
+
+          card.innerHTML =
+            '<div class="flex items-center justify-between gap-1">' +
+              '<div class="font-black text-xs text-slate-900 truncate">' + icons[idx] + ' Seat ' + (idx + 1) + ': ' + seat.name + '</div>' +
+              statusBadge +
+            '</div>' +
+            '<div class="text-[10px] font-semibold text-slate-600">' +
+              (seat.active ? (seat.type === 'human' ? '👤 Human Seat (Active)' : '🤖 AI Seat (Click below to switch to Human + Mouse)') : '🚫 Inactive Seat (Click below to activate)') +
+            '</div>' +
+            '<div class="flex gap-1.5">' +
+              '<button type="button" class="mm-capture-btn flex-1 py-2 px-2.5 rounded-xl font-black text-[11px] transition ' +
+                (isWizardActive ? 'bg-indigo-600 text-white animate-pulse shadow-md' : 'bg-slate-900 hover:bg-slate-800 text-amber-300') + '">' +
+                (isWizardActive ? '👉 CLICK NOW WITH ' + meta.colorName.toUpperCase() + ' MOUSE!' : '🎯 Click with ' + meta.colorName + ' Mouse') +
+              '</button>' +
+              (assignedId !== null && assignedId !== undefined
+                ? '<button type="button" class="mm-clear-one-btn px-2 py-2 rounded-xl bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 text-[10px] font-bold" title="Unlink Mouse">✕</button>'
+                : '') +
+            '</div>';
+
+          const capBtn = card.querySelector('.mm-capture-btn');
+          capBtn.addEventListener('pointerdown', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            const pid = ev.pointerId !== undefined ? ev.pointerId : 1;
+            assignMousePointerToSeat(idx, pid);
+          });
+
+          const clrBtn = card.querySelector('.mm-clear-one-btn');
+          if (clrBtn) {
+            clrBtn.addEventListener('pointerdown', function (ev) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              multiMouseState.playerPointerIds[idx] = null;
+              saveMultiMouseMap();
+              showToast('Unlinked mouse from ' + meta.colorName + '.', true);
+            });
+          }
+
+          grid.appendChild(card);
+        });
+      }
+
+      function assignMousePointerToSeat(seatIdx, pointerId) {
+        seatConfig[seatIdx].active = true;
+        seatConfig[seatIdx].type = 'human';
+        seatConfig[seatIdx].isBotTakeover = false;
+        if (gameState.players[seatIdx]) {
+          gameState.players[seatIdx].active = true;
+          gameState.players[seatIdx].type = 'human';
+          gameState.players[seatIdx].isBotTakeover = false;
+        }
+        const setupTypeEl = document.getElementById('setupType' + seatIdx);
+        if (setupTypeEl) setupTypeEl.value = 'human';
+
+        multiMouseState.playerPointerIds[seatIdx] = pointerId;
+        rulesConfig.multiMouseLock = true;
+        saveRulesPreferences(false);
+        saveMultiMouseMap();
+
+        const meta = PLAYER_META[seatIdx];
+        const promptEl = document.getElementById('mmWizardPromptText');
+
+        if (multiMouseState.wizardStep !== null) {
+          let nextSeat = null;
+          for (let s = seatIdx + 1; s < 4; s++) {
+            if (seatConfig[s] && seatConfig[s].active && seatConfig[s].type === 'human') {
+              nextSeat = s;
+              break;
+            }
+          }
+          if (nextSeat !== null) {
+            multiMouseState.wizardStep = nextSeat;
+            if (promptEl) {
+              promptEl.textContent = '✅ ' + meta.colorName + ' linked to Mouse ID #' + pointerId + '! Now click the highlighted box with ' + PLAYER_META[nextSeat].colorName + '\'s mouse!';
+            }
+          } else {
+            multiMouseState.wizardStep = null;
+            if (promptEl) {
+              promptEl.textContent = '🎉 All active player mice calibrated! Multi-Mouse Per-Player Lock is now ACTIVE.';
+            }
+          }
+          renderMultiMouseCalibrationGrid();
+        } else {
+          if (promptEl) {
+            promptEl.textContent = '✅ Linked ' + meta.colorName + ' (Seat ' + (seatIdx + 1) + ') to Hardware Mouse Pointer ID #' + pointerId + '!';
+          }
+        }
+        updateAllUI();
+        showToast('🖱️ ' + meta.colorName + ' bound to Mouse Pointer ID #' + pointerId + '!', true);
+      }
+
+      function applyMultiMousePlayerCountPreset(playerCount) {
+        if (playerCount === 2) {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 2 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          multiMouseState.playerPointerIds = { 0: null, 1: null, 2: null, 3: null };
+          multiMouseState.wizardStep = 0;
+        } else if (playerCount === 3) {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          multiMouseState.playerPointerIds = { 0: null, 1: null, 2: null, 3: null };
+          multiMouseState.wizardStep = 0;
+        } else {
+          rulesConfig.teamMode = true;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
+          multiMouseState.playerPointerIds = { 0: null, 1: null, 2: null, 3: null };
+          multiMouseState.wizardStep = 0;
+        }
+        rulesConfig.multiMouseLock = true;
+        for (let i = 0; i < 4; i++) {
+          const nEl = document.getElementById('setupName' + i);
+          const tEl = document.getElementById('setupType' + i);
+          if (nEl) nEl.value = seatConfig[i].name;
+          if (tEl) tEl.value = seatConfig[i].active ? seatConfig[i].type : 'none';
+        }
+        saveRulesPreferences(false);
+        saveMultiMouseMap();
+        const promptEl = document.getElementById('mmWizardPromptText');
+        if (promptEl) {
+          promptEl.textContent = '🔴 Step 1: Click the flashing Red Seat 1 button below using Player 1\'s Mouse!';
+        }
+      }
 
       function setAutoRollPreference(enabled) {
         rulesConfig.autoRollOnTurn = Boolean(enabled);
@@ -4194,6 +4511,12 @@
 
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+
+        if (!verifyMultiMouseAccess(e.pointerId, 'touch the board or roll dice')) {
+          if (e.cancelable) e.preventDefault();
+          return;
+        }
+
         actor.consecutiveTimeouts = 0;
 
         if (gameState.phase === 'ROLL') {
@@ -4239,6 +4562,7 @@
             if (e.cancelable) e.preventDefault();
             const wasAlreadySelected = (gameState.selectedTokenKey === (chosenHb.ownerIdx + '_' + chosenHb.tokenId));
             pointerDownInfo = {
+              pointerId: e.pointerId,
               startX: pt.x,
               startY: pt.y,
               ownerIdx: chosenHb.ownerIdx,
@@ -4268,6 +4592,7 @@
 
       function handlePointerMove(e) {
         if (!pointerDownInfo) return;
+        if (pointerDownInfo.pointerId !== undefined && e.pointerId !== undefined && e.pointerId !== pointerDownInfo.pointerId) return;
         const pt = getCanvasPoint(e);
         const dist = Math.hypot(pt.x - pointerDownInfo.startX, pt.y - pointerDownInfo.startY);
         if (dist > 10) {
@@ -4286,6 +4611,7 @@
 
       function handlePointerEnd(e) {
         if (!pointerDownInfo) return;
+        if (pointerDownInfo.pointerId !== undefined && e.pointerId !== undefined && e.pointerId !== pointerDownInfo.pointerId) return;
         const pt = getCanvasPoint(e);
         const info = pointerDownInfo;
         pointerDownInfo = null;
@@ -4339,13 +4665,19 @@
         }
       }
 
-      canvas.addEventListener('mousedown', handlePointerStart);
-      window.addEventListener('mousemove', handlePointerMove);
-      window.addEventListener('mouseup', handlePointerEnd);
-
-      canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
-      window.addEventListener('touchmove', handlePointerMove, { passive: false });
-      window.addEventListener('touchend', handlePointerEnd);
+      if (window.PointerEvent) {
+        canvas.addEventListener('pointerdown', handlePointerStart, { passive: false });
+        window.addEventListener('pointermove', handlePointerMove, { passive: false });
+        window.addEventListener('pointerup', handlePointerEnd);
+        window.addEventListener('pointercancel', handlePointerEnd);
+      } else {
+        canvas.addEventListener('mousedown', handlePointerStart);
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerEnd);
+        canvas.addEventListener('touchstart', handlePointerStart, { passive: false });
+        window.addEventListener('touchmove', handlePointerMove, { passive: false });
+        window.addEventListener('touchend', handlePointerEnd);
+      }
 
       // --- 10. UI RENDERING & DICE PIP FACES ---
       const PIP_LAYOUTS = {
@@ -4697,6 +5029,7 @@
         if (chkMandCap) chkMandCap.checked = Boolean(rulesConfig.mandatoryCapture);
         const chk3TimeoutBot = document.getElementById('chkThreeTimeoutsBotTakeover');
         if (chk3TimeoutBot) chk3TimeoutBot.checked = Boolean(rulesConfig.threeTimeoutsBotTakeover);
+        updateMultiMouseStatusUI();
         const chkAuto1 = document.getElementById('autoRollTurnChk');
         const chkAuto2 = document.getElementById('chkAutoRollTurn');
         if (chkAuto1) chkAuto1.checked = Boolean(rulesConfig.autoRollOnTurn);
@@ -6120,6 +6453,22 @@
           offEffectUr: 'آف (OFF): ٹائمر ختم ہونے پر مستقل بوٹ کنٹرول نہیں ہو گا۔',
           exampleEn: 'You step away for a phone call; after 3 missed 30s timers, AI Bot plays for you so your friends aren’t stuck waiting. When you return, tap "👤 Reclaim Seat" to resume playing!',
           exampleUr: 'مثال: اگر آپ کسی کام سے اٹھ گئے تو 3 ٹائم آؤٹ کے بعد بوٹ آپ کی جگہ کھیلتا رہے گا اور واپس آ کر آپ ایک کلک سے اپنی باری واپس لے سکتے ہیں۔'
+        },
+        {
+          id: 'multi_mouse_lock',
+          cat: 'system',
+          ruleKey: 'multiMouseLock',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '26. Multi-Mouse Per-Player Hardware Lock (2, 3, or 4 Mice)',
+          titleUr: 'ملٹی ماؤس ہارڈویئر لاک — ہر کھلاڑی کے لیے الگ ماؤس (2 تا 4 ماؤس)',
+          enDesc: 'Connect 2, 3, or 4 physical USB/Wireless mice to one laptop (using TeamPlayer4 / MouseMux on Windows, or native xinput master pointers on Linux). Each player registers their mouse hardware ID (event.pointerId) so they can only roll the dice and move their own beads during their turn.',
+          urDesc: 'ایک ہی لیپ ٹاپ کے ساتھ 2، 3 یا 4 الگ ماؤس منسلک کریں (ونڈوز پر TeamPlayer4 یا MouseMux ڈرائیور کے ذریعے، یا لینکس پر xinput کمانڈ کے ذریعے)۔ ہر کھلاڑی کا ماؤس اس کے رنگ کے ساتھ لاک ہو جاتا ہے تاکہ کوئی دوسرا کھلاڑی اس کی باری پر ڈائس یا گوٹی کو نہ چھیڑ سکے۔',
+          onEffectEn: 'ENABLED (ON): Strictly verifies event.pointerId on every dice roll and board click/drag. Rejects input from any mouse other than the active turn player’s assigned mouse.',
+          onEffectUr: 'آن (ON): جس کھلاڑی کی باری ہو گی صرف اسی کا رجسٹرڈ ماؤس ڈائس رول کر سکے گا اور اپنی گوٹی ہلا سکے گا؛ دوسرے کسی ماؤس کا کلک قبول نہیں ہو گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Standard single/shared cursor mode where any mouse or touch input can play the current human turn.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): عام موڈ جس میں کسی بھی ماؤس یا ٹچ سے موجودہ باری چلی جا سکتی ہے۔',
+          exampleEn: '4 friends plug 4 mice into 1 laptop, open "🖱️ Setup 2–4 Mice & Guide" in Rules or Pause Menu, click their colored boxes once to bind IDs #2, #3, #4, #5, and play without anyone touching another player’s turn!',
+          exampleUr: 'مثال: 4 دوست اپنے 4 ماؤس ایک لیپ ٹاپ میں لگا کر سیٹنگز میں اپنے رنگ والے خانے پر کلک کر کے ماؤس رجسٹر کر لیتے ہیں؛ اب لال کی باری پر صرف لال والا ماؤس ہی کام کرے گا!'
         }
       ];
 
@@ -6296,7 +6645,8 @@
       document.getElementById('exitImmersiveBtn').addEventListener('click', function () {
         toggleImmersiveBoardOnlyMode(false);
       });
-      document.getElementById('immersiveRollBtn').addEventListener('click', function () {
+      document.getElementById('immersiveRollBtn').addEventListener('pointerdown', function (e) {
+        if (!verifyMultiMouseAccess(e.pointerId, 'roll the dice')) return;
         if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
           rollDiceForCurrentPlayer();
         }
@@ -6513,18 +6863,20 @@
         });
       });
 
-      document.getElementById('rollDiceBtn').addEventListener('click', function () {
+      document.getElementById('rollDiceBtn').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (actor && actor.type === 'human') {
+          if (!verifyMultiMouseAccess(e.pointerId, 'roll the dice')) return;
           actor.consecutiveTimeouts = 0;
           if (gameState.phase === 'ROLL') {
             rollDiceForCurrentPlayer();
           }
         }
       });
-      document.getElementById('dieSlot0').addEventListener('click', function () {
+      document.getElementById('dieSlot0').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+        if (!verifyMultiMouseAccess(e.pointerId, 'use Die 1')) return;
         actor.consecutiveTimeouts = 0;
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
         const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : gameState.dicePool[0];
@@ -6535,9 +6887,10 @@
           updateAllUI();
         }
       });
-      document.getElementById('dieSlot1').addEventListener('click', function () {
+      document.getElementById('dieSlot1').addEventListener('pointerdown', function (e) {
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
+        if (!verifyMultiMouseAccess(e.pointerId, 'use Die 2')) return;
         actor.consecutiveTimeouts = 0;
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
         const d1 = (gameState.dicePool.length > 2 && activePool.length > 1) ? activePool[1] : gameState.dicePool[1];
@@ -6548,7 +6901,10 @@
           updateAllUI();
         }
       });
-      document.getElementById('dicePlusDivider').addEventListener('click', function () {
+      document.getElementById('dicePlusDivider').addEventListener('pointerdown', function (e) {
+        const actor = gameState.players[gameState.currentTurn];
+        if (!actor || actor.type !== 'human') return;
+        if (!verifyMultiMouseAccess(e.pointerId, 'combine dice')) return;
         if (gameState.phase === 'MOVE') {
           gameState.preferredDieFilter = (gameState.preferredDieFilter === 'combined' ? null : 'combined');
           updateAllUI();
@@ -6687,7 +7043,66 @@
           document.getElementById('applyComingDiceBtn').click();
         }
       });
+      function openMultiMouseModal() {
+        multiMouseState.wizardStep = null;
+        updateMultiMouseStatusUI();
+        document.getElementById('multiMouseModal').classList.remove('hidden');
+      }
 
+      function closeMultiMouseModal() {
+        multiMouseState.wizardStep = null;
+        document.getElementById('multiMouseModal').classList.add('hidden');
+      }
+
+      document.getElementById('openMultiMouseModalBtn').addEventListener('click', openMultiMouseModal);
+      document.getElementById('openMultiMouseFromPauseBtn').addEventListener('click', function () {
+        document.getElementById('pauseMenuModal').classList.add('hidden');
+        openMultiMouseModal();
+      });
+      document.getElementById('closeMultiMouseModalBtn').addEventListener('click', closeMultiMouseModal);
+      document.getElementById('doneMultiMouseModalBtn').addEventListener('click', closeMultiMouseModal);
+
+      document.getElementById('chkMultiMouseLock').addEventListener('change', function () {
+        setMultiMouseLockPreference(this.checked);
+        if (this.checked && getLinkedMiceCount() === 0) {
+          openMultiMouseModal();
+        }
+      });
+      document.getElementById('pauseMultiMouseChk').addEventListener('change', function () {
+        setMultiMouseLockPreference(this.checked);
+      });
+      document.getElementById('modalMultiMouseEnableChk').addEventListener('change', function () {
+        setMultiMouseLockPreference(this.checked);
+      });
+
+      document.querySelectorAll('.mm-preset-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          applyMultiMousePlayerCountPreset(Number(btn.dataset.count));
+        });
+      });
+
+      document.getElementById('startMmWizardBtn').addEventListener('click', function () {
+        let firstHuman = 0;
+        for (let i = 0; i < 4; i++) {
+          if (seatConfig[i] && seatConfig[i].active && seatConfig[i].type === 'human') {
+            firstHuman = i;
+            break;
+          }
+        }
+        multiMouseState.wizardStep = firstHuman;
+        document.getElementById('mmWizardPromptText').textContent =
+          '👉 Wizard Active: Click the flashing ' + PLAYER_META[firstHuman].colorName + ' Seat button below using ' + PLAYER_META[firstHuman].colorName + '\'s physical mouse!';
+        renderMultiMouseCalibrationGrid();
+      });
+
+      document.getElementById('clearAllMiceBtn').addEventListener('click', function () {
+        multiMouseState.wizardStep = null;
+        multiMouseState.playerPointerIds = { 0: null, 1: null, 2: null, 3: null };
+        saveMultiMouseMap();
+        document.getElementById('mmWizardPromptText').textContent =
+          '🗑️ Cleared all mouse bindings. Click any player box below with that player\'s mouse to bind.';
+        showToast('🗑️ All mouse hardware bindings cleared.', true);
+      });
       document.getElementById('autoRollTurnChk').addEventListener('change', function () {
         setAutoRollPreference(this.checked);
       });
@@ -6735,6 +7150,7 @@
         rulesConfig.oneDieWhenOneBeadLeft = document.getElementById('chkOneDieWhenOneBeadLeft').checked;
         rulesConfig.mandatoryCapture = document.getElementById('chkMandatoryCapture').checked;
         rulesConfig.threeTimeoutsBotTakeover = document.getElementById('chkThreeTimeoutsBotTakeover').checked;
+        rulesConfig.multiMouseLock = document.getElementById('chkMultiMouseLock').checked;
         setAutoRollPreference(document.getElementById('chkAutoRollTurn').checked);
         setShowTooltipsPreference(document.getElementById('chkShowTooltips').checked);
         rulesConfig.aiDifficulty = document.getElementById('aiDifficultySelect').value;
