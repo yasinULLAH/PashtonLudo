@@ -5681,50 +5681,6 @@
           return;
         }
 
-        // Silent 5-consecutive-tap detector for team yards & non-crown center area (no visual shown!)
-        (function detectSilentRegionCheatTap() {
-          const tapCol = pt.x / cellW;
-          const tapRow = pt.y / cellH;
-          let detectedZone = null;
-          if (tapRow >= 9 && tapCol < 6) {
-            detectedZone = 'BLUE_YARD'; // 6,6 in 2-dice | 6 in 1-die
-          } else if (tapRow < 6 && tapCol < 6) {
-            detectedZone = 'RED_YARD'; // 1,5 in 2-dice | 1 in 1-die
-          } else if (tapRow < 6 && tapCol >= 9) {
-            detectedZone = 'GREEN_YARD'; // 2,4 in 2-dice | 2 in 1-die
-          } else if (tapRow >= 9 && tapCol >= 9) {
-            detectedZone = 'YELLOW_YARD'; // 3,3 in 2-dice | 3 in 1-die
-          } else if (tapRow >= 6 && tapRow <= 9 && tapCol >= 6 && tapCol <= 9) {
-            detectedZone = 'CENTER_NON_CROWN'; // 5,6 in 2-dice | 4 in 1-die
-          }
-          if (!detectedZone) {
-            regionTapTracker.zone = null;
-            regionTapTracker.timestamps = [];
-            return;
-          }
-          const now = Date.now();
-          if (regionTapTracker.zone !== detectedZone) {
-            regionTapTracker.zone = detectedZone;
-            regionTapTracker.timestamps = [];
-          }
-          regionTapTracker.timestamps = regionTapTracker.timestamps.filter(function (t) { return now - t < 2200; });
-          regionTapTracker.timestamps.push(now);
-          if (regionTapTracker.timestamps.length >= 5) {
-            regionTapTracker.timestamps = [];
-            const cheatMap = {
-              BLUE_YARD: { twoDice: [6, 6], oneDie: 6 },
-              RED_YARD: { twoDice: [1, 5], oneDie: 1 },
-              GREEN_YARD: { twoDice: [2, 4], oneDie: 2 },
-              YELLOW_YARD: { twoDice: [3, 3], oneDie: 3 },
-              CENTER_NON_CROWN: { twoDice: [5, 6], oneDie: 4 }
-            };
-            queuedCheatModeObject = cheatMap[detectedZone];
-            queuedCheatDice = (rulesConfig.diceCount === 1)
-              ? [queuedCheatModeObject.oneDie]
-              : queuedCheatModeObject.twoDice.slice();
-          }
-        })();
-
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return;
 
