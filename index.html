@@ -2298,9 +2298,25 @@
             dicePool: gameState.dicePool,
             earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
             earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
-            lastMovedTrail: gameState.lastMovedTrail
+            lastMovedTrail: gameState.lastMovedTrail,
+            netMatch: netMatch.isActive ? {
+              isActive: true,
+              isHost: netMatch.isHost,
+              myLocalSeat: netMatch.myLocalSeat,
+              remoteSeat: netMatch.remoteSeat,
+              remoteName: netMatch.remoteName,
+              remoteId: netMatch.remoteId,
+              matchType: netMatch.matchType,
+              hostRoomId: netMatch.isHost ? myRoomId : netMatch.remoteId
+            } : { isActive: false },
+            myRoomId: myRoomId
           };
-          localStorage.setItem('bannu_ludo_saved_match_v1', JSON.stringify(payload));
+          const jsonStr = JSON.stringify(payload);
+          try { sessionStorage.setItem('bannu_ludo_saved_match_v1', jsonStr); } catch (e) {}
+          if (netMatch.isActive) {
+            try { localStorage.setItem('bannu_ludo_saved_match_' + myRoomId, jsonStr); } catch (e) {}
+          }
+          localStorage.setItem('bannu_ludo_saved_match_v1', jsonStr);
           checkSavedMatchBanner();
         } catch (e) {}
       }
@@ -2308,9 +2324,36 @@
       function clearSavedMatchSnapshot() {
         if (gameState.isScenarioDrill) return;
         try {
+          sessionStorage.removeItem('bannu_ludo_saved_match_v1');
+          localStorage.removeItem('bannu_ludo_saved_match_' + myRoomId);
           localStorage.removeItem('bannu_ludo_saved_match_v1');
           checkSavedMatchBanner();
         } catch (e) {}
+      }
+
+      function getSavedMatchSnapshotData() {
+        try {
+          const sess = sessionStorage.getItem('bannu_ludo_saved_match_v1');
+          if (sess) {
+            const data = JSON.parse(sess);
+            if (data && data.players && data.players.length === 4) return data;
+          }
+        } catch (e) {}
+        try {
+          const byRoom = localStorage.getItem('bannu_ludo_saved_match_' + myRoomId);
+          if (byRoom) {
+            const data = JSON.parse(byRoom);
+            if (data && data.players && data.players.length === 4) return data;
+          }
+        } catch (e) {}
+        try {
+          const raw = localStorage.getItem('bannu_ludo_saved_match_v1');
+          if (raw) {
+            const data = JSON.parse(raw);
+            if (data && data.players && data.players.length === 4) return data;
+          }
+        } catch (e) {}
+        return null;
       }
 
       function checkSavedMatchBanner() {
@@ -2318,15 +2361,11 @@
         const info = document.getElementById('resumeSavedMatchInfo');
         if (!banner) return;
         try {
-          const raw = localStorage.getItem('bannu_ludo_saved_match_v1');
-          if (!raw) {
-            banner.classList.add('hidden');
-            return;
-          }
-          const data = JSON.parse(raw);
+          const data = getSavedMatchSnapshotData();
           if (data && data.players && data.players.length === 4) {
             const curName = data.players[data.currentTurn] ? data.players[data.currentTurn].name : 'Player';
-            info.textContent = data.rulesConfig.presetName + ' • Turn: ' + curName + ' (' + data.phase + ')';
+            const netLabel = (data.netMatch && data.netMatch.isActive) ? (' • 🌐 Online (' + (data.netMatch.myLocalSeat === 0 ? 'Red' : 'Yellow') + ')') : '';
+            info.textContent = data.rulesConfig.presetName + ' • Turn: ' + curName + ' (' + data.phase + ')' + netLabel;
             banner.classList.remove('hidden');
           } else {
             banner.classList.add('hidden');
@@ -2336,11 +2375,40 @@
         }
       }
 
+      function attemptNetMatchReconnect() {
+        if (!netMatch.isActive || !netMatch.remoteId) return;
+        const syncMsg = {
+          type: 'REQUEST_RESYNC',
+          senderId: myRoomId,
+          remoteId: netMatch.remoteId,
+          playerName: careerStats.playerName,
+          seatIdx: netMatch.myLocalSeat,
+          isHost: netMatch.isHost
+        };
+        broadcastNetworkAction(syncMsg);
+        if (localBroadcastChannel) {
+          try {
+            localBroadcastChannel.postMessage({ type: 'GAME_ACTION', senderId: myRoomId, payload: syncMsg });
+          } catch (e) {}
+        }
+        try {
+          if (peerJsInstance && !peerJsInstance.destroyed && netMatch.remoteId) {
+            const existing = peerJsConnections.find(function (c) { return c && c.peer === netMatch.remoteId && c.open; });
+            if (!existing) {
+              const conn = peerJsInstance.connect(netMatch.remoteId, { reliable: true });
+              bindPeerConnectionEvents(conn);
+              conn.on('open', function () {
+                conn.send({ type: 'GAME_ACTION', payload: syncMsg });
+              });
+            }
+          }
+        } catch (e) {}
+      }
+
       function resumeSavedMatch() {
         try {
-          const raw = localStorage.getItem('bannu_ludo_saved_match_v1');
-          if (!raw) return;
-          const data = JSON.parse(raw);
+          const data = getSavedMatchSnapshotData();
+          if (!data) return;
           rulesConfig = Object.assign({}, rulesConfig, data.rulesConfig || {});
           seatConfig = data.seatConfig || seatConfig;
           gameState.players = data.players;
@@ -2352,12 +2420,42 @@
           gameState.lastMovedTrail = data.lastMovedTrail || null;
           gameState.isPaused = false;
           gameState.isMatchActive = true;
+
+          if (data.netMatch && data.netMatch.isActive) {
+            netMatch.isActive = true;
+            netMatch.isHost = Boolean(data.netMatch.isHost);
+            netMatch.myLocalSeat = Number(data.netMatch.myLocalSeat);
+            netMatch.remoteSeat = Number(data.netMatch.remoteSeat);
+            netMatch.remoteName = data.netMatch.remoteName || '';
+            netMatch.remoteId = data.netMatch.remoteId || '';
+            netMatch.matchType = data.netMatch.matchType || (rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
+            isMultiplayerHost = netMatch.isHost;
+
+            if (gameState.players[netMatch.myLocalSeat]) {
+              gameState.players[netMatch.myLocalSeat].type = 'human';
+              gameState.players[netMatch.myLocalSeat].isBotTakeover = false;
+            }
+            if (seatConfig[netMatch.myLocalSeat]) {
+              seatConfig[netMatch.myLocalSeat].type = 'human';
+              seatConfig[netMatch.myLocalSeat].isBotTakeover = false;
+            }
+
+            const myColor = netMatch.myLocalSeat === 0 ? 'Red' : 'Yellow';
+            const roleLabel = (netMatch.matchType && netMatch.matchType.includes('2v2')) ? ('2v2 Partner (' + myColor + ')') : ('1v1 (' + myColor + ')');
+            const pill = document.getElementById('connectionStatusPill');
+            if (pill) pill.textContent = '🟢 P2P: ' + (netMatch.remoteName || 'Friend') + ' • ' + roleLabel;
+
+            attemptNetMatchReconnect();
+          } else {
+            netMatch.isActive = false;
+          }
+
           syncRulesStudioControls();
           switchNavigationTab('viewPlay');
           resetTurnCountdown();
           updateAllUI();
           scheduleAiIfNeeded();
-          showToast('🔄 Resumed unfinished match from exact saved state!');
+          showToast('🔄 Resumed match: ' + (netMatch.isActive ? ('Reconnecting to ' + (netMatch.remoteName || 'peer') + '...') : 'Local exact saved state!'));
         } catch (e) {
           showToast('Could not restore saved match.');
         }
@@ -2623,8 +2721,9 @@
       function isAllBeadsInsideHome(ownerIdx) {
         const p = gameState.players[ownerIdx];
         if (!p || !p.active) return false;
-        return p.tokens.some(function (tk) { return tk.state === 'home_stretch'; }) &&
-               p.tokens.every(function (tk) { return tk.state === 'home_stretch' || tk.state === 'completed'; });
+        const remaining = p.tokens.filter(function (tk) { return tk.state !== 'completed'; });
+        if (remaining.length === 0) return false;
+        return remaining.every(function (tk) { return tk.state === 'home_stretch'; });
       }
 
       function isOnlyOneBeadRemainingOnBoardOrYard(ownerIdx) {
@@ -2639,8 +2738,6 @@
         if (!p || !p.active) return false;
         const remaining = p.tokens.filter(function (tk) { return tk.state !== 'completed'; });
         if (remaining.length === 0) return false;
-        // If only 1 bead remains and it is at the final square before Home (homeStep === 5, needing 1) or inside Home stretch,
-        // OR if any bead is at the last point needing 1 (homeStep === 5) and no other bead can use a second die:
         const anyAtLastPoint = remaining.some(function (tk) {
           return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1;
         });
@@ -2652,15 +2749,17 @@
       }
 
       function getEffectiveDiceCountForOwner(actorIdx, targetOwnerIdx) {
+        if (rulesConfig.diceCount === 1) return 1;
         const actor = gameState.players[actorIdx];
-        const needsAssistSixRoll = rulesConfig.teamMode &&
-                                   rulesConfig.teamAssistRequiresSix &&
-                                   hasPlayerCompletedAllTokens(actorIdx) &&
-                                   actor && !actor.assistUnlocked;
-        const allInHomeSingleDie = isAllBeadsInsideHome(targetOwnerIdx);
-        const lastPointNeedsOneSingleDie = hasReachedLastPointNeedingOne(targetOwnerIdx);
-        const lastBeadSingleDie = Boolean(rulesConfig.oneDieWhenOneBeadLeft && isOnlyOneBeadRemainingOnBoardOrYard(targetOwnerIdx));
-        return (needsAssistSixRoll || allInHomeSingleDie || lastPointNeedsOneSingleDie || lastBeadSingleDie) ? 1 : rulesConfig.diceCount;
+        const needsAssistSixRoll = Boolean(
+          rulesConfig.teamMode &&
+          rulesConfig.teamAssistRequiresSix &&
+          hasPlayerCompletedAllTokens(actorIdx) &&
+          actor && !actor.assistUnlocked
+        );
+        if (needsAssistSixRoll) return 1;
+        if (isAllBeadsInsideHome(targetOwnerIdx)) return 1;
+        return 2;
       }
 
       function isSpawnDieValue(val) {
@@ -2861,17 +2960,14 @@
       function canPlaySecondDieOnSimulatedState(simTokens, secondDieValue, eligibleHome) {
         const locked = simTokens.filter(function (t) { return t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); });
         if (locked.length > 0 && rulesConfig.closeGameMode) {
+          const simGround = simTokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
           const unlockedPlayable = simTokens.some(function (t) {
-            if (t.lockedThisTurn) return false;
+            if (t.lockedThisTurn || t.state === 'completed') return false;
             return simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, false).valid ||
                    (eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
           });
-          if (!unlockedPlayable) {
-            const otherGroundCount = simTokens.filter(function (t) { return !t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); }).length;
-            const canSpawn = isSpawnDieValue(secondDieValue) && simTokens.some(function (t) { return t.state === 'yard'; });
-            if (otherGroundCount === 0 && !canSpawn) {
-              locked.forEach(function (t) { t.lockedThisTurn = false; });
-            }
+          if (simGround.length <= 1 || !unlockedPlayable) {
+            locked.forEach(function (t) { t.lockedThisTurn = false; });
           }
         }
 
@@ -2905,9 +3001,17 @@
 
         const lockedTokens = groundTokens.filter(function (t) { return t.lockedThisTurn; });
         if (lockedTokens.length > 0 && rulesConfig.closeGameMode) {
-          const otherGround = groundTokens.filter(function (t) { return !t.lockedThisTurn; });
-          const canSpawnYard = yardTokens.length > 0 && unusedDice.some(function (d) { return isSpawnDieValue(d.value); });
-          if (otherGround.length === 0 && !canSpawnYard) {
+          const otherPlayable = tokens.some(function (t) {
+            if (t.lockedThisTurn || t.state === 'completed') return false;
+            return unusedDice.some(function (d) {
+              if (simulateTokenAdvance(t, d.value, undefined, tokens, false).valid) return true;
+              if (t.state === 'board' && rulesConfig.allowOptionalLoopAfterKill && canOwnerEnterHomeStretch(targetOwnerIdx)) {
+                if (simulateTokenAdvance(t, d.value, true, tokens, true).valid) return true;
+              }
+              return false;
+            });
+          });
+          if (groundTokens.length <= 1 || !otherPlayable) {
             lockedTokens.forEach(function (t) { t.lockedThisTurn = false; });
           }
         }
@@ -3383,8 +3487,11 @@
         addGameLog('⚔️ ' + capturerPlayer.name + ' captured ' + victimPlayer.name + '\'s Bead #' + (victimToken.id + 1) + '!' + (rulesConfig.bonusRollOnKill ? ' (+Bonus Re-Roll Earned!)' : ''), 'kill');
 
         if (rulesConfig.closeGameMode) {
-          capturingToken.lockedThisTurn = true;
-          addGameLog('🔒 Close Game Rule: Capturing Bead #' + (capturingToken.id + 1) + ' locked on this square for the rest of the turn.', 'warn');
+          const ground = capturerPlayer.tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
+          if (ground.length > 1) {
+            capturingToken.lockedThisTurn = true;
+            addGameLog('🔒 Close Game Rule: Capturing Bead #' + (capturingToken.id + 1) + ' locked on this square for the rest of the turn.', 'warn');
+          }
         }
       }
 
@@ -3511,6 +3618,7 @@
         const rolledDiceBonus = Boolean(gameState.earnedSixBonusThisRoll);
 
         if (rolledDiceBonus || earnedKillBonus || earnedHomeBonus) {
+          resetTokenLocksForPlayer(getControlledOwnerIndex(gameState.currentTurn));
           const curP = gameState.players[gameState.currentTurn];
           const reason = earnedHomeBonus
             ? 'for completing a bead into Home (گھر پہنچنے پر دوبارہ باری)!'
@@ -5208,7 +5316,15 @@
       let radarHubClients = new Map();
       let pendingIncomingInvite = null;
       let activeRtcConnections = {};
-      let myRoomId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
+      let myRoomId = (function () {
+        try {
+          const s = sessionStorage.getItem('bannu_ludo_my_room_id');
+          if (s && /^BANNU-\d{4}$/.test(s)) return s;
+        } catch (e) {}
+        const id = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
+        try { sessionStorage.setItem('bannu_ludo_my_room_id', id); } catch (e) {}
+        return id;
+      })();
       let cameraStream = null;
       let qrScanRaf = null;
       const RADAR_HUB_ID = 'BANNU-ROYALE-RADAR-HUB-V2';
@@ -5406,6 +5522,7 @@
         netMatch.remoteId = remoteId;
         netMatch.remoteName = remoteName;
         netMatch.matchType = matchType || (rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
+        isMultiplayerHost = Boolean(isHost);
 
         const is2v2 = netMatch.matchType.includes('2v2');
         rulesConfig.teamMode = is2v2;
@@ -5487,8 +5604,9 @@
                 handleRemoteNetworkAction(msg.payload);
               } else if (msg.type === 'PEER_LEFT') {
                 removeDiscoveredPeer(msg.senderId);
-                if (gameState.isMatchActive) {
-                  handlePlayerDisconnectOrLeave(msg.slot || 1, 'closed tab / left game');
+                if (gameState.isMatchActive && netMatch.isActive) {
+                  const targetSlot = (msg.slot !== undefined && msg.slot !== null) ? msg.slot : netMatch.remoteSeat;
+                  handlePlayerDisconnectOrLeave(targetSlot, 'closed tab / left game');
                 }
               }
             };
@@ -5514,12 +5632,16 @@
             peerJsInstance.on('error', function (err) {
               if (err && err.type === 'unavailable-id') {
                 myRoomId = 'BANNU-' + Math.floor(1000 + Math.random() * 9000);
+                try { sessionStorage.setItem('bannu_ludo_my_room_id', myRoomId); } catch (e) {}
                 document.getElementById('myPeerIdDisplay').textContent = myRoomId;
                 document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
                 try {
                   peerJsInstance = new window.Peer(myRoomId, PEER_ICE_CONFIG);
                   peerJsInstance.on('open', function (id) {
-                    if (id) myRoomId = id;
+                    if (id) {
+                      myRoomId = id;
+                      try { sessionStorage.setItem('bannu_ludo_my_room_id', myRoomId); } catch (e) {}
+                    }
                     document.getElementById('myPeerIdDisplay').textContent = myRoomId;
                     document.getElementById('radarSelfLabel').textContent = careerStats.playerName + ' (' + myRoomId + ')';
                     document.getElementById('wifiRadarStatusBadge').textContent = '🟢 Wi-Fi & PeerJS Live (' + myRoomId + ')';
@@ -5588,9 +5710,18 @@
         window.addEventListener('beforeunload', function () {
           handlePageLifecycleSave();
           try {
-            broadcastNetworkAction({ type: 'PEER_DISCONNECTING', senderId: myRoomId, playerName: careerStats.playerName });
+            broadcastNetworkAction({
+              type: 'PEER_DISCONNECTING',
+              senderId: myRoomId,
+              playerName: careerStats.playerName,
+              seatIdx: netMatch.isActive ? netMatch.myLocalSeat : null
+            });
             if (localBroadcastChannel) {
-              localBroadcastChannel.postMessage({ type: 'PEER_LEFT', senderId: myRoomId, slot: 1 });
+              localBroadcastChannel.postMessage({
+                type: 'PEER_LEFT',
+                senderId: myRoomId,
+                slot: netMatch.isActive ? netMatch.myLocalSeat : null
+              });
             }
             if (radarHubConn && radarHubConn.open) {
               radarHubConn.send({ type: 'LEAVE', senderId: myRoomId });
@@ -5917,27 +6048,29 @@
           return;
         }
         if (payload.type === 'PEER_DISCONNECTING') {
-          if (gameState.isMatchActive && payload.playerName) {
-            gameState.players.forEach(function (pl, idx) {
-              if (pl && pl.active && pl.type === 'human' && pl.name === payload.playerName) {
-                handlePlayerDisconnectOrLeave(idx, 'left or device shut down');
-              }
-            });
+          if (gameState.isMatchActive && netMatch.isActive) {
+            const discSeat = (payload.seatIdx !== undefined && payload.seatIdx !== null) ? payload.seatIdx : netMatch.remoteSeat;
+            handlePlayerDisconnectOrLeave(discSeat, 'left or device shut down');
           }
           return;
         }
         if (payload.type === 'REQUEST_RESYNC') {
-          if (isMultiplayerHost && gameState.isMatchActive) {
+          if (gameState.isMatchActive && netMatch.isActive) {
+            const rejoinSeat = (payload.seatIdx !== undefined && payload.seatIdx !== null) ? payload.seatIdx : netMatch.remoteSeat;
+            const pl = gameState.players[rejoinSeat];
+            if (pl && pl.isBotTakeover) {
+              handlePlayerDisconnectOrLeave(rejoinSeat, 'rejoined match');
+            }
+            if (payload.senderId) {
+              netMatch.remoteId = payload.senderId;
+            }
             if (payload.playerName) {
-              gameState.players.forEach(function (pl, idx) {
-                if (pl && pl.isBotTakeover && pl.name === payload.playerName) {
-                  handlePlayerDisconnectOrLeave(idx, 'rejoined match');
-                }
-              });
+              netMatch.remoteName = payload.playerName;
             }
             broadcastNetworkAction({
               type: 'SYNC_SNAPSHOT',
               senderId: myRoomId,
+              hostName: careerStats.playerName,
               snapshot: getFullNetworkSnapshot()
             });
           }
@@ -5949,7 +6082,9 @@
           netMatch.myLocalSeat = 2;
           netMatch.remoteSeat = 0;
           netMatch.remoteName = payload.hostName || 'Host';
+          netMatch.remoteId = payload.senderId || '';
           netMatch.matchType = payload.matchType || (rulesConfig.teamMode ? '2v2 Team Match' : '1v1 Match');
+          isMultiplayerHost = false;
           if (payload.rulesConfig) {
             const keepAuto = rulesConfig.autoRollOnTurn;
             const keepTips = rulesConfig.showTooltips;
@@ -6027,6 +6162,24 @@
             gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
             gameState.lastMovedTrail = snap.lastMovedTrail || null;
             gameState.isMatchActive = Boolean(snap.isMatchActive);
+
+            if (netMatch.isActive) {
+              if (gameState.players[netMatch.myLocalSeat]) {
+                gameState.players[netMatch.myLocalSeat].type = 'human';
+                gameState.players[netMatch.myLocalSeat].isBotTakeover = false;
+              }
+              if (seatConfig[netMatch.myLocalSeat]) {
+                seatConfig[netMatch.myLocalSeat].type = 'human';
+                seatConfig[netMatch.myLocalSeat].isBotTakeover = false;
+              }
+              if (payload.senderId) {
+                netMatch.remoteId = payload.senderId;
+              }
+              if (payload.hostName && !netMatch.isHost) {
+                netMatch.remoteName = payload.hostName;
+              }
+            }
+
             saveActiveMatchSnapshot();
             syncRulesStudioControls();
             resetTurnCountdown();
