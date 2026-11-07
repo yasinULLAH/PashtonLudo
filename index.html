@@ -2676,15 +2676,106 @@
       let multiMouseState = {
         wizardStep: null,
         playerPointerIds: { 0: null, 1: null, 2: null, 3: null },
-        lastDetectedPointerId: null
+        lastDetectedPointerId: null,
+        lastWsHwid: null,
+        wsConnected: false
       };
 
       try {
         const savedMmMap = localStorage.getItem('bannu_ludo_multimouse_map_v1');
         if (savedMmMap) {
-          multiMouseState.playerPointerIds = Object.assign({ 0: null, 1: null, 2: null, 3: null }, JSON.parse(savedMmMap));
+          const parsedMap = JSON.parse(savedMmMap);
+          const vals = Object.values(parsedMap).filter(function (v) { return v !== null && v !== undefined; });
+          const hasDuplicates = new Set(vals).size !== vals.length;
+          if (!hasDuplicates) {
+            multiMouseState.playerPointerIds = Object.assign({ 0: null, 1: null, 2: null, 3: null }, parsedMap);
+          }
         }
       } catch (e) {}
+
+      function formatMouseSignatureLabel(sig) {
+        if (sig === null || sig === undefined) return 'Unassigned';
+        const s = String(sig);
+        if (s === 'BTN:0') return 'Left-Click';
+        if (s === 'BTN:2') return 'Right-Click';
+        if (s === 'BTN:1') return 'Middle-Click';
+        if (s === 'BTN:3') return 'Side-Btn 1';
+        if (s === 'BTN:4') return 'Side-Btn 2';
+        if (s.indexOf('HWID:') === 0) return 'MouseMux #' + s.slice(5);
+        if (s.indexOf('PID:') === 0) return 'Pointer #' + s.slice(4);
+        return 'ID #' + s;
+      }
+
+      function getEventMouseSignature(ev) {
+        if (multiMouseState.wsConnected && multiMouseState.lastWsHwid !== null) {
+          return 'HWID:' + multiMouseState.lastWsHwid;
+        }
+        if (ev && ev.pointerId !== undefined && ev.pointerId > 1 && ev.pointerType === 'mouse') {
+          return 'PID:' + ev.pointerId;
+        }
+        const btn = (ev && typeof ev.button === 'number' && ev.button >= 0) ? ev.button : 0;
+        return 'BTN:' + btn;
+      }
+
+      (function initMouseMuxWebSdkBridge() {
+        function connectWs() {
+          try {
+            const ws = new WebSocket('ws://localhost:41001');
+            ws.onopen = function () {
+              multiMouseState.wsConnected = true;
+            };
+            ws.onmessage = function (msg) {
+              try {
+                const data = JSON.parse(msg.data);
+                if (data && data.hwid !== undefined) {
+                  multiMouseState.lastWsHwid = data.hwid;
+                }
+              } catch (e) {}
+            };
+            ws.onclose = function () {
+              multiMouseState.wsConnected = false;
+              multiMouseState.lastWsHwid = null;
+            };
+            ws.onerror = function () {
+              multiMouseState.wsConnected = false;
+            };
+          } catch (e) {}
+        }
+        connectWs();
+      })();
+
+      window.addEventListener('contextmenu', function (ev) {
+        const inPlay = ev.target && ev.target.closest && ev.target.closest('#viewPlay');
+        const inModal = ev.target && ev.target.closest && ev.target.closest('#multiMouseModal');
+        if (inModal || (inPlay && rulesConfig.multiMouseLock)) {
+          ev.preventDefault();
+        }
+      }, true);
+
+      window.addEventListener('pointerdown', function (ev) {
+        const sig = getEventMouseSignature(ev);
+        multiMouseState.lastDetectedPointerId = sig;
+        if (!rulesConfig.multiMouseLock || !gameState.isMatchActive) return;
+        const inDiceControls = ev.target && ev.target.closest && (
+          ev.target.closest('#centerDiceDock') ||
+          ev.target.closest('#immersiveFloatingHud')
+        );
+        if (inDiceControls) {
+          if (!verifyMultiMouseAccess(sig, 'roll or select dice')) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+            return;
+          }
+          if (ev.button === 2 || ev.button === 1) {
+            const btnEl = ev.target.closest('button');
+            if (btnEl && !btnEl.disabled) {
+              ev.preventDefault();
+              btnEl.click();
+            }
+          }
+        }
+      }, true);
 
       function saveMultiMouseMap() {
         try {
@@ -2734,12 +2825,15 @@
         if (expectedPointerId === null || expectedPointerId === undefined) {
           return true;
         }
-        if (incomingPointerId === undefined || incomingPointerId === null) {
+        const actualSig = (incomingPointerId !== undefined && incomingPointerId !== null)
+          ? String(incomingPointerId)
+          : (multiMouseState.lastDetectedPointerId ? String(multiMouseState.lastDetectedPointerId) : null);
+        if (!actualSig) {
           return true;
         }
-        if (incomingPointerId !== expectedPointerId) {
+        if (actualSig !== String(expectedPointerId)) {
           const meta = PLAYER_META[actorIdx];
-          showToast('⛔ Mouse Locked! Only ' + actor.name + ' (' + meta.colorName + ', Mouse ID #' + expectedPointerId + ') can ' + (actionContext || 'play on this turn') + ' — Rejected Mouse ID #' + incomingPointerId + '!', true);
+          showToast('⛔ Mouse Locked! Only ' + actor.name + ' (' + meta.colorName + ' — ' + formatMouseSignatureLabel(expectedPointerId) + ') can ' + (actionContext || 'play on this turn') + ' (Rejected ' + formatMouseSignatureLabel(actualSig) + ')!', true);
           return false;
         }
         return true;
@@ -2751,6 +2845,7 @@
         grid.innerHTML = '';
         const borderColors = ['border-rose-400 bg-rose-50/70', 'border-emerald-400 bg-emerald-50/70', 'border-amber-400 bg-amber-50/70', 'border-blue-400 bg-blue-50/70'];
         const icons = ['🔴', '🟢', '🟡', '🔵'];
+        const clickHints = ['Left-Click', 'Right-Click', 'Middle-Click', 'Side-Btn'];
 
         [0, 1, 2, 3].forEach(function (idx) {
           const meta = PLAYER_META[idx];
@@ -2763,7 +2858,7 @@
             borderColors[idx] + (isWizardActive ? ' ring-4 ring-indigo-500 scale-[1.01]' : '');
 
           const statusBadge = (assignedId !== null && assignedId !== undefined)
-            ? '<span class="px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-mono text-[10px] font-black">🖱️ ID #' + assignedId + '</span>'
+            ? '<span class="px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-mono text-[10px] font-black">🖱️ ' + formatMouseSignatureLabel(assignedId) + '</span>'
             : '<span class="px-2 py-0.5 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-bold">Unassigned</span>';
 
           card.innerHTML =
@@ -2772,7 +2867,7 @@
               statusBadge +
             '</div>' +
             '<div class="text-[10px] font-semibold text-slate-600">' +
-              (seat.active ? (seat.type === 'human' ? '👤 Human Seat (Active)' : '🤖 AI Seat (Click below to switch to Human + Mouse)') : '🚫 Inactive Seat (Click below to activate)') +
+              (seat.active ? (seat.type === 'human' ? '👤 Human Seat (Suggested: ' + clickHints[idx] + ')' : '🤖 AI Seat (Click below to switch to Human + Mouse)') : '🚫 Inactive Seat (Click below to activate)') +
             '</div>' +
             '<div class="flex gap-1.5">' +
               '<button type="button" class="mm-capture-btn flex-1 py-2 px-2.5 rounded-xl font-black text-[11px] transition ' +
@@ -2788,8 +2883,8 @@
           capBtn.addEventListener('pointerdown', function (ev) {
             ev.preventDefault();
             ev.stopPropagation();
-            const pid = ev.pointerId !== undefined ? ev.pointerId : 1;
-            assignMousePointerToSeat(idx, pid);
+            const sig = getEventMouseSignature(ev);
+            assignMousePointerToSeat(idx, sig);
           });
 
           const clrBtn = card.querySelector('.mm-clear-one-btn');
@@ -2808,6 +2903,24 @@
       }
 
       function assignMousePointerToSeat(seatIdx, pointerId) {
+        const sigStr = String(pointerId);
+        const conflictSeat = [0, 1, 2, 3].find(function (otherIdx) {
+          return otherIdx !== seatIdx &&
+                 multiMouseState.playerPointerIds[otherIdx] !== null &&
+                 String(multiMouseState.playerPointerIds[otherIdx]) === sigStr;
+        });
+
+        const meta = PLAYER_META[seatIdx];
+        const promptEl = document.getElementById('mmWizardPromptText');
+
+        if (conflictSeat !== undefined) {
+          const conflictColor = PLAYER_META[conflictSeat].colorName;
+          const msg = '⚠️ ' + formatMouseSignatureLabel(sigStr) + ' is already bound to ' + conflictColor + '! For ' + meta.colorName + '\'s mouse, please RIGHT-CLICK (or Middle-Click) on this box (or enable Web SDK in MouseMux Settings)!';
+          if (promptEl) promptEl.textContent = msg;
+          showToast(msg, true);
+          return;
+        }
+
         seatConfig[seatIdx].active = true;
         seatConfig[seatIdx].type = 'human';
         seatConfig[seatIdx].isBotTakeover = false;
@@ -2819,13 +2932,10 @@
         const setupTypeEl = document.getElementById('setupType' + seatIdx);
         if (setupTypeEl) setupTypeEl.value = 'human';
 
-        multiMouseState.playerPointerIds[seatIdx] = pointerId;
+        multiMouseState.playerPointerIds[seatIdx] = sigStr;
         rulesConfig.multiMouseLock = true;
         saveRulesPreferences(false);
         saveMultiMouseMap();
-
-        const meta = PLAYER_META[seatIdx];
-        const promptEl = document.getElementById('mmWizardPromptText');
 
         if (multiMouseState.wizardStep !== null) {
           let nextSeat = null;
@@ -2838,7 +2948,7 @@
           if (nextSeat !== null) {
             multiMouseState.wizardStep = nextSeat;
             if (promptEl) {
-              promptEl.textContent = '✅ ' + meta.colorName + ' linked to Mouse ID #' + pointerId + '! Now click the highlighted box with ' + PLAYER_META[nextSeat].colorName + '\'s mouse!';
+              promptEl.textContent = '✅ ' + meta.colorName + ' linked to ' + formatMouseSignatureLabel(sigStr) + '! Now click the highlighted box with ' + PLAYER_META[nextSeat].colorName + '\'s mouse (use Right-Click if Web SDK is off)!';
             }
           } else {
             multiMouseState.wizardStep = null;
@@ -2849,11 +2959,11 @@
           renderMultiMouseCalibrationGrid();
         } else {
           if (promptEl) {
-            promptEl.textContent = '✅ Linked ' + meta.colorName + ' (Seat ' + (seatIdx + 1) + ') to Hardware Mouse Pointer ID #' + pointerId + '!';
+            promptEl.textContent = '✅ Linked ' + meta.colorName + ' (Seat ' + (seatIdx + 1) + ') to ' + formatMouseSignatureLabel(sigStr) + '!';
           }
         }
         updateAllUI();
-        showToast('🖱️ ' + meta.colorName + ' bound to Mouse Pointer ID #' + pointerId + '!', true);
+        showToast('🖱️ ' + meta.colorName + ' bound to ' + formatMouseSignatureLabel(sigStr) + '!', true);
       }
 
       function applyMultiMousePlayerCountPreset(playerCount) {
@@ -5674,7 +5784,7 @@
           return;
         }
 
-        if (!verifyMultiMouseAccess(e.pointerId, 'touch the board or roll dice')) {
+        if (!verifyMultiMouseAccess(getEventMouseSignature(e), 'touch the board or roll dice')) {
           if (e.cancelable) e.preventDefault();
           return;
         }
