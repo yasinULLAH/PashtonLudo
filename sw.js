@@ -66,7 +66,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "e75b4ff8ecb4f8098fcfa7a90bb7b2cb"
+        "revision": "b0b6c9d81d5037a99e0d894bbaddc80c"
     },
     {
         "url": "manifest.json",
@@ -90,7 +90,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "d7c7ea5cd88f50af462b48fc3d920c1a"
+        "revision": "c2613e81ba00a922672e4aae4caf61b7"
     },
     {
         "url": "transcript of the vioces.txt",
