@@ -50,6 +50,8 @@
 📱 WhatsApp: **0336-1593533**  
 🔗 LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/yasin-ullah-029229232/)  
 
+💛 **Dedication:** This game suite is lovingly dedicated to my little brother **Muhib Ullah**.
+
 *Building innovative, culturally grounded, and world-class educational & gaming technology solutions for Pakistan and beyond*
 
 &lt;/div&gt;

@@ -2,6 +2,7 @@
 ### Authentic Pashtun Cultural Rules, 2-Dice Mechanics, Multi-Mouse Hardware Lock & KPK Hujra Board Gaming Suite
 **Developer:** Yasin Ullah — Bannu Software Solutions  
 **Contact:** WhatsApp: `0336-1593533` | [LinkedIn Profile](https://www.linkedin.com/in/yasin-ullah-029229232/)  
+**Dedication:** 💛 Dedicated to my little brother **Muhib Ullah**  
 **Edition:** v5.0 Master Production Suite (PWA Offline Enabled)
 
 ---
@@ -435,6 +436,8 @@ npx serve .
 **یاسین اللہ (Yasin Ullah)** – بنوں سافٹ ویئر سلوشنز (Bannu Software Solutions)  
 📱 واٹس ایپ (WhatsApp): **0336-1593533**  
 🔗 لنکڈ ان: [LinkedIn Profile](https://www.linkedin.com/in/yasin-ullah-029229232/)  
+
+💛 **محبت بھرا نذرانہ:** یہ کھیل اپنے چھوٹے بھائی **محب اللہ (Muhib Ullah)** کے نام وقف ہے۔
 
 *پاکستان اور بین الاقوامی دنیا کے لیے جدید ترین روایتی و سائنسی سافٹ ویئر سلوشنز*
 

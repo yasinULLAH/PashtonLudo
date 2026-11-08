@@ -58,19 +58,19 @@ if (workbox) {
     },
     {
         "url": "client_readme.md",
-        "revision": "a948841dc24600f346df574188ab9571"
+        "revision": "225432f4fea06a9432ca10f535a75b6e"
     },
     {
         "url": "feature_report.md",
-        "revision": "4ff030576beb954fd5b59b26d3898424"
+        "revision": "82ecb324d1553aa6495de9358f0630f7"
     },
     {
         "url": "index.html",
-        "revision": "8fbc18a2509cae09ed3a234c809de6b0"
+        "revision": "ba5c1782d012f1a8bbfdacf8ca0882d2"
     },
     {
         "url": "manifest.json",
-        "revision": "e883ed010df7760edeb752aa2f6da4be"
+        "revision": "68ce1d246936d2abf9ab2502ae0300db"
     },
     {
         "url": "offline.html",
@@ -82,15 +82,15 @@ if (workbox) {
     },
     {
         "url": "readme.md",
-        "revision": "8a7dbae2a4acbeb3f7330615c6f673fa"
+        "revision": "2377170f5a59681fc1f3b8ad9b11a3b1"
     },
     {
         "url": "snakes.html",
-        "revision": "c530d81fd50cb7d09d4cae302e4e6407"
+        "revision": "1d0f2aafc0f142455ebd5dc5222b3630"
     },
     {
         "url": "sw.js",
-        "revision": "50df8340c21be554e52b35ae24ef0c93"
+        "revision": "cb3067fa4edcdde489e2e14d11734a02"
     },
     {
         "url": "transcript of the vioces.txt",
