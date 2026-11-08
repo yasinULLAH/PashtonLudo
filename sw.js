@@ -66,11 +66,11 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "ba5c1782d012f1a8bbfdacf8ca0882d2"
+        "revision": "d31c90694e3581ce94501ed68145ef2b"
     },
     {
         "url": "manifest.json",
-        "revision": "68ce1d246936d2abf9ab2502ae0300db"
+        "revision": "e883ed010df7760edeb752aa2f6da4be"
     },
     {
         "url": "offline.html",
@@ -90,7 +90,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "cb3067fa4edcdde489e2e14d11734a02"
+        "revision": "0cf4424ad5ffa6579ef36a07ec664aeb"
     },
     {
         "url": "transcript of the vioces.txt",

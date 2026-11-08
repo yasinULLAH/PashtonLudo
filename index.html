@@ -2145,6 +2145,16 @@
 </div>
 </div>
 </div>
+<!-- Author Credit & Dedication -->
+<div class="royal-card rounded-3xl p-3.5 sm:p-4 border-2 border-amber-300 bg-gradient-to-r from-amber-50 via-white to-emerald-50 flex flex-wrap items-center justify-between gap-2">
+<div>
+<div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">👨‍💻 About &amp; Credits</div>
+<div class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5">Bannu Royale Ludo — created by <strong>Yasin Ullah</strong> (Bannu Software Solutions)</div>
+<div class="text-xs text-amber-900 font-semibold mt-0.5">💛 Dedicated to my little brother <strong>Muhib Ullah</strong></div>
+<div class="text-[11px] text-slate-500 mt-0.5" dir="rtl">محبت بھرے تحفے کے طور پر اپنے چھوٹے بھائی محب اللہ کے نام</div>
+</div>
+<div class="text-[11px] font-bold text-slate-600">📱 WhatsApp: 0336-1593533</div>
+</div>
 </div>
 </div>
 </section>
@@ -9506,7 +9516,11 @@
 
         g.fillStyle = '#92400e';
         g.font = '700 12px Inter, sans-serif';
-        g.fillText('Authentic Bannu 2-Dice • Close Bari Lock • Clean Sweep Victory • Full Telemetry', 30, 348);
+        g.fillText('Authentic Bannu 2-Dice • Close Bari Lock • Clean Sweep Victory • Full Telemetry', 30, 338);
+
+        g.fillStyle = '#b45309';
+        g.font = '800 12px Inter, sans-serif';
+        g.fillText('💛 Created by Yasin Ullah  •  Dedicated to my little brother Muhib Ullah', 30, 360);
       }
 
       // --- 15. LOGGING & TOAST HELPERS ---
@@ -10922,6 +10936,8 @@
         const backupPayload = {
           app: 'BannuRoyaleLudo',
           version: '5.0-Complete',
+          author: 'Yasin Ullah (Bannu Software Solutions)',
+          dedication: "Dedicated to Muhib Ullah, the author's little brother.",
           exportedAt: new Date().toISOString(),
           careerStats: careerStats,
           rulesConfig: rulesConfig
