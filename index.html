@@ -367,6 +367,38 @@
         gap: 10px;
       }
 
+      #viewHome *, #viewRules *, #viewNetwork *, #viewStats *, #viewGuide *,
+      .fixed .royal-card * {
+        min-width: 0;
+      }
+
+      #viewHome .royal-card, #viewRules .royal-card, #viewNetwork .royal-card,
+      #viewStats .royal-card, #viewGuide .royal-card {
+        max-width: 100% !important;
+        width: 100% !important;
+        overflow-x: hidden;
+      }
+
+      #viewHome button, #viewRules button, #viewNetwork button,
+      #viewStats button:not(.dash-subtab-btn), #viewGuide button:not(.guide-cat-btn),
+      .fixed .royal-card button {
+        white-space: normal !important;
+        word-break: break-word;
+        line-height: 1.25;
+        text-align: center;
+        max-width: 100%;
+      }
+
+      #dashboardSubTabs, #guideCategoryTabs {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      #dashboardSubTabs > button, #guideCategoryTabs > button {
+        flex-shrink: 0;
+        white-space: nowrap !important;
+      }
+
       #viewHome > .my-auto {
         margin-top: 2px !important;
         margin-bottom: 4px !important;
