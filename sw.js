@@ -90,7 +90,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "0cf4424ad5ffa6579ef36a07ec664aeb"
+        "revision": "0ff29a60976f843aa3d2efd218b7df8b"
     },
     {
         "url": "transcript of the vioces.txt",
