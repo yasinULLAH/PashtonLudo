@@ -518,6 +518,187 @@ table.dataTable tbody tr:hover {
   height: 40px !important;
 }
 
+/* Mobile Device Responsive Refinements (< 640px) */
+@media (max-width: 640px) {
+  :root {
+    --font-size-base: 12.5px;
+  }
+  header.theme-header {
+    height: 40px !important;
+    padding: 0 8px !important;
+  }
+  header.theme-header .w-8 {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 8px !important;
+  }
+  header.theme-header button {
+    min-width: 28px !important;
+    min-height: 28px !important;
+    padding: 3px 7px !important;
+    font-size: 10.5px !important;
+    border-radius: 8px !important;
+  }
+  #unifiedNavigation {
+    padding: 3px 4px !important;
+  }
+  #unifiedNavigation .nav-btn {
+    min-height: 34px !important;
+    padding: 3px 2px !important;
+    font-size: 9px !important;
+    gap: 1.5px !important;
+    border-radius: 8px !important;
+  }
+  #unifiedNavigation .nav-btn i {
+    font-size: 11px !important;
+  }
+  #unifiedNavigation .nav-btn span {
+    max-width: 54px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #view-home > div:first-child {
+    padding: 14px 12px !important;
+    border-radius: 18px !important;
+  }
+  #view-home h1 {
+    font-size: 1.35rem !important;
+    line-height: 1.2 !important;
+  }
+  #view-home p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  .btn-play-hero,
+  #resumeSavedMatchBtn,
+  #homeImmersivePlayBtn,
+  #view-home button[onclick*="setup"] {
+    min-height: 36px !important;
+    padding: 6px 12px !important;
+    font-size: 11.5px !important;
+    border-radius: 11px !important;
+  }
+  #view-home .lg\:col-span-5 button {
+    padding: 8px 10px !important;
+    border-radius: 12px !important;
+  }
+  #view-home .lg\:col-span-5 button .w-9 {
+    width: 28px !important;
+    height: 28px !important;
+    margin-bottom: 4px !important;
+  }
+  #view-setup > div,
+  #view-multiplayer > div,
+  #view-rules > div,
+  #view-players > div,
+  #view-settings .bg-white {
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+  button, input, select {
+    min-height: 32px;
+  }
+  .select2-container .select2-selection--single {
+    height: 34px !important;
+    font-size: 11.5px !important;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 32px !important;
+  }
+  /* Compact Board Cells, Badges & Tokens on Mobile */
+  .board-grid {
+    border-width: 2.5px !important;
+    border-radius: 11px !important;
+  }
+  .board-cell {
+    padding: 1px 1.5px !important;
+  }
+  .board-cell > div:first-child span:first-child {
+    font-size: 7.5px !important;
+    padding: 0 2px !important;
+    line-height: 1.1 !important;
+  }
+  .board-cell > div:first-child span:nth-child(2) {
+    font-size: 6.5px !important;
+    padding: 0 2px !important;
+    line-height: 1.1 !important;
+  }
+  .token-pin {
+    width: clamp(12px, 3.2vmin, 18px) !important;
+    height: clamp(12px, 3.2vmin, 18px) !important;
+    font-size: 6.5px !important;
+    border-width: 1.5px !important;
+  }
+  .bead-name-tag {
+    font-size: 5.5px !important;
+    padding: 0 2px !important;
+    max-width: 28px !important;
+    margin-top: -1px !important;
+  }
+  .step-clue-badge {
+    font-size: 6.5px !important;
+    padding: 0.5px 2.5px !important;
+  }
+  /* Compact Arena Bars & Dice on Mobile */
+  #topCollapsedHandleBar,
+  #bottomCollapsedHandleBar,
+  #immersiveFloatingBar {
+    padding: 2px 7px !important;
+    gap: 4px !important;
+  }
+  #topCollapsedHandleBar button,
+  #bottomCollapsedHandleBar button,
+  #immersiveFloatingBar button {
+    font-size: 9.5px !important;
+    padding: 2px 6px !important;
+    min-height: 22px !important;
+  }
+  #arenaTopHudBar {
+    height: 34px !important;
+    padding: 2px 6px !important;
+  }
+  #arenaTopHudBar button {
+    height: 24px !important;
+    min-height: 24px !important;
+    padding: 0 6px !important;
+    font-size: 9.5px !important;
+  }
+  #arenaBottomDeckBar {
+    padding: 4px 6px !important;
+  }
+  .dice-cube {
+    width: 34px !important;
+    height: 34px !important;
+    padding: 4px !important;
+    border-radius: 8px !important;
+  }
+  .pip {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  #primaryRollBtn {
+    height: 26px !important;
+    min-height: 26px !important;
+    padding: 0 8px !important;
+    font-size: 10px !important;
+    border-radius: 8px !important;
+  }
+  #floatingCalloutInner {
+    padding: 5px 12px !important;
+    font-size: 11px !important;
+    border-radius: 12px !important;
+  }
+  #arenaPauseModal > div {
+    padding: 14px !important;
+    border-radius: 20px !important;
+  }
+  #arenaPauseModal button {
+    min-height: 34px !important;
+    font-size: 11px !important;
+  }
+}
+
 @media print {
   .no-print {
     display: none !important;
@@ -852,15 +1033,21 @@ table.dataTable tbody tr:hover {
 <option value="4">4 Beads (Full Hujra)</option>
 </select>
 </div>
-<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-600">
-<label class="flex items-center gap-1.5 cursor-pointer">
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-600 gap-1.5">
+<select class="no-select2 bg-amber-50 text-amber-900 font-extrabold px-2 py-1 rounded-lg border border-amber-300 text-xs" id="homeAiDifficultySelect" onchange="GameEngine.setAiPersonality(this.value)" title="AI Bot Intelligence">
+<option value="easy">🟢 Easy AI</option>
+<option value="medium">🟡 Medium AI</option>
+<option value="hard">🟠 Hard AI</option>
+<option selected="" value="hardest">🔥 Hardest AI</option>
+</select>
+<label class="flex items-center gap-1 cursor-pointer shrink-0">
 <input checked="" class="w-3.5 h-3.5 accent-emerald-600 rounded" id="homeToggleRadar" onchange="GameEngine.setRadarEnabled(this.checked)" type="checkbox"/>
 <span>Radar</span>
 </label>
 <select class="no-select2 bg-slate-50 text-slate-800 font-bold px-2 py-1 rounded-lg border border-slate-300 text-xs" id="homeGameSpeedSelect" onchange="GameEngine.setGameSpeed(this.value)">
-<option value="1">1x Normal Pace</option>
-<option selected="" value="1.6">1.6x Fast Hujra</option>
-<option value="3">3x Turbo Blitz</option>
+<option value="1">1x Pace</option>
+<option selected="" value="1.6">1.6x Fast</option>
+<option value="3">3x Blitz</option>
 </select>
 </div>
 </div>
@@ -909,11 +1096,12 @@ table.dataTable tbody tr:hover {
 <select class="w-full" id="selectRulePreset" onchange="GameEngine.applyPresetById(this.value)"></select>
 </div>
 <div>
-<label class="block text-xs font-bold text-slate-700 mb-1" for="selectAiDifficulty">AI Bot Personality</label>
+<label class="block text-xs font-bold text-slate-700 mb-1" for="selectAiDifficulty">AI Bot Intelligence</label>
 <select class="w-full" id="selectAiDifficulty" onchange="GameEngine.setAiPersonality(this.value)">
-<option value="mehman">Casual Mehman (Friendly)</option>
-<option selected="" value="ustad">KPK Ustad (Balanced)</option>
-<option value="malak">Grand Malak (Aggressive Takkar)</option>
+<option value="easy">🟢 Easy (Normal &amp; Relaxed)</option>
+<option value="medium">🟡 Medium (Balanced Ustad)</option>
+<option value="hard">🟠 Hard (Tough Malak)</option>
+<option selected="" value="hardest">🔥 Hardest (Utmost Expert Grand Ustad)</option>
 </select>
 </div>
 </div>
@@ -1700,6 +1888,15 @@ table.dataTable tbody tr:hover {
 <span class="text-[10px] text-slate-500">Hide all bars &amp; roll by clicking board</span>
 </div>
 <input class="w-4 h-4 accent-indigo-600" id="pauseChkImmersive" onchange="GameEngine.toggleImmersiveMode(this.checked)" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-amber-50/80 border border-amber-200">
+<span class="font-bold text-amber-950">AI Bot Intelligence</span>
+<select class="no-select2 bg-white text-amber-900 font-extrabold px-2.5 py-1 rounded border border-amber-300 text-xs" id="pauseAiDifficultySelect" onchange="GameEngine.setAiPersonality(this.value)">
+<option value="easy">🟢 Easy (Normal)</option>
+<option value="medium">🟡 Medium (Balanced)</option>
+<option value="hard">🟠 Hard (Tough)</option>
+<option selected="" value="hardest">🔥 Hardest (Utmost Expert)</option>
+</select>
 </div>
 <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200">
 <span class="font-bold text-slate-800">Beads Per Player (Gotiyan)</span>
@@ -2504,7 +2701,7 @@ const ThemeEngine = {
    ============================================================================ */
 const GameEngine = {
   mode: 'ai',
-  aiPersonality: 'ustad',
+  aiPersonality: 'hardest',
   activePreset: null,
   inArena: false,
   isPaused: false,
@@ -2689,6 +2886,18 @@ const GameEngine = {
       setChk('chkAllowUndo', s.allowUndo);
       setChk('chkHaptics', s.haptics);
       setChk('chkFastCamp', s.fastCamp);
+      const legacyMap = { mehman: 'easy', ustad: 'medium', malak: 'hard' };
+      if (s.aiDifficulty && legacyMap[s.aiDifficulty]) s.aiDifficulty = legacyMap[s.aiDifficulty];
+      if (!['easy', 'medium', 'hard', 'hardest'].includes(s.aiDifficulty || this.aiPersonality)) {
+        this.aiPersonality = 'hardest';
+        s.aiDifficulty = 'hardest';
+      } else {
+        this.aiPersonality = s.aiDifficulty || this.aiPersonality || 'hardest';
+        s.aiDifficulty = this.aiPersonality;
+      }
+      AppUI.syncSelectValue('homeAiDifficultySelect', this.aiPersonality);
+      AppUI.syncSelectValue('selectAiDifficulty', this.aiPersonality);
+      AppUI.syncSelectValue('pauseAiDifficultySelect', this.aiPersonality);
       AppUI.syncSelectValue('homeGameSpeedSelect', s.speedMultiplier);
       AppUI.syncSelectValue('setupSnakeSizeSelect', s.snakeScale || 0.55);
       AppUI.syncSelectValue('arenaSnakeSizeSelect', s.snakeScale || 0.55);
@@ -2908,7 +3117,24 @@ const GameEngine = {
   },
 
   setAiPersonality(val) {
-    this.aiPersonality = val || 'ustad';
+    const legacyMap = { mehman: 'easy', ustad: 'medium', malak: 'hard' };
+    const normalized = legacyMap[val] || val || 'hardest';
+    this.aiPersonality = ['easy', 'medium', 'hard', 'hardest'].includes(normalized) ? normalized : 'hardest';
+    this.settings.aiDifficulty = this.aiPersonality;
+    this.saveSettings();
+    const botTitles = {
+      easy: 'Easy Mehman Bot',
+      medium: 'Medium Ustad Bot',
+      hard: 'Hard Malak AI',
+      hardest: 'Hardest Grand Ustad AI'
+    };
+    if (this.mode === 'ai' && this.players && this.players[1] && this.players[1].isAI) {
+      this.players[1].name = botTitles[this.aiPersonality] || 'Hardest Grand Ustad AI';
+      const modePill = document.getElementById('matchModePill');
+      if (modePill) modePill.textContent = 'Vs ' + this.players[1].name;
+      this.renderPlayerCards();
+      this.updateTurnBanner();
+    }
   },
 
   /* ==========================================================================
@@ -3663,9 +3889,13 @@ const GameEngine = {
     const s3 = getSeatPlayer(3, 'Arsalaan Swati (P4)', APP_CONFIG.tokenColors[3]);
 
     const botTitles = {
-      mehman: 'Mehman Bot',
-      ustad: 'KPK Ustad Bot',
-      malak: 'Grand Malak AI'
+      easy: 'Easy Mehman Bot',
+      medium: 'Medium Ustad Bot',
+      hard: 'Hard Malak AI',
+      hardest: 'Hardest Grand Ustad AI',
+      mehman: 'Easy Mehman Bot',
+      ustad: 'Medium Ustad Bot',
+      malak: 'Hard Malak AI'
     };
 
     const slots = [
@@ -4306,39 +4536,156 @@ const GameEngine = {
     });
   },
 
+  evaluateSquareFutureExpectation(sq) {
+    if (sq >= 100 || sq <= 0) return 0;
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    let expectedDelta = 0;
+    for (let d = 1; d <= 6; d++) {
+      const nextSq = sq + d;
+      if (nextSq > 100) {
+        if (this.rules.exact100) expectedDelta -= 4;
+        continue;
+      }
+      if (nextSq === 100) {
+        expectedDelta += 45;
+      } else if (ladders[nextSq]) {
+        expectedDelta += (ladders[nextSq] - nextSq) * 1.6;
+      } else if (snakes[nextSq]) {
+        expectedDelta -= (nextSq - snakes[nextSq]) * (nextSq === 99 ? 3.2 : 2.2);
+      } else if (APP_CONFIG.safeSquares.includes(nextSq)) {
+        expectedDelta += 8;
+      }
+    }
+    return expectedDelta / 6;
+  },
+
+  computeEnemyCutDangerAtSquare(playerIndex, sq) {
+    if (!this.rules.knockback || sq <= 1 || sq >= 100 || APP_CONFIG.safeSquares.includes(sq)) return 0;
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    let danger = 0;
+    this.players.forEach(other => {
+      if (other.index === playerIndex) return;
+      (other.beads || []).forEach(ob => {
+        if (ob.pos <= 0 || ob.pos >= 100) return;
+        for (let d = 1; d <= 6; d++) {
+          const rawNext = ob.pos + d;
+          if (rawNext > 100) continue;
+          const landSq = ladders[rawNext] || snakes[rawNext] || rawNext;
+          if (landSq === sq) {
+            danger += (sq * 1.4 + 35);
+          }
+        }
+      });
+    });
+    return danger;
+  },
+
+  scoreBeadMoveForDifficulty(player, bead, roll, diffLevel) {
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    const diff = diffLevel || this.aiPersonality || 'hardest';
+
+    // 1. EASY: Casual & forgiving with high randomness
+    if (diff === 'easy') {
+      let easyScore = Math.random() * 90 + roll;
+      if (this.rules.needSix && !bead.unlocked && roll === 6) easyScore += 25;
+      else if (bead.pos + roll === 100) easyScore += 100;
+      return easyScore;
+    }
+
+    // 2. MEDIUM: Standard greedy evaluation of immediate ladders and snakes
+    if (diff === 'medium') {
+      let medScore = (Math.random() * 18) + roll * 2;
+      if (this.rules.needSix && !bead.unlocked && roll === 6) {
+        medScore += 75;
+      } else {
+        const rawTarget = Math.min(100, bead.pos + roll);
+        if (ladders[rawTarget]) medScore += (ladders[rawTarget] - bead.pos) * 2.5 + 45;
+        else if (snakes[rawTarget]) medScore -= (bead.pos - snakes[rawTarget]) * 3.2 + 70;
+        if (rawTarget === 100 || ladders[rawTarget] === 100) medScore += 350;
+      }
+      return medScore;
+    }
+
+    // 3. HARD & HARDEST: Deep tactical KPK rule evaluation
+    let score = 0;
+    if (this.rules.needSix && !bead.unlocked && roll === 6) {
+      const unlockedCount = (player.beads || []).filter(b => b.unlocked && b.pos < 100).length;
+      score = unlockedCount === 0 ? 220 : 115;
+      return score;
+    }
+
+    const curDanger = this.computeEnemyCutDangerAtSquare(player.index, bead.pos);
+    const rawTarget = Math.min(100, bead.pos + roll);
+    let finalPos = rawTarget;
+
+    if (ladders[rawTarget]) {
+      finalPos = ladders[rawTarget];
+      score += (finalPos - bead.pos) * 3.8 + 80;
+    } else if (snakes[rawTarget]) {
+      finalPos = snakes[rawTarget];
+      score -= (bead.pos - finalPos) * 4.8 + (rawTarget === 99 ? 220 : 120);
+    } else {
+      score += roll * 2.4;
+    }
+
+    if (finalPos === 100) {
+      score += 800;
+    }
+    if (APP_CONFIG.safeSquares.includes(finalPos)) {
+      score += 42;
+    }
+
+    // Takkar Knockback Cut evaluation
+    if (this.rules.knockback && finalPos > 1 && finalPos < 100 && !APP_CONFIG.safeSquares.includes(finalPos)) {
+      this.players.forEach(other => {
+        if (other.index === player.index) return;
+        (other.beads || []).forEach(ob => {
+          if (ob.pos === finalPos) {
+            score += 165 + (ob.pos * 2.6) + ((this.settings.beadsPerPlayer || 1) > 1 ? 75 : 0);
+          }
+        });
+      });
+    }
+
+    if (diff === 'hardest') {
+      // Escape from enemy Takkar danger vs stepping into enemy Takkar range
+      const destDanger = this.computeEnemyCutDangerAtSquare(player.index, finalPos);
+      score += (curDanger * 1.15) - (destDanger * 1.25);
+
+      // Penalty for leaving a high Safe Zone (50, 75, 92) into danger or snake-heavy zone
+      if (APP_CONFIG.safeSquares.includes(bead.pos) && bead.pos >= 50 && !APP_CONFIG.safeSquares.includes(finalPos) && finalPos < 100) {
+        score -= 28;
+      }
+
+      // Next-turn 1..6 roll probability lookahead (avoiding Kalamar 99 & snake clusters, stalking ladders)
+      score += this.evaluateSquareFutureExpectation(finalPos) * 2.8;
+
+      // Exact 100 endgame positioning (squares 94-98 have clean 1-roll finishes without hitting 99 Kalamar)
+      if (finalPos >= 94 && finalPos <= 98 && !snakes[finalPos]) {
+        score += 36;
+      }
+    }
+
+    return score;
+  },
+
   chooseBestTacticalBead(player, eligibleBeads, roll) {
     if (!eligibleBeads || !eligibleBeads.length) return null;
     if (eligibleBeads.length === 1) return eligibleBeads[0];
 
-    const ladders = (this.activePreset && this.activePreset.ladders) || {};
-    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    const diff = player.isAI ? (this.aiPersonality || 'hardest') : 'hardest';
+    if (player.isAI && diff === 'easy' && Math.random() < 0.5) {
+      return eligibleBeads[Math.floor(Math.random() * eligibleBeads.length)];
+    }
 
     let bestBead = eligibleBeads[0];
-    let bestScore = -99999;
+    let bestScore = -999999;
 
     eligibleBeads.forEach(b => {
-      let score = 0;
-      if (this.rules.needSix && !b.unlocked && roll === 6) {
-        score = 85;
-      } else {
-        const rawTarget = Math.min(100, b.pos + roll);
-        let finalPos = rawTarget;
-        if (ladders[rawTarget]) {
-          finalPos = ladders[rawTarget];
-          score += (finalPos - b.pos) * 3 + 60;
-        } else if (snakes[rawTarget]) {
-          finalPos = snakes[rawTarget];
-          score -= (b.pos - finalPos) * 4 + 90;
-        } else {
-          score += roll * 2;
-        }
-        if (finalPos === 100) score += 500;
-        if (APP_CONFIG.safeSquares.includes(finalPos)) score += 25;
-        if (this.rules.knockback && finalPos > 1 && finalPos < 100 && !APP_CONFIG.safeSquares.includes(finalPos)) {
-          const cutsEnemy = this.players.some(other => other.index !== player.index && (other.beads || []).some(ob => ob.pos === finalPos));
-          if (cutsEnemy) score += 140;
-        }
-      }
+      const score = this.scoreBeadMoveForDifficulty(player, b, roll, diff);
       if (score > bestScore) {
         bestScore = score;
         bestBead = b;
@@ -4493,9 +4840,72 @@ const GameEngine = {
     }
   },
 
+  computeSmartAiRoll(player) {
+    const pureRandom = () => Math.floor(Math.random() * 6) + 1;
+    if (!player || !player.isAI) return pureRandom();
+    const diff = this.aiPersonality || 'hardest';
+
+    // Candidates 1..6 scored by the AI's tactical engine
+    const candidates = [1, 2, 3, 4, 5, 6].map(r => {
+      // Avoid 3x6 Barsi burn on 3rd consecutive 6!
+      if (r === 6 && this.rules.tripleSixBurn && this.consecutiveSixes === 2) {
+        return { roll: r, score: -9000 };
+      }
+      const eligible = this.getEligibleBeadsForRoll(player, r);
+      if (eligible.length === 0) {
+        return { roll: r, score: -200 };
+      }
+      let bestForRoll = -99999;
+      eligible.forEach(b => {
+        const s = this.scoreBeadMoveForDifficulty(player, b, r, 'hardest');
+        if (s > bestForRoll) bestForRoll = s;
+      });
+      if (r === 6 && (!this.rules.tripleSixBurn || this.consecutiveSixes < 2)) {
+        bestForRoll += 28;
+      }
+      return { roll: r, score: bestForRoll };
+    });
+
+    candidates.sort((a, b) => b.score - a.score);
+
+    if (diff === 'easy') {
+      // Easy: forgiving — 45% chance to pick from the lower-scoring half of rolls so human wins comfortably
+      if (Math.random() < 0.45) {
+        const easyPool = candidates.slice(2);
+        return easyPool[Math.floor(Math.random() * easyPool.length)].roll;
+      }
+      return pureRandom();
+    }
+
+    if (diff === 'medium') {
+      // Medium: completely fair standard dice
+      return pureRandom();
+    }
+
+    if (diff === 'hard') {
+      // Hard: 35% chance to pick one of the top 2 tactical rolls, 65% fair roll
+      if (Math.random() < 0.35) {
+        const topTwo = candidates.slice(0, 2);
+        return topTwo[Math.floor(Math.random() * topTwo.length)].roll;
+      }
+      return pureRandom();
+    }
+
+    // Hardest: Utmost Intelligent Grand Ustad — 60% chance to pick from top 2 tactical rolls (never 3x6 burns, expertly hits ladders/cuts & dodges snakes)
+    if (Math.random() < 0.60) {
+      const topTwo = candidates.slice(0, 2).filter(c => c.score > -500);
+      if (topTwo.length > 0) {
+        return topTwo[0].roll;
+      }
+    }
+    const safePool = candidates.filter(c => c.score > -1000);
+    return safePool.length > 0 ? safePool[Math.floor(Math.random() * safePool.length)].roll : pureRandom();
+  },
+
   async executeAITurn() {
     if (this.matchFinished || this.isAnimating || this.isPaused || this.awaitingBeadChoice) return;
-    const aiRoll = Math.floor(Math.random() * 6) + 1;
+    const cur = this.players[this.currentTurnIdx];
+    const aiRoll = (cur && cur.isAI) ? this.computeSmartAiRoll(cur) : (Math.floor(Math.random() * 6) + 1);
     await this.triggerRoll(aiRoll, false, true);
   },
 

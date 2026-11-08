@@ -374,6 +374,100 @@
         display: none !important;
       }
 
+      /* Compact Mobile Typography, Buttons, Inputs & Cards (< 820px) */
+      #homeTopBar {
+        padding: 6px 10px !important;
+        border-radius: 14px !important;
+      }
+      #homeTopBar .w-9 {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 14px !important;
+        border-radius: 9px !important;
+      }
+      #homePlayerName {
+        font-size: 11.5px !important;
+      }
+      #homeQuickStats {
+        font-size: 9.5px !important;
+      }
+      #langSelect, #soundToggleBtn, #fullscreenToggleBtn {
+        height: 28px !important;
+        min-height: 28px !important;
+        font-size: 10px !important;
+        border-radius: 8px !important;
+      }
+      #soundToggleBtn, #fullscreenToggleBtn {
+        width: 28px !important;
+      }
+      #appMainTitle {
+        font-size: 1.25rem !important;
+        line-height: 1.2 !important;
+      }
+      #appSubTitle {
+        font-size: 10.5px !important;
+        line-height: 1.35 !important;
+        margin-bottom: 6px !important;
+      }
+      #headerPresetBadge {
+        font-size: 10px !important;
+      }
+      #viewHome .royal-card {
+        padding: 10px 12px !important;
+        border-radius: 18px !important;
+      }
+      #presetBannuQuickBtn, #presetYallaQuickBtn {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+        border-radius: 11px !important;
+      }
+      #viewHome select, #viewHome input[type="number"],
+      #viewRules select, #viewRules input[type="text"], #viewRules input[type="number"] {
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        font-size: 11px !important;
+        border-radius: 9px !important;
+        min-height: 30px !important;
+      }
+      #startMatchHeroBtn {
+        padding: 9px 14px !important;
+        font-size: 13px !important;
+        border-radius: 13px !important;
+      }
+      #pauseMenuModal .royal-card,
+      #victoryModal .royal-card,
+      #scenarioDrawer .royal-card,
+      #refereeLogModal .royal-card,
+      #captureChoiceModal .royal-card {
+        padding: 12px 14px !important;
+        border-radius: 20px !important;
+      }
+      #pauseMenuModal button,
+      #victoryModal button {
+        padding-top: 7px !important;
+        padding-bottom: 7px !important;
+        font-size: 11px !important;
+        border-radius: 10px !important;
+      }
+      #quickEmoteDrawer {
+        bottom: 54px !important;
+        padding: 6px 8px !important;
+        border-radius: 14px !important;
+      }
+      #quickEmoteDrawer .emote-send-btn {
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        border-radius: 8px !important;
+      }
+      #immersiveFloatingHud {
+        padding: 3px 6px !important;
+        gap: 4px !important;
+      }
+      #immersiveFloatingHud button {
+        padding: 3px 8px !important;
+        font-size: 10px !important;
+      }
+
       /* Fixed React Native Android Bottom Tab Navigation Bar */
       body:not(.in-play-mode) #mobileAndroidBottomNav {
         display: grid !important;
@@ -382,15 +476,15 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 62px;
-        padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px)) 6px;
+        height: 50px;
+        padding: 3px 4px calc(3px + env(safe-area-inset-bottom, 0px)) 4px;
         background: rgba(15, 23, 42, 0.96);
         backdrop-filter: blur(16px);
         border-top: 1.5px solid rgba(245, 158, 11, 0.45);
-        box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.35);
+        box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.32);
         z-index: 45;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
       }
 
       .android-tab-btn {
@@ -398,19 +492,19 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 2px;
+        gap: 1px;
         height: 100%;
-        border-radius: 14px;
+        border-radius: 10px;
         color: #94a3b8;
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 800;
         transition: all 0.18s ease;
         position: relative;
       }
       .android-tab-btn .tab-icon {
-        font-size: 17px;
+        font-size: 14px;
         line-height: 1;
-        padding: 2px 12px;
+        padding: 1px 8px;
         border-radius: 9999px;
         transition: all 0.18s ease;
       }
@@ -425,15 +519,15 @@
       #viewPlay {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: 38px 44px minmax(0, 1fr) 44px 54px;
+        grid-template-rows: 32px 38px minmax(0, 1fr) 38px 46px;
         grid-template-areas:
           "topbar topbar"
           "p0     p1"
           "board  board"
           "p3     p2"
           "dice   dice";
-        gap: 3px 4px;
-        padding: 3px 4px calc(3px + env(safe-area-inset-bottom, 0px)) 4px !important;
+        gap: 2.5px 4px;
+        padding: 2px 4px calc(2px + env(safe-area-inset-bottom, 0px)) 4px !important;
         width: 100vw;
         height: 100dvh;
         max-height: 100dvh;
@@ -452,25 +546,25 @@
       #playActionToolbar {
         grid-area: topbar;
         width: 100%;
-        height: 38px !important;
-        max-height: 38px !important;
+        height: 32px !important;
+        max-height: 32px !important;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         border: 1.5px solid rgba(245, 158, 11, 0.55);
-        border-radius: 12px;
-        padding: 3px 6px !important;
+        border-radius: 10px;
+        padding: 2px 5px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         align-items: center;
         justify-content: flex-start;
-        gap: 5px;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.28);
+        gap: 4px;
+        box-shadow: 0 3px 10px rgba(15, 23, 42, 0.24);
       }
       #playActionToolbar button {
-        height: 28px;
-        min-width: 30px;
-        padding: 0 8px !important;
-        border-radius: 8px !important;
-        font-size: 11px !important;
+        height: 24px;
+        min-width: 26px;
+        padding: 0 6px !important;
+        border-radius: 7px !important;
+        font-size: 10px !important;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -481,11 +575,20 @@
       }
 
       #playerCard0, #playerCard1, #playerCard2, #playerCard3 {
-        height: 44px !important;
-        max-height: 44px !important;
-        padding: 3px 7px !important;
-        border-radius: 11px !important;
-        box-shadow: 0 2px 6px rgba(180, 83, 9, 0.12);
+        height: 38px !important;
+        max-height: 38px !important;
+        padding: 2px 6px !important;
+        border-radius: 9px !important;
+        box-shadow: 0 2px 5px rgba(180, 83, 9, 0.12);
+      }
+      #playerCard0 span, #playerCard1 span, #playerCard2 span, #playerCard3 span {
+        font-size: 9.5px !important;
+        line-height: 1.1 !important;
+      }
+      #pTeamBadge0, #pTeamBadge1, #pTeamBadge2, #pTeamBadge3,
+      #pStatusTag0, #pStatusTag1, #pStatusTag2, #pStatusTag3 {
+        font-size: 7.5px !important;
+        padding: 1px 4px !important;
       }
       #playerCard0 { grid-area: p0; }
       #playerCard1 { grid-area: p1; }
@@ -509,57 +612,70 @@
         height: 100% !important;
         max-width: none !important;
         max-height: none !important;
-        padding: 3px !important;
-        border-radius: 12px !important;
-        box-shadow: 0 6px 18px rgba(180, 83, 9, 0.25) !important;
+        padding: 2.5px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 5px 14px rgba(180, 83, 9, 0.22) !important;
       }
 
       /* Full-width Android 3D Dice Controller Dock at bottom of screen */
       #centerDiceDock {
         grid-area: dice;
         width: 100%;
-        height: 54px !important;
-        max-height: 54px !important;
-        padding: 4px 8px !important;
-        border-radius: 14px !important;
+        height: 46px !important;
+        max-height: 46px !important;
+        padding: 3px 6px !important;
+        border-radius: 11px !important;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
-        border: 2px solid #f59e0b !important;
-        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.35) !important;
+        border: 1.5px solid #f59e0b !important;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3) !important;
         display: flex !important;
         align-items: center;
         justify-content: space-between;
-        gap: 6px !important;
+        gap: 5px !important;
       }
       #centerDiceDock #turnBannerText {
         color: #fde68a !important;
-        font-size: 10px !important;
+        font-size: 9px !important;
       }
       #centerDiceDock #turnCountdownBadge {
         color: #38bdf8 !important;
-        font-size: 10px !important;
+        font-size: 9px !important;
         font-weight: 900 !important;
       }
       #centerDiceDock #dieSlot0,
       #centerDiceDock #dieSlot1 {
-        width: 42px !important;
-        height: 42px !important;
-        border-radius: 11px !important;
+        width: 34px !important;
+        height: 34px !important;
+        padding: 2.5px !important;
+        border-radius: 8px !important;
+      }
+      #centerDiceDock #dieFace0,
+      #centerDiceDock #dieFace1 {
+        width: 21px !important;
+        height: 21px !important;
+        gap: 1.5px !important;
+      }
+      #centerDiceDock #dieStatus0,
+      #centerDiceDock #dieStatus1 {
+        font-size: 7px !important;
+        padding: 0 3px !important;
       }
       #centerDiceDock #dicePlusDivider {
-        height: 38px;
-        padding: 2px 5px !important;
-        border-radius: 9px !important;
+        height: 30px;
+        padding: 1px 4px !important;
+        border-radius: 7px !important;
       }
       #centerDiceDock #rollDiceBtn {
-        height: 30px;
-        font-size: 12px !important;
-        border-radius: 10px !important;
+        height: 24px;
+        font-size: 10.5px !important;
+        padding: 0 6px !important;
+        border-radius: 8px !important;
       }
       #centerDiceDock #toggleEmoteTrayBtn {
-        width: 38px !important;
-        height: 40px !important;
-        border-radius: 11px !important;
-        font-size: 15px !important;
+        width: 30px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        font-size: 12px !important;
       }
     }
 
@@ -682,11 +798,11 @@
 </button>
 </div>
 </div>
-<!-- 2. Match Mode, Bead Count, Kill Mode & Turn Timer Row -->
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<!-- 2. Match Mode, AI Intelligence, Bead Count, Kill Mode & Turn Timer Row -->
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
 <div>
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Match Format</label>
-<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900" id="homeQuickFormatSelect">
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickFormatSelect">
 <option selected="" value="2v2_ai">🤝 2v2 Teams (vs AI)</option>
 <option value="1v1_ai">⚔️ 1v1 Duel (vs AI)</option>
 <option value="4p_ai">👑 4-Player FFA (vs AI)</option>
@@ -697,8 +813,17 @@
 </select>
 </div>
 <div>
+<label class="block text-[10px] font-bold uppercase text-amber-800 mb-1">AI Intelligence</label>
+<select class="w-full bg-amber-50/90 border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-extrabold text-amber-950" id="homeQuickAiDiffSelect">
+<option value="easy">🟢 Easy (Normal)</option>
+<option value="medium">🟡 Medium (Balanced)</option>
+<option value="hard">🟠 Hard (Tough)</option>
+<option selected="" value="hardest">🔥 Hardest (Utmost Expert)</option>
+</select>
+</div>
+<div>
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Beads Per Player</label>
-<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900" id="homeQuickTokensSelect">
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickTokensSelect">
 <option value="2">♟️ 2 Beads (Fast)</option>
 <option value="3">♟️ 3 Beads (Medium)</option>
 <option selected="" value="4">♟️ 4 Beads (Standard)</option>
@@ -706,15 +831,15 @@
 </div>
 <div>
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Kill Rule Mode</label>
-<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900" id="homeQuickCloseSelect">
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickCloseSelect">
 <option selected="" value="close">🔒 Close Game + Kill Re-Roll</option>
 <option value="open">🔓 Open Game + Kill Re-Roll</option>
 </select>
 </div>
-<div>
+<div class="col-span-2 sm:col-span-1">
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Turn Timer</label>
 <div class="flex gap-1">
-<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-2 text-xs font-bold text-slate-900" id="homeQuickTimerSelect">
+<select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickTimerSelect">
 <option value="0">🚫 No Timer (Off)</option>
 <option value="15">⏱️ 15 Seconds</option>
 <option selected="" value="30">⏱️ 30 Seconds</option>
@@ -723,7 +848,7 @@
 <option value="180">⏱️ 3 Minutes</option>
 <option value="custom">✏️ Custom...</option>
 </select>
-<input class="hidden w-16 bg-white border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeCustomTimerInput" max="3600" min="5" placeholder="Sec" type="number" value="45"/>
+<input class="hidden w-16 bg-white border border-amber-400 rounded-xl px-2 py-1 text-xs font-bold text-slate-900" id="homeCustomTimerInput" max="3600" min="5" placeholder="Sec" type="number" value="45"/>
 </div>
 </div>
 </div>
@@ -930,9 +1055,18 @@
 <button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-white hover:bg-slate-50 text-slate-800 border border-slate-300" id="toggleLogModalBtn" type="button">
         📜 View Referee Log
       </button>
-<!-- Live Disconnect / Player Left AI Takeover Controls -->
+<!-- Live AI Intelligence Level & Seat Takeover Controls -->
 <div class="p-2.5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5">
-<div class="text-[10px] font-extrabold uppercase text-amber-900">🤖 Player Left / Disconnect Bot Takeover</div>
+<div class="flex items-center justify-between gap-2">
+<span class="text-[10px] font-extrabold uppercase text-amber-900">🧠 AI Bot Intelligence</span>
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-0.5 text-[11px] font-extrabold text-amber-950" id="pauseAiDifficultySelect">
+<option value="easy">🟢 Easy (Normal)</option>
+<option value="medium">🟡 Medium (Balanced)</option>
+<option value="hard">🟠 Hard (Tough)</option>
+<option value="hardest">🔥 Hardest (Utmost Expert)</option>
+</select>
+</div>
+<div class="text-[10px] font-extrabold uppercase text-amber-900 pt-1 border-t border-amber-200/70">🤖 Player Left / Disconnect Bot Takeover</div>
 <div class="grid grid-cols-2 gap-1.5" id="seatTakeoverButtons"></div>
 </div>
 <div class="p-2.5 rounded-2xl bg-indigo-50/90 border border-indigo-300 space-y-1.5">
@@ -1226,9 +1360,10 @@
 </select>
 <input class="hidden w-16 bg-white border border-amber-400 rounded-lg px-2 py-1 text-xs font-bold text-slate-900" id="rulesCustomTimerInput" max="3600" min="5" placeholder="Sec" type="number" value="45"/>
 <select class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-amber-900" id="aiDifficultySelect">
-<option value="easy">Easy AI</option>
-<option value="medium">Medium AI</option>
-<option selected="" value="hard">Hard — Grandmaster AI</option>
+<option value="easy">🟢 Easy AI (Normal &amp; Forgiving)</option>
+<option value="medium">🟡 Medium AI (Balanced)</option>
+<option value="hard">🟠 Hard AI (Tough Tactician)</option>
+<option selected="" value="hardest">🔥 Hardest AI (Utmost Expert of All Rules)</option>
 </select>
 </div>
 </div>
@@ -2061,6 +2196,9 @@
 <button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs text-slate-800 border border-amber-200 whitespace-normal" data-scenario="home_split_two_beads" type="button">
           7️⃣ <b>Near-Home Split (2 Beads):</b> 5 enters Home + 4 moves 2nd bead!
         </button>
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-xs text-emerald-950 border border-emerald-300 whitespace-normal" data-scenario="flawless_home_entry_win" type="button">
+          8️⃣ <b>Flawless Victory on Entering Home:</b> 3 beads in Home + 4th enters Home while opponents have 0 kills → Instant Win!
+        </button>
 </div>
 </div>
 </div>
@@ -2525,7 +2663,7 @@
         autoRollOnTurn: savedAutoRollPref,
         showTooltips: savedShowTooltipsPref,
         turnTimeSeconds: 30,
-        aiDifficulty: 'hard'
+        aiDifficulty: 'hardest'
       };
 
       let rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG);
@@ -3520,6 +3658,29 @@
         return p.tokens.every(function (tk) { return tk.state === 'completed'; });
       }
 
+      function hasPlayerAllTokensInsideHome(playerIdx) {
+        const p = gameState.players[playerIdx];
+        if (!p || !p.active) return true;
+        return p.tokens.every(function (tk) {
+          return tk.state === 'home_stretch' || tk.state === 'completed';
+        });
+      }
+
+      function areOpponentsWithoutKillsForPlayer(playerIdx) {
+        const p = gameState.players[playerIdx];
+        if (!p || !p.active) return false;
+        const opponents = gameState.players.filter(function (op) {
+          if (!op.active) return false;
+          return rulesConfig.teamMode ? (op.team !== p.team) : (op.id !== playerIdx);
+        });
+        if (opponents.length === 0) return false;
+        const reqKills = getRequiredKillsForHome();
+        return opponents.every(function (op) {
+          const k = op.kills || 0;
+          return k === 0 || (reqKills > 0 && k < reqKills);
+        });
+      }
+
       function isAllBeadsInsideHome(ownerIdx) {
         const p = gameState.players[ownerIdx];
         if (!p || !p.active) return false;
@@ -3855,7 +4016,18 @@
           const combinedLoopSim = (canOwnerEnterHomeStretch(targetOwnerIdx) && rulesConfig.allowOptionalLoopAfterKill)
             ? simulateTokenAdvance(soleToken, sumVal, true, tokens, true)
             : { valid: false };
-          if (!combinedSim.valid && !combinedLoopSim.valid) {
+          const singleTriggersFlawlessWin = areOpponentsWithoutKillsForPlayer(targetOwnerIdx) &&
+            yardTokens.length === 0 &&
+            unusedDice.some(function (d) {
+              const sSim = simulateTokenAdvance(soleToken, d.value, undefined, tokens, false);
+              return sSim.valid && (sSim.newState === 'home_stretch' || sSim.newState === 'completed');
+            });
+          const singleCompletesAll = yardTokens.length === 0 &&
+            unusedDice.some(function (d) {
+              const sSim = simulateTokenAdvance(soleToken, d.value, undefined, tokens, false);
+              return sSim.valid && sSim.newState === 'completed';
+            });
+          if (!combinedSim.valid && !combinedLoopSim.valid && !singleTriggersFlawlessWin && !singleCompletesAll) {
             return [];
           }
         }
@@ -3883,6 +4055,11 @@
               lockedThisTurn: locksAfterMove
             };
           });
+          const allSimCompleted = simTokens.every(function (t) { return t.state === 'completed'; });
+          if (allSimCompleted) return true;
+          const allSimInsideHome = simTokens.every(function (t) { return t.state === 'home_stretch' || t.state === 'completed'; });
+          if (allSimInsideHome && areOpponentsWithoutKillsForPlayer(targetOwnerIdx)) return true;
+
           const simEnemies = sim.newState === 'board' ? getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52) : [];
           const addedKills = rulesConfig.killAllStackedEnemies ? simEnemies.length : (simEnemies.length > 0 ? 1 : 0);
           const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || ((owner.kills + addedKills) >= getRequiredKillsForHome());
@@ -4464,33 +4641,53 @@
       }
 
       function checkVictoryCondition() {
+        const reqKills = getRequiredKillsForHome();
         for (let i = 0; i < 4; i++) {
           const p = gameState.players[i];
           if (!p.active) continue;
           if (rulesConfig.teamMode) {
             const partner = gameState.players[p.partner];
             const opponents = gameState.players.filter(function (op) { return op.active && op.team !== p.team; });
-            const allOpponentsZeroKills = opponents.length > 0 && opponents.every(function (op) { return (op.kills || 0) === 0; });
+            const allOpponentsLockedOut = opponents.length > 0 && opponents.every(function (op) {
+              const k = op.kills || 0;
+              return k === 0 || (reqKills > 0 && k < reqKills);
+            });
+            const thisPlayerAllInsideHome = hasPlayerAllTokensInsideHome(i);
+            const partnerAllInsideHome = !partner || !partner.active || hasPlayerAllTokensInsideHome(p.partner);
             const thisPlayerDone = hasPlayerCompletedAllTokens(i);
             const partnerDone = !partner || !partner.active || hasPlayerCompletedAllTokens(p.partner);
 
-            // Clean Sweep in 2v2: If you completed all your beads (or both partners completed) while BOTH opponents have 0 kills (cannot enter Home without kill), immediate Flawless Clean Sweep Win!
-            if (thisPlayerDone && allOpponentsZeroKills && (rulesConfig.killRequiredForHome || rulesConfig.twoKillsForHome || partnerDone)) {
+            // Immediate Flawless Clean Sweep in 2v2: As soon as all of a player's beads (or both partners' beads) have gone inside Home while opponents haven't killed/eaten yet, crown them and win right then!
+            if (thisPlayerAllInsideHome && allOpponentsLockedOut && (rulesConfig.killRequiredForHome || rulesConfig.twoKillsForHome || partnerAllInsideHome)) {
+              p.tokens.forEach(function (tk) {
+                if (tk.state === 'home_stretch') {
+                  tk.state = 'completed';
+                  tk.homeStep = 6;
+                }
+              });
+              if (partner && partner.active && partnerAllInsideHome) {
+                partner.tokens.forEach(function (tk) {
+                  if (tk.state === 'home_stretch') {
+                    tk.state = 'completed';
+                    tk.homeStep = 6;
+                  }
+                });
+              }
               return {
                 won: true,
                 isCleanSweep: true,
                 isTeamWin: true,
                 winningTeam: p.team,
                 winnerIdx: i,
-                title: '🧹👑 CLEAN SWEEP! ' + (p.team === 0 ? 'Team 1 (Red & Yellow)' : 'Team 2 (Green & Blue)') + ' Wins!',
-                subtitle: 'Flawless Clean Sweep (کلین سویپ فتح)! All beads reached Home while opponents had 0 kills and remained locked out of Home!'
+                title: '🧹👑 FLAWLESS CLEAN SWEEP! ' + (p.team === 0 ? 'Team 1 (Red & Yellow)' : 'Team 2 (Green & Blue)') + ' Wins!',
+                subtitle: 'Immediate Flawless Victory (کلین سویپ فتح)! All beads entered Home while opponents had 0 kills and could no longer enter Home!'
               };
             }
 
             if (thisPlayerDone && partnerDone) {
               return {
                 won: true,
-                isCleanSweep: allOpponentsZeroKills,
+                isCleanSweep: allOpponentsLockedOut,
                 isTeamWin: true,
                 winningTeam: p.team,
                 winnerIdx: i,
@@ -4499,16 +4696,38 @@
               };
             }
           } else {
-            if (hasPlayerCompletedAllTokens(i)) {
-              const opponents = gameState.players.filter(function (op) { return op.active && op.id !== i; });
-              const allOpponentsZeroKills = opponents.length > 0 && opponents.every(function (op) { return (op.kills || 0) === 0; });
+            const opponents = gameState.players.filter(function (op) { return op.active && op.id !== i; });
+            const allOpponentsLockedOut = opponents.length > 0 && opponents.every(function (op) {
+              const k = op.kills || 0;
+              return k === 0 || (reqKills > 0 && k < reqKills);
+            });
+
+            // Immediate Flawless Victory in 1v1 / FFA: As soon as all of player i's beads have gone inside Home (home_stretch or completed) while opponent(s) haven't killed/eaten yet, crown them and win right then!
+            if (hasPlayerAllTokensInsideHome(i) && allOpponentsLockedOut) {
+              p.tokens.forEach(function (tk) {
+                if (tk.state === 'home_stretch') {
+                  tk.state = 'completed';
+                  tk.homeStep = 6;
+                }
+              });
               return {
                 won: true,
-                isCleanSweep: allOpponentsZeroKills,
+                isCleanSweep: true,
                 isTeamWin: false,
                 winnerIdx: i,
-                title: (allOpponentsZeroKills ? '🧹👑 CLEAN SWEEP! ' : '') + p.name + ' Wins the Match!',
-                subtitle: allOpponentsZeroKills
+                title: '🧹👑 FLAWLESS CLEAN SWEEP! ' + p.name + ' Wins!',
+                subtitle: 'Immediate Flawless Victory (کلین سویپ فتح)! All ' + rulesConfig.tokensPerPlayer + ' beads of ' + p.name + ' entered Home while opponent(s) had 0 kills and could never enter Home!'
+              };
+            }
+
+            if (hasPlayerCompletedAllTokens(i)) {
+              return {
+                won: true,
+                isCleanSweep: allOpponentsLockedOut,
+                isTeamWin: false,
+                winnerIdx: i,
+                title: (allOpponentsLockedOut ? '🧹👑 CLEAN SWEEP! ' : '') + p.name + ' Wins the Match!',
+                subtitle: allOpponentsLockedOut
                   ? ('Flawless Clean Sweep (کلین سویپ فتح)! ' + p.name + ' brought all ' + rulesConfig.tokensPerPlayer + ' beads Home while all opponents had 0 kills!')
                   : ('Completed all ' + rulesConfig.tokensPerPlayer + ' beads!')
               };
@@ -4647,7 +4866,7 @@
               careerStats.bestStreak = careerStats.streak;
             }
             if (vic.isTeamWin) careerStats.teamWins += 1;
-            if (rulesConfig.aiDifficulty === 'hard') careerStats.hardAiWins += 1;
+            if (rulesConfig.aiDifficulty === 'hard' || rulesConfig.aiDifficulty === 'hardest') careerStats.hardAiWins += 1;
           } else {
             careerStats.streak = 0;
           }
@@ -4969,37 +5188,324 @@
         }, 280);
       }
 
-      // --- 7. INTELLIGENT AI ENGINE ---
+      // --- 7. 4-TIER INTELLIGENT AI ENGINE (Easy, Medium, Hard, Hardest Utmost Expert) ---
+      function isSquareSafeFromCapture(trackIdx) {
+        if (rulesConfig.safeStopImmunity) {
+          return SAFE_TRACK_INDICES.has(trackIdx);
+        }
+        return START_TRACK_INDEX.includes(trackIdx);
+      }
+
+      function computeSquareThreatScore(ownerIdx, trackIdx) {
+        if (isSquareSafeFromCapture(trackIdx)) return 0;
+        const ownerMeta = PLAYER_META[ownerIdx];
+        let threat = 0;
+        const twoDiceWeights = {
+          1: 11, 2: 12, 3: 13, 4: 14, 5: 15, 6: 16,
+          7: 6, 8: 5, 9: 4, 10: 3, 11: 2, 12: 1
+        };
+
+        gameState.players.forEach(function (pl) {
+          if (!pl || !pl.active || pl.id === ownerIdx) return;
+          if (rulesConfig.teamMode && pl.team === ownerMeta.team) return;
+
+          const enemyEffectiveDice = getEffectiveDiceCountForOwner(pl.id, pl.id);
+          const enemyMaxReach = enemyEffectiveDice === 2 ? 12 : 6;
+          const enemyNeedsBloodKill = (getRequiredKillsForHome() > 0 && (pl.kills || 0) < getRequiredKillsForHome());
+          const aggressionMultiplier = enemyNeedsBloodKill ? 1.55 : 1.0;
+
+          // Check if enemy has yard beads that can spawn onto their start square or strike from start
+          const enemyHasYardBeads = pl.tokens.some(function (et) { return et.state === 'yard'; });
+          if (enemyHasYardBeads) {
+            const enemyStartIdx = START_TRACK_INDEX[pl.id];
+            if (trackIdx === enemyStartIdx && !isSquareSafeFromCapture(trackIdx)) {
+              threat += 28 * aggressionMultiplier;
+            } else if (enemyEffectiveDice === 2) {
+              const distFromStart = (trackIdx - enemyStartIdx + 52) % 52;
+              if (distFromStart >= 1 && distFromStart <= 6) {
+                threat += 12 * aggressionMultiplier;
+              }
+            }
+          }
+
+          pl.tokens.forEach(function (et) {
+            if (et.state !== 'board') return;
+            const eTrack = getOuterTrackIndex(et);
+            const dist = (trackIdx - eTrack + 52) % 52;
+            if (dist >= 1 && dist <= enemyMaxReach) {
+              // Check if a Jora wall blocks the enemy from jumping to trackIdx
+              let blockedByJora = false;
+              if (rulesConfig.pairBlockadeRule && dist > 1) {
+                for (let s = 1; s < dist; s++) {
+                  const midIdx = (eTrack + s) % 52;
+                  if (isTrackSquareBlockedByOpponentJora(pl.id, midIdx)) {
+                    blockedByJora = true;
+                    break;
+                  }
+                }
+              }
+              if (!blockedByJora) {
+                const weight = enemyEffectiveDice === 2 ? (twoDiceWeights[dist] || 2) : (dist <= 6 ? 10 : 0);
+                threat += weight * 2.4 * aggressionMultiplier;
+              }
+            }
+          });
+        });
+
+        return threat;
+      }
+
+      function computeOffensiveStalkScore(ownerIdx, trackIdx, ownerNeedsKill) {
+        const ownerMeta = PLAYER_META[ownerIdx];
+        const myEffectiveDice = getEffectiveDiceCountForOwner(ownerIdx, ownerIdx);
+        const maxStrike = myEffectiveDice === 2 ? 10 : 6;
+        let stalkBonus = 0;
+
+        gameState.players.forEach(function (pl) {
+          if (!pl || !pl.active || pl.id === ownerIdx) return;
+          if (rulesConfig.teamMode && pl.team === ownerMeta.team) return;
+
+          pl.tokens.forEach(function (et) {
+            if (et.state !== 'board') return;
+            const eTrack = getOuterTrackIndex(et);
+            if (isSquareSafeFromCapture(eTrack)) return;
+            const distAhead = (eTrack - trackIdx + 52) % 52;
+            if (distAhead >= 1 && distAhead <= maxStrike) {
+              const valueOfVictim = 18 + (et.steps * 0.65) + (ownerNeedsKill ? 42 : 12);
+              const probFactor = distAhead <= 6 ? 1.0 : 0.45;
+              stalkBonus += valueOfVictim * probFactor;
+            }
+          });
+        });
+
+        return stalkBonus;
+      }
+
       function evaluateMoveScore(move) {
+        const diff = rulesConfig.aiDifficulty || 'hardest';
         const owner = gameState.players[move.ownerIdx];
         const tk = owner.tokens[move.tokenId];
-        let score = 0;
+        const reqKills = getRequiredKillsForHome();
+        const ownerNeedsKill = reqKills > 0 && (owner.kills || 0) < reqKills;
+        const activePlayersCount = gameState.players.filter(function (pl) { return pl && pl.active; }).length;
+        const is1v1Mode = !rulesConfig.teamMode && activePlayersCount === 2;
+        const isFfaMode = !rulesConfig.teamMode && activePlayersCount >= 3;
+        const is2v2Mode = Boolean(rulesConfig.teamMode);
 
-        if (rulesConfig.aiDifficulty === 'easy') {
-          return Math.random() * 50 + move.delta;
+        // 1. EASY MODE: Normal & Easy — casual, forgiving, sometimes moves non-optimal beads so players can comfortably win
+        if (diff === 'easy') {
+          let easyScore = Math.random() * 85 + move.delta * 1.2;
+          if (move.sim.isSpawn) easyScore += 35;
+          if (move.sim.newState === 'completed') easyScore += 65;
+          else if (move.sim.newState === 'home_stretch') easyScore += 30;
+          if (move.sim.newState === 'board') {
+            const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
+            if (getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack).length > 0) {
+              easyScore += 45;
+            }
+          }
+          return easyScore;
         }
 
-        score += move.delta * 3.2;
-        if (move.sim.isSpawn) score += 95;
-        if (move.sim.newState === 'completed') score += 260;
-        else if (move.sim.newState === 'home_stretch') score += 140 + move.sim.newHomeStep * 10;
+        // 2. MEDIUM MODE: Balanced standard AI — takes direct kills, spawns, and safe squares with moderate human-like variance
+        if (diff === 'medium') {
+          let medScore = (Math.random() * 22) + move.delta * 2.8;
+          if (move.sim.isSpawn) medScore += 90;
+          if (move.sim.newState === 'completed') medScore += 220;
+          else if (move.sim.newState === 'home_stretch') medScore += 125 + move.sim.newHomeStep * 8;
+          if (move.sim.newState === 'board') {
+            const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
+            const victims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
+            if (victims.length > 0) {
+              medScore += ownerNeedsKill ? 310 : 185;
+            }
+            if (isSquareSafeFromCapture(destTrack)) medScore += 55;
+          }
+          return medScore;
+        }
+
+        // 3. HARD & HARDEST MODES: Deep rule-aware tactical engine
+        let score = move.delta * 3.4;
+        const curTrack = tk.state === 'board' ? getOuterTrackIndex(tk) : -1;
+        const curDanger = (tk.state === 'board' && curTrack >= 0) ? computeSquareThreatScore(move.ownerIdx, curTrack) : 0;
+
+        // Check if this move triggers an immediate Flawless Clean Sweep Victory!
+        const otherBeadsAllInsideHome = owner.tokens.every(function (otherTk) {
+          if (otherTk.id === tk.id) return true;
+          return otherTk.state === 'home_stretch' || otherTk.state === 'completed';
+        });
+        if (
+          otherBeadsAllInsideHome &&
+          (move.sim.newState === 'home_stretch' || move.sim.newState === 'completed') &&
+          areOpponentsWithoutKillsForPlayer(move.ownerIdx)
+        ) {
+          score += (diff === 'hardest' ? 5000 : 1200);
+        }
+
+        // Spawn evaluation
+        if (move.sim.isSpawn) {
+          const groundCount = owner.tokens.filter(function (t) { return t.state === 'board'; }).length;
+          score += groundCount === 0 ? 240 : (groundCount === 1 ? 155 : 105);
+          if (rulesConfig.closeGameMode && groundCount === 1) {
+            // Having at least 2 beads on the board in Close Game mode lets 1 bead kill and the 2nd bead play the remaining die!
+            score += 65;
+          }
+        }
+
+        // Home Stretch & Completion evaluation
+        if (move.sim.newState === 'completed') {
+          score += 340 + (rulesConfig.bonusRollOnHome ? 95 : 0);
+          score += curDanger * (1 + tk.steps / 35);
+        } else if (move.sim.newState === 'home_stretch') {
+          score += 210 + move.sim.newHomeStep * 14;
+          score += curDanger * (1 + tk.steps / 35);
+        }
+
+        // Optional outer loop evaluation: only loop past Home Gate after a kill if it directly captures an enemy!
+        if (move.isOptionalLoop) {
+          const destTrackLoop = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
+          const loopVictims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrackLoop);
+          if (loopVictims.length === 0) {
+            score -= 320;
+          } else {
+            score += 140;
+          }
+        }
+
+        // No-Kill Forced Outer Loop penalty: if AI has 0 kills and this move forces a bead past step 50 into another 52-cell lap, prefer moving/stalking with another bead unless forced
+        if (move.sim.loopedPastHome && !move.isOptionalLoop && ownerNeedsKill) {
+          score -= (diff === 'hardest' ? 190 : 80);
+        }
 
         if (move.sim.newState === 'board') {
           const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
           const victims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
+          const destDanger = computeSquareThreatScore(move.ownerIdx, destTrack);
+
+          // Escape from danger vs walking into danger
+          const stepValueFactor = 1 + (tk.steps / 38);
+          score += (curDanger * stepValueFactor) - (destDanger * (1 + (move.sim.newSteps / 36)));
+
+          // Leaving a safe square without a kill
+          if (tk.state === 'board' && isSquareSafeFromCapture(curTrack) && !isSquareSafeFromCapture(destTrack) && victims.length === 0) {
+            score -= (45 + destDanger * 0.85);
+          }
+
+          // Landing on a Safe Stop square
+          if (isSquareSafeFromCapture(destTrack)) {
+            score += 95 + (move.sim.newSteps > 25 ? 35 : 0);
+          }
+
+          // Capture / Kill evaluation
           if (victims.length > 0) {
-            score += (owner.kills === 0 && rulesConfig.killRequiredForHome) ? 380 : 210;
-            if (rulesConfig.bonusRollOnKill) score += 65; // Extra priority for earning a kill re-roll!
-          }
-          if (SAFE_TRACK_INDICES.has(destTrack)) {
-            score += 70;
-          }
-          if (rulesConfig.aiDifficulty === 'hard') {
-            const curTrack = getOuterTrackIndex(tk);
-            if (tk.state === 'board' && SAFE_TRACK_INDICES.has(curTrack) && !SAFE_TRACK_INDICES.has(destTrack) && victims.length === 0) {
-              score -= 40;
+            const uniqueVictimOwners = Array.from(new Set(victims.map(function (v) { return v.ownerIdx; })));
+            let maxKillCount = 1;
+            let victimStepsDestroyed = 0;
+            uniqueVictimOwners.forEach(function (vOwnerIdx) {
+              const sameOwnerVictims = victims.filter(function (v) { return v.ownerIdx === vOwnerIdx; });
+              const countKilled = rulesConfig.killAllStackedEnemies ? sameOwnerVictims.length : 1;
+              const stepsSum = sameOwnerVictims.slice(0, countKilled).reduce(function (acc, v) {
+                const vTk = gameState.players[v.ownerIdx].tokens[v.tokenId];
+                return acc + (vTk ? vTk.steps : 10);
+              }, 0);
+              if (countKilled > maxKillCount || stepsSum > victimStepsDestroyed) {
+                maxKillCount = Math.max(maxKillCount, countKilled);
+                victimStepsDestroyed = Math.max(victimStepsDestroyed, stepsSum);
+              }
+            });
+
+            // Blood Gate urgency
+            let killScore = ownerNeedsKill ? 560 : 280;
+            killScore += maxKillCount * 150 + victimStepsDestroyed * (is1v1Mode ? 3.5 : 2.2);
+            if (rulesConfig.bonusRollOnKill) killScore += 110;
+
+            // Emergency Clean Sweep Interception: if an opponent has almost all beads inside home while AI has 0 kills!
+            if (diff === 'hardest') {
+              victims.forEach(function (v) {
+                const vPlayer = gameState.players[v.ownerIdx];
+                if (!vPlayer) return;
+                const vRemainingOutside = vPlayer.tokens.filter(function (vt) {
+                  return vt.state === 'yard' || vt.state === 'board';
+                }).length;
+                if (vRemainingOutside <= 2) {
+                  killScore += 320;
+                }
+              });
+
+              // Close Game Lock Risk Check: if capturing locks our bead on destTrack, check if destTrack is exposed to immediate revenge kill
+              if (rulesConfig.closeGameMode && destDanger > 30 && !ownerNeedsKill) {
+                killScore -= destDanger * 0.65;
+              }
             }
-            if (rulesConfig.teamMode) {
+
+            score += killScore;
+          }
+
+          if (diff === 'hardest') {
+            // Stalking bonus (positioning within strike distance behind vulnerable enemy beads, especially when AI needs a kill)
+            score += computeOffensiveStalkScore(move.ownerIdx, destTrack, ownerNeedsKill);
+
+            // Clean Sweep Denial: if an enemy has 0 kills (needs a kill to open their gate), avoid placing our bead 1..7 steps ahead of that enemy on an unsafe square!
+            if (!isSquareSafeFromCapture(destTrack)) {
+              gameState.players.forEach(function (op) {
+                if (!op || !op.active || op.id === move.ownerIdx) return;
+                if (is2v2Mode && op.team === owner.team) return;
+                if (reqKills > 0 && (op.kills || 0) < reqKills) {
+                  op.tokens.forEach(function (ot) {
+                    if (ot.state !== 'board') return;
+                    const oTrack = getOuterTrackIndex(ot);
+                    const distInFrontOfStarvingEnemy = (destTrack - oTrack + 52) % 52;
+                    if (distInFrontOfStarvingEnemy >= 1 && distInFrontOfStarvingEnemy <= 8) {
+                      score -= 95;
+                    }
+                  });
+                }
+              });
+            }
+
+            // Jora Wall / Pair Blockade & Stacking awareness
+            const friendlyOnDest = owner.tokens.filter(function (ft) {
+              return ft.id !== tk.id && ft.state === 'board' && getOuterTrackIndex(ft) === destTrack;
+            }).length;
+
+            if (friendlyOnDest >= 1 && !isSquareSafeFromCapture(destTrack)) {
+              if (rulesConfig.pairBlockadeRule) {
+                // Forming a Jora wall blocks opponents from jumping past destTrack!
+                score += 85;
+              } else if (rulesConfig.killAllStackedEnemies && destDanger > 0) {
+                // Avoid stacking 2 of our own beads on an unsafe square when killAllStackedEnemies is ON!
+                score -= (110 + destDanger * 0.9);
+              }
+            }
+
+            // 2v2 Partner Synergy
+            if (is2v2Mode) {
+              const partner = gameState.players[owner.partner];
+              if (partner && partner.active) {
+                const partnerOnDest = partner.tokens.some(function (pt) {
+                  return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack;
+                });
+                if (partnerOnDest) {
+                  score += rulesConfig.pairBlockadeRule ? 80 : 38;
+                }
+              }
+            }
+
+            // FFA Self-Preservation: in 4P FFA, 3 opponents roll before our next turn, so safety and advancing the lead bead toward Home are critical
+            if (isFfaMode) {
+              score -= destDanger * 0.45;
+              if (!ownerNeedsKill && tk.steps > 26) {
+                score += 45;
+              }
+            }
+
+            // Progress pacing: if we already have the required kill(s), prioritize advancing our furthest bead into Home!
+            if (!ownerNeedsKill && tk.state === 'board') {
+              score += (move.sim.newSteps / 50) * 55;
+            }
+          } else {
+            // HARD MODE (without full hardest heuristics)
+            if (is2v2Mode) {
               const partner = gameState.players[owner.partner];
               if (partner && partner.tokens.some(function (pt) { return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack; })) {
                 score += 28;
@@ -5009,6 +5515,104 @@
         }
 
         return score;
+      }
+
+      function chooseBestAiMove(legalMoves) {
+        if (!legalMoves || legalMoves.length === 0) return null;
+        if (legalMoves.length === 1) return legalMoves[0];
+
+        const diff = rulesConfig.aiDifficulty || 'hardest';
+
+        // In EASY mode, 45% of the time pick a random legal move so beginners can win comfortably
+        if (diff === 'easy' && Math.random() < 0.45) {
+          return legalMoves[Math.floor(Math.random() * legalMoves.length)];
+        }
+
+        // In HARDEST mode, perform full 2-Die Turn Lookahead across (move1, move2) pairs and combined moves!
+        const unusedDice = gameState.dicePool.filter(function (d) { return !d.used; });
+        if (diff === 'hardest' && unusedDice.length === 2) {
+          let bestMove = legalMoves[0];
+          let bestTurnScore = -999999;
+
+          legalMoves.forEach(function (mv1) {
+            let turnScore = evaluateMoveScore(mv1);
+
+            // If mv1 is a single-die move, simulate the board state after mv1 and find the best second-die move (mv2)
+            if (!mv1.isCombined && mv1.diceIds.length === 1) {
+              const remainingDie = unusedDice.find(function (d) { return d.id !== mv1.diceIds[0]; });
+              if (remainingDie) {
+                const owner = gameState.players[mv1.ownerIdx];
+                const tk1 = owner.tokens[mv1.tokenId];
+                const destTrack1 = mv1.sim.newState === 'board' ? ((START_TRACK_INDEX[tk1.owner] + mv1.sim.newSteps) % 52) : -1;
+                const victims1 = destTrack1 >= 0 ? getCaptureCandidatesAtTrackIndex(mv1.ownerIdx, destTrack1) : [];
+                const locksAfterMv1 = Boolean(victims1.length > 0 && rulesConfig.closeGameMode);
+                const addedKills1 = rulesConfig.killAllStackedEnemies ? victims1.length : (victims1.length > 0 ? 1 : 0);
+                const willHomeBeEligible = canOwnerEnterHomeStretch(mv1.ownerIdx) || ((owner.kills + addedKills1) >= getRequiredKillsForHome());
+
+                const simTokens = owner.tokens.map(function (orig) {
+                  if (orig.id !== mv1.tokenId) return Object.assign({}, orig);
+                  return {
+                    owner: orig.owner,
+                    id: orig.id,
+                    state: mv1.sim.newState,
+                    steps: mv1.sim.newSteps,
+                    homeStep: mv1.sim.newHomeStep,
+                    lockedThisTurn: locksAfterMv1
+                  };
+                });
+
+                // Check if Close Game lock unlocks because no other token can move
+                const simGround = simTokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
+                const unlockedCanMove = simTokens.some(function (t) {
+                  if (t.lockedThisTurn || t.state === 'completed') return false;
+                  return simulateTokenAdvance(t, remainingDie.value, willHomeBeEligible, simTokens, false).valid;
+                });
+                if (simGround.length <= 1 || !unlockedCanMove) {
+                  simTokens.forEach(function (t) { t.lockedThisTurn = false; });
+                }
+
+                let bestMv2Score = -99999;
+                simTokens.forEach(function (simTk) {
+                  if (simTk.state === 'completed') return;
+                  const sim2 = simulateTokenAdvance(simTk, remainingDie.value, willHomeBeEligible, simTokens, false);
+                  if (sim2.valid) {
+                    let s2 = remainingDie.value * 3.2;
+                    if (sim2.isSpawn) s2 += 120;
+                    if (sim2.newState === 'completed') s2 += 320;
+                    else if (sim2.newState === 'home_stretch') s2 += 200 + sim2.newHomeStep * 12;
+                    else if (sim2.newState === 'board') {
+                      const dTrack2 = (START_TRACK_INDEX[simTk.owner] + sim2.newSteps) % 52;
+                      const v2 = getCaptureCandidatesAtTrackIndex(mv1.ownerIdx, dTrack2);
+                      if (v2.length > 0) s2 += 300;
+                      if (isSquareSafeFromCapture(dTrack2)) s2 += 90;
+                      s2 -= computeSquareThreatScore(mv1.ownerIdx, dTrack2) * 0.85;
+                    }
+                    if (s2 > bestMv2Score) bestMv2Score = s2;
+                  }
+                });
+
+                if (bestMv2Score > -99999) {
+                  turnScore += bestMv2Score * 0.88;
+                }
+              }
+            } else if (mv1.isCombined) {
+              // Combined move uses both dice at once; scale appropriately so it competes fairly with 2-move sequences
+              turnScore *= 1.15;
+            }
+
+            if (turnScore > bestTurnScore) {
+              bestTurnScore = turnScore;
+              bestMove = mv1;
+            }
+          });
+
+          return bestMove;
+        }
+
+        const scored = legalMoves.slice().sort(function (a, b) {
+          return evaluateMoveScore(b) - evaluateMoveScore(a);
+        });
+        return scored[0];
       }
 
       function scheduleAiIfNeeded() {
@@ -5040,7 +5644,7 @@
         if (gameState.phase === 'ROLL') {
           gameState.aiTimer = setTimeout(function () {
             rollDiceForCurrentPlayer();
-          }, 480);
+          }, 420);
         } else if (gameState.phase === 'MOVE') {
           gameState.aiTimer = setTimeout(function () {
             const legal = computeLegalMoves();
@@ -5048,9 +5652,9 @@
               advanceToNextTurn();
               return;
             }
-            legal.sort(function (a, b) { return evaluateMoveScore(b) - evaluateMoveScore(a); });
-            executeMove(legal[0]);
-          }, 500);
+            const chosen = chooseBestAiMove(legal);
+            executeMove(chosen || legal[0]);
+          }, 440);
         }
       }
 
@@ -5228,26 +5832,27 @@
           ctx.stroke();
           ctx.restore();
 
+          const isCompactCanvas = window.innerWidth < 640;
           if (pl && pl.active) {
             const teamStr = rulesConfig.teamMode ? (' [' + meta.teamTag + ']') : '';
-            const turnPrefix = isCurrentTurnYard ? '⚡ BARI: ' : '';
-            const bannerText = turnPrefix + pl.name.slice(0, 11) + teamStr;
-            const bannerW = sizeW - cellW * 1.2;
-            const bannerH = Math.max(cellH * 0.48, cell * 0.48);
+            const turnPrefix = isCurrentTurnYard ? '⚡ ' : '';
+            const bannerText = turnPrefix + pl.name.slice(0, isCompactCanvas ? 9 : 11) + teamStr;
+            const bannerW = sizeW - cellW * 1.25;
+            const bannerH = Math.max(cellH * (isCompactCanvas ? 0.38 : 0.44), cell * (isCompactCanvas ? 0.38 : 0.44));
             const bannerX = x + (sizeW - bannerW) / 2;
-            const bannerY = y + cellH * 0.58;
+            const bannerY = y + cellH * 0.54;
 
             ctx.save();
             ctx.fillStyle = isCurrentTurnYard ? '#0f172a' : '#f1f5f9';
             ctx.beginPath();
-            ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 8);
+            ctx.roundRect(bannerX, bannerY, bannerW, bannerH, 6);
             ctx.fill();
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 1.2;
             ctx.strokeStyle = isCurrentTurnYard ? '#f59e0b' : '#cbd5e1';
             ctx.stroke();
 
             ctx.fillStyle = isCurrentTurnYard ? '#fde047' : '#0f172a';
-            ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
+            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.22)) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(bannerText, x + sizeW / 2, bannerY + bannerH / 2);
@@ -5259,10 +5864,10 @@
             const sx = (slot[1] + 0.5) * cellW;
             const sy = (slot[0] + 0.5) * cellH;
             ctx.beginPath();
-            ctx.arc(sx, sy, cell * 0.42, 0, Math.PI * 2);
+            ctx.arc(sx, sy, cell * (isCompactCanvas ? 0.36 : 0.40), 0, Math.PI * 2);
             ctx.fillStyle = homeColors[yo.pIdx];
             ctx.fill();
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 2;
             ctx.strokeStyle = strongColors[yo.pIdx];
             ctx.stroke();
           }
@@ -5272,22 +5877,22 @@
             const badgeText = pl.kills >= reqKillsForYard
               ? ('🔓 HOME OPEN (⚔️' + pl.kills + ')')
               : ('🔒 NEED ' + reqKillsForYard + (reqKillsForYard === 1 ? ' KILL' : ' KILLS (⚔️' + pl.kills + '/2)'));
-            const badgeW = sizeW - cellW * 1.2;
-            const badgeH = Math.max(cellH * 0.48, cell * 0.5);
+            const badgeW = sizeW - cellW * 1.25;
+            const badgeH = Math.max(cellH * (isCompactCanvas ? 0.38 : 0.44), cell * (isCompactCanvas ? 0.38 : 0.44));
             const badgeX = x + (sizeW - badgeW) / 2;
-            const badgeY = y + sizeH - cellH * 0.58 - badgeH;
+            const badgeY = y + sizeH - cellH * 0.54 - badgeH;
 
             ctx.save();
             ctx.fillStyle = pl.kills >= reqKillsForYard ? '#065f46' : '#881337';
             ctx.beginPath();
-            ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
+            ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 6);
             ctx.fill();
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 1.2;
             ctx.strokeStyle = '#ffffff';
             ctx.stroke();
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
+            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.22)) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(badgeText, x + sizeW / 2, badgeY + badgeH / 2);
@@ -5296,21 +5901,21 @@
 
           // On-Board Interactive Dice / Roll Pill in the center of the Active Player's Yard (Especially handy in Immersive Board-Only Mode!)
           if (isCurrentTurnYard && pl && pl.active) {
-            const pillW = Math.min(sizeW - cellW * 1.1, cell * 2.6);
-            const pillH = Math.max(cellH * 0.65, cell * 0.76);
+            const pillW = Math.min(sizeW - cellW * 1.3, cell * (isCompactCanvas ? 2.2 : 2.5));
+            const pillH = Math.max(cellH * (isCompactCanvas ? 0.50 : 0.60), cell * (isCompactCanvas ? 0.54 : 0.68));
             const px = x + (sizeW - pillW) / 2;
             const py = y + (sizeH - pillH) / 2;
             ctx.save();
             ctx.fillStyle = gameState.phase === 'ROLL' ? '#f59e0b' : '#0f172a';
             ctx.beginPath();
-            ctx.roundRect(px, py, pillW, pillH, 10);
+            ctx.roundRect(px, py, pillW, pillH, 8);
             ctx.fill();
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.6;
             ctx.strokeStyle = '#ffffff';
             ctx.stroke();
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '900 ' + Math.round(cell * 0.25) + 'px Inter, sans-serif';
+            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.20 : 0.24)) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             if (gameState.phase === 'ROLL') {
@@ -6248,6 +6853,25 @@
           p2.tokens[1].steps = 24;
           addGameLog('Drill 7 (Partner Assist): Red finished all beads! Rolling 1-Die 6 unlocks 2-Dice control of Yellow Partner\'s beads!', 'gold');
           rollDiceForCurrentPlayer([6, 1]);
+        } else if (scenarioKey === 'flawless_home_entry_win') {
+          p0.kills = 1;
+          for (let i = 0; i < p0.tokens.length - 1; i++) {
+            p0.tokens[i].state = 'home_stretch';
+            p0.tokens[i].steps = 50;
+            p0.tokens[i].homeStep = 2 + (i % 3);
+          }
+          const lastIdx = p0.tokens.length - 1;
+          p0.tokens[lastIdx].state = 'board';
+          p0.tokens[lastIdx].steps = 49;
+          p0.tokens[lastIdx].homeStep = 0;
+          p1.kills = 0;
+          p1.tokens[0].state = 'board';
+          p1.tokens[0].steps = 18;
+          gameState.players[3].kills = 0;
+          gameState.players[3].tokens[0].state = 'board';
+          gameState.players[3].tokens[0].steps = 24;
+          addGameLog('Drill 8 (Immediate Flawless Victory): Opponents have 0 kills. Move your last outer bead inside Home (+3) to win immediately without needing exact step 6!', 'gold');
+          rollDiceForCurrentPlayer([3, 2]);
         }
       }
 
@@ -6327,7 +6951,14 @@
         const chkTip2 = document.getElementById('chkShowTooltips');
         if (chkTip1) chkTip1.checked = Boolean(rulesConfig.showTooltips);
         if (chkTip2) chkTip2.checked = Boolean(rulesConfig.showTooltips);
+        if (!['easy', 'medium', 'hard', 'hardest'].includes(rulesConfig.aiDifficulty)) {
+          rulesConfig.aiDifficulty = 'hardest';
+        }
         document.getElementById('aiDifficultySelect').value = rulesConfig.aiDifficulty;
+        const homeAiSel = document.getElementById('homeQuickAiDiffSelect');
+        if (homeAiSel) homeAiSel.value = rulesConfig.aiDifficulty;
+        const pauseAiSel = document.getElementById('pauseAiDifficultySelect');
+        if (pauseAiSel) pauseAiSel.value = rulesConfig.aiDifficulty;
         const presetTimers = ['0', '15', '30', '60', '120', '180'];
         const curTimerStr = String(rulesConfig.turnTimeSeconds);
         const isPresetTimer = presetTimers.includes(curTimerStr);
@@ -9537,9 +10168,23 @@
         document.getElementById('rulesCustomTimerInput').classList.toggle('hidden', this.value !== 'custom');
       });
 
+      document.getElementById('homeQuickAiDiffSelect').addEventListener('change', function () {
+        rulesConfig.aiDifficulty = this.value;
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('pauseAiDifficultySelect').addEventListener('change', function () {
+        rulesConfig.aiDifficulty = this.value;
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+        showToast('🧠 AI Intelligence set to: ' + this.options[this.selectedIndex].text, true);
+      });
+
       document.getElementById('startMatchHeroBtn').addEventListener('click', function () {
         netMatch.isActive = false;
         const fmt = document.getElementById('homeQuickFormatSelect').value;
+        const homeAiEl = document.getElementById('homeQuickAiDiffSelect');
+        if (homeAiEl) rulesConfig.aiDifficulty = homeAiEl.value;
         rulesConfig.tokensPerPlayer = Number(document.getElementById('homeQuickTokensSelect').value);
         rulesConfig.closeGameMode = (document.getElementById('homeQuickCloseSelect').value === 'close');
         const homeTimerVal = document.getElementById('homeQuickTimerSelect').value;

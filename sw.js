@@ -66,7 +66,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "5018fc546513915b8da4bbe05bd22349"
+        "revision": "8fbc18a2509cae09ed3a234c809de6b0"
     },
     {
         "url": "manifest.json",
@@ -86,11 +86,11 @@ if (workbox) {
     },
     {
         "url": "snakes.html",
-        "revision": "db66e837daead91de4b25d9f5ef24420"
+        "revision": "c530d81fd50cb7d09d4cae302e4e6407"
     },
     {
         "url": "sw.js",
-        "revision": "e609f2b57c9cdf88f9ca51590f57e6a5"
+        "revision": "50df8340c21be554e52b35ae24ef0c93"
     },
     {
         "url": "transcript of the vioces.txt",
