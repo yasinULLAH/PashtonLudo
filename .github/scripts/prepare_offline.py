@@ -108,6 +108,8 @@ if os.path.exists(src_index):
         content = content.replace(f"href='{remote_url}'", f"href='{local_rel}'")
     content = re.sub(r'<link[^>]*href=["\']https://fonts\.googleapis\.com[^"\']*["\'][^>]*>', '', content)
     content = re.sub(r'<link[^>]*href=["\']https://fonts\.gstatic\.com[^"\']*["\'][^>]*>', '', content)
+    if "viewport-fit=cover" not in content:
+        content = content.replace('user-scalable=no', 'user-scalable=no, viewport-fit=cover')
     with open(os.path.join(LUDO_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -120,6 +122,8 @@ if os.path.exists(src_snakes):
         content = content.replace(f"src='{remote_url}'", f"src='{local_rel}'")
         content = content.replace(f'href="{remote_url}"', f'href="{local_rel}"')
         content = content.replace(f"href='{remote_url}'", f"href='{local_rel}'")
+    if "viewport-fit=cover" not in content:
+        content = content.replace('user-scalable=no', 'user-scalable=no, viewport-fit=cover')
     with open(os.path.join(SNAKES_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(content)
     with open(os.path.join(SNAKES_DIR, "snakes.html"), "w", encoding="utf-8") as f:
