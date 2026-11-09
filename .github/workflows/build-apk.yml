@@ -38,6 +38,11 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.2.1'
+
       - name: Prepare Offline Web Assets
         run: python .github/scripts/prepare_offline.py
 
@@ -55,10 +60,13 @@ jobs:
         run: npx cap sync android
 
       - name: Build Android Debug APK
+        env:
+          JAVA_OPTS: "-Dorg.gradle.internal.http.socketTimeout=180000 -Dorg.gradle.internal.http.connectionTimeout=180000"
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.socketTimeout=180000 -Dorg.gradle.internal.http.connectionTimeout=180000"
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace || gradle assembleDebug --stacktrace
 
       - name: Prepare APK Package
         run: |
@@ -79,4 +87,3 @@ jobs:
           name: "Bannu Royale Ludo - Offline APK (Build ${{ github.run_number }})"
           body: "Standalone fully offline working APK generated automatically from commit ${{ github.sha }}."
           files: BannuRoyaleLudo.apk
-

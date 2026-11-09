@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 RES_DIR = os.path.join(BASE_DIR, "android", "app", "src", "main", "res")
 MANIFEST_PATH = os.path.join(BASE_DIR, "android", "app", "src", "main", "AndroidManifest.xml")
+WRAPPER_PROPS = os.path.join(BASE_DIR, "android", "gradle", "wrapper", "gradle-wrapper.properties")
 
 ICON_MAP = {
     "mipmap-mdpi": os.path.join(BASE_DIR, "icon-72.png"),
@@ -43,3 +44,9 @@ if os.path.exists(MANIFEST_PATH):
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
         f.write(manifest_text)
 
+if os.path.exists(WRAPPER_PROPS):
+    with open(WRAPPER_PROPS, "r", encoding="utf-8") as f:
+        props = f.read()
+    props = props.replace("-all.zip", "-bin.zip")
+    with open(WRAPPER_PROPS, "w", encoding="utf-8") as f:
+        f.write(props)
