@@ -1,4 +1,4 @@
-name: Build Offline Android APK
+name: Build Offline Android APKs
 
 on:
   push:
@@ -46,37 +46,57 @@ jobs:
       - name: Prepare Offline Web Assets
         run: python .github/scripts/prepare_offline.py
 
-      - name: Install Capacitor & Initialize Android
+      - name: Install Capacitor Core
         run: |
           npm init -y
           npm install --save-dev @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
-          npx cap init "Bannu Royale Ludo" "com.yasinullah.bannuroyaleludo" --web-dir www
-          npx cap add android
 
-      - name: Configure App Icons and Android Manifest
-        run: python .github/scripts/configure_android.py
-
-      - name: Sync Capacitor Android Project
-        run: npx cap sync android
-
-      - name: Build Android Debug APK
+      - name: Build Bannu Royale Ludo APK
         env:
           JAVA_OPTS: "-Dorg.gradle.internal.http.socketTimeout=180000 -Dorg.gradle.internal.http.connectionTimeout=180000"
           GRADLE_OPTS: "-Dorg.gradle.internal.http.socketTimeout=180000 -Dorg.gradle.internal.http.connectionTimeout=180000"
         run: |
+          rm -rf www android capacitor.config.json
+          cp -r dist/ludo ./www
+          npx cap init "Bannu Royale Ludo" "com.yasinullah.bannuroyaleludo" --web-dir www
+          npx cap add android
+          python .github/scripts/configure_android.py .
+          npx cap sync android
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --stacktrace || gradle assembleDebug --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk ../BannuRoyaleLudo.apk
+          cd ..
 
-      - name: Prepare APK Package
+      - name: Build Khyber Saanp Seedhi Pro APK
+        env:
+          JAVA_OPTS: "-Dorg.gradle.internal.http.socketTimeout=180000 -Dorg.gradle.internal.http.connectionTimeout=180000"
+          GRADLE_OPTS: "-Dorg.gradle.internal.http.socketTimeout=180000 -Dorg.gradle.internal.http.connectionTimeout=180000"
         run: |
-          cp android/app/build/outputs/apk/debug/app-debug.apk BannuRoyaleLudo.apk
+          rm -rf www android capacitor.config.json
+          cp -r dist/snakes ./www
+          npx cap init "Khyber Saanp Seedhi Pro" "com.yasinullah.khybersaanpseedhi" --web-dir www
+          npx cap add android
+          python .github/scripts/configure_android.py .
+          npx cap sync android
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace || gradle assembleDebug --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk ../KhyberSaanpSeedhi.apk
+          cd ..
 
-      - name: Upload APK Artifact
+      - name: Upload Bannu Royale Ludo APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: BannuRoyaleLudo-APK
           path: BannuRoyaleLudo.apk
+          if-no-files-found: error
+
+      - name: Upload Khyber Saanp Seedhi APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KhyberSaanpSeedhi-APK
+          path: KhyberSaanpSeedhi.apk
           if-no-files-found: error
 
       - name: Create or Update GitHub Release
@@ -84,6 +104,8 @@ jobs:
         continue-on-error: true
         with:
           tag_name: latest
-          name: "Bannu Royale Ludo - Offline APK (Build ${{ github.run_number }})"
-          body: "Standalone fully offline working APK generated automatically from commit ${{ github.sha }}."
-          files: BannuRoyaleLudo.apk
+          name: "Offline Android APKs (Build ${{ github.run_number }})"
+          body: "Standalone fully offline working APKs for Bannu Royale Ludo and Khyber Saanp Seedhi Pro. Commit: ${{ github.sha }}"
+          files: |
+            BannuRoyaleLudo.apk
+            KhyberSaanpSeedhi.apk

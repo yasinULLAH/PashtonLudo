@@ -1,18 +1,20 @@
 import os
+import sys
 import shutil
-import xml.etree.ElementTree as ET
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-RES_DIR = os.path.join(BASE_DIR, "android", "app", "src", "main", "res")
-MANIFEST_PATH = os.path.join(BASE_DIR, "android", "app", "src", "main", "AndroidManifest.xml")
-WRAPPER_PROPS = os.path.join(BASE_DIR, "android", "gradle", "wrapper", "gradle-wrapper.properties")
+ROOT_DIR = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.getcwd()
+REPO_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+RES_DIR = os.path.join(ROOT_DIR, "android", "app", "src", "main", "res")
+MANIFEST_PATH = os.path.join(ROOT_DIR, "android", "app", "src", "main", "AndroidManifest.xml")
+WRAPPER_PROPS = os.path.join(ROOT_DIR, "android", "gradle", "wrapper", "gradle-wrapper.properties")
 
 ICON_MAP = {
-    "mipmap-mdpi": os.path.join(BASE_DIR, "icon-72.png"),
-    "mipmap-hdpi": os.path.join(BASE_DIR, "icon-72.png"),
-    "mipmap-xhdpi": os.path.join(BASE_DIR, "icon-96.png"),
-    "mipmap-xxhdpi": os.path.join(BASE_DIR, "icon-144.png"),
-    "mipmap-xxxhdpi": os.path.join(BASE_DIR, "icon-192.png"),
+    "mipmap-mdpi": os.path.join(REPO_DIR, "icon-72.png"),
+    "mipmap-hdpi": os.path.join(REPO_DIR, "icon-72.png"),
+    "mipmap-xhdpi": os.path.join(REPO_DIR, "icon-96.png"),
+    "mipmap-xxhdpi": os.path.join(REPO_DIR, "icon-144.png"),
+    "mipmap-xxxhdpi": os.path.join(REPO_DIR, "icon-192.png"),
 }
 
 for folder, icon_src in ICON_MAP.items():

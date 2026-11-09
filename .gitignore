@@ -1,10 +1,14 @@
 node_modules/
 android/
 www/
+dist/
+build-ludo/
+build-snakes/
 *.apk
 package.json
 package-lock.json
 capacitor.config.json
 .gradle/
 build/
-
+__pycache__/
+*.pyc
