@@ -53,6 +53,10 @@ if (workbox) {
         "revision": "05bdb783ee6514c8c072e47680af8ff7"
     },
     {
+        "url": ".gitignore",
+        "revision": "4d91a2cea178eb696162e89246528ea6"
+    },
+    {
         "url": "build pwa make html app offline and installable yasin best working re-run this for updates best for html only.pyw",
         "revision": "d3ceb161cfab9e9c5f40a93e15e5be27"
     },
@@ -66,7 +70,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "a98294dbf51df98258f612609c9e7205"
+        "revision": "73cbfd1d9baaa7461f012be02a1a299b"
     },
     {
         "url": "manifest.json",
@@ -90,7 +94,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "e3e5333d31e00731d7a140ac55093cfd"
+        "revision": "99f161d1c96b7c9c44a393ea665f28c2"
     },
     {
         "url": "transcript of the vioces.txt",

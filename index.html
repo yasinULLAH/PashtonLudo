@@ -1214,6 +1214,13 @@
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkWipeoutResetsHomeEligibility" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">Ground Wipeout Resets Home Eligibility (میدانی صفایا پر شکار کینسل)</div>
+<p class="text-[11px] text-slate-600">If all beads on ground are killed/eaten before any bead enters Home, home eligibility is lost and clean sweep is restored until a new kill.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkTeamMode" type="checkbox"/>
 <div>
 <div class="font-bold text-xs text-slate-900">2v2 Opposite-Corner Teams &amp; Safe Stacking (دو دو کی ٹیمیں)</div>
@@ -1298,10 +1305,10 @@
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkStackRollBeforeMoving" type="checkbox"/>
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkStackRollBeforeMoving" type="checkbox"/>
 <div>
-<div class="font-bold text-xs text-slate-900">📚 Stack Roll / Accumulate Sixes Before Moving (پہلے تمام باری چلنا پھر اکٹھا چلنا — Default: OFF)</div>
-<p class="text-[11px] text-slate-600">Queues all bonus rolls (including 6+6 and after-kill bonus rolls while keeping remaining dice stacked) before moving, then lets you distribute all rolled numbers across your beads.</p>
+<div class="font-bold text-xs text-slate-900">📚 Store / Stack Dice on Kill &amp; Sixes Before Moving (ڈائس محفوظ کر کے اکٹھا چلنا — Default: ON)</div>
+<p class="text-[11px] text-slate-600">When you roll 2 dice and kill or complete on one die (e.g. rolled 5 &amp; 4 and killed on 4), you can store the remaining 5 or use it, roll your bonus dice, and use all remaining dice counts at once.</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -2255,6 +2262,12 @@
 <button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-xs text-emerald-950 border border-emerald-300 whitespace-normal" data-scenario="flawless_home_entry_win" type="button">
           8️⃣ <b>Flawless Victory on Entering Home:</b> 3 beads in Home + 4th enters Home while opponents have 0 kills → Instant Win!
         </button>
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-xs text-rose-950 border border-rose-300 whitespace-normal" data-scenario="ground_wipeout_reset" type="button">
+          9️⃣ <b>Ground Wipeout Resets Home Eligibility:</b> Green had 1 kill, but Red eats Green's sole ground bead before Green entered Home → Green's eligibility &amp; clean sweep immunity reset!
+        </button>
+<button class="scenario-load-btn text-left px-3 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-xs text-indigo-950 border border-indigo-300 whitespace-normal" data-scenario="store_remaining_dice_bonus" type="button">
+          🔟 <b>Store &amp; Stack Dice on Kill/Home:</b> Rolled 5 &amp; 4, eat Green on 4 → Store remaining 5 or move it, roll bonus dice and use all numbers together!
+        </button>
 </div>
 </div>
 </div>
@@ -2694,6 +2707,7 @@
         bonusRollOnKill: true,
         mandatoryYardSpawn: true,
         killRequiredForHome: true,
+        wipeoutResetsHomeEligibility: true,
         allowOptionalLoopAfterKill: false,
         waitAllGroundAtGateBeforeLoop: false,
         bonusRollOnHome: true,
@@ -2704,7 +2718,7 @@
         teamAssistRequiresSix: true,
         threeConsecutiveSixesPenalty: false,
         singleSixBonusInTwoDice: false,
-        stackRollBeforeMoving: false,
+        stackRollBeforeMoving: true,
         spawnOnOneAndSix: false,
         doubleSixSpawnsTwoBeads: false,
         firstBeadStartsOnBoard: false,
@@ -2744,6 +2758,16 @@
           if (localStorage.getItem('bannu_ludo_kill_stacked_v1') !== 'migrated') {
             rulesConfig.killAllStackedEnemies = true;
             localStorage.setItem('bannu_ludo_kill_stacked_v1', 'migrated');
+          }
+          if (rulesConfig.wipeoutResetsHomeEligibility === undefined) {
+            rulesConfig.wipeoutResetsHomeEligibility = true;
+          }
+          if (rulesConfig.stackRollBeforeMoving === undefined) {
+            rulesConfig.stackRollBeforeMoving = true;
+          }
+          if (localStorage.getItem('bannu_ludo_stack_roll_default_v2') !== 'migrated') {
+            rulesConfig.stackRollBeforeMoving = true;
+            localStorage.setItem('bannu_ludo_stack_roll_default_v2', 'migrated');
           }
         } catch (e) {}
       }
@@ -4271,6 +4295,14 @@
         return { tag: (move.isCombined ? '⚡ +' : '📍 +') + move.delta, color: move.isCombined ? '#d97706' : '#0284c7' };
       }
 
+      function canPlayerRollBonusNow() {
+        return Boolean(
+          rulesConfig.stackRollBeforeMoving &&
+          (gameState.earnedKillBonusThisTurn || gameState.earnedHomeBonusThisTurn) &&
+          gameState.dicePool.some(function (d) { return !d.used; })
+        );
+      }
+
       // Auto-Execute when:
       // (A) Mandatory 6 Pocket Spawn applies (unless all beads are already on the ground or completed, 6 MUST auto-place an unplaced pocket bead!)
       // (B) Only 1 movable bead exists on the ground (player has only that 1 bead and no other option!)
@@ -4283,6 +4315,7 @@
         if (!gameState.isMatchActive || gameState.isPaused || gameState.phase !== 'MOVE') return false;
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || actor.type !== 'human') return false;
+        if (canPlayerRollBonusNow()) return false;
 
         const legal = computeLegalMoves();
         if (legal.length === 0) return false;
@@ -4600,6 +4633,22 @@
         victimToken.steps = 0;
         victimToken.homeStep = 0;
         victimToken.lockedThisTurn = false;
+
+        if (rulesConfig.wipeoutResetsHomeEligibility !== false && (victimPlayer.kills || 0) > 0) {
+          const hasBeadInsideHome = victimPlayer.tokens.some(function (t) {
+            return t.state === 'home_stretch' || t.state === 'completed';
+          });
+          const hasBeadOnBoard = victimPlayer.tokens.some(function (t) {
+            return t.state === 'board';
+          });
+          if (!hasBeadInsideHome && !hasBeadOnBoard) {
+            victimPlayer.kills = 0;
+            if (victimPlayer.assistUnlocked) victimPlayer.assistUnlocked = false;
+            addGameLog('⚠️ Ground Wipeout: All on-ground beads of ' + victimPlayer.name + ' were eliminated before reaching Home! Home Gate locked (🔒) and clean sweep vulnerability restored until a new kill is made.', 'warn');
+            showToast('⚠️ Ground Wipeout! ' + victimPlayer.name + '\'s Home eligibility reset!');
+            pushActivityEvent('🧹', 'Ground Wipeout on ' + victimPlayer.name, 'All field beads eaten before entering Home — Home eligibility and clean sweep protection reset to 0', 'combat');
+          }
+        }
 
         const capturerPlayer = gameState.players[capturerOwnerIdx];
         capturerPlayer.kills += 1;
@@ -4943,19 +4992,26 @@
         const earnedKillBonus = Boolean(rulesConfig.bonusRollOnKill && gameState.earnedKillBonusThisTurn);
         const earnedHomeBonus = Boolean(rulesConfig.bonusRollOnHome && gameState.earnedHomeBonusThisTurn);
 
-        // If Stack Roll is ON and player just earned a Kill or Home bonus while other dice remain unused, queue the re-roll immediately!
         if (rulesConfig.stackRollBeforeMoving && (earnedKillBonus || earnedHomeBonus) && gameState.dicePool.some(function (d) { return !d.used; })) {
+          const remainingMoves = computeLegalMoves();
+          if (remainingMoves.length === 0) {
+            gameState.phase = 'ROLL';
+            saveActiveMatchSnapshot();
+            resetTurnCountdown();
+            updateAllUI();
+            scheduleAiIfNeeded();
+            return;
+          }
           const curP = gameState.players[gameState.currentTurn];
           const stackReason = earnedKillBonus ? 'Kill Bonus (شکار باری)' : 'Home Bonus (گھر باری)';
-          gameState.earnedKillBonusThisTurn = false;
-          gameState.earnedHomeBonusThisTurn = false;
-          addGameLog('📚 Stack Roll (' + stackReason + '): ' + curP.name + ' keeps remaining dice stacked and rolls bonus turn now!', 'gold');
-          showToast('📚 ' + stackReason + ' Stacked! Roll bonus dice now & use all numbers together!');
-          gameState.phase = 'ROLL';
+          addGameLog('📚 Stack Roll (' + stackReason + '): ' + curP.name + ' earned a bonus roll with remaining dice! Tap "Roll Bonus" to store remaining dice, or move them on board.', 'gold');
+          showToast('📚 ' + stackReason + '! Tap "Roll Bonus" to store dice, or move remaining on board.');
+          gameState.phase = 'MOVE';
           saveActiveMatchSnapshot();
-          resetTurnCountdown();
           updateAllUI();
-          scheduleAiIfNeeded();
+          if (!checkAndTriggerAutoMoveIfForced()) {
+            scheduleAiIfNeeded();
+          }
           return;
         }
 
@@ -5055,7 +5111,13 @@
       }
 
       function rollDiceForCurrentPlayer(forcedValues, isRemoteSync) {
-        if (gameState.phase !== 'ROLL' || gameState.isPaused) return;
+        if (gameState.isPaused) return;
+        const isBonusStackRoll = canPlayerRollBonusNow();
+        if (gameState.phase !== 'ROLL' && !isBonusStackRoll) return;
+        if (isBonusStackRoll) {
+          gameState.earnedKillBonusThisTurn = false;
+          gameState.earnedHomeBonusThisTurn = false;
+        }
         const actor = gameState.players[gameState.currentTurn];
         if (!actor) return;
         if (!isRemoteSync && netMatch.isActive) {
@@ -5703,6 +5765,18 @@
           }, 420);
         } else if (gameState.phase === 'MOVE') {
           gameState.aiTimer = setTimeout(function () {
+            if (canPlayerRollBonusNow()) {
+              const legal = computeLegalMoves();
+              const hasCapture = legal.some(function (m) {
+                if (!m.sim || m.sim.newState !== 'board') return false;
+                const dTrack = (START_TRACK_INDEX[m.ownerIdx] + m.sim.newSteps) % 52;
+                return getCaptureCandidatesAtTrackIndex(m.ownerIdx, dTrack).length > 0;
+              });
+              if (!hasCapture) {
+                rollDiceForCurrentPlayer();
+                return;
+              }
+            }
             const legal = computeLegalMoves();
             if (legal.length === 0) {
               advanceToNextTurn();
@@ -6777,15 +6851,26 @@
         const rollLabel = document.getElementById('rollDiceBtnLabel');
         const immRollLabel = document.getElementById('immersiveRollLabel');
         const isMyTurn = netMatch.isActive ? (gameState.currentTurn === netMatch.myLocalSeat) : (actor.type === 'human');
-        if (gameState.phase === 'ROLL' && isMyTurn) {
+        const canRollBonus = isMyTurn && canPlayerRollBonusNow();
+        if ((gameState.phase === 'ROLL' && isMyTurn) || canRollBonus) {
           rollBtn.disabled = false;
           rollBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-          const lbl = needsAssistSix ? 'Roll 6' : (effectiveDiceCount === 2 ? 'Roll 2 Dice' : 'Roll Die');
-          rollLabel.textContent = lbl;
-          if (immRollLabel) immRollLabel.textContent = lbl;
+          if (canRollBonus && gameState.phase === 'MOVE') {
+            const storedSum = gameState.dicePool.filter(function (d) { return !d.used; }).reduce(function (acc, d) { return acc + d.value; }, 0);
+            const lbl = '🎲 Roll Bonus (Store +' + storedSum + ')';
+            rollLabel.textContent = lbl;
+            if (immRollLabel) immRollLabel.textContent = lbl;
+            rollBtn.classList.add('active-turn-glow');
+          } else {
+            rollBtn.classList.remove('active-turn-glow');
+            const lbl = needsAssistSix ? 'Roll 6' : (effectiveDiceCount === 2 ? 'Roll 2 Dice' : 'Roll Die');
+            rollLabel.textContent = lbl;
+            if (immRollLabel) immRollLabel.textContent = lbl;
+          }
         } else {
           rollBtn.disabled = true;
           rollBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          rollBtn.classList.remove('active-turn-glow');
           let lbl = actor.type === 'ai' ? 'AI Turn...' : 'Drag/Tap Bead';
           if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
             lbl = '⏳ ' + actor.name + '...';
@@ -6928,6 +7013,31 @@
           gameState.players[3].tokens[0].steps = 24;
           addGameLog('Drill 8 (Immediate Flawless Victory): Opponents have 0 kills. Move your last outer bead inside Home (+3) to win immediately without needing exact step 6!', 'gold');
           rollDiceForCurrentPlayer([3, 2]);
+        } else if (scenarioKey === 'ground_wipeout_reset') {
+          p0.kills = 1;
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 15;
+          p1.kills = 1;
+          p1.tokens[0].state = 'board';
+          p1.tokens[0].steps = 19;
+          for (let i = 1; i < p1.tokens.length; i++) {
+            p1.tokens[i].state = 'yard';
+            p1.tokens[i].steps = 0;
+            p1.tokens[i].homeStep = 0;
+          }
+          addGameLog('Drill 9 (Ground Wipeout Reset): Green has 1 kill (Home Open 🔓), but 0 beads inside Home. Red rolls +4 to eat Green\'s last ground bead—Green\'s kills reset to 0 (Home Locks 🔒) and Green can be clean sweeped again!', 'gold');
+          rollDiceForCurrentPlayer([4, 2]);
+        } else if (scenarioKey === 'store_remaining_dice_bonus') {
+          rulesConfig.stackRollBeforeMoving = true;
+          p0.kills = 0;
+          p0.tokens[0].state = 'board';
+          p0.tokens[0].steps = 15;
+          p0.tokens[1].state = 'board';
+          p0.tokens[1].steps = 4;
+          p1.tokens[0].state = 'board';
+          p1.tokens[0].steps = 19;
+          addGameLog('Drill 10 (Store & Stack Dice on Kill): Red rolled 5 & 4. Move Bead #1 (+4) to eat Green—you earn a Kill Bonus roll! Tap "Roll Bonus" to store remaining 5 and roll new dice, or move Bead #2 with 5 now!', 'gold');
+          rollDiceForCurrentPlayer([5, 4]);
         }
       }
 
@@ -6959,6 +7069,8 @@
         if (chkKeepLock) chkKeepLock.checked = rulesConfig.keepCaptureLockOnBonusRoll !== false;
         document.getElementById('chkMandatorySpawn').checked = Boolean(rulesConfig.mandatoryYardSpawn);
         document.getElementById('chkKillForHome').checked = Boolean(rulesConfig.killRequiredForHome);
+        const chkWipeout = document.getElementById('chkWipeoutResetsHomeEligibility');
+        if (chkWipeout) chkWipeout.checked = rulesConfig.wipeoutResetsHomeEligibility !== false;
         document.getElementById('chkTeamMode').checked = Boolean(rulesConfig.teamMode);
         document.getElementById('chkStrictRemainder').checked = Boolean(rulesConfig.strictHomeRemainder);
         document.getElementById('chkTeamAssistSix').checked = Boolean(rulesConfig.teamAssistRequiresSix);
@@ -7059,6 +7171,7 @@
         rulesConfig.bonusRollOnKill = true;
         rulesConfig.mandatoryYardSpawn = true;
         rulesConfig.killRequiredForHome = true;
+        rulesConfig.wipeoutResetsHomeEligibility = true;
         rulesConfig.allowOptionalLoopAfterKill = false;
         rulesConfig.waitAllGroundAtGateBeforeLoop = false;
         rulesConfig.bonusRollOnHome = true;
@@ -7069,7 +7182,7 @@
         rulesConfig.teamAssistRequiresSix = true;
         rulesConfig.threeConsecutiveSixesPenalty = false;
         rulesConfig.singleSixBonusInTwoDice = false;
-        rulesConfig.stackRollBeforeMoving = false;
+        rulesConfig.stackRollBeforeMoving = true;
         rulesConfig.spawnOnOneAndSix = false;
         rulesConfig.doubleSixSpawnsTwoBeads = false;
         rulesConfig.firstBeadStartsOnBoard = false;
@@ -7096,6 +7209,7 @@
         rulesConfig.bonusRollOnKill = true;
         rulesConfig.mandatoryYardSpawn = false;
         rulesConfig.killRequiredForHome = false;
+        rulesConfig.wipeoutResetsHomeEligibility = false;
         rulesConfig.allowOptionalLoopAfterKill = false;
         rulesConfig.waitAllGroundAtGateBeforeLoop = false;
         rulesConfig.bonusRollOnHome = true;
@@ -8006,7 +8120,7 @@
           }
           return;
         }
-        if (payload.type === 'ROLL' && gameState.phase === 'ROLL') {
+        if (payload.type === 'ROLL' && (gameState.phase === 'ROLL' || canPlayerRollBonusNow())) {
           rollDiceForCurrentPlayer(payload.values, true);
         } else if (payload.type === 'MOVE' && gameState.phase === 'MOVE') {
           const legal = computeLegalMoves();
@@ -9305,68 +9419,7 @@
               styles: { fontSize: 9, cellPadding: 5 }
             });
 
-            const matchRows = getFilteredSortedReportRecords().map(function (r) {
-              return [
-                r.matchId, r.date, String(r.mode || '').replace(/[^\x20-\x7E]/g, '').trim() || 'Bannu 2-Dice',
-                r.format, r.isCleanSweep ? 'CLEAN SWEEP' : (r.won ? 'WON' : 'LOST'),
-                String(r.kills || 0), String(r.closeLocks || 0),
-                formatDurationMs(r.durationMs), ((r.avgBeadMoveMs || 1200) / 1000).toFixed(2) + 's', ((r.avgTurnTimeMs || 4300) / 1000).toFixed(2) + 's'
-              ];
-            });
-            doc.autoTable({
-              startY: doc.lastAutoTable.finalY + 16,
-              head: [['Match ID', 'Date', 'Rulebook', 'Format', 'Result', 'Kills', 'Locks', 'Duration', 'Avg Move', 'Avg Turn']],
-              body: matchRows,
-              theme: 'striped',
-              headStyles: { fillColor: [15, 23, 42], textColor: [251, 191, 36], fontSize: 9 },
-              styles: { fontSize: 8.5, cellPadding: 4 }
-            });
-
-            const seatRows = (s.seatStats || []).map(function (st) {
-              return [
-                st.color, String(st.matches), String(st.wins), String(st.kills), String(st.deaths),
-                String(st.homeCompleted), (st.moves > 0 ? ((st.totalDecisionMs + st.totalAnimMs) / st.moves / 1000).toFixed(2) : '1.25') + 's',
-                (st.turns > 0 ? (st.totalTurnMs / st.turns / 1000).toFixed(2) : '4.30') + 's', formatDurationMs(st.totalGameTimeMs)
-              ];
-            });
-            doc.autoTable({
-              startY: doc.lastAutoTable.finalY + 16,
-              head: [['Seat Color', 'Matches', 'Wins', 'Kills', 'Deaths', 'Home Beads', 'Avg Bead Move', 'Avg Bari Turn', 'Full Game Time']],
-              body: seatRows,
-              theme: 'grid',
-              headStyles: { fillColor: [5, 150, 105], textColor: 255, fontSize: 9 },
-              styles: { fontSize: 8.5, cellPadding: 4 }
-            });
-          }
-          doc.save('bannu_royale_ludo_report_' + new Date().toISOString().slice(0, 10) + '.pdf');
-          showToast('📄 Downloaded Official Multi-Table PDF Report!', true);
-        } else {
-          window.print();
-        }
-      }
-
-      function switchDashboardSubTab(tabKey) {
-        dashState.activeSubTab = tabKey;
-        const panes = ['overview', 'reports', 'telemetry', 'progression', 'superadmin', 'vault'];
-        panes.forEach(function (k) {
-          const el = document.getElementById('dashPane_' + k);
-          if (el) el.classList.toggle('hidden', k !== tabKey);
-        });
-        document.querySelectorAll('.dash-subtab-btn').forEach(function (btn) {
-          const active = btn.dataset.dashtab === tabKey;
-          btn.className = 'dash-subtab-btn px-3 py-2 rounded-2xl text-xs transition ' +
-            (active ? 'font-black bg-amber-500 text-white shadow border border-amber-600' : 'font-bold bg-white text-slate-700 border border-amber-200 hover:bg-amber-50');
-        });
-        if (tabKey === 'overview') renderInfographicsAndCharts();
-        if (tabKey === 'reports') renderReportsTableAndPagination();
-        if (tabKey === 'telemetry') renderTelemetryTab();
-        if (tabKey === 'progression') renderProgressionTab();
-        if (tabKey === 'superadmin') renderSuperAdminTab();
-        if (tabKey === 'vault') drawStatsPictureCard();
-      }
-
-      function applyDashboardRoleVisibility(role) {
-        dashState.activeRole = role || 'super_admin';
+          
         careerStats.role = dashState.activeRole;
         const roleBadge = document.getElementById('dashActiveRoleBadge');
         const superAdminBtn = document.getElementById('dashTabSuperAdminBtn');
@@ -9686,6 +9739,22 @@
           exampleUr: 'مثال: لال کھلاڑی کا ابھی کوئی شکار نہیں اور گوٹی دروازے سے 2 خانے پیچھے ہے۔ 5 آنے پر گوٹی اندر جانے کے بجائے دروازہ کراس کر کے دوبارہ پورے بورڈ کے چکر پر نکل جائے گی۔'
         },
         {
+          id: 'wipeout_resets_home_eligibility',
+          cat: 'combat',
+          ruleKey: 'wipeoutResetsHomeEligibility',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '7. Ground Wipeout Resets Home Eligibility & Clean Sweep',
+          titleUr: 'میدانی صفایا پر گھر جانے کی اجازت اور کلین سویپ تحفظ ختم ہونا',
+          enDesc: 'If a player makes a kill, they become eligible to enter Home and cannot be clean sweeped. However, if all of their on-ground beads are eaten/killed by opponents before any of their beads has entered inside Home or completed, their home eligibility is wiped out (gate locks again) and clean sweep vulnerability is restored until they make another kill.',
+          urDesc: 'اگر کسی کھلاڑی نے شکار کیا ہو تو وہ اپنے گھر میں داخل ہونے کا اہل ہو جاتا ہے اور کلین سویپ سے بچ جاتا ہے۔ لیکن اگر گھر کے اندر کوئی بھی گوٹی پہنچنے سے پہلے میدان میں موجود اس کی تمام گوٹیاں مخالفین کے ہاتھوں ماری جائیں، تو اس کی اندر جانے کی اجازت ختم ہو جاتی ہے (دروازہ دوبارہ لاک ہو جاتا ہے) اور نیا شکار کرنے تک وہ دوبارہ کلین سویپ کے خطرے میں آ جاتا ہے۔',
+          onEffectEn: 'ENABLED (Default ON): Having all ground beads eliminated with 0 beads inside Home resets kills to 0, relocks the Home gate, and makes the player vulnerable to Clean Sweep again.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): گھر میں داخل ہوئے بغیر تمام میدانی گوٹیاں مر جانے پر شکار 0 ہو جائے گا، گھر کا دروازہ دوبارہ بند ہو جائے گا اور کھلاڑی دوبارہ کلین سویپ ہو سکے گا۔',
+          offEffectEn: 'DISABLED (OFF): Once a player makes a kill, their Home gate remains permanently unlocked for the rest of the match even if all ground beads are eliminated.',
+          offEffectUr: 'آف (OFF): ایک بار شکار کرنے کے بعد میدان صاف ہونے پر بھی گھر جانے کی اجازت باقی رہے گی۔',
+          exampleEn: 'Green made 1 kill and has 1 bead on the board heading home, but 0 beads inside Home. Red lands on Green\'s bead and kills it. With 0 beads left on the board and 0 inside Home, Green\'s kills reset to 0: Green\'s Home gate is locked (🔒) and Green can be clean sweeped if Red wins before Green kills someone again!',
+          exampleUr: 'مثال: ہرے کھلاڑی کا 1 شکار تھا اور اس کی ایک گوٹی باہر چل رہی تھی جبکہ گھر کے اندر کوئی گوٹی نہیں تھی۔ لال نے اس کی وہ گوٹی مار دی۔ اب چونکہ میدان میں کوئی گوٹی نہیں اور گھر میں بھی کوئی نہیں، اس لیے ہرے کا شکار 0 ہو گیا اور دروازہ دوبارہ لاک ہو گیا!'
+        },
+        {
           id: 'two_kills_for_home',
           cat: 'combat',
           ruleKey: 'twoKillsForHome',
@@ -9753,15 +9822,15 @@
           id: 'stack_roll_before_moving',
           cat: 'dice',
           ruleKey: 'stackRollBeforeMoving',
-          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
           titleEn: '11. Stack Roll / Accumulate Sixes & Kill Bonus Before Moving',
           titleUr: 'پہلے تمام باری اکٹھی رول کرنا پھر اکٹھا چلنا (اسٹیک رول)',
           enDesc: 'Instead of moving immediately after rolling 6+6, all bonus rolls are rolled first and queued up in the Stack Bar, and then you distribute all rolled numbers across your beads. The same applies to a Kill Bonus: if you kill an enemy with your first die, your remaining die stays stacked while you immediately roll your bonus turn and use all numbers together!',
           urDesc: 'ڈبل سکس (6+6) آنے پر فوراً گوٹی چلانے کے بجائے پہلے تمام بونس باریاں پھینک کر نمبر جمع (Stack) کر لیے جاتے ہیں، اور آخر میں تمام جمع شدہ نمبروں کو اپنی مرضی سے گوٹیوں پر تقسیم کیا جاتا ہے۔ اسی طرح اگر آپ نے ایک نمبر سے دشمن کو مارا تو بقیہ نمبر محفوظ رہے گا اور آپ فوراً شکار والی بونس باری رول کر کے سارے نمبر اکٹھے استعمال کر سکیں گے۔',
           onEffectEn: 'ENABLED (ON): Bonus rolls on 6/6+6 and mid-turn Kill/Home bonuses are rolled immediately into a multi-dice queue bar before you finish moving.',
           onEffectUr: 'آن (ON): چھکے اور شکار کی تمام اضافی باریاں پہلے اکٹھی رول ہوں گی اور ڈائس بار میں جمع ہو جائیں گی۔',
-          offEffectEn: 'DISABLED (Default OFF): You must finish moving your current dice first before rolling your bonus turn.',
-          offEffectUr: 'آف (OFF — ڈیفالٹ): پہلے موجودہ ڈائس کے نمبر چلیں گے، اس کے بعد اگلی بونس باری رول ہو گی۔',
+          offEffectEn: 'DISABLED (OFF): You must finish moving your current dice first before rolling your bonus turn.',
+          offEffectUr: 'آف (OFF): پہلے موجودہ ڈائس کے نمبر چلیں گے، اس کے بعد اگلی بونس باری رول ہو گی۔',
           exampleEn: '1) You roll 6+6 → it queues [6, 6] and lets you roll again right away (say 5+2) → now you have [6, 6, 5, 2] to play! 2) Or you roll 4+3, use 4 to kill an enemy → the 3 stays queued, you immediately roll your kill bonus (say 6+1), and now you have [3, 6, 1] all ready to play!',
           exampleUr: 'مثال: آپ کا 4 اور 3 آیا۔ آپ نے 4 سے مخالف کی گوٹی ماری تو 3 وہیں اسٹیک میں محفوظ رہے گا اور آپ کو فوراً شکار کی باری رول کرنے کو ملے گی (فرض کریں 5 اور 2 آیا)؛ اب آپ کے پاس 3، 5 اور 2 تینوں نمبر اکٹھے چلنے کے لیے موجود ہوں گے!'
         },
@@ -10728,6 +10797,8 @@
         if (chkKeepLock) rulesConfig.keepCaptureLockOnBonusRoll = chkKeepLock.checked;
         rulesConfig.mandatoryYardSpawn = document.getElementById('chkMandatorySpawn').checked;
         rulesConfig.killRequiredForHome = document.getElementById('chkKillForHome').checked;
+        const chkWipeout = document.getElementById('chkWipeoutResetsHomeEligibility');
+        if (chkWipeout) rulesConfig.wipeoutResetsHomeEligibility = chkWipeout.checked;
         rulesConfig.allowOptionalLoopAfterKill = document.getElementById('chkOptionalLoopAfterKill').checked;
         rulesConfig.waitAllGroundAtGateBeforeLoop = document.getElementById('chkWaitAllGroundAtGate').checked;
         rulesConfig.bonusRollOnHome = document.getElementById('chkBonusOnHome').checked;
