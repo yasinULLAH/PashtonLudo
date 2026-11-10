@@ -9419,7 +9419,68 @@
               styles: { fontSize: 9, cellPadding: 5 }
             });
 
-          
+            const matchRows = getFilteredSortedReportRecords().map(function (r) {
+              return [
+                r.matchId, r.date, String(r.mode || '').replace(/[^\x20-\x7E]/g, '').trim() || 'Bannu 2-Dice',
+                r.format, r.isCleanSweep ? 'CLEAN SWEEP' : (r.won ? 'WON' : 'LOST'),
+                String(r.kills || 0), String(r.closeLocks || 0),
+                formatDurationMs(r.durationMs), ((r.avgBeadMoveMs || 1200) / 1000).toFixed(2) + 's', ((r.avgTurnTimeMs || 4300) / 1000).toFixed(2) + 's'
+              ];
+            });
+            doc.autoTable({
+              startY: doc.lastAutoTable.finalY + 16,
+              head: [['Match ID', 'Date', 'Rulebook', 'Format', 'Result', 'Kills', 'Locks', 'Duration', 'Avg Move', 'Avg Turn']],
+              body: matchRows,
+              theme: 'striped',
+              headStyles: { fillColor: [15, 23, 42], textColor: [251, 191, 36], fontSize: 9 },
+              styles: { fontSize: 8.5, cellPadding: 4 }
+            });
+
+            const seatRows = (s.seatStats || []).map(function (st) {
+              return [
+                st.color, String(st.matches), String(st.wins), String(st.kills), String(st.deaths),
+                String(st.homeCompleted), (st.moves > 0 ? ((st.totalDecisionMs + st.totalAnimMs) / st.moves / 1000).toFixed(2) : '1.25') + 's',
+                (st.turns > 0 ? (st.totalTurnMs / st.turns / 1000).toFixed(2) : '4.30') + 's', formatDurationMs(st.totalGameTimeMs)
+              ];
+            });
+            doc.autoTable({
+              startY: doc.lastAutoTable.finalY + 16,
+              head: [['Seat Color', 'Matches', 'Wins', 'Kills', 'Deaths', 'Home Beads', 'Avg Bead Move', 'Avg Bari Turn', 'Full Game Time']],
+              body: seatRows,
+              theme: 'grid',
+              headStyles: { fillColor: [5, 150, 105], textColor: 255, fontSize: 9 },
+              styles: { fontSize: 8.5, cellPadding: 4 }
+            });
+          }
+          doc.save('bannu_royale_ludo_report_' + new Date().toISOString().slice(0, 10) + '.pdf');
+          showToast('📄 Downloaded Official Multi-Table PDF Report!', true);
+        } else {
+          window.print();
+        }
+      }
+
+      function switchDashboardSubTab(tabKey) {
+        dashState.activeSubTab = tabKey;
+        const panes = ['overview', 'reports', 'telemetry', 'progression', 'superadmin', 'vault'];
+        panes.forEach(function (k) {
+          const el = document.getElementById('dashPane_' + k);
+          if (el) el.classList.toggle('hidden', k !== tabKey);
+        });
+        document.querySelectorAll('.dash-subtab-btn').forEach(function (btn) {
+          const active = btn.dataset.dashtab === tabKey;
+          btn.className = 'dash-subtab-btn px-3 py-2 rounded-2xl text-xs transition ' +
+            (active ? 'font-black bg-amber-500 text-white shadow border border-amber-600' : 'font-bold bg-white text-slate-700 border border-amber-200 hover:bg-amber-50');
+        });
+        if (tabKey === 'overview') renderInfographicsAndCharts();
+        if (tabKey === 'reports') renderReportsTableAndPagination();
+        if (tabKey === 'telemetry') renderTelemetryTab();
+        if (tabKey === 'progression') renderProgressionTab();
+        if (tabKey === 'superadmin') renderSuperAdminTab();
+        if (tabKey === 'vault') drawStatsPictureCard();
+      }
+
+      function applyDashboardRoleVisibility(role) {
+        dashState.activeRole = role || 'super_admin';
         careerStats.role = dashState.activeRole;
         const roleBadge = document.getElementById('dashActiveRoleBadge');
         const superAdminBtn = document.getElementById('dashTabSuperAdminBtn');
