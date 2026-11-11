@@ -75,10 +75,6 @@ if (workbox) {
         "revision": "9c8b29467d8795a44e0ce2e4404f2613"
     },
     {
-        "url": "easy and short V5 via python and json.py.bak",
-        "revision": "843b5c45bd34ca3b08e6d46f993b2f37"
-    },
-    {
         "url": "feature_report.md",
         "revision": "82ecb324d1553aa6495de9358f0630f7"
     },
@@ -120,7 +116,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "c0149e53811c5a98c2227287072290c3"
+        "revision": "c01f63904bca4f441307413972a16b0d"
     },
     {
         "url": "transcript of the vioces.txt",
