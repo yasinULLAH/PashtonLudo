@@ -71,11 +71,19 @@ if (workbox) {
         "revision": "2cb95ff675d477536bcc0576fb8cae88"
     },
     {
+        "url": "easy and short V5 via python and json.py",
+        "revision": "843b5c45bd34ca3b08e6d46f993b2f37"
+    },
+    {
         "url": "feature_report.md",
         "revision": "82ecb324d1553aa6495de9358f0630f7"
     },
     {
         "url": "index.html",
+        "revision": "2e7663a9b239bca40b5bab601bd44c4b"
+    },
+    {
+        "url": "index.html.bak",
         "revision": "7f7b6abbfdb0b576c84bc90f6035190f"
     },
     {
@@ -91,6 +99,10 @@ if (workbox) {
         "revision": "14b8d9657316f9cd0474f0bea3e44a26"
     },
     {
+        "url": "patch.json",
+        "revision": "a930e5c035784d7c1d614cf044fdaa7f"
+    },
+    {
         "url": "pwa-register.js",
         "revision": "a231f535e9cd717de72e84f8e28da396"
     },
@@ -104,7 +116,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "a7cf3deb21d98c5b571057d759cc6b3b"
+        "revision": "d648d3169c4d9a73d969caf560606100"
     },
     {
         "url": "transcript of the vioces.txt",

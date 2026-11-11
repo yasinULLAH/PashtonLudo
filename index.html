@@ -775,6 +775,54 @@
         height: 36px !important;
       }
     }
+
+    /* ==================== FULL-SCREEN MOBILE-FIRST GAME REPLAY STUDIO ==================== */
+    #playActionToolbar {
+      overflow-x: auto !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #playActionToolbar::-webkit-scrollbar {
+      display: none;
+    }
+    #replayStudioModal {
+      width: 100vw;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 0%, #0f172a 0%, #090d16 65%, #020617 100%);
+      color: #f8fafc;
+    }
+    #replayTimelineSlider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 7px;
+      border-radius: 9999px;
+      background: rgba(245, 158, 11, 0.25);
+      outline: none;
+    }
+    #replayTimelineSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      background: #f59e0b;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.65);
+      cursor: pointer;
+    }
+    #replayTimelineSlider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      background: #f59e0b;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.65);
+      cursor: pointer;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 <link href="manifest.json" rel="manifest"/><link href="favicon.ico" rel="icon" type="image/x-icon"/></head>
 <body class="w-full h-dvh overflow-hidden flex flex-col selection:bg-amber-500 selection:text-white">
@@ -933,10 +981,14 @@
 <span>▶️</span>
 <span>PLAY GAME NOW (کھیل شروع کریں)</span>
 </button>
+<button class="w-full py-2.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-400/60 transition flex items-center justify-center gap-2 shadow-md" id="homeOpenReplayStudioBtn" type="button">
+<span>🎬</span>
+<span>WATCH GAME REPLAYS — CURRENT &amp; PAST (ری پلے اسٹوڈیو)</span>
+</button>
 </div>
 </div>
 <!-- Bottom Secondary Navigation Bar on Home Screen -->
-<div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2" id="homeDesktopBottomNav">
+<div class="w-full grid grid-cols-2 sm:grid-cols-5 gap-2" id="homeDesktopBottomNav">
 <button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition" id="navRulesBtn" type="button">
 <span>⚙️</span><span>Advanced Rules</span>
 </button>
@@ -949,6 +1001,9 @@
 </button>
 <button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-slate-800 flex items-center justify-center gap-1.5 transition" id="navGuideBtn" type="button">
 <span>📖</span><span>Bannu Guide</span>
+</button>
+<button class="royal-card hover:bg-amber-50 py-2.5 px-3 rounded-2xl text-xs font-extrabold text-rose-800 border-rose-300 flex items-center justify-center gap-1.5 transition" id="navReplayBtn" type="button">
+<span>🎬</span><span>Match Replays</span>
 </button>
 </div>
 </section>
@@ -992,6 +1047,9 @@
 <button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-200 font-bold text-[10px] border border-amber-400/40 shadow-sm" id="undoMoveBtn" title="Undo Move" type="button">
           ↩️
         </button>
+<button class="px-2 py-1 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-extrabold text-[10px] sm:text-[11px] border border-rose-400/60 shadow-sm flex items-center gap-1" id="openLiveReplayBtn" title="Open Full-Screen Game Replay Studio" type="button">
+<span>🎬</span><span class="hidden sm:inline">Replay</span>
+</button>
 <button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[10px] border border-amber-400/40 shadow-sm" id="demoScenarioBtn" title="Test Cultural Rule Drills" type="button">
           ⚡
         </button>
@@ -1125,6 +1183,9 @@
 <button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-600 text-white shadow" id="enterImmersiveFromMenuBtn" type="button">
         👁️ Immersive Board-Only Mode (Zero Distractions)
       </button>
+<button class="w-full py-2.5 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white shadow flex items-center justify-center gap-1.5" id="pauseOpenReplayBtn" type="button">
+<span>🎬</span><span>Replay Studio (Review Current &amp; Past Games)</span>
+</button>
 <button class="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300" id="newMatchQuickBtn" type="button">
         🔄 Restart Match
       </button>
@@ -2414,6 +2475,9 @@
 <button class="px-4 py-2.5 rounded-xl font-black text-xs gold-gradient-btn" id="victoryPlayAgainBtn" type="button">
   🔄 Play Again
 </button>
+<button class="px-4 py-2.5 rounded-xl font-black text-xs bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm flex items-center gap-1" id="victoryWatchReplayBtn" type="button">
+  🎬 Watch Replay
+</button>
 <button class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 border border-slate-300" id="victoryViewStatsBtn" type="button">
   📸 View Stats Card
 </button>
@@ -2445,14 +2509,142 @@
 <!-- ==================== MODAL 5: MATCH TELEMETRY DRILL-DOWN MODAL ==================== -->
 <div class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" id="matchDrilldownModal">
 <div class="royal-card rounded-3xl p-4 sm:p-5 max-w-3xl w-full max-h-[88dvh] overflow-y-auto border-2 border-indigo-400 shadow-2xl space-y-3">
-<div class="flex items-center justify-between border-b border-indigo-200 pb-2.5">
-<div>
-<h3 class="text-sm sm:text-base font-black text-slate-900" id="matchDrilldownTitle">🔍 Match Telemetry Breakdown</h3>
-<p class="text-[11px] text-slate-600" id="matchDrilldownSubtitle">Detailed per-player and per-bead movement timing for this match</p>
+<div class="flex items-center justify-between border-b border-indigo-200 pb-2.5 gap-2">
+<div class="min-w-0">
+<h3 class="text-sm sm:text-base font-black text-slate-900 truncate" id="matchDrilldownTitle">🔍 Match Telemetry Breakdown</h3>
+<p class="text-[11px] text-slate-600 truncate" id="matchDrilldownSubtitle">Detailed per-player and per-bead movement timing for this match</p>
 </div>
+<div class="flex items-center gap-1.5 flex-shrink-0">
+<button class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black shadow-sm flex items-center gap-1" id="drilldownWatchReplayBtn" type="button"><span>🎬</span><span>Watch Replay</span></button>
 <button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700" id="closeMatchDrilldownModalBtn" type="button">✕</button>
 </div>
+</div>
 <div class="space-y-3 text-xs" id="matchDrilldownContent"></div>
+</div>
+</div>
+<!-- ==================== MODAL 6: FULL-SCREEN MOBILE-FIRST GAME REPLAY STUDIO ==================== -->
+<div class="hidden fixed inset-0 z-50 flex flex-col justify-between p-1.5 sm:p-3 select-none" id="replayStudioModal">
+<!-- Top Header Bar: Match Switcher, Screenshot, Export/Import, Fullscreen & Exit -->
+<div class="w-full max-w-6xl mx-auto flex items-center justify-between gap-1.5 bg-slate-900/95 border border-amber-400/60 rounded-2xl px-2.5 py-1.5 shadow-lg flex-shrink-0">
+<div class="flex items-center gap-1.5 min-w-0 flex-1">
+<span class="w-7 h-7 rounded-xl bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-sm shadow flex-shrink-0">🎬</span>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-1.5">
+<select aria-label="Select Match Replay" class="bg-slate-800 border border-amber-400/60 text-amber-200 text-[11px] sm:text-xs font-black rounded-xl px-2 py-1 max-w-[185px] sm:max-w-xs truncate cursor-pointer focus:outline-none" id="replayMatchSelect"></select>
+<span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/40 truncate" id="replayMetaModeBadge">Bannu 2-Dice</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="px-2.5 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] sm:text-xs shadow flex items-center gap-1" id="replayScreenshotBtn" title="Download HD Replay Screenshot (.PNG)" type="button">
+<span>📸</span><span class="hidden sm:inline">Screenshot</span>
+</button>
+<button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 font-bold text-[10px] sm:text-xs flex items-center gap-1" id="replayExportJsonBtn" title="Download Replay File (.json)" type="button">
+<span>💾</span><span class="hidden md:inline">Save</span>
+</button>
+<label class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-400/40 font-bold text-[10px] sm:text-xs flex items-center gap-1 cursor-pointer" title="Import Replay File (.json)">
+<span>📂</span><span class="hidden md:inline">Load</span>
+<input accept=".json,application/json" class="hidden" id="replayImportJsonInput" type="file"/>
+</label>
+<button class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 text-xs font-bold flex items-center justify-center" id="replayFullscreenBtn" title="Toggle Fullscreen" type="button">⛶</button>
+<button class="px-2.5 py-1 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] sm:text-xs shadow" id="closeReplayStudioBtn" title="Close Replay Studio" type="button">✕ Exit</button>
+</div>
+</div>
+<!-- Sub-Header: 4-Player Live Frame Score Strip + Current Step Event Ticker -->
+<div class="w-full max-w-6xl mx-auto mt-1 flex flex-col gap-1 flex-shrink-0">
+<div class="grid grid-cols-4 gap-1 sm:gap-2" id="replayPlayersStrip"></div>
+<div class="w-full bg-slate-900/90 border border-slate-700/90 rounded-xl px-2.5 py-1 flex items-center justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0 flex-1">
+<span class="px-2 py-0.5 rounded-lg bg-amber-500 text-slate-950 font-black text-[10px] flex-shrink-0" id="replayEventTypeBadge">START</span>
+<div class="min-w-0 flex-1">
+<div class="text-[11px] sm:text-xs font-black text-white truncate" id="replayEventTitle">Match Replay Ready</div>
+<div class="text-[9px] sm:text-[10px] font-semibold text-slate-400 truncate" id="replayEventSubtitle">Step 0 / 0 • Tap Play or scrub timeline</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5 flex-shrink-0">
+<div class="flex items-center gap-1 bg-slate-800 border border-amber-400/40 rounded-lg px-2 py-0.5" id="replayDiceReadout">
+<span class="text-xs">🎲</span>
+<span class="font-mono font-black text-[11px] text-amber-300" id="replayDiceText">-</span>
+</div>
+<button class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-600 text-[10px] font-extrabold" id="replayToggleLogDrawerBtn" title="Toggle Move-by-Move Jump List" type="button">📜 Moves</button>
+</div>
+</div>
+</div>
+<!-- Center Board Area + Optional Slide-Over Move List Drawer -->
+<div class="flex-1 min-h-0 w-full max-w-6xl mx-auto my-1 relative flex items-center justify-center overflow-hidden">
+<div class="relative h-full w-full flex items-center justify-center">
+<div class="relative aspect-square max-h-full max-w-full h-full p-1.5 sm:p-2 rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-700 shadow-2xl border-2 border-amber-300 flex items-center justify-center">
+<canvas class="w-full h-full rounded-xl bg-white block" height="750" id="replayCanvas" width="750"></canvas>
+<!-- Floating On-Board Quick Overlay Toggles -->
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1 pointer-events-auto">
+<span class="px-2 py-0.5 rounded-full bg-slate-950/85 text-amber-300 border border-amber-400/50 text-[9px] font-black shadow" id="replayFloatingStatusPill">⏸️ PAUSED • 1x</span>
+</div>
+<div class="absolute top-2.5 right-2.5 flex items-center gap-1 pointer-events-auto">
+<button class="px-2 py-0.5 rounded-full bg-slate-950/85 hover:bg-slate-900 text-emerald-300 border border-emerald-400/50 text-[9px] font-black shadow" id="replayToggleTrailBtn" title="Toggle Move Trail &amp; Step Numbers" type="button">🧭 Trail: ON</button>
+<button class="px-2 py-0.5 rounded-full bg-slate-950/85 hover:bg-slate-900 text-sky-300 border border-sky-400/50 text-[9px] font-black shadow" id="replayRotateBoardBtn" title="Rotate Board View 90°" type="button">🔄 0°</button>
+</div>
+</div>
+</div>
+<!-- Move-by-Move Interactive Jump Drawer -->
+<div class="hidden absolute inset-y-0 right-0 z-30 w-72 sm:w-80 bg-slate-900/95 backdrop-blur-md border-l-2 border-amber-400 rounded-l-2xl p-3 flex flex-col justify-between shadow-2xl" id="replayMoveListDrawer">
+<div class="flex items-center justify-between pb-2 border-b border-slate-700">
+<span class="text-xs font-black text-amber-300">📜 Step-by-Step Replay Log</span>
+<button class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold" id="closeReplayMoveListBtn" type="button">✕</button>
+</div>
+<div class="flex-1 overflow-y-auto space-y-1 my-2 pr-1 text-[11px]" id="replayMoveListContainer"></div>
+<div class="text-[10px] text-slate-400 text-center">Tap any step to jump directly to that board state</div>
+</div>
+</div>
+<!-- Bottom Scrubber & Full Transport Controls Dock -->
+<div class="w-full max-w-6xl mx-auto bg-slate-900/95 border border-amber-400/60 rounded-2xl px-2.5 py-2 shadow-2xl space-y-1.5 flex-shrink-0">
+<!-- Scrubber & Key Event Jump Chips -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar text-[10px]">
+<div class="flex items-center gap-1 flex-shrink-0">
+<span class="font-mono font-black text-amber-300" id="replayStepCounterLabel">Step 0 / 0</span>
+<span class="text-slate-500">•</span>
+<span class="font-mono text-slate-300" id="replayTimeElapsedLabel">00:00</span>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="px-2 py-0.5 rounded-lg bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-500/40 font-bold" id="replayPrevKillBtn" title="Jump to Previous Kill" type="button">⏪⚔️ Kill</button>
+<button class="px-2 py-0.5 rounded-lg bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-500/40 font-bold" id="replayNextKillBtn" title="Jump to Next Kill" type="button">⚔️ Kill ⏩</button>
+<button class="px-2 py-0.5 rounded-lg bg-amber-950/90 hover:bg-amber-900 text-amber-200 border border-amber-500/40 font-bold" id="replayNextSixBtn" title="Jump to Next 6 / Double 6" type="button">🔥 Next 6</button>
+<button class="px-2 py-0.5 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/40 font-bold" id="replayNextHomeBtn" title="Jump to Next Home Entry" type="button">🏠 Home</button>
+</div>
+</div>
+<input aria-label="Replay Timeline Scrubber" class="w-full cursor-pointer" id="replayTimelineSlider" max="0" min="0" step="1" type="range" value="0"/>
+</div>
+<!-- Transport Buttons: Stop, First, -5, Prev, Play/Pause, Next, +5, Last, Speed, Loop, Sound -->
+<div class="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar pt-0.5">
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 font-extrabold text-[10px] sm:text-xs" id="replayStopBtn" title="Stop &amp; Reset to Start" type="button">⏹️ Stop</button>
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[10px] sm:text-xs" id="replayFirstStepBtn" title="Jump to First Frame (Home)" type="button">⏮️</button>
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[10px] sm:text-xs" id="replayBack5Btn" title="Back 5 Steps" type="button">-5</button>
+<button class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-black text-[10px] sm:text-xs" id="replayPrevStepBtn" title="Step Backward (-1)" type="button">◀️ Step</button>
+</div>
+<button class="px-4 sm:px-6 py-1.5 rounded-xl emerald-play-btn font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 flex-shrink-0 shadow-lg" id="replayPlayPauseBtn" type="button">
+<span id="replayPlayPauseIcon">▶️</span>
+<span id="replayPlayPauseLabel">Play</span>
+</button>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-black text-[10px] sm:text-xs" id="replayNextStepBtn" title="Step Forward (+1)" type="button">Step ▶️</button>
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[10px] sm:text-xs" id="replayFwd5Btn" title="Forward 5 Steps" type="button">+5</button>
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[10px] sm:text-xs" id="replayLastStepBtn" title="Jump to Final Frame (End)" type="button">⏭️</button>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<select aria-label="Replay Playback Speed" class="bg-slate-800 border border-amber-400/60 text-amber-300 rounded-xl px-2 py-1.5 text-[10px] sm:text-xs font-black cursor-pointer" id="replaySpeedSelect" title="Playback Speed">
+<option value="0.25">🐢 0.25x</option>
+<option value="0.5">🐢 0.5x</option>
+<option selected="" value="1">⚡ 1x</option>
+<option value="1.5">⚡ 1.5x</option>
+<option value="2">🚀 2x</option>
+<option value="4">🚀 4x</option>
+<option value="8">⚡ 8x</option>
+</select>
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-[10px] sm:text-xs" id="replayLoopToggleBtn" title="Toggle Auto-Loop Replay" type="button">🔁 Off</button>
+<button class="px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-bold text-[10px] sm:text-xs" id="replaySoundToggleBtn" title="Toggle Replay Sound Effects" type="button">🔊</button>
+</div>
+</div>
 </div>
 </div>
 <div class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4" id="crownCheatModal">
@@ -3614,6 +3806,7 @@
             earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
             earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
             lastMovedTrail: gameState.lastMovedTrail,
+            replayFrames: (gameState.replayFrames || []).slice(-140),
             netMatch: netMatch.isActive ? {
               isActive: true,
               isHost: netMatch.isHost,
@@ -3733,6 +3926,7 @@
           gameState.earnedKillBonusThisTurn = Boolean(data.earnedKillBonusThisTurn);
           gameState.earnedHomeBonusThisTurn = Boolean(data.earnedHomeBonusThisTurn);
           gameState.lastMovedTrail = data.lastMovedTrail || null;
+          gameState.replayFrames = Array.isArray(data.replayFrames) ? data.replayFrames : [];
           gameState.isPaused = false;
           gameState.isMatchActive = true;
 
@@ -3866,6 +4060,9 @@
         gameState.earnedKillBonusThisTurn = Boolean(snap.earnedKillBonusThisTurn);
         gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
         gameState.lastMovedTrail = snap.lastMovedTrail || null;
+        if (Array.isArray(gameState.replayFrames) && gameState.replayFrames.length > 1) {
+          gameState.replayFrames.pop();
+        }
         gameState.selectedTokenKey = null;
         gameState.draggingToken = null;
         gameState.preferredDieFilter = null;
@@ -3939,6 +4136,17 @@
         document.getElementById('scenarioDrawer').classList.add('hidden');
         document.getElementById('pauseMenuModal').classList.add('hidden');
 
+        gameState.replayFrames = [];
+        recordLiveReplayFrame({
+          type: 'START',
+          actorIdx: 0,
+          ownerIdx: 0,
+          tokenId: null,
+          delta: 0,
+          title: '🏁 Match Started — ' + rulesConfig.presetName,
+          subtitle: rulesConfig.diceCount + ' Dice • ' + rulesConfig.tokensPerPlayer + ' Beads • ' + (rulesConfig.closeGameMode ? 'Close Game' : 'Open Game'),
+          trail: null
+        });
         clearGameLog();
         addGameLog(customAnnouncement || ('Match started: ' + rulesConfig.presetName + ' (' + rulesConfig.diceCount + ' Dice, ' + rulesConfig.tokensPerPlayer + ' Beads).'), 'gold');
 
@@ -5219,11 +5427,27 @@
               stepsMoved: pt.stepsMoved
             };
           }),
-          moveLogs: (mt.moveLogs || []).slice(0, 30)
+          moveLogs: (mt.moveLogs || []).slice(0, 30),
+          rulesSnapshot: {
+            presetName: rulesConfig.presetName,
+            diceCount: rulesConfig.diceCount,
+            tokensPerPlayer: rulesConfig.tokensPerPlayer,
+            closeGameMode: Boolean(rulesConfig.closeGameMode),
+            teamMode: Boolean(rulesConfig.teamMode),
+            killRequiredForHome: Boolean(rulesConfig.killRequiredForHome),
+            twoKillsForHome: Boolean(rulesConfig.twoKillsForHome),
+            pairBlockadeRule: Boolean(rulesConfig.pairBlockadeRule)
+          },
+          replayFrames: (gameState.replayFrames || []).slice(-160)
         };
 
         careerStats.matchRecords.unshift(record);
         if (careerStats.matchRecords.length > 100) careerStats.matchRecords.length = 100;
+        careerStats.matchRecords.forEach(function (mr, idx) {
+          if (idx >= 25 && mr.replayFrames && mr.replayFrames.length > 40) {
+            delete mr.replayFrames;
+          }
+        });
 
         careerStats.history.unshift({
           matchId: record.matchId,
@@ -5255,8 +5479,37 @@
       }
 
       function continueTurnAfterMove() {
+        if (gameState.lastMovedTrail && gameState.matchTelemetry && gameState.matchTelemetry.moveLogs && gameState.matchTelemetry.moveLogs[0]) {
+          const latestLog = gameState.matchTelemetry.moveLogs[0];
+          const tr = gameState.lastMovedTrail;
+          let evType = 'MOVE';
+          if (String(latestLog.outcome || '').indexOf('Kill') !== -1) evType = 'KILL';
+          else if (String(latestLog.outcome || '').indexOf('Spawn') !== -1) evType = 'SPAWN';
+          else if (String(latestLog.outcome || '').indexOf('Home Completed') !== -1) evType = 'HOME';
+          else if (String(latestLog.outcome || '').indexOf('Loop') !== -1) evType = 'LOOP';
+          recordLiveReplayFrame({
+            type: evType,
+            actorIdx: latestLog.actorIdx !== undefined ? latestLog.actorIdx : gameState.currentTurn,
+            ownerIdx: tr.ownerIdx,
+            tokenId: tr.tokenId,
+            delta: tr.delta,
+            title: latestLog.playerName + ' (' + latestLog.colorName + ' Bead #' + latestLog.tokenId + ') → ' + latestLog.outcome,
+            subtitle: 'Move #' + latestLog.moveNo + ' • Think: ' + (latestLog.decisionMs / 1000).toFixed(2) + 's • Hop: ' + (latestLog.animMs / 1000).toFixed(2) + 's',
+            trail: JSON.parse(JSON.stringify(tr))
+          });
+        }
         const vic = checkVictoryCondition();
         if (vic.won) {
+          recordLiveReplayFrame({
+            type: 'VICTORY',
+            actorIdx: vic.winnerIdx !== undefined ? vic.winnerIdx : gameState.currentTurn,
+            ownerIdx: vic.winnerIdx !== undefined ? vic.winnerIdx : gameState.currentTurn,
+            tokenId: null,
+            delta: 0,
+            title: '👑 ' + vic.title,
+            subtitle: vic.subtitle,
+            trail: gameState.lastMovedTrail ? JSON.parse(JSON.stringify(gameState.lastMovedTrail)) : null
+          });
           gameState.phase = 'GAME_OVER';
           clearSavedMatchSnapshot();
           playSound('win');
@@ -5590,6 +5843,16 @@
 
           gameState.phase = 'MOVE';
           const rollStr = effectiveDiceCount === 2 ? (v1 + ' & ' + v2 + ' (Total ' + (v1 + v2) + ')') : String(v1);
+          recordLiveReplayFrame({
+            type: 'ROLL',
+            actorIdx: actor.id,
+            ownerIdx: targetOwnerIdx,
+            tokenId: null,
+            delta: effectiveDiceCount === 2 ? (v1 + v2) : v1,
+            title: '🎲 ' + actor.name + ' rolled ' + rollStr,
+            subtitle: 'Turn Roll • ' + PLAYER_META[actor.id].colorName + (v1 === 6 && v2 === 6 && effectiveDiceCount === 2 ? ' • 🔥 DOUBLE SIX!' : ''),
+            trail: null
+          });
           addGameLog('🎲 ' + actor.name + ' rolled ' + rollStr + '.', 'info');
 
           const legal = computeLegalMoves();
@@ -9568,10 +9831,15 @@
               '<td class="py-2.5 px-3 text-right font-mono font-bold text-slate-800">' + formatDurationMs(r.durationMs || 240000) + '<div class="text-[10px] text-slate-500">' + (r.totalTurns || 20) + ' Baris</div></td>' +
               '<td class="py-2.5 px-3 text-right font-mono font-bold text-emerald-700">' + ((r.avgBeadMoveMs || 1250) / 1000).toFixed(2) + 's</td>' +
               '<td class="py-2.5 px-3 text-right font-mono font-bold text-sky-700">' + ((r.avgTurnTimeMs || 4300) / 1000).toFixed(2) + 's</td>' +
-              '<td class="py-2.5 px-3 text-center"><button type="button" data-match-id="' + r.matchId + '" class="inspect-match-btn px-2.5 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-black text-[10px] border border-amber-300">🔍 Details</button></td>' +
+              '<td class="py-2.5 px-3 text-center"><div class="flex items-center justify-center gap-1"><button type="button" data-match-id="' + r.matchId + '" class="replay-match-btn px-2 py-1 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] shadow-sm">🎬 Replay</button><button type="button" data-match-id="' + r.matchId + '" class="inspect-match-btn px-2 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-black text-[10px] border border-amber-300">🔍 Details</button></div></td>' +
             '</tr>';
           }).join('');
 
+          tbody.querySelectorAll('.replay-match-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              openReplayStudio(btn.dataset.matchId);
+            });
+          });
           tbody.querySelectorAll('.inspect-match-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
               openMatchDrilldownModal(btn.dataset.matchId);
@@ -9589,10 +9857,12 @@
         }
       }
 
+      let currentDrilldownMatchId = null;
       function openMatchDrilldownModal(matchId) {
         ensureCareerStatsSchema();
         const rec = (careerStats.matchRecords || []).find(function (m) { return m.matchId === matchId; }) || (careerStats.matchRecords || [])[0];
         if (!rec) return;
+        currentDrilldownMatchId = rec.matchId;
         const modal = document.getElementById('matchDrilldownModal');
         document.getElementById('matchDrilldownTitle').textContent = '🔍 Match Telemetry Breakdown — ' + rec.matchId + ' (' + rec.result + ')';
         document.getElementById('matchDrilldownSubtitle').textContent = rec.mode + ' • ' + rec.format + ' • Duration: ' + formatDurationMs(rec.durationMs) + ' • ' + rec.totalTurns + ' Baris';
@@ -10467,12 +10737,21 @@
           if (list.length === 0) {
             histEl.innerHTML = '<div class="text-slate-400 italic">No matches recorded yet.</div>';
           } else {
-            histEl.innerHTML = list.slice(0, 15).map(function (h) {
+            histEl.innerHTML = list.slice(0, 15).map(function (h, idx) {
+              const mId = h.matchId || ((careerStats.matchRecords && careerStats.matchRecords[idx]) ? careerStats.matchRecords[idx].matchId : '');
               return '<div class="px-2.5 py-1.5 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center justify-between gap-2">' +
                 '<span class="truncate"><b>' + h.mode + '</b> <span class="text-slate-500">(' + h.date + ')</span></span>' +
-                '<span class="font-bold text-amber-900 flex-shrink-0">' + h.result + ' • ⚔️' + h.kills + (h.avgBeadMoveMs ? (' • ⚡' + (h.avgBeadMoveMs / 1000).toFixed(1) + 's') : '') + '</span>' +
+                '<div class="flex items-center gap-1.5 flex-shrink-0">' +
+                  '<span class="font-bold text-amber-900">' + h.result + ' • ⚔️' + h.kills + '</span>' +
+                  (mId ? '<button type="button" data-match-id="' + mId + '" class="hist-replay-btn px-2 py-0.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px]">🎬 Replay</button>' : '') +
+                '</div>' +
               '</div>';
             }).join('');
+            histEl.querySelectorAll('.hist-replay-btn').forEach(function (btn) {
+              btn.addEventListener('click', function () {
+                openReplayStudio(btn.dataset.matchId);
+              });
+            });
           }
         }
 
@@ -10554,6 +10833,1176 @@
         g.fillStyle = '#78350f';
         g.font = '700 10px Inter, sans-serif';
         g.fillText('© 2026 Yasin Ullah — Bannu Software Solutions. All Rights Reserved.', 30, 374);
+      }
+
+      // --- 14B. FULL-SCREEN MOBILE-FIRST GAME REPLAY STUDIO ENGINE ---
+      let replayState = {
+        isOpen: false,
+        wasMatchPausedBeforeOpen: false,
+        activeMatchId: 'LIVE',
+        frames: [],
+        rulesSnap: null,
+        matchMeta: null,
+        currentFrameIdx: 0,
+        isPlaying: false,
+        speed: 1,
+        loop: false,
+        sound: true,
+        showTrail: true,
+        boardRotationDeg: 0,
+        playTimer: null,
+        hopAnimTimer: null,
+        animTokenOverride: null
+      };
+
+      function encodePlayersStateForReplay(playersArr) {
+        const stMap = { yard: 0, board: 1, home_stretch: 2, completed: 3 };
+        return (playersArr || []).map(function (pl, idx) {
+          return {
+            id: idx,
+            name: pl ? pl.name : PLAYER_META[idx].colorName,
+            active: pl ? Boolean(pl.active) : true,
+            kills: pl ? (pl.kills || 0) : 0,
+            assistUnlocked: pl ? Boolean(pl.assistUnlocked) : false,
+            tokens: (pl && pl.tokens ? pl.tokens : []).map(function (tk) {
+              return [
+                stMap[tk.state] !== undefined ? stMap[tk.state] : 0,
+                tk.steps || 0,
+                tk.homeStep || 0,
+                tk.lockedThisTurn ? 1 : 0
+              ];
+            })
+          };
+        });
+      }
+
+      function decodePlayersStateFromReplay(encodedPlayers, tokensPerPlayer) {
+        const revMap = ['yard', 'board', 'home_stretch', 'completed'];
+        const count = tokensPerPlayer || 4;
+        return [0, 1, 2, 3].map(function (idx) {
+          const ep = (encodedPlayers && encodedPlayers[idx]) ? encodedPlayers[idx] : null;
+          const meta = PLAYER_META[idx];
+          const tks = [];
+          for (let t = 0; t < count; t++) {
+            const rawTk = (ep && ep.tokens && ep.tokens[t]) ? ep.tokens[t] : [0, 0, 0, 0];
+            tks.push({
+              owner: idx,
+              id: t,
+              state: revMap[rawTk[0]] || 'yard',
+              steps: rawTk[1] || 0,
+              homeStep: rawTk[2] || 0,
+              lockedThisTurn: Boolean(rawTk[3]),
+              animCoords: null
+            });
+          }
+          return {
+            id: idx,
+            name: ep ? ep.name : meta.colorName,
+            active: ep ? Boolean(ep.active) : true,
+            team: meta.team,
+            partner: meta.partner,
+            kills: ep ? (ep.kills || 0) : 0,
+            assistUnlocked: ep ? Boolean(ep.assistUnlocked) : false,
+            tokens: tks
+          };
+        });
+      }
+
+      function recordLiveReplayFrame(opts) {
+        if (!gameState.players || gameState.players.length !== 4) return;
+        if (!Array.isArray(gameState.replayFrames)) gameState.replayFrames = [];
+        const now = Date.now();
+        const startedAt = (gameState.matchTelemetry && gameState.matchTelemetry.startedAt) ? gameState.matchTelemetry.startedAt : now;
+        const frame = {
+          frameIdx: gameState.replayFrames.length,
+          type: (opts && opts.type) || 'MOVE',
+          turn: gameState.currentTurn || 0,
+          actorIdx: (opts && opts.actorIdx !== undefined) ? opts.actorIdx : (gameState.currentTurn || 0),
+          ownerIdx: (opts && opts.ownerIdx !== undefined) ? opts.ownerIdx : (gameState.currentTurn || 0),
+          tokenId: (opts && opts.tokenId !== undefined) ? opts.tokenId : null,
+          delta: (opts && opts.delta) || 0,
+          dicePool: JSON.parse(JSON.stringify(gameState.dicePool || [])),
+          title: (opts && opts.title) || 'Board Update',
+          subtitle: (opts && opts.subtitle) || '',
+          elapsedMs: Math.max(0, now - startedAt),
+          ts: new Date(now).toLocaleTimeString(),
+          trail: (opts && opts.trail) ? opts.trail : null,
+          players: encodePlayersStateForReplay(gameState.players)
+        };
+        gameState.replayFrames.push(frame);
+      }
+
+      function computeReplayPathCoordsForMove(ownerIdx, startState, startSteps, startHomeStep, delta, eligibleHome) {
+        if (startState === 'yard' || startState === 0) {
+          return [MAIN_TRACK[START_TRACK_INDEX[ownerIdx]]];
+        }
+        const coords = [];
+        let curState = (startState === 2 || startState === 'home_stretch') ? 'home_stretch' : 'board';
+        let curSteps = startSteps || 0;
+        let curHomeStep = startHomeStep || 0;
+        for (let s = 1; s <= delta; s++) {
+          if (curState === 'home_stretch') {
+            curHomeStep = Math.min(6, curHomeStep + 1);
+            coords.push(HOME_PATHS[ownerIdx][Math.min(5, curHomeStep - 1)]);
+          } else {
+            const posInLap = curSteps % 52;
+            if (posInLap === 50 && eligibleHome) {
+              curState = 'home_stretch';
+              curHomeStep = 1;
+              coords.push(HOME_PATHS[ownerIdx][0]);
+            } else {
+              curSteps += 1;
+              const tIdx = (START_TRACK_INDEX[ownerIdx] + curSteps) % 52;
+              coords.push(MAIN_TRACK[tIdx]);
+            }
+          }
+        }
+        return coords;
+      }
+
+      function ensureReplayFramesForRecord(rec) {
+        if (!rec) return [];
+        if (Array.isArray(rec.replayFrames) && rec.replayFrames.length > 1) {
+          return rec.replayFrames;
+        }
+        const is2Dice = rec.rulebookType !== 'yalla';
+        const pSum = Array.isArray(rec.playersSummary) && rec.playersSummary.length === 4
+          ? rec.playersSummary
+          : [0, 1, 2, 3].map(function (i) {
+              return { seat: i, name: PLAYER_META[i].colorName, color: PLAYER_META[i].colorName, active: true, kills: i === 0 ? (rec.kills || 2) : 1, homeCompleted: i === 0 ? 4 : 2 };
+            });
+        const simPlayers = [0, 1, 2, 3].map(function (i) {
+          const ps = pSum[i] || {};
+          return {
+            id: i,
+            name: ps.name || PLAYER_META[i].colorName,
+            active: ps.active !== false,
+            kills: 0,
+            assistUnlocked: false,
+            tokens: [0, 1, 2, 3].map(function (t) {
+              return { owner: i, id: t, state: 'yard', steps: 0, homeStep: 0, lockedThisTurn: false };
+            })
+          };
+        });
+
+        const frames = [];
+        let elapsed = 0;
+        function pushSimFrame(type, turn, actorIdx, ownerIdx, tokenId, delta, dicePool, title, subtitle, trail) {
+          frames.push({
+            frameIdx: frames.length,
+            type: type,
+            turn: turn,
+            actorIdx: actorIdx,
+            ownerIdx: ownerIdx,
+            tokenId: tokenId,
+            delta: delta,
+            dicePool: dicePool,
+            title: title,
+            subtitle: subtitle,
+            elapsedMs: elapsed,
+            ts: 'Step ' + frames.length,
+            trail: trail,
+            players: encodePlayersStateForReplay(simPlayers)
+          });
+        }
+
+        pushSimFrame('START', 0, 0, 0, null, 0, [{ id: 0, value: 6, used: true }, { id: 1, value: 6, used: true }], '🏁 Match Started — ' + (rec.mode || 'Bannu Royale Ludo'), (rec.format || '2v2 Teams') + ' • ' + (rec.date || ''), null);
+
+        const activeSeats = [0, 1, 2, 3].filter(function (i) { return simPlayers[i].active; });
+        let seed = 0;
+        const idStr = String(rec.matchId || 'M-100');
+        for (let c = 0; c < idStr.length; c++) seed = (seed * 31 + idStr.charCodeAt(c)) % 9973;
+        function nextRand(max) {
+          seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+          return (seed % max) + 1;
+        }
+
+        // Phase 1: Spawn & tactical board progression
+        const totalRounds = 9;
+        for (let r = 0; r < totalRounds; r++) {
+          for (let sIdx = 0; sIdx < activeSeats.length; sIdx++) {
+            const pIdx = activeSeats[sIdx];
+            const pl = simPlayers[pIdx];
+            const targetHome = (pSum[pIdx] && pSum[pIdx].homeCompleted !== undefined) ? pSum[pIdx].homeCompleted : 2;
+            const targetKills = (pSum[pIdx] && pSum[pIdx].kills !== undefined) ? pSum[pIdx].kills : 1;
+
+            elapsed += 6500 + nextRand(3500);
+            let d1 = r < 2 ? 6 : nextRand(6);
+            let d2 = is2Dice ? (r === 0 ? nextRand(5) : nextRand(6)) : 0;
+            const diceArr = is2Dice
+              ? [{ id: 0, value: d1, used: false }, { id: 1, value: d2, used: false }]
+              : [{ id: 0, value: d1, used: false }];
+            const rollText = is2Dice ? (d1 + ' & ' + d2 + ' (Total ' + (d1 + d2) + ')') : String(d1);
+            pushSimFrame('ROLL', pIdx, pIdx, pIdx, null, is2Dice ? (d1 + d2) : d1, JSON.parse(JSON.stringify(diceArr)), '🎲 ' + pl.name + ' rolled ' + rollText, 'Bari Roll • ' + PLAYER_META[pIdx].colorName, null);
+
+            elapsed += 1200;
+            const yardTk = pl.tokens.find(function (t) { return t.state === 'yard'; });
+            if (yardTk && (d1 === 6 || d2 === 6 || r < 2)) {
+              const startRC = YARD_SLOTS[pIdx][yardTk.id].slice();
+              yardTk.state = 'board';
+              yardTk.steps = 0;
+              const endRC = MAIN_TRACK[START_TRACK_INDEX[pIdx]].slice();
+              diceArr[0].used = true;
+              pushSimFrame('SPAWN', pIdx, pIdx, pIdx, yardTk.id, 6, JSON.parse(JSON.stringify(diceArr)), '⚡ ' + pl.name + ' spawned Bead #' + (yardTk.id + 1) + ' (+6)', 'Brought out from Yard onto Start Stop', {
+                ownerIdx: pIdx,
+                tokenId: yardTk.id,
+                startRC: startRC,
+                endRC: endRC,
+                pathCoords: [endRC],
+                delta: 6
+              });
+            }
+
+            const boardTks = pl.tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
+            if (boardTks.length > 0) {
+              const mvTk = boardTks[r % boardTks.length];
+              const prevState = mvTk.state;
+              const prevSteps = mvTk.steps;
+              const prevHome = mvTk.homeStep;
+              const startRC = (prevState === 'home_stretch' ? HOME_PATHS[pIdx][prevHome - 1] : MAIN_TRACK[(START_TRACK_INDEX[pIdx] + prevSteps) % 52]).slice();
+              const stepDelta = is2Dice ? (d1 === 6 && yardTk ? d2 : (d1 + d2)) : d1;
+              const moveDelta = Math.max(2, stepDelta || 4);
+              const pathCoords = computeReplayPathCoordsForMove(pIdx, prevState, prevSteps, prevHome, moveDelta, true);
+              const endRC = pathCoords.length > 0 ? pathCoords[pathCoords.length - 1] : startRC;
+              diceArr.forEach(function (d) { d.used = true; });
+
+              let evType = 'MOVE';
+              let titleStr = pl.name + ' moved Bead #' + (mvTk.id + 1) + ' (+' + moveDelta + ')';
+              let subStr = 'Think: ' + ((900 + nextRand(500)) / 1000).toFixed(2) + 's • Hop: 0.22s';
+
+              if (pl.kills < targetKills && r >= 2 && mvTk.state === 'board') {
+                const victimSeat = activeSeats.find(function (as) { return as !== pIdx && (!rec.formatCode || rec.formatCode !== '2v2' || PLAYER_META[as].team !== PLAYER_META[pIdx].team); });
+                if (victimSeat !== undefined) {
+                  const vPl = simPlayers[victimSeat];
+                  const vTk = vPl.tokens.find(function (vt) { return vt.state === 'board'; });
+                  if (vTk) {
+                    vTk.state = 'yard';
+                    vTk.steps = 0;
+                    pl.kills += 1;
+                    evType = 'KILL';
+                    titleStr = '⚔️ ' + pl.name + ' killed ' + vPl.name + ' (Bead #' + (vTk.id + 1) + ')!';
+                    subStr = 'Blood Gate Hunt (+' + moveDelta + ') • Total Kills: ' + pl.kills;
+                  }
+                }
+              }
+
+              const doneNow = pl.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+              if (r >= 5 && doneNow < targetHome) {
+                mvTk.state = 'completed';
+                mvTk.steps = 50;
+                mvTk.homeStep = 6;
+                const homeEndRC = HOME_PATHS[pIdx][5].slice();
+                pathCoords.push(homeEndRC);
+                evType = 'HOME';
+                titleStr = '🏠 ' + pl.name + ' completed Bead #' + (mvTk.id + 1) + ' into Home!';
+                subStr = 'Home Goal Reached (' + (doneNow + 1) + '/' + (rec.rulesSnapshot ? rec.rulesSnapshot.tokensPerPlayer : 4) + ')';
+              } else {
+                const nextSteps = prevSteps + moveDelta;
+                if (nextSteps >= 51 && pl.kills > 0) {
+                  mvTk.state = 'home_stretch';
+                  mvTk.steps = 50;
+                  mvTk.homeStep = Math.min(5, nextSteps - 50);
+                } else {
+                  mvTk.state = 'board';
+                  mvTk.steps = nextSteps % 50;
+                }
+              }
+
+              pushSimFrame(evType, pIdx, pIdx, pIdx, mvTk.id, moveDelta, JSON.parse(JSON.stringify(diceArr)), titleStr, subStr, {
+                ownerIdx: pIdx,
+                tokenId: mvTk.id,
+                startRC: startRC,
+                endRC: pathCoords[pathCoords.length - 1] || endRC,
+                pathCoords: pathCoords,
+                delta: moveDelta
+              });
+            }
+          }
+        }
+
+        // Sync final frame counts with exact record summary
+        activeSeats.forEach(function (i) {
+          const ps = pSum[i];
+          if (!ps) return;
+          simPlayers[i].kills = ps.kills || 0;
+          const hCount = Math.min(4, ps.homeCompleted || 0);
+          for (let t = 0; t < hCount; t++) {
+            simPlayers[i].tokens[t].state = 'completed';
+            simPlayers[i].tokens[t].steps = 50;
+            simPlayers[i].tokens[t].homeStep = 6;
+          }
+        });
+        elapsed = rec.durationMs || elapsed;
+        pushSimFrame('VICTORY', 0, 0, 0, null, 0, [{ id: 0, value: 6, used: true }], '👑 Match Finished — ' + (rec.result || 'Victory!'), (rec.mode || '') + ' • Duration: ' + formatDurationMs(elapsed), null);
+        rec.replayFrames = frames;
+        return frames;
+      }
+
+      function getAvailableReplaySources() {
+        ensureCareerStatsSchema();
+        const sources = [];
+        if (Array.isArray(gameState.replayFrames) && gameState.replayFrames.length > 0) {
+          sources.push({
+            id: 'LIVE',
+            label: '🔴 Current Match (' + gameState.replayFrames.length + ' steps)',
+            mode: rulesConfig.presetName,
+            format: rulesConfig.teamMode ? '2v2 Teams' : 'FFA / Duel',
+            rulesSnap: {
+              presetName: rulesConfig.presetName,
+              diceCount: rulesConfig.diceCount,
+              tokensPerPlayer: rulesConfig.tokensPerPlayer,
+              closeGameMode: Boolean(rulesConfig.closeGameMode),
+              teamMode: Boolean(rulesConfig.teamMode),
+              killRequiredForHome: Boolean(rulesConfig.killRequiredForHome),
+              twoKillsForHome: Boolean(rulesConfig.twoKillsForHome),
+              pairBlockadeRule: Boolean(rulesConfig.pairBlockadeRule)
+            },
+            frames: gameState.replayFrames
+          });
+        }
+        (careerStats.matchRecords || []).forEach(function (rec) {
+          const frames = ensureReplayFramesForRecord(rec);
+          sources.push({
+            id: rec.matchId,
+            label: '📜 ' + rec.matchId + ' • ' + (rec.result || 'Match') + ' (' + (rec.date || '') + ')',
+            mode: rec.mode || 'Bannu 2-Dice',
+            format: rec.format || '2v2 Teams',
+            rulesSnap: rec.rulesSnapshot || {
+              presetName: rec.mode || 'Bannu Rules',
+              diceCount: rec.rulebookType === 'yalla' ? 1 : 2,
+              tokensPerPlayer: 4,
+              closeGameMode: rec.closeGameMode !== false,
+              teamMode: rec.formatCode === '2v2',
+              killRequiredForHome: rec.rulebookType !== 'yalla',
+              twoKillsForHome: false,
+              pairBlockadeRule: false
+            },
+            frames: frames,
+            record: rec
+          });
+        });
+        return sources;
+      }
+
+      function clearReplayTimers() {
+        if (replayState.playTimer) {
+          clearTimeout(replayState.playTimer);
+          replayState.playTimer = null;
+        }
+        if (replayState.hopAnimTimer) {
+          clearTimeout(replayState.hopAnimTimer);
+          replayState.hopAnimTimer = null;
+        }
+        replayState.animTokenOverride = null;
+      }
+
+      function openReplayStudio(preferredMatchId) {
+        clearReplayTimers();
+        replayState.wasMatchPausedBeforeOpen = Boolean(gameState.isPaused);
+        if (gameState.isMatchActive && !gameState.isPaused) {
+          setGamePaused(true);
+        }
+        replayState.isOpen = true;
+        replayState.isPlaying = false;
+
+        const sources = getAvailableReplaySources();
+        const sel = document.getElementById('replayMatchSelect');
+        sel.innerHTML = '';
+        sources.forEach(function (src) {
+          const opt = document.createElement('option');
+          opt.value = src.id;
+          opt.textContent = src.label;
+          sel.appendChild(opt);
+        });
+
+        let targetId = preferredMatchId;
+        if (!targetId || !sources.some(function (s) { return s.id === targetId; })) {
+          targetId = sources.length > 0 ? sources[0].id : 'LIVE';
+        }
+        sel.value = targetId;
+        document.getElementById('replayStudioModal').classList.remove('hidden');
+        loadMatchIntoReplayStudio(targetId);
+      }
+
+      function closeReplayStudio() {
+        clearReplayTimers();
+        replayState.isOpen = false;
+        replayState.isPlaying = false;
+        document.getElementById('replayStudioModal').classList.add('hidden');
+        document.getElementById('replayMoveListDrawer').classList.add('hidden');
+        if (gameState.isMatchActive && !replayState.wasMatchPausedBeforeOpen && document.getElementById('pauseMenuModal').classList.contains('hidden')) {
+          setGamePaused(false);
+        }
+      }
+
+      function loadMatchIntoReplayStudio(matchId) {
+        clearReplayTimers();
+        replayState.isPlaying = false;
+        const sources = getAvailableReplaySources();
+        const chosen = sources.find(function (s) { return s.id === matchId; }) || sources[0];
+        if (!chosen) return;
+
+        replayState.activeMatchId = chosen.id;
+        replayState.frames = chosen.frames || [];
+        replayState.rulesSnap = chosen.rulesSnap || Object.assign({}, rulesConfig);
+        replayState.matchMeta = chosen;
+        replayState.currentFrameIdx = 0;
+
+        const slider = document.getElementById('replayTimelineSlider');
+        slider.min = '0';
+        slider.max = String(Math.max(0, replayState.frames.length - 1));
+        slider.value = '0';
+
+        const modeBadge = document.getElementById('replayMetaModeBadge');
+        if (modeBadge) modeBadge.textContent = chosen.mode + ' • ' + chosen.format;
+
+        renderReplayMoveListDrawer();
+        stepReplayToFrame(0, false);
+        updateReplayPlayPauseUI();
+      }
+
+      function renderReplayMoveListDrawer() {
+        const container = document.getElementById('replayMoveListContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        const badgeColors = {
+          START: 'bg-slate-700 text-white',
+          ROLL: 'bg-amber-500 text-slate-950',
+          SPAWN: 'bg-sky-500 text-white',
+          MOVE: 'bg-indigo-600 text-white',
+          KILL: 'bg-rose-600 text-white',
+          HOME: 'bg-emerald-600 text-white',
+          LOOP: 'bg-purple-600 text-white',
+          VICTORY: 'bg-yellow-400 text-slate-950'
+        };
+        replayState.frames.forEach(function (fr, idx) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.dataset.frameIdx = String(idx);
+          btn.className = 'replay-log-row-btn w-full text-left p-2 rounded-xl border transition flex items-start justify-between gap-2 ' +
+            (idx === replayState.currentFrameIdx ? 'bg-amber-500/20 border-amber-400 text-white' : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-200');
+          btn.innerHTML =
+            '<div class="min-w-0 flex-1">' +
+              '<div class="flex items-center gap-1.5">' +
+                '<span class="px-1.5 py-0.2 rounded text-[9px] font-black ' + (badgeColors[fr.type] || badgeColors.MOVE) + '">#' + idx + ' ' + fr.type + '</span>' +
+                '<span class="font-bold truncate text-[11px]">' + fr.title + '</span>' +
+              '</div>' +
+              '<div class="text-[10px] text-slate-400 truncate mt-0.5">' + (fr.subtitle || '') + '</div>' +
+            '</div>';
+          btn.addEventListener('click', function () {
+            pauseReplayPlayback();
+            stepReplayToFrame(idx, false);
+          });
+          container.appendChild(btn);
+        });
+      }
+
+      function formatReplayClock(ms) {
+        const totalSec = Math.max(0, Math.floor((Number(ms) || 0) / 1000));
+        const mins = Math.floor(totalSec / 60);
+        const secs = totalSec % 60;
+        return (mins < 10 ? '0' + mins : mins) + ':' + (secs < 10 ? '0' + secs : secs);
+      }
+
+      function stepReplayToFrame(targetIdx, withHopAnimation, onAnimDone) {
+        if (!replayState.frames || replayState.frames.length === 0) return;
+        const clampedIdx = Math.max(0, Math.min(replayState.frames.length - 1, Number(targetIdx) || 0));
+        const prevIdx = replayState.currentFrameIdx;
+        replayState.currentFrameIdx = clampedIdx;
+        if (replayState.hopAnimTimer) {
+          clearTimeout(replayState.hopAnimTimer);
+          replayState.hopAnimTimer = null;
+        }
+        replayState.animTokenOverride = null;
+
+        const fr = replayState.frames[clampedIdx];
+        const slider = document.getElementById('replayTimelineSlider');
+        if (slider) slider.value = String(clampedIdx);
+
+        updateReplayHudForFrame(fr, clampedIdx);
+
+        const canAnimateHop = Boolean(
+          withHopAnimation &&
+          fr.trail &&
+          Array.isArray(fr.trail.pathCoords) &&
+          fr.trail.pathCoords.length > 0 &&
+          replayState.speed <= 4
+        );
+
+        if (canAnimateHop) {
+          const prevFr = clampedIdx > 0 ? replayState.frames[clampedIdx - 1] : fr;
+          const coords = fr.trail.pathCoords;
+          let hopStep = 0;
+          const stepDelay = Math.max(18, Math.round(95 / Math.max(0.25, replayState.speed)));
+
+          function tickHop() {
+            if (!replayState.isOpen || replayState.currentFrameIdx !== clampedIdx) return;
+            if (hopStep < coords.length) {
+              replayState.animTokenOverride = {
+                basePlayersEncoded: prevFr.players,
+                ownerIdx: fr.trail.ownerIdx,
+                tokenId: fr.trail.tokenId,
+                rc: coords[hopStep]
+              };
+              if (replayState.sound) playSound('step');
+              drawReplayBoardCanvas();
+              hopStep += 1;
+              replayState.hopAnimTimer = setTimeout(tickHop, stepDelay);
+            } else {
+              replayState.animTokenOverride = null;
+              if (replayState.sound) {
+                if (fr.type === 'KILL') playSound('kill');
+                else if (fr.type === 'HOME' || fr.type === 'VICTORY') playSound('home');
+              }
+              drawReplayBoardCanvas();
+              if (typeof onAnimDone === 'function') onAnimDone();
+            }
+          }
+          tickHop();
+        } else {
+          if (withHopAnimation && replayState.sound) {
+            if (fr.type === 'ROLL') playSound('roll');
+            else if (fr.type === 'KILL') playSound('kill');
+            else if (fr.type === 'HOME' || fr.type === 'VICTORY') playSound('home');
+            else if (fr.type === 'MOVE' || fr.type === 'SPAWN') playSound('step');
+          }
+          drawReplayBoardCanvas();
+          if (typeof onAnimDone === 'function') onAnimDone();
+        }
+      }
+
+      function updateReplayHudForFrame(fr, idx) {
+        const total = Math.max(1, replayState.frames.length - 1);
+        document.getElementById('replayStepCounterLabel').textContent = 'Step ' + idx + ' / ' + total;
+        document.getElementById('replayTimeElapsedLabel').textContent = formatReplayClock(fr.elapsedMs || 0);
+
+        const typeBadge = document.getElementById('replayEventTypeBadge');
+        typeBadge.textContent = fr.type || 'STEP';
+        const badgeMap = {
+          START: 'bg-slate-700 text-white',
+          ROLL: 'bg-amber-400 text-slate-950',
+          SPAWN: 'bg-sky-400 text-slate-950',
+          MOVE: 'bg-indigo-500 text-white',
+          KILL: 'bg-rose-600 text-white',
+          HOME: 'bg-emerald-500 text-slate-950',
+          LOOP: 'bg-purple-500 text-white',
+          VICTORY: 'bg-yellow-400 text-slate-950'
+        };
+        typeBadge.className = 'px-2 py-0.5 rounded-lg font-black text-[10px] flex-shrink-0 ' + (badgeMap[fr.type] || badgeMap.MOVE);
+
+        document.getElementById('replayEventTitle').textContent = fr.title || 'Replay Step';
+        document.getElementById('replayEventSubtitle').textContent = fr.subtitle || ('Step ' + idx + ' of ' + total);
+
+        const diceTextEl = document.getElementById('replayDiceText');
+        if (Array.isArray(fr.dicePool) && fr.dicePool.length > 0) {
+          diceTextEl.textContent = fr.dicePool.map(function (d) { return d.value; }).join(' + ');
+        } else {
+          diceTextEl.textContent = '-';
+        }
+
+        // Render 4 player cards at this frame
+        const rSnap = replayState.rulesSnap || rulesConfig;
+        const decodedPlayers = decodePlayersStateFromReplay(fr.players, rSnap.tokensPerPlayer || 4);
+        const strip = document.getElementById('replayPlayersStrip');
+        const icons = ['🔴', '🟢', '🟡', '🔵'];
+        const borders = ['border-rose-500/70', 'border-emerald-500/70', 'border-amber-400/70', 'border-blue-500/70'];
+        strip.innerHTML = decodedPlayers.map(function (pl, pIdx) {
+          if (!pl.active) {
+            return '<div class="rounded-xl bg-slate-900/50 border border-slate-800 px-2 py-1 opacity-40 text-[10px]">' + icons[pIdx] + ' Off</div>';
+          }
+          const isTurn = fr.turn === pIdx;
+          const doneCount = pl.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+          return '<div class="rounded-xl px-2 py-1 border transition flex flex-col justify-center ' +
+            (isTurn ? 'bg-amber-500/20 border-amber-400 shadow-md ring-1 ring-amber-400' : ('bg-slate-900/85 ' + borders[pIdx])) + '">' +
+            '<div class="flex items-center justify-between gap-1">' +
+              '<span class="font-black text-[10px] sm:text-xs text-white truncate">' + icons[pIdx] + ' ' + pl.name + '</span>' +
+              (isTurn ? '<span class="px-1 rounded bg-amber-400 text-slate-950 font-black text-[8px]">BARI</span>' : '') +
+            '</div>' +
+            '<div class="flex items-center justify-between text-[9px] sm:text-[10px] font-bold text-slate-300 mt-0.5">' +
+              '<span>⚔️ ' + pl.kills + '</span>' +
+              '<span>🏠 ' + doneCount + '/' + (rSnap.tokensPerPlayer || 4) + '</span>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        // Highlight active row in drawer if open
+        const drawer = document.getElementById('replayMoveListContainer');
+        if (drawer && !document.getElementById('replayMoveListDrawer').classList.contains('hidden')) {
+          drawer.querySelectorAll('.replay-log-row-btn').forEach(function (b) {
+            const bIdx = Number(b.dataset.frameIdx);
+            b.className = 'replay-log-row-btn w-full text-left p-2 rounded-xl border transition flex items-start justify-between gap-2 ' +
+              (bIdx === idx ? 'bg-amber-500/20 border-amber-400 text-white' : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-200');
+          });
+        }
+
+        updateReplayPlayPauseUI();
+      }
+
+      function updateReplayPlayPauseUI() {
+        const iconEl = document.getElementById('replayPlayPauseIcon');
+        const labelEl = document.getElementById('replayPlayPauseLabel');
+        const statusPill = document.getElementById('replayFloatingStatusPill');
+        if (iconEl) iconEl.textContent = replayState.isPlaying ? '⏸️' : '▶️';
+        if (labelEl) labelEl.textContent = replayState.isPlaying ? 'Pause' : 'Play';
+        if (statusPill) {
+          statusPill.textContent = (replayState.isPlaying ? '▶️ PLAYING' : '⏸️ PAUSED') + ' • ' + replayState.speed + 'x';
+        }
+      }
+
+      function scheduleNextReplayPlaybackTick() {
+        if (replayState.playTimer) {
+          clearTimeout(replayState.playTimer);
+          replayState.playTimer = null;
+        }
+        if (!replayState.isOpen || !replayState.isPlaying) return;
+
+        const baseInterval = Math.max(90, Math.round(950 / Math.max(0.25, replayState.speed)));
+        replayState.playTimer = setTimeout(function () {
+          if (!replayState.isOpen || !replayState.isPlaying) return;
+          if (replayState.currentFrameIdx < replayState.frames.length - 1) {
+            stepReplayToFrame(replayState.currentFrameIdx + 1, true, function () {
+              if (replayState.isPlaying) scheduleNextReplayPlaybackTick();
+            });
+          } else if (replayState.loop) {
+            stepReplayToFrame(0, false, function () {
+              if (replayState.isPlaying) scheduleNextReplayPlaybackTick();
+            });
+          } else {
+            replayState.isPlaying = false;
+            updateReplayPlayPauseUI();
+          }
+        }, baseInterval);
+      }
+
+      function startReplayPlayback() {
+        if (!replayState.frames || replayState.frames.length === 0) return;
+        if (replayState.currentFrameIdx >= replayState.frames.length - 1) {
+          stepReplayToFrame(0, false);
+        }
+        replayState.isPlaying = true;
+        updateReplayPlayPauseUI();
+        scheduleNextReplayPlaybackTick();
+      }
+
+      function pauseReplayPlayback() {
+        replayState.isPlaying = false;
+        if (replayState.playTimer) {
+          clearTimeout(replayState.playTimer);
+          replayState.playTimer = null;
+        }
+        updateReplayPlayPauseUI();
+      }
+
+      function toggleReplayPlayPause() {
+        if (replayState.isPlaying) pauseReplayPlayback();
+        else startReplayPlayback();
+      }
+
+      function stopReplayPlayback() {
+        pauseReplayPlayback();
+        stepReplayToFrame(0, false);
+      }
+
+      function jumpToReplayEventType(typesArr, direction) {
+        pauseReplayPlayback();
+        const len = replayState.frames.length;
+        if (len === 0) return;
+        const step = direction < 0 ? -1 : 1;
+        let i = replayState.currentFrameIdx + step;
+        while (i >= 0 && i < len) {
+          const fr = replayState.frames[i];
+          if (typesArr.includes(fr.type)) {
+            stepReplayToFrame(i, false);
+            return;
+          }
+          if (typesArr.includes('SIX') && fr.type === 'ROLL' && Array.isArray(fr.dicePool) && fr.dicePool.some(function (d) { return d.value === 6; })) {
+            stepReplayToFrame(i, false);
+            return;
+          }
+          i += step;
+        }
+        showToast('No more matching events in that direction.', true);
+      }
+
+      function drawReplayBoardCanvas(customTargetCanvas) {
+        const rCanvas = customTargetCanvas || document.getElementById('replayCanvas');
+        if (!rCanvas) return;
+        const rCtx = rCanvas.getContext('2d');
+        if (!customTargetCanvas) {
+          const rect = rCanvas.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          if (rect.width > 30 && rect.height > 30) {
+            const targetW = Math.round(rect.width * dpr);
+            const targetH = Math.round(rect.height * dpr);
+            if (Math.abs(rCanvas.width - targetW) > 2 || Math.abs(rCanvas.height - targetH) > 2) {
+              rCanvas.width = targetW;
+              rCanvas.height = targetH;
+            }
+          }
+        }
+
+        const W = rCanvas.width;
+        const H = rCanvas.height;
+        const cellW = W / 15;
+        const cellH = H / 15;
+        const cell = Math.min(cellW, cellH);
+
+        const fr = (replayState.frames && replayState.frames[replayState.currentFrameIdx]) || {
+          turn: 0,
+          dicePool: [{ id: 0, value: 6, used: false }],
+          trail: null,
+          players: encodePlayersStateForReplay(gameState.players)
+        };
+        const rSnap = replayState.rulesSnap || rulesConfig;
+        const baseEncoded = (replayState.animTokenOverride && replayState.animTokenOverride.basePlayersEncoded)
+          ? replayState.animTokenOverride.basePlayersEncoded
+          : fr.players;
+        const playersList = decodePlayersStateFromReplay(baseEncoded, rSnap.tokensPerPlayer || 4);
+        if (replayState.animTokenOverride) {
+          const ov = replayState.animTokenOverride;
+          if (playersList[ov.ownerIdx] && playersList[ov.ownerIdx].tokens[ov.tokenId]) {
+            playersList[ov.ownerIdx].tokens[ov.tokenId].animCoords = ov.rc;
+          }
+        }
+
+        rCtx.save();
+        rCtx.clearRect(0, 0, W, H);
+        if (replayState.boardRotationDeg) {
+          rCtx.translate(W / 2, H / 2);
+          rCtx.rotate((replayState.boardRotationDeg * Math.PI) / 180);
+          rCtx.translate(-W / 2, -H / 2);
+        }
+
+        rCtx.fillStyle = '#ffffff';
+        rCtx.fillRect(0, 0, W, H);
+
+        const homeColors = ['#ffe4e6', '#d1fae5', '#fef3c7', '#dbeafe'];
+        const strongColors = ['#e11d48', '#059669', '#d97706', '#2563eb'];
+
+        HOME_PATHS.forEach(function (path, pIdx) {
+          for (let i = 0; i < 5; i++) {
+            const rc = path[i];
+            rCtx.fillStyle = strongColors[pIdx];
+            rCtx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
+          }
+        });
+
+        START_TRACK_INDEX.forEach(function (tIdx, pIdx) {
+          const rc = MAIN_TRACK[tIdx];
+          rCtx.fillStyle = strongColors[pIdx];
+          rCtx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
+        });
+
+        [8, 21, 34, 47].forEach(function (tIdx) {
+          const rc = MAIN_TRACK[tIdx];
+          rCtx.fillStyle = '#fde68a';
+          rCtx.fillRect(rc[1] * cellW, rc[0] * cellH, cellW, cellH);
+        });
+
+        rCtx.strokeStyle = '#cbd5e1';
+        rCtx.lineWidth = Math.max(1.2, cell * 0.03);
+        for (let r = 0; r < 15; r++) {
+          for (let c = 0; c < 15; c++) {
+            const inCorner = (r < 6 && c < 6) || (r < 6 && c > 8) || (r > 8 && c < 6) || (r > 8 && c > 8);
+            const inCenter = (r >= 6 && r <= 8 && c >= 6 && c <= 8);
+            if (!inCorner && !inCenter) {
+              rCtx.strokeRect(c * cellW, r * cellH, cellW, cellH);
+            }
+          }
+        }
+
+        SAFE_TRACK_INDICES.forEach(function (tIdx) {
+          const rc = MAIN_TRACK[tIdx];
+          const x = rc[1] * cellW;
+          const y = rc[0] * cellH;
+          const cx = (rc[1] + 0.5) * cellW;
+          const cy = (rc[0] + 0.5) * cellH;
+          const isStartStop = START_TRACK_INDEX.includes(tIdx);
+
+          rCtx.save();
+          rCtx.strokeStyle = isStartStop ? '#ffffff' : '#b45309';
+          rCtx.lineWidth = Math.max(2, cell * 0.055);
+          rCtx.strokeRect(x + cellW * 0.07, y + cellH * 0.07, cellW * 0.86, cellH * 0.86);
+          rCtx.fillStyle = isStartStop ? '#ffffff' : '#92400e';
+          rCtx.font = '900 ' + Math.round(cell * 0.40) + 'px Inter, sans-serif';
+          rCtx.textAlign = 'center';
+          rCtx.textBaseline = 'middle';
+          rCtx.fillText('★', cx, cy - cellH * 0.06);
+          rCtx.font = '900 ' + Math.round(cell * 0.16) + 'px Inter, sans-serif';
+          rCtx.fillText('STOP', cx, cy + cellH * 0.27);
+          rCtx.restore();
+        });
+
+        const yardOrigins = [
+          { r: 0, c: 0, pIdx: 0 },
+          { r: 0, c: 9, pIdx: 1 },
+          { r: 9, c: 9, pIdx: 2 },
+          { r: 9, c: 0, pIdx: 3 }
+        ];
+
+        yardOrigins.forEach(function (yo) {
+          const x = yo.c * cellW;
+          const y = yo.r * cellH;
+          const sizeW = 6 * cellW;
+          const sizeH = 6 * cellH;
+          const isTurn = (fr.turn === yo.pIdx);
+          const pl = playersList[yo.pIdx];
+
+          rCtx.fillStyle = strongColors[yo.pIdx];
+          rCtx.fillRect(x, y, sizeW, sizeH);
+
+          rCtx.save();
+          rCtx.fillStyle = isTurn ? '#fffbeb' : '#ffffff';
+          rCtx.beginPath();
+          rCtx.roundRect(x + cellW * 0.45, y + cellH * 0.45, sizeW - cellW * 0.9, sizeH - cellH * 0.9, 14);
+          rCtx.fill();
+          rCtx.lineWidth = isTurn ? 4.5 : 2.5;
+          rCtx.strokeStyle = isTurn ? '#f59e0b' : homeColors[yo.pIdx];
+          rCtx.stroke();
+          rCtx.restore();
+
+          if (pl && pl.active) {
+            const bannerW = sizeW - cellW * 1.25;
+            const bannerH = cellH * 0.42;
+            const bannerX = x + (sizeW - bannerW) / 2;
+            const bannerY = y + cellH * 0.54;
+            rCtx.fillStyle = isTurn ? '#0f172a' : '#f1f5f9';
+            rCtx.beginPath();
+            rCtx.roundRect(bannerX, bannerY, bannerW, bannerH, 6);
+            rCtx.fill();
+            rCtx.fillStyle = isTurn ? '#fde047' : '#0f172a';
+            rCtx.font = '900 ' + Math.round(cell * 0.21) + 'px Inter, sans-serif';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            rCtx.fillText((isTurn ? '⚡ ' : '') + pl.name.slice(0, 10), x + sizeW / 2, bannerY + bannerH / 2);
+          }
+
+          for (let t = 0; t < (rSnap.tokensPerPlayer || 4); t++) {
+            const slot = YARD_SLOTS[yo.pIdx][t];
+            const sx = (slot[1] + 0.5) * cellW;
+            const sy = (slot[0] + 0.5) * cellH;
+            rCtx.beginPath();
+            rCtx.arc(sx, sy, cell * 0.38, 0, Math.PI * 2);
+            rCtx.fillStyle = homeColors[yo.pIdx];
+            rCtx.fill();
+            rCtx.lineWidth = 2;
+            rCtx.strokeStyle = strongColors[yo.pIdx];
+            rCtx.stroke();
+          }
+
+          if (pl && pl.active) {
+            const badgeW = sizeW - cellW * 1.25;
+            const badgeH = cellH * 0.40;
+            const badgeX = x + (sizeW - badgeW) / 2;
+            const badgeY = y + sizeH - cellH * 0.54 - badgeH;
+            rCtx.fillStyle = pl.kills > 0 ? '#065f46' : '#881337';
+            rCtx.beginPath();
+            rCtx.roundRect(badgeX, badgeY, badgeW, badgeH, 6);
+            rCtx.fill();
+            rCtx.fillStyle = '#ffffff';
+            rCtx.font = '900 ' + Math.round(cell * 0.19) + 'px Inter, sans-serif';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            rCtx.fillText((pl.kills > 0 ? '🔓 HOME OPEN (⚔️' : '🔒 NEED KILL (⚔️') + pl.kills + ')', x + sizeW / 2, badgeY + badgeH / 2);
+          }
+        });
+
+        // Center Home Triangles
+        const cx = 7.5 * cellW;
+        const cy = 7.5 * cellH;
+        const x0 = 6 * cellW, y0 = 6 * cellH, x1 = 9 * cellW, y1 = 9 * cellH;
+        [
+          { pts: [[x0, y0], [x0, y1], [cx, cy]], color: strongColors[0] },
+          { pts: [[x0, y0], [x1, y0], [cx, cy]], color: strongColors[1] },
+          { pts: [[x1, y0], [x1, y1], [cx, cy]], color: strongColors[2] },
+          { pts: [[x0, y1], [x1, y1], [cx, cy]], color: strongColors[3] }
+        ].forEach(function (tri) {
+          rCtx.beginPath();
+          rCtx.moveTo(tri.pts[0][0], tri.pts[0][1]);
+          rCtx.lineTo(tri.pts[1][0], tri.pts[1][1]);
+          rCtx.lineTo(tri.pts[2][0], tri.pts[2][1]);
+          rCtx.closePath();
+          rCtx.fillStyle = tri.color;
+          rCtx.fill();
+          rCtx.lineWidth = 2;
+          rCtx.strokeStyle = '#ffffff';
+          rCtx.stroke();
+        });
+
+        rCtx.beginPath();
+        rCtx.arc(cx, cy, cell * 0.45, 0, Math.PI * 2);
+        rCtx.fillStyle = '#ffffff';
+        rCtx.fill();
+        rCtx.lineWidth = 3;
+        rCtx.strokeStyle = '#d97706';
+        rCtx.stroke();
+        rCtx.font = 'bold ' + Math.round(cell * 0.42) + 'px Inter, sans-serif';
+        rCtx.textAlign = 'center';
+        rCtx.textBaseline = 'middle';
+        rCtx.fillText('👑', cx, cy);
+
+        // Trail Overlay
+        if (replayState.showTrail && fr.trail && Array.isArray(fr.trail.pathCoords) && fr.trail.pathCoords.length > 0) {
+          const trail = fr.trail;
+          const trailMeta = PLAYER_META[trail.ownerIdx] || PLAYER_META[0];
+          rCtx.save();
+          const ox = (trail.startRC[1] + 0.5) * cellW;
+          const oy = (trail.startRC[0] + 0.5) * cellH;
+          rCtx.beginPath();
+          rCtx.arc(ox, oy, cell * 0.25, 0, Math.PI * 2);
+          rCtx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+          rCtx.fill();
+          rCtx.lineWidth = 2.5;
+          rCtx.setLineDash([4, 3]);
+          rCtx.strokeStyle = trailMeta.hex;
+          rCtx.stroke();
+
+          rCtx.beginPath();
+          rCtx.moveTo(ox, oy);
+          trail.pathCoords.forEach(function (rc) {
+            rCtx.lineTo((rc[1] + 0.5) * cellW, (rc[0] + 0.5) * cellH);
+          });
+          rCtx.strokeStyle = trailMeta.hex;
+          rCtx.lineWidth = 4.5;
+          rCtx.stroke();
+          rCtx.setLineDash([]);
+
+          trail.pathCoords.forEach(function (rc, pIdx) {
+            const px = (rc[1] + 0.5) * cellW;
+            const py = (rc[0] + 0.5) * cellH;
+            rCtx.beginPath();
+            rCtx.arc(px, py, pIdx === trail.pathCoords.length - 1 ? cell * 0.42 : cell * 0.14, 0, Math.PI * 2);
+            rCtx.fillStyle = pIdx === trail.pathCoords.length - 1 ? 'rgba(250, 204, 21, 0.34)' : trailMeta.hex;
+            rCtx.fill();
+          });
+          rCtx.restore();
+        }
+
+        // Group & Draw Tokens
+        const cellGroups = {};
+        playersList.forEach(function (pl) {
+          if (!pl.active) return;
+          pl.tokens.forEach(function (tk) {
+            const rc = getTokenGridCoords(tk);
+            const key = rc[0].toFixed(1) + ',' + rc[1].toFixed(1);
+            if (!cellGroups[key]) cellGroups[key] = [];
+            cellGroups[key].push(tk);
+          });
+        });
+
+        Object.keys(cellGroups).forEach(function (key) {
+          const group = cellGroups[key];
+          const baseRC = getTokenGridCoords(group[0]);
+          const baseX = (baseRC[1] + 0.5) * cellW;
+          const baseY = (baseRC[0] + 0.5) * cellH;
+
+          group.forEach(function (tk, idx) {
+            let offsetX = 0;
+            let offsetY = 0;
+            let radius = cell * 0.34;
+            if (group.length > 1) {
+              radius = group.length === 2 ? cell * 0.24 : cell * 0.20;
+              const spread = cell * 0.23;
+              const angle = (idx / group.length) * Math.PI * 2 - Math.PI / 4;
+              offsetX = Math.cos(angle) * spread;
+              offsetY = Math.sin(angle) * spread;
+            }
+            const tx = baseX + offsetX;
+            const ty = baseY + offsetY;
+            const meta = PLAYER_META[tk.owner];
+            const isMovedToken = Boolean(fr.trail && fr.trail.ownerIdx === tk.owner && fr.trail.tokenId === tk.id);
+
+            if (isMovedToken) {
+              rCtx.beginPath();
+              rCtx.arc(tx, ty, radius + 6, 0, Math.PI * 2);
+              rCtx.fillStyle = 'rgba(250, 204, 21, 0.85)';
+              rCtx.fill();
+              rCtx.lineWidth = 2.5;
+              rCtx.strokeStyle = '#b45309';
+              rCtx.stroke();
+            }
+
+            rCtx.beginPath();
+            rCtx.arc(tx, ty, radius, 0, Math.PI * 2);
+            rCtx.fillStyle = meta.hex;
+            rCtx.fill();
+            rCtx.lineWidth = 2.2;
+            rCtx.strokeStyle = rSnap.teamMode ? meta.teamRing : '#ffffff';
+            rCtx.stroke();
+
+            rCtx.beginPath();
+            rCtx.arc(tx, ty, radius * 0.65, 0, Math.PI * 2);
+            rCtx.fillStyle = meta.darkHex;
+            rCtx.fill();
+
+            rCtx.fillStyle = '#ffffff';
+            rCtx.font = 'bold ' + Math.round(radius * 0.85) + 'px Inter, sans-serif';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            rCtx.fillText(tk.lockedThisTurn ? '🔒' : String(tk.id + 1), tx, ty);
+          });
+        });
+
+        rCtx.restore();
+      }
+
+      function downloadReplayScreenshotPng() {
+        const fr = (replayState.frames && replayState.frames[replayState.currentFrameIdx]);
+        if (!fr) return;
+        const rSnap = replayState.rulesSnap || rulesConfig;
+        const decodedPlayers = decodePlayersStateFromReplay(fr.players, rSnap.tokensPerPlayer || 4);
+
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width = 1080;
+        outCanvas.height = 1320;
+        const g = outCanvas.getContext('2d');
+
+        // Background
+        const bgGrad = g.createLinearGradient(0, 0, 0, 1320);
+        bgGrad.addColorStop(0, '#0f172a');
+        bgGrad.addColorStop(0.5, '#1e293b');
+        bgGrad.addColorStop(1, '#090d16');
+        g.fillStyle = bgGrad;
+        g.fillRect(0, 0, 1080, 1320);
+
+        // Gold border
+        g.strokeStyle = '#f59e0b';
+        g.lineWidth = 6;
+        g.strokeRect(16, 16, 1048, 1288);
+
+        // Top Header
+        g.fillStyle = '#fbbf24';
+        g.font = '900 28px Inter, sans-serif';
+        g.fillText('🎬 BANNU ROYALE LUDO — OFFICIAL MATCH REPLAY SNAPSHOT', 42, 66);
+
+        g.fillStyle = '#e2e8f0';
+        g.font = '700 20px Inter, sans-serif';
+        const mLabel = (replayState.matchMeta && replayState.matchMeta.label) ? replayState.matchMeta.label : 'Match Replay';
+        g.fillText(mLabel + '  •  Step ' + replayState.currentFrameIdx + ' / ' + Math.max(1, replayState.frames.length - 1) + '  •  Elapsed: ' + formatReplayClock(fr.elapsedMs || 0), 42, 102);
+
+        // Event Banner Box
+        g.fillStyle = '#020617';
+        g.fillRect(42, 122, 996, 68);
+        g.strokeStyle = '#f59e0b';
+        g.lineWidth = 2;
+        g.strokeRect(42, 122, 996, 68);
+        g.fillStyle = '#fde047';
+        g.font = '900 22px Inter, sans-serif';
+        g.fillText('[' + (fr.type || 'STEP') + ']  ' + (fr.title || ''), 60, 152);
+        g.fillStyle = '#94a3b8';
+        g.font = '600 16px Inter, sans-serif';
+        g.fillText(fr.subtitle || '', 60, 178);
+
+        // 4 Player Score Boxes
+        const pCols = ['#e11d48', '#059669', '#d97706', '#2563eb'];
+        decodedPlayers.forEach(function (pl, i) {
+          const bx = 42 + i * 252;
+          const by = 204;
+          g.fillStyle = fr.turn === i ? '#332407' : '#0f172a';
+          g.fillRect(bx, by, 240, 62);
+          g.strokeStyle = fr.turn === i ? '#fbbf24' : pCols[i];
+          g.lineWidth = fr.turn === i ? 3.5 : 2;
+          g.strokeRect(bx, by, 240, 62);
+          g.fillStyle = '#ffffff';
+          g.font = '900 18px Inter, sans-serif';
+          g.fillText(pl.name.slice(0, 14), bx + 14, by + 26);
+          const done = pl.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+          g.fillStyle = '#cbd5e1';
+          g.font = '700 15px Inter, sans-serif';
+          g.fillText('⚔️ Kills: ' + pl.kills + '   🏠 Home: ' + done + '/' + (rSnap.tokensPerPlayer || 4), bx + 14, by + 50);
+        });
+
+        // Render Board onto offscreen 960x960 canvas and composite
+        const boardTemp = document.createElement('canvas');
+        boardTemp.width = 960;
+        boardTemp.height = 960;
+        drawReplayBoardCanvas(boardTemp);
+
+        g.fillStyle = '#d97706';
+        g.fillRect(54, 280, 972, 972);
+        g.drawImage(boardTemp, 60, 286, 960, 960);
+
+        // Footer
+        g.fillStyle = '#fbbf24';
+        g.font = '700 16px Inter, sans-serif';
+        g.fillText('Bannu Royale Ludo — © 2026 Yasin Ullah (Bannu Software Solutions) • Dedicated to Muhib Ullah', 42, 1284);
+
+        const dataUrl = outCanvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'bannu_ludo_replay_' + (replayState.activeMatchId || 'match') + '_step_' + replayState.currentFrameIdx + '.png';
+        a.click();
+        showToast('📸 Downloaded HD Replay Screenshot (.PNG)!', true);
+      }
+
+      function exportCurrentReplayAsJson() {
+        if (!replayState.frames || replayState.frames.length === 0) return;
+        const payload = {
+          app: 'BannuRoyaleLudoReplay',
+          version: '1.0',
+          exportedAt: new Date().toISOString(),
+          matchId: replayState.activeMatchId,
+          label: replayState.matchMeta ? replayState.matchMeta.label : 'Custom Replay',
+          mode: replayState.matchMeta ? replayState.matchMeta.mode : rulesConfig.presetName,
+          format: replayState.matchMeta ? replayState.matchMeta.format : '2v2 Teams',
+          rulesSnap: replayState.rulesSnap,
+          frames: replayState.frames
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'bannu_ludo_replay_' + (replayState.activeMatchId || 'live') + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('💾 Downloaded Replay file (.json)!', true);
+      }
+
+      function importReplayFromJsonFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (!data || !Array.isArray(data.frames) || data.frames.length === 0) {
+              showToast('⚠️ Invalid replay JSON file.', true);
+              return;
+            }
+            const customId = data.matchId || ('IMP-' + String(Date.now()).slice(-4));
+            ensureCareerStatsSchema();
+            const existingIdx = (careerStats.matchRecords || []).findIndex(function (r) { return r.matchId === customId; });
+            if (existingIdx === -1) {
+              careerStats.matchRecords.unshift({
+                matchId: customId,
+                date: new Date().toISOString().slice(0, 10),
+                timestamp: new Date().toISOString(),
+                mode: data.mode || 'Imported Replay',
+                rulebookType: 'bannu',
+                closeGameMode: true,
+                format: data.format || '2v2 Teams',
+                formatCode: '2v2',
+                result: 'Imported 🎬',
+                won: true,
+                isCleanSweep: false,
+                kills: 0,
+                durationMs: (data.frames[data.frames.length - 1] && data.frames[data.frames.length - 1].elapsedMs) || 180000,
+                totalTurns: data.frames.length,
+                avgBeadMoveMs: 1200,
+                avgTurnTimeMs: 4000,
+                rulesSnapshot: data.rulesSnap || Object.assign({}, rulesConfig),
+                replayFrames: data.frames
+              });
+              saveCareerStats();
+            } else {
+              careerStats.matchRecords[existingIdx].replayFrames = data.frames;
+            }
+            openReplayStudio(customId);
+            showToast('📂 Loaded Replay ' + customId + ' (' + data.frames.length + ' steps)!', true);
+          } catch (e) {
+            showToast('⚠️ Could not parse replay JSON file.', true);
+          }
+        };
+        reader.readAsText(file);
       }
 
       // --- 15. LOGGING & TOAST HELPERS ---
@@ -11464,6 +12913,9 @@
         if (gameState.players && gameState.players.length === 4) {
           drawBoard();
         }
+        if (replayState.isOpen) {
+          drawReplayBoardCanvas();
+        }
       });
 
       document.getElementById('openPauseMenuBtn').addEventListener('click', function () {
@@ -12159,6 +13611,153 @@
         a.download = 'bannu_ludo_stats_card.png';
         a.click();
         showToast('📸 Downloaded HD Stats Picture (.PNG)!', true);
+      });
+
+      // --- REPLAY STUDIO EVENT LISTENERS ---
+      document.getElementById('homeOpenReplayStudioBtn').addEventListener('click', function () {
+        openReplayStudio();
+      });
+      document.getElementById('navReplayBtn').addEventListener('click', function () {
+        openReplayStudio();
+      });
+      document.getElementById('openLiveReplayBtn').addEventListener('click', function () {
+        openReplayStudio('LIVE');
+      });
+      document.getElementById('pauseOpenReplayBtn').addEventListener('click', function () {
+        document.getElementById('pauseMenuModal').classList.add('hidden');
+        openReplayStudio('LIVE');
+      });
+      document.getElementById('victoryWatchReplayBtn').addEventListener('click', function () {
+        document.getElementById('victoryModal').classList.add('hidden');
+        const latestId = (careerStats.matchRecords && careerStats.matchRecords[0]) ? careerStats.matchRecords[0].matchId : 'LIVE';
+        openReplayStudio(latestId);
+      });
+      document.getElementById('drilldownWatchReplayBtn').addEventListener('click', function () {
+        document.getElementById('matchDrilldownModal').classList.add('hidden');
+        openReplayStudio(currentDrilldownMatchId || 'LIVE');
+      });
+      document.getElementById('closeReplayStudioBtn').addEventListener('click', closeReplayStudio);
+      document.getElementById('replayMatchSelect').addEventListener('change', function () {
+        loadMatchIntoReplayStudio(this.value);
+      });
+      document.getElementById('replayPlayPauseBtn').addEventListener('click', toggleReplayPlayPause);
+      document.getElementById('replayStopBtn').addEventListener('click', stopReplayPlayback);
+      document.getElementById('replayFirstStepBtn').addEventListener('click', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(0, false);
+      });
+      document.getElementById('replayLastStepBtn').addEventListener('click', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(Math.max(0, replayState.frames.length - 1), false);
+      });
+      document.getElementById('replayPrevStepBtn').addEventListener('click', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(Math.max(0, replayState.currentFrameIdx - 1), false);
+      });
+      document.getElementById('replayNextStepBtn').addEventListener('click', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(Math.min(replayState.frames.length - 1, replayState.currentFrameIdx + 1), true);
+      });
+      document.getElementById('replayBack5Btn').addEventListener('click', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(Math.max(0, replayState.currentFrameIdx - 5), false);
+      });
+      document.getElementById('replayFwd5Btn').addEventListener('click', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(Math.min(replayState.frames.length - 1, replayState.currentFrameIdx + 5), false);
+      });
+      document.getElementById('replayTimelineSlider').addEventListener('input', function () {
+        pauseReplayPlayback();
+        stepReplayToFrame(Number(this.value), false);
+      });
+      document.getElementById('replaySpeedSelect').addEventListener('change', function () {
+        replayState.speed = Number(this.value) || 1;
+        updateReplayPlayPauseUI();
+        if (replayState.isPlaying) {
+          scheduleNextReplayPlaybackTick();
+        }
+      });
+      document.getElementById('replayLoopToggleBtn').addEventListener('click', function () {
+        replayState.loop = !replayState.loop;
+        this.textContent = replayState.loop ? '🔁 Loop: ON' : '🔁 Off';
+        this.className = 'px-2 py-1.5 rounded-xl font-bold text-[10px] sm:text-xs border ' +
+          (replayState.loop ? 'bg-amber-500 text-slate-950 border-amber-300' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700');
+      });
+      document.getElementById('replaySoundToggleBtn').addEventListener('click', function () {
+        replayState.sound = !replayState.sound;
+        this.textContent = replayState.sound ? '🔊' : '🔇';
+      });
+      document.getElementById('replayToggleTrailBtn').addEventListener('click', function () {
+        replayState.showTrail = !replayState.showTrail;
+        this.textContent = '🧭 Trail: ' + (replayState.showTrail ? 'ON' : 'OFF');
+        drawReplayBoardCanvas();
+      });
+      document.getElementById('replayRotateBoardBtn').addEventListener('click', function () {
+        replayState.boardRotationDeg = (replayState.boardRotationDeg + 90) % 360;
+        this.textContent = '🔄 ' + replayState.boardRotationDeg + '°';
+        drawReplayBoardCanvas();
+      });
+      document.getElementById('replayToggleLogDrawerBtn').addEventListener('click', function () {
+        const dr = document.getElementById('replayMoveListDrawer');
+        dr.classList.toggle('hidden');
+        if (!dr.classList.contains('hidden')) {
+          renderReplayMoveListDrawer();
+        }
+      });
+      document.getElementById('closeReplayMoveListBtn').addEventListener('click', function () {
+        document.getElementById('replayMoveListDrawer').classList.add('hidden');
+      });
+      document.getElementById('replayPrevKillBtn').addEventListener('click', function () {
+        jumpToReplayEventType(['KILL'], -1);
+      });
+      document.getElementById('replayNextKillBtn').addEventListener('click', function () {
+        jumpToReplayEventType(['KILL'], 1);
+      });
+      document.getElementById('replayNextSixBtn').addEventListener('click', function () {
+        jumpToReplayEventType(['SIX'], 1);
+      });
+      document.getElementById('replayNextHomeBtn').addEventListener('click', function () {
+        jumpToReplayEventType(['HOME', 'VICTORY'], 1);
+      });
+      document.getElementById('replayScreenshotBtn').addEventListener('click', downloadReplayScreenshotPng);
+      document.getElementById('replayExportJsonBtn').addEventListener('click', exportCurrentReplayAsJson);
+      document.getElementById('replayImportJsonInput').addEventListener('change', function (e) {
+        const f = e.target.files && e.target.files[0];
+        if (f) importReplayFromJsonFile(f);
+      });
+      document.getElementById('replayFullscreenBtn').addEventListener('click', function () {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(function () {});
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen().catch(function () {});
+        }
+      });
+      window.addEventListener('keydown', function (e) {
+        if (!replayState.isOpen) return;
+        if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement && document.activeElement.tagName)) return;
+        if (e.code === 'Space') {
+          e.preventDefault();
+          toggleReplayPlayPause();
+        } else if (e.code === 'ArrowRight') {
+          e.preventDefault();
+          pauseReplayPlayback();
+          stepReplayToFrame(Math.min(replayState.frames.length - 1, replayState.currentFrameIdx + 1), true);
+        } else if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          pauseReplayPlayback();
+          stepReplayToFrame(Math.max(0, replayState.currentFrameIdx - 1), false);
+        } else if (e.code === 'Home') {
+          e.preventDefault();
+          pauseReplayPlayback();
+          stepReplayToFrame(0, false);
+        } else if (e.code === 'End') {
+          e.preventDefault();
+          pauseReplayPlayback();
+          stepReplayToFrame(Math.max(0, replayState.frames.length - 1), false);
+        } else if (e.code === 'Escape') {
+          e.preventDefault();
+          closeReplayStudio();
+        }
       });
 
       document.getElementById('victoryPlayAgainBtn').addEventListener('click', function () {
