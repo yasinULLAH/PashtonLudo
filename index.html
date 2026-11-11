@@ -327,6 +327,9 @@
 
     /* DESKTOP SIDE-BY-SIDE FULL-BLEED LAYOUT: Left Wing + Giant Full-Screen Center Board + Right Wing (Zero Empty Space!) */
     @media (min-width: 820px) {
+      #viewHome {
+        overflow-y: hidden !important;
+      }
       #viewPlay {
         display: grid !important;
         grid-template-columns: 196px minmax(0, 1fr) 196px !important;
@@ -927,7 +930,7 @@
 </button>
 </div>
 <!-- ==================== SCREEN 0: TRADITIONAL HOME LOBBY / START SCREEN ==================== -->
-<section class="w-full h-dvh overflow-y-auto flex flex-col justify-between p-3 sm:p-5 max-w-4xl mx-auto" id="viewHome">
+<section class="w-full h-dvh overflow-y-auto flex flex-col justify-between p-3 sm:py-3 sm:px-6 max-w-5xl mx-auto" id="viewHome">
 <div class="w-full flex flex-nowrap items-center justify-between gap-2 bg-slate-900/95 backdrop-blur-md border-2 border-amber-400/70 rounded-2xl px-2.5 py-2 sm:px-4 sm:py-2.5 shadow-lg" id="homeTopBar">
 <div class="flex items-center gap-2 min-w-0 flex-1">
 <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-md text-white text-lg sm:text-xl flex-shrink-0 border border-amber-200">
@@ -960,29 +963,29 @@
 </div>
 </div>
 <!-- Center Hero & Instant Quick-Launch Card -->
-<div class="my-auto py-2 flex flex-col items-center text-center">
-<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold mb-1.5">
+<div class="my-auto py-1 flex flex-col items-center text-center w-full">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold mb-1">
 <span>🎲</span>
 <span id="headerPresetBadge">بنوں روایتی رولز (Bannu Rules)</span>
 </div>
-<h1 class="text-2xl sm:text-4xl font-black tracking-tight text-slate-900" id="appMainTitle">
+<h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 leading-tight" id="appMainTitle">
         Bannu Royale Ludo
       </h1>
-<p class="text-xs sm:text-sm text-slate-600 max-w-md mt-0.5 mb-3" id="appSubTitle">
+<p class="text-xs sm:text-sm text-slate-600 max-w-xl mt-0.5 mb-2" id="appSubTitle">
         Authentic Pashtun 2-Dice Cultural Rules &amp; Classic Yalla Ludo — Direct Drag &amp; Tap Board
       </p>
 <!-- Auto-Saved Crash/Close Recovery Banner (Visible whenever an unfinished match is saved!) -->
-<div class="hidden w-full max-w-xl mb-3 p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex items-center justify-between gap-2 shadow-md" id="resumeSavedMatchBanner">
-<div class="text-left">
-<div class="text-xs font-black text-emerald-900">🔄 Unfinished Match Saved (ادھورا کھیل محفوظ ہے)</div>
-<div class="text-[11px] text-emerald-700" id="resumeSavedMatchInfo">Disconnected or closed earlier? Resume from the exact turn!</div>
+<div class="hidden w-full max-w-xl sm:max-w-3xl mb-2 py-2 px-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex items-center justify-between gap-2 shadow-md" id="resumeSavedMatchBanner">
+<div class="text-left flex flex-col sm:flex-row sm:items-center sm:gap-2 min-w-0">
+<div class="text-xs font-black text-emerald-900 whitespace-nowrap">🔄 Unfinished Match Saved (ادھورا کھیل محفوظ ہے)</div>
+<div class="text-[11px] text-emerald-700 truncate" id="resumeSavedMatchInfo">Disconnected or closed earlier? Resume from the exact turn!</div>
 </div>
-<button class="px-4 py-2 rounded-xl font-black text-xs emerald-play-btn" id="resumeSavedMatchBtn" type="button">
+<button class="px-3.5 py-1.5 rounded-xl font-black text-xs emerald-play-btn flex-shrink-0" id="resumeSavedMatchBtn" type="button">
           ▶️ Resume Match
         </button>
 </div>
 <!-- Main Pre-Game Mode Picker Card -->
-<div class="w-full max-w-xl royal-card rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-xl text-left space-y-3">
+<div class="w-full max-w-xl sm:max-w-3xl royal-card rounded-3xl p-3.5 sm:p-4 border-2 border-amber-300 shadow-xl text-left space-y-2.5">
 <!-- 1. Rulebook Preset Switch -->
 <div>
 <label class="block text-[11px] font-extrabold uppercase tracking-wider text-amber-800 mb-1.5">1. Select Rulebook (قوانین کا انتخاب)</label>
@@ -1067,15 +1070,17 @@
 </div>
 </div>
 </div>
-<!-- BIG START GAME HERO BUTTON -->
-<button class="w-full py-3.5 px-6 rounded-2xl font-black text-base sm:text-lg emerald-play-btn transition flex items-center justify-center gap-2 shadow-xl" id="startMatchHeroBtn" type="button">
+<!-- BIG START GAME HERO BUTTON & REPLAY STUDIO ROW -->
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pt-0.5">
+<button class="sm:col-span-7 w-full py-3 px-5 rounded-2xl font-black text-sm sm:text-base emerald-play-btn transition flex items-center justify-center gap-2 shadow-xl" id="startMatchHeroBtn" type="button">
 <span>▶️</span>
 <span>PLAY GAME NOW (کھیل شروع کریں)</span>
 </button>
-<button class="w-full py-2.5 px-4 rounded-2xl font-extrabold text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-400/60 transition flex items-center justify-center gap-2 shadow-md" id="homeOpenReplayStudioBtn" type="button">
+<button class="sm:col-span-5 w-full py-3 px-4 rounded-2xl font-extrabold text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-400/60 transition flex items-center justify-center gap-2 shadow-md" id="homeOpenReplayStudioBtn" type="button">
 <span>🎬</span>
-<span>WATCH GAME REPLAYS — CURRENT &amp; PAST (ری پلے اسٹوڈیو)</span>
+<span>WATCH REPLAYS (ری پلے اسٹوڈیو)</span>
 </button>
+</div>
 </div>
 </div>
 <!-- Bottom Secondary Navigation Bar on Home Screen -->
