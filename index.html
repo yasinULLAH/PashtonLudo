@@ -2904,10 +2904,10 @@
       ];
 
       const YARD_SLOTS = [
-        [[1.7, 1.7], [1.7, 3.3], [3.3, 1.7], [3.3, 3.3]],
-        [[1.7, 10.7], [1.7, 12.3], [3.3, 10.7], [3.3, 12.3]],
-        [[10.7, 10.7], [10.7, 12.3], [12.3, 10.7], [12.3, 12.3]],
-        [[10.7, 1.7], [10.7, 3.3], [12.3, 1.7], [12.3, 3.3]]
+        [[0.98, 0.68], [0.98, 4.32], [4.02, 0.68], [4.02, 4.32]],
+        [[0.98, 9.68], [0.98, 13.32], [4.02, 9.68], [4.02, 13.32]],
+        [[9.98, 9.68], [9.98, 13.32], [13.02, 9.68], [13.02, 13.32]],
+        [[9.98, 0.68], [9.98, 4.32], [13.02, 0.68], [13.02, 4.32]]
       ];
 
       const PLAYER_META = [
@@ -7007,6 +7007,7 @@
       let renderedTokenHitboxes = [];
       let renderedDestinationTargets = [];
       let renderedYardRollHitbox = null;
+      let renderedYardDiceHitboxes = [];
 
       function getTokenGridCoords(token) {
         if (token.animCoords) return token.animCoords;
@@ -7147,12 +7148,15 @@
         ];
 
         renderedYardRollHitbox = null;
+        renderedYardDiceHitboxes = [];
 
         yardOrigins.forEach(function (yo) {
           const x = yo.c * cellW;
           const y = yo.r * cellH;
           const sizeW = 6 * cellW;
           const sizeH = 6 * cellH;
+          const yardCx = x + sizeW / 2;
+          const yardCy = y + sizeH / 2;
           const isCurrentTurnYard = (gameState.currentTurn === yo.pIdx);
           const pl = gameState.players[yo.pIdx];
           const meta = PLAYER_META[yo.pIdx];
@@ -7168,22 +7172,22 @@
           }
           ctx.fillStyle = isCurrentTurnYard ? '#fffbeb' : '#ffffff';
           ctx.beginPath();
-          ctx.roundRect(x + cellW * 0.45, y + cellH * 0.45, sizeW - cellW * 0.9, sizeH - cellH * 0.9, 16);
+          ctx.roundRect(x + cellW * 0.34, y + cellH * 0.34, sizeW - cellW * 0.68, sizeH - cellH * 0.68, 16);
           ctx.fill();
           ctx.lineWidth = isCurrentTurnYard ? 5 : 2.5;
           ctx.strokeStyle = isCurrentTurnYard ? '#f59e0b' : homeColors[yo.pIdx];
           ctx.stroke();
           ctx.restore();
 
-          const isCompactCanvas = window.innerWidth < 640;
+          const isCompactCanvas = window.innerWidth < 820;
           if (pl && pl.active) {
             const teamStr = rulesConfig.teamMode ? (' [' + meta.teamTag + ']') : '';
             const turnPrefix = isCurrentTurnYard ? '⚡ ' : '';
-            const bannerText = turnPrefix + pl.name.slice(0, isCompactCanvas ? 9 : 11) + teamStr;
-            const bannerW = sizeW - cellW * 1.25;
-            const bannerH = Math.max(cellH * (isCompactCanvas ? 0.38 : 0.44), cell * (isCompactCanvas ? 0.38 : 0.44));
+            const bannerText = turnPrefix + pl.name.slice(0, isCompactCanvas ? 10 : 12) + teamStr;
+            const bannerW = sizeW - cellW * 1.85;
+            const bannerH = Math.max(cellH * 0.42, cell * 0.40);
             const bannerX = x + (sizeW - bannerW) / 2;
-            const bannerY = y + cellH * 0.54;
+            const bannerY = y + cellH * 0.44;
 
             ctx.save();
             ctx.fillStyle = isCurrentTurnYard ? '#0f172a' : '#f1f5f9';
@@ -7195,10 +7199,10 @@
             ctx.stroke();
 
             ctx.fillStyle = isCurrentTurnYard ? '#fde047' : '#0f172a';
-            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.22)) + 'px Inter, sans-serif';
+            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.20 : 0.22)) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(bannerText, x + sizeW / 2, bannerY + bannerH / 2);
+            ctx.fillText(bannerText, yardCx, bannerY + bannerH / 2);
             ctx.restore();
           }
 
@@ -7207,7 +7211,7 @@
             const sx = (slot[1] + 0.5) * cellW;
             const sy = (slot[0] + 0.5) * cellH;
             ctx.beginPath();
-            ctx.arc(sx, sy, cell * (isCompactCanvas ? 0.36 : 0.40), 0, Math.PI * 2);
+            ctx.arc(sx, sy, cell * 0.36, 0, Math.PI * 2);
             ctx.fillStyle = homeColors[yo.pIdx];
             ctx.fill();
             ctx.lineWidth = 2;
@@ -7220,10 +7224,10 @@
             const badgeText = pl.kills >= reqKillsForYard
               ? ('🔓 HOME OPEN (⚔️' + pl.kills + ')')
               : ('🔒 NEED ' + reqKillsForYard + (reqKillsForYard === 1 ? ' KILL' : ' KILLS (⚔️' + pl.kills + '/2)'));
-            const badgeW = sizeW - cellW * 1.25;
-            const badgeH = Math.max(cellH * (isCompactCanvas ? 0.38 : 0.44), cell * (isCompactCanvas ? 0.38 : 0.44));
+            const badgeW = sizeW - cellW * 1.85;
+            const badgeH = Math.max(cellH * 0.42, cell * 0.40);
             const badgeX = x + (sizeW - badgeW) / 2;
-            const badgeY = y + sizeH - cellH * 0.54 - badgeH;
+            const badgeY = y + sizeH - cellH * 0.44 - badgeH;
 
             ctx.save();
             ctx.fillStyle = pl.kills >= reqKillsForYard ? '#065f46' : '#881337';
@@ -7235,50 +7239,219 @@
             ctx.stroke();
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.22)) + 'px Inter, sans-serif';
+            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.21)) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(badgeText, x + sizeW / 2, badgeY + badgeH / 2);
+            ctx.fillText(badgeText, yardCx, badgeY + badgeH / 2);
             ctx.restore();
           }
 
-          // On-Board Interactive 3D Dice & Roll Stage in the center of the Active Player's Yard
+          // On-Board Interactive 3D Dice & Roll Arena in the Center of the Player's Yard
           if (isCurrentTurnYard && pl && pl.active) {
-            const pillW = Math.min(sizeW - cellW * 1.15, cell * (isCompactCanvas ? 2.5 : 2.8));
-            const pillH = Math.max(cellH * (isCompactCanvas ? 0.58 : 0.68), cell * (isCompactCanvas ? 0.62 : 0.76));
-            const px = x + (sizeW - pillW) / 2;
-            const py = y + (sizeH - pillH) / 2;
-            renderedYardRollHitbox = { x: px, y: py, w: pillW, h: pillH };
+            const stageW = Math.min(sizeW - cellW * 1.55, cellW * 3.95);
+            const stageH = Math.min(sizeH - cellH * 2.15, cellH * 2.38);
+            const px = yardCx - stageW / 2;
+            const py = yardCy - stageH / 2;
+            renderedYardRollHitbox = { x: px, y: py, w: stageW, h: stageH };
+
+            const targetIdx = getControlledOwnerIndex(yo.pIdx);
+            const effDiceCount = getEffectiveDiceCountForOwner(yo.pIdx, targetIdx);
 
             if (canvas3dRollState.active && canvas3dRollState.actorIdx === yo.pIdx) {
-              drawCanvas3dRollingDiceInYard(ctx, x + sizeW / 2, y + sizeH / 2, cell, canvas3dRollState);
-            } else if (gameState.phase === 'ROLL') {
               ctx.save();
-              ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+              ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
               ctx.beginPath();
-              ctx.roundRect(px, py, pillW, pillH, 10);
+              ctx.roundRect(px, py, stageW, stageH, 14);
               ctx.fill();
-              ctx.lineWidth = 2;
+              ctx.lineWidth = 2.5;
               ctx.strokeStyle = '#f59e0b';
               ctx.stroke();
-              const dSize = cell * (isCompactCanvas ? 0.42 : 0.48);
-              drawIsometric3dDieOnCanvas(ctx, px + dSize * 0.95, y + sizeH / 2, dSize, 6, false, 0, 0);
-              ctx.fillStyle = '#fde047';
-              ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.22)) + 'px Inter, sans-serif';
-              ctx.textAlign = 'left';
+              ctx.restore();
+              drawCanvas3dRollingDiceInYard(ctx, yardCx, yardCy, cell, canvas3dRollState);
+            } else if (gameState.phase === 'ROLL') {
+              ctx.save();
+              const grad = ctx.createLinearGradient(px, py, px, py + stageH);
+              grad.addColorStop(0, 'rgba(15, 23, 42, 0.96)');
+              grad.addColorStop(1, 'rgba(30, 41, 59, 0.96)');
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.roundRect(px, py, stageW, stageH, 14);
+              ctx.fill();
+              ctx.lineWidth = 2.5;
+              ctx.strokeStyle = '#f59e0b';
+              ctx.stroke();
+
+              const dSize = cell * (effDiceCount === 1 ? 1.16 : 1.02);
+              const diceCy = yardCy - stageH * 0.13;
+              if (effDiceCount === 1) {
+                drawIsometric3dDieOnCanvas(ctx, yardCx, diceCy, dSize, 6, false, 0, 0);
+              } else {
+                drawIsometric3dDieOnCanvas(ctx, yardCx - dSize * 0.78, diceCy, dSize, 6, false, 0, 0);
+                drawIsometric3dDieOnCanvas(ctx, yardCx + dSize * 0.78, diceCy, dSize, 6, false, 0, 0);
+              }
+
+              const ctaW = stageW * 0.88;
+              const ctaH = Math.max(cellH * 0.44, cell * 0.42);
+              const ctaX = yardCx - ctaW / 2;
+              const ctaY = py + stageH - ctaH - cellH * 0.10;
+              ctx.fillStyle = '#f59e0b';
+              ctx.beginPath();
+              ctx.roundRect(ctaX, ctaY, ctaW, ctaH, 7);
+              ctx.fill();
+
+              ctx.fillStyle = '#0f172a';
+              ctx.font = '900 ' + Math.round(cell * 0.23) + 'px Inter, sans-serif';
+              ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText('TAP TO ROLL', px + dSize * 1.65, y + sizeH / 2);
+              ctx.fillText(effDiceCount === 2 ? '🎲 TAP TO ROLL (2D)' : '🎲 TAP TO ROLL', yardCx, ctaY + ctaH / 2);
               ctx.restore();
             } else {
-              const poolToShow = gameState.dicePool.slice(0, 2);
-              const dSize = cell * (isCompactCanvas ? 0.46 : 0.54);
+              const activeUnused = gameState.dicePool.filter(function (d) { return !d.used; });
+              const poolToShow = (gameState.dicePool.length > 2 && activeUnused.length > 0)
+                ? activeUnused.slice(0, 2)
+                : gameState.dicePool.slice(0, 2);
+
+              ctx.save();
+              const grad = ctx.createLinearGradient(px, py, px, py + stageH);
+              grad.addColorStop(0, 'rgba(15, 23, 42, 0.94)');
+              grad.addColorStop(1, 'rgba(30, 41, 59, 0.94)');
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.roundRect(px, py, stageW, stageH, 14);
+              ctx.fill();
+              ctx.lineWidth = 2.5;
+              ctx.strokeStyle = '#fbbf24';
+              ctx.stroke();
+              ctx.restore();
+
+              const diceCy = yardCy - stageH * 0.13;
               if (poolToShow.length === 1) {
-                drawIsometric3dDieOnCanvas(ctx, x + sizeW / 2, y + sizeH / 2, dSize, poolToShow[0].value, poolToShow[0].used, 0, 0);
+                const d0 = poolToShow[0];
+                const dSize = cell * 1.20;
+                const isSel0 = (gameState.preferredDieFilter === d0.id);
+                drawIsometric3dDieOnCanvas(ctx, yardCx, diceCy, dSize, d0.value, d0.used, 0, 0, isSel0);
+                renderedYardDiceHitboxes.push({
+                  x: yardCx - dSize * 0.65,
+                  y: diceCy - dSize * 0.65,
+                  w: dSize * 1.3,
+                  h: dSize * 1.3,
+                  filterVal: d0.id,
+                  used: d0.used,
+                  value: d0.value
+                });
               } else if (poolToShow.length >= 2) {
-                drawIsometric3dDieOnCanvas(ctx, x + sizeW / 2 - dSize * 0.68, y + sizeH / 2, dSize, poolToShow[0].value, poolToShow[0].used, 0, 0);
-                drawIsometric3dDieOnCanvas(ctx, x + sizeW / 2 + dSize * 0.68, y + sizeH / 2, dSize, poolToShow[1].value, poolToShow[1].used, 0, 0);
+                const d0 = poolToShow[0];
+                const d1 = poolToShow[1];
+                const dSize = cell * 1.05;
+                const dx0 = yardCx - dSize * 0.82;
+                const dx1 = yardCx + dSize * 0.82;
+                const isSel0 = (gameState.preferredDieFilter === d0.id);
+                const isSel1 = (gameState.preferredDieFilter === d1.id);
+
+                drawIsometric3dDieOnCanvas(ctx, dx0, diceCy, dSize, d0.value, d0.used, 0, 0, isSel0);
+                drawIsometric3dDieOnCanvas(ctx, dx1, diceCy, dSize, d1.value, d1.used, 0, 0, isSel1);
+
+                renderedYardDiceHitboxes.push({
+                  x: dx0 - dSize * 0.6,
+                  y: diceCy - dSize * 0.6,
+                  w: dSize * 1.2,
+                  h: dSize * 1.2,
+                  filterVal: d0.id,
+                  used: d0.used,
+                  value: d0.value
+                });
+                renderedYardDiceHitboxes.push({
+                  x: dx1 - dSize * 0.6,
+                  y: diceCy - dSize * 0.6,
+                  w: dSize * 1.2,
+                  h: dSize * 1.2,
+                  filterVal: d1.id,
+                  used: d1.used,
+                  value: d1.value
+                });
               }
+
+              // Bottom interactive bar inside Yard Dice Stage (Bonus Roll CTA or Sum / Filter Pill)
+              const barW = stageW * 0.90;
+              const barH = Math.max(cellH * 0.44, cell * 0.40);
+              const barX = yardCx - barW / 2;
+              const barY = py + stageH - barH - cellH * 0.09;
+              const canBonusNow = canPlayerRollBonusNow();
+
+              ctx.save();
+              if (canBonusNow) {
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.roundRect(barX, barY, barW, barH, 7);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '900 ' + Math.round(cell * 0.21) + 'px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🎲 TAP FOR BONUS ROLL!', yardCx, barY + barH / 2);
+              } else if (poolToShow.length >= 2) {
+                const isCombSel = (gameState.preferredDieFilter === 'combined');
+                const unusedSum = activeUnused.reduce(function (acc, item) { return acc + item.value; }, 0);
+                ctx.fillStyle = isCombSel ? '#0284c7' : 'rgba(255, 255, 255, 0.14)';
+                ctx.beginPath();
+                ctx.roundRect(barX, barY, barW, barH, 7);
+                ctx.fill();
+                ctx.lineWidth = 1.2;
+                ctx.strokeStyle = isCombSel ? '#38bdf8' : 'rgba(251, 191, 36, 0.55)';
+                ctx.stroke();
+                ctx.fillStyle = '#fde047';
+                ctx.font = '900 ' + Math.round(cell * 0.21) + 'px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const sumLabel = activeUnused.length >= 2
+                  ? (poolToShow[0].value + ' + ' + poolToShow[1].value + ' = ' + unusedSum + (isCombSel ? ' ✓' : ''))
+                  : (activeUnused.length === 1 ? ('REMAINING: +' + activeUnused[0].value) : '✓ MOVES DONE');
+                ctx.fillText(sumLabel, yardCx, barY + barH / 2);
+                if (activeUnused.length >= 2) {
+                  renderedYardDiceHitboxes.push({
+                    x: barX,
+                    y: barY,
+                    w: barW,
+                    h: barH,
+                    filterVal: 'combined',
+                    used: false,
+                    value: unusedSum
+                  });
+                }
+              } else if (poolToShow.length === 1) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.14)';
+                ctx.beginPath();
+                ctx.roundRect(barX, barY, barW, barH, 7);
+                ctx.fill();
+                ctx.fillStyle = '#fde047';
+                ctx.font = '900 ' + Math.round(cell * 0.21) + 'px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(poolToShow[0].used ? '✓ PLAYED' : ('ROLLED: +' + poolToShow[0].value), yardCx, barY + barH / 2);
+              }
+              ctx.restore();
             }
+          } else if (pl && pl.active) {
+            // Subtle Royal Medallion in Inactive Player's Yard Center so empty space looks balanced
+            const doneCount = pl.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(yardCx, yardCy, cell * 0.72, 0, Math.PI * 2);
+            ctx.fillStyle = homeColors[yo.pIdx];
+            ctx.globalAlpha = 0.55;
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = strongColors[yo.pIdx];
+            ctx.stroke();
+            ctx.globalAlpha = 0.85;
+            ctx.fillStyle = meta.darkHex;
+            ctx.font = '900 ' + Math.round(cell * 0.22) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🏠 ' + doneCount + '/' + rulesConfig.tokensPerPlayer, yardCx, yardCy - cell * 0.14);
+            ctx.font = '800 ' + Math.round(cell * 0.18) + 'px Inter, sans-serif';
+            ctx.fillText(rulesConfig.teamMode ? meta.teamTag : 'WAIT', yardCx, yardCy + cell * 0.20);
+            ctx.restore();
           }
         });
 
@@ -7753,6 +7926,26 @@
           rollDiceForCurrentPlayer();
           return;
         }
+        if (gameState.phase === 'MOVE' && canPlayerRollBonusNow() && renderedYardRollHitbox) {
+          const hb = renderedYardRollHitbox;
+          if (pt.x >= hb.x && pt.x <= hb.x + hb.w && pt.y >= hb.y && pt.y <= hb.y + hb.h) {
+            if (e.cancelable) e.preventDefault();
+            rollDiceForCurrentPlayer();
+            return;
+          }
+        }
+        if (gameState.phase === 'MOVE' && renderedYardDiceHitboxes.length > 0) {
+          for (let i = 0; i < renderedYardDiceHitboxes.length; i++) {
+            const dhb = renderedYardDiceHitboxes[i];
+            if (!dhb.used && pt.x >= dhb.x && pt.x <= dhb.x + dhb.w && pt.y >= dhb.y && pt.y <= dhb.y + dhb.h) {
+              if (e.cancelable) e.preventDefault();
+              gameState.preferredDieFilter = (gameState.preferredDieFilter === dhb.filterVal ? null : dhb.filterVal);
+              playSound('step');
+              updateAllUI();
+              return;
+            }
+          }
+        }
         if (gameState.phase !== 'MOVE') return;
 
         const legal = computeLegalMoves();
@@ -8062,8 +8255,8 @@
 
       function drawDiePipsOnCanvasQuad(ctx, cx, cy, faceSize, val, isRed) {
         const pips = PIP_LAYOUTS[val] || [4];
-        const step = faceSize * 0.27;
-        const pipR = faceSize * (val === 1 ? 0.135 : 0.095);
+        const step = faceSize * 0.275;
+        const pipR = faceSize * (val === 1 ? 0.16 : 0.112);
         pips.forEach(function (idx) {
           const r = Math.floor(idx / 3) - 1;
           const c = (idx % 3) - 1;
@@ -8073,23 +8266,39 @@
           ctx.arc(px, py, pipR, 0, Math.PI * 2);
           ctx.fillStyle = isRed ? '#e11d48' : '#0f172a';
           ctx.fill();
+          ctx.beginPath();
+          ctx.arc(px - pipR * 0.28, py - pipR * 0.28, pipR * 0.28, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+          ctx.fill();
         });
       }
 
-      function drawIsometric3dDieOnCanvas(ctx, cx, cy, size, value, isUsed, rotAngle, bounceHeight) {
+      function drawIsometric3dDieOnCanvas(ctx, cx, cy, size, value, isUsed, rotAngle, bounceHeight, isSelectedFilter) {
         const val = (value >= 1 && value <= 6) ? value : 6;
         const half = size * 0.48;
-        const depthX = size * 0.14;
-        const depthY = size * 0.13;
+        const depthX = size * 0.15;
+        const depthY = size * 0.14;
         const liftY = (bounceHeight || 0) * size * 0.65;
 
         ctx.save();
-        if (isUsed) ctx.globalAlpha = 0.48;
+        if (isUsed) ctx.globalAlpha = 0.42;
+
+        if (isSelectedFilter && !isUsed) {
+          ctx.save();
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 14;
+          ctx.beginPath();
+          ctx.arc(cx, cy, half * 1.32, 0, Math.PI * 2);
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = Math.max(2.5, size * 0.08);
+          ctx.stroke();
+          ctx.restore();
+        }
 
         const shadowScale = 1 + (bounceHeight || 0) * 0.28;
         ctx.beginPath();
-        ctx.ellipse(cx + depthX * 0.5, cy + half * 0.95, half * 1.15 * shadowScale, half * 0.42 * shadowScale, 0, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.36)';
+        ctx.ellipse(cx + depthX * 0.4, cy + half * 0.96, half * 1.15 * shadowScale, half * 0.38 * shadowScale, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.55)';
         ctx.fill();
 
         ctx.translate(cx - depthX * 0.3, cy - liftY + depthY * 0.25);
@@ -8107,13 +8316,13 @@
         ctx.closePath();
         ctx.fillStyle = '#fef3c7';
         ctx.fill();
-        ctx.lineWidth = 1.3;
-        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.4;
+        ctx.strokeStyle = isSelectedFilter ? '#38bdf8' : '#d97706';
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(x0 + w * 0.35 + depthX * 0.5, y0 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
-        ctx.arc(x0 + w * 0.68 + depthX * 0.5, y0 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
+        ctx.arc(x0 + w * 0.35 + depthX * 0.5, y0 - depthY * 0.5, size * 0.048, 0, Math.PI * 2);
+        ctx.arc(x0 + w * 0.68 + depthX * 0.5, y0 - depthY * 0.5, size * 0.048, 0, Math.PI * 2);
         ctx.fillStyle = '#78350f';
         ctx.fill();
 
@@ -8125,21 +8334,24 @@
         ctx.closePath();
         ctx.fillStyle = '#cbd5e1';
         ctx.fill();
-        ctx.strokeStyle = '#94a3b8';
+        ctx.strokeStyle = isSelectedFilter ? '#38bdf8' : '#94a3b8';
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(x0 + w + depthX * 0.5, y0 + h * 0.32 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
-        ctx.arc(x0 + w + depthX * 0.5, y0 + h * 0.65 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
+        ctx.arc(x0 + w + depthX * 0.5, y0 + h * 0.32 - depthY * 0.5, size * 0.048, 0, Math.PI * 2);
+        ctx.arc(x0 + w + depthX * 0.5, y0 + h * 0.65 - depthY * 0.5, size * 0.048, 0, Math.PI * 2);
         ctx.fillStyle = '#334155';
         ctx.fill();
 
-        ctx.fillStyle = '#ffffff';
+        const faceGrad = ctx.createLinearGradient(x0, y0, x0 + w, y0 + h);
+        faceGrad.addColorStop(0, '#ffffff');
+        faceGrad.addColorStop(1, '#f1f5f9');
+        ctx.fillStyle = faceGrad;
         ctx.beginPath();
-        ctx.roundRect(x0, y0, w, h, Math.max(3, size * 0.12));
+        ctx.roundRect(x0, y0, w, h, Math.max(4, size * 0.14));
         ctx.fill();
-        ctx.lineWidth = 1.8;
-        ctx.strokeStyle = val === 6 ? '#e11d48' : '#f59e0b';
+        ctx.lineWidth = Math.max(2, size * 0.065);
+        ctx.strokeStyle = isSelectedFilter ? '#38bdf8' : (val === 6 ? '#e11d48' : '#f59e0b');
         ctx.stroke();
 
         drawDiePipsOnCanvasQuad(ctx, 0, 0, w, val, val === 6 || val === 1);
@@ -8147,12 +8359,12 @@
       }
 
       function drawCanvas3dRollingDiceInYard(ctx, centerX, centerY, cell, animState) {
-        const dSize = cell * 0.58;
+        const dSize = animState.diceCount === 1 ? (cell * 1.28) : (cell * 1.12);
         if (animState.diceCount === 1) {
           drawIsometric3dDieOnCanvas(ctx, centerX, centerY, dSize, animState.tempVal0, false, animState.angle0, animState.bounce);
         } else {
-          drawIsometric3dDieOnCanvas(ctx, centerX - dSize * 0.72, centerY, dSize, animState.tempVal0, false, animState.angle0, animState.bounce);
-          drawIsometric3dDieOnCanvas(ctx, centerX + dSize * 0.72, centerY, dSize, animState.tempVal1, false, animState.angle1, animState.bounce * 0.85);
+          drawIsometric3dDieOnCanvas(ctx, centerX - dSize * 0.78, centerY, dSize, animState.tempVal0, false, animState.angle0, animState.bounce);
+          drawIsometric3dDieOnCanvas(ctx, centerX + dSize * 0.78, centerY, dSize, animState.tempVal1, false, animState.angle1, animState.bounce * 0.85);
         }
       }
 
@@ -12103,12 +12315,25 @@
           }
 
           if (isTurn && pl && pl.active && Array.isArray(fr.dicePool) && fr.dicePool.length > 0) {
-            const dSize = cell * 0.50;
+            const stageW = cellW * 3.85;
+            const stageH = cellH * 2.15;
+            const yardCx = x + sizeW / 2;
+            const yardCy = y + sizeH / 2;
+            rCtx.save();
+            rCtx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+            rCtx.beginPath();
+            rCtx.roundRect(yardCx - stageW / 2, yardCy - stageH / 2, stageW, stageH, 12);
+            rCtx.fill();
+            rCtx.lineWidth = 2;
+            rCtx.strokeStyle = '#fbbf24';
+            rCtx.stroke();
+            rCtx.restore();
+            const dSize = fr.dicePool.length === 1 ? (cell * 1.15) : (cell * 1.02);
             if (fr.dicePool.length === 1) {
-              drawIsometric3dDieOnCanvas(rCtx, x + sizeW / 2, y + sizeH / 2, dSize, fr.dicePool[0].value, false, 0, 0);
+              drawIsometric3dDieOnCanvas(rCtx, yardCx, yardCy, dSize, fr.dicePool[0].value, false, 0, 0);
             } else {
-              drawIsometric3dDieOnCanvas(rCtx, x + sizeW / 2 - dSize * 0.68, y + sizeH / 2, dSize, fr.dicePool[0].value, false, 0, 0);
-              drawIsometric3dDieOnCanvas(rCtx, x + sizeW / 2 + dSize * 0.68, y + sizeH / 2, dSize, fr.dicePool[1].value, false, 0, 0);
+              drawIsometric3dDieOnCanvas(rCtx, yardCx - dSize * 0.78, yardCy, dSize, fr.dicePool[0].value, false, 0, 0);
+              drawIsometric3dDieOnCanvas(rCtx, yardCx + dSize * 0.78, yardCy, dSize, fr.dicePool[1].value, false, 0, 0);
             }
           }
         });
