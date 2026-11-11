@@ -857,13 +857,18 @@
 </div>
 </div>
 <!-- 2. Match Mode, AI Intelligence, Bead Count, Kill Mode & Turn Timer Row -->
-<div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
 <div>
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Match Format</label>
 <select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickFormatSelect">
 <option selected="" value="2v2_ai">🤝 2v2 Teams (vs AI)</option>
 <option value="1v1_ai">⚔️ 1v1 Duel (vs AI)</option>
+<option value="3p_ai">👥 3-Player FFA (vs AI)</option>
 <option value="4p_ai">👑 4-Player FFA (vs AI)</option>
+<option value="ai_2p">🤖 AI vs AI: 2-Player (1v1)</option>
+<option value="ai_3p">🤖 AI vs AI: 3-Player (FFA)</option>
+<option value="ai_vs_ai">🤖 AI vs AI: 4P (2v2 Teams)</option>
+<option value="ai_4p">🤖 AI vs AI: 4-Player (FFA)</option>
 <option value="pass_2p">👥 2P Same Device (1v1)</option>
 <option value="pass_3p">👥 3P Same Device (3 Players)</option>
 <option value="pass_4p_ffa">👥 4P Same Device (FFA)</option>
@@ -880,6 +885,19 @@
 </select>
 </div>
 <div>
+<label class="block text-[10px] font-bold uppercase text-amber-800 mb-1">AI Pace / Speed</label>
+<div class="flex gap-1">
+<select class="w-full bg-amber-50/90 border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-extrabold text-amber-950" id="homeQuickAiSpeedSelect">
+<option selected="" value="default">⚡ Fast (Default)</option>
+<option value="slow">🐢 Slow</option>
+<option value="dramatic">🎭 Dramatic</option>
+<option value="slowest">⏳ Slowest</option>
+<option value="custom">✏️ Custom...</option>
+</select>
+<input class="hidden w-16 bg-white border border-amber-400 rounded-xl px-2 py-1 text-xs font-bold text-slate-900" id="homeCustomAiSpeedInput" max="10" min="0.2" placeholder="Sec" step="0.1" type="number" value="1.5"/>
+</div>
+</div>
+<div>
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Beads Per Player</label>
 <select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickTokensSelect">
 <option value="2">♟️ 2 Beads (Fast)</option>
@@ -894,7 +912,7 @@
 <option value="open">🔓 Open Game + Kill Re-Roll</option>
 </select>
 </div>
-<div class="col-span-2 sm:col-span-1">
+<div>
 <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Turn Timer</label>
 <div class="flex gap-1">
 <select class="w-full bg-amber-50/90 border border-amber-300 rounded-xl px-2 py-1.5 text-xs font-bold text-slate-900" id="homeQuickTimerSelect">
@@ -958,6 +976,9 @@
 <div class="col-span-4 flex flex-wrap items-center justify-center gap-1" id="playActionToolbar">
 <button class="px-2.5 py-1 rounded-xl gold-gradient-btn font-black text-[10px] sm:text-[11px] border border-amber-300 shadow-sm flex items-center gap-1" id="openPauseMenuBtn" title="Game Menu &amp; Setup" type="button">
 <span>⏸️</span><span>Menu</span>
+</button>
+<button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-extrabold text-[10px] sm:text-[11px] border border-amber-400/50 shadow-sm flex items-center gap-1" id="quickAiSpeedBtn" title="Cycle AI Match Pace" type="button">
+<span>⏱️</span><span id="quickAiSpeedLabel">Fast</span>
 </button>
 <button class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm" id="exitScenarioDrillBtn" title="Exit Drill &amp; Return to Match" type="button">
           🔙 Match
@@ -1144,6 +1165,23 @@
 <option value="hard">🟠 Hard (Tough)</option>
 <option value="hardest">🔥 Hardest (Utmost Expert)</option>
 </select>
+</div>
+<div class="flex items-center justify-between gap-2 pt-1 border-t border-amber-200/70">
+<span class="text-[10px] font-extrabold uppercase text-amber-900">⏱️ AI Movement &amp; Dice Speed</span>
+<div class="flex items-center gap-1">
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-0.5 text-[11px] font-extrabold text-amber-950" id="pauseAiSpeedSelect">
+<option selected="" value="default">⚡ Fast (Default)</option>
+<option value="slow">🐢 Slow (Deliberate)</option>
+<option value="dramatic">🎭 Dramatic (Suspenseful)</option>
+<option value="slowest">⏳ Slowest (Spectator)</option>
+<option value="custom">✏️ Custom...</option>
+</select>
+<input class="hidden w-14 bg-white border border-amber-400 rounded-lg px-1.5 py-0.5 text-[11px] font-bold text-slate-900" id="pauseAiCustomSpeedInput" max="10" min="0.2" placeholder="Sec" step="0.1" type="number" value="1.5"/>
+</div>
+</div>
+<div class="flex items-center justify-between text-[10px] text-amber-950 font-bold bg-amber-100/70 border border-amber-300/80 rounded-lg px-2 py-1" id="pauseAiLearningBadge">
+<span id="pauseAiLearningLabel">🧠 Hardest AI: Gen 1 (0 Exp • 0 Fixes)</span>
+<button class="text-[9px] underline text-amber-800 hover:text-rose-700 font-bold" id="pauseResetAiLearningBtn" type="button">Reset</button>
 </div>
 <div class="text-[10px] font-extrabold uppercase text-amber-900 pt-1 border-t border-amber-200/70">🤖 Player Left / Disconnect Bot Takeover</div>
 <div class="grid grid-cols-2 gap-1.5" id="seatTakeoverButtons"></div>
@@ -1451,6 +1489,18 @@
 <option value="hard">🟠 Hard AI (Tough Tactician)</option>
 <option selected="" value="hardest">🔥 Hardest AI (Utmost Expert of All Rules)</option>
 </select>
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-amber-900" id="aiSpeedSelect">
+<option selected="" value="default">⚡ AI Pace: Fast (Default)</option>
+<option value="slow">🐢 AI Pace: Slow (Deliberate)</option>
+<option value="dramatic">🎭 AI Pace: Dramatic (Suspenseful)</option>
+<option value="slowest">⏳ AI Pace: Slowest (Spectator)</option>
+<option value="custom">✏️ AI Pace: Custom...</option>
+</select>
+<input class="hidden w-16 bg-white border border-amber-400 rounded-lg px-2 py-1 text-xs font-bold text-slate-900" id="rulesCustomAiSpeedInput" max="10" min="0.2" placeholder="Sec" step="0.1" type="number" value="1.5"/>
+</div>
+<div class="flex items-center justify-between text-[10px] text-amber-950 font-bold bg-amber-100/70 border border-amber-300/80 rounded-xl px-2.5 py-1.5 mt-2" id="rulesAiLearningBadge">
+<span id="rulesAiLearningLabel">🧠 Hardest AI Adaptive Memory: Gen 1 (0 Experiences Learned • 0 Mistakes Corrected • 0 Mastered)</span>
+<button class="text-[10px] underline text-amber-800 hover:text-rose-700 font-bold" id="rulesResetAiLearningBtn" type="button">Reset AI Memory</button>
 </div>
 </div>
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
@@ -2786,8 +2836,194 @@
         autoRollOnTurn: savedAutoRollPref,
         showTooltips: savedShowTooltipsPref,
         turnTimeSeconds: 30,
-        aiDifficulty: 'hardest'
+        aiDifficulty: 'hardest',
+        aiSpeed: 'default',
+        aiCustomSpeedSec: 1.5
       };
+
+      function getAiSpeedTimings() {
+        const speed = rulesConfig.aiSpeed || 'default';
+        if (speed === 'slow') {
+          return {
+            rollDelay: 900,
+            diceRollDuration: 650,
+            moveDelay: 900,
+            hopInterval: 130,
+            turnPassDelay: 1500
+          };
+        }
+        if (speed === 'dramatic') {
+          return {
+            rollDelay: 1400,
+            diceRollDuration: 1100,
+            moveDelay: 1500,
+            hopInterval: 240,
+            turnPassDelay: 2200
+          };
+        }
+        if (speed === 'slowest') {
+          return {
+            rollDelay: 2200,
+            diceRollDuration: 1600,
+            moveDelay: 2200,
+            hopInterval: 380,
+            turnPassDelay: 3000
+          };
+        }
+        if (speed === 'custom') {
+          const customSec = Math.max(0.2, Math.min(10, Number(rulesConfig.aiCustomSpeedSec) || 1.5));
+          const baseMs = Math.round(customSec * 1000);
+          return {
+            rollDelay: Math.max(200, Math.round(baseMs * 0.9)),
+            diceRollDuration: Math.max(250, Math.round(baseMs * 0.7)),
+            moveDelay: Math.max(200, baseMs),
+            hopInterval: Math.max(35, Math.min(500, Math.round(baseMs * 0.16))),
+            turnPassDelay: Math.max(600, Math.round(baseMs * 1.5))
+          };
+        }
+        return {
+          rollDelay: 420,
+          diceRollDuration: 280,
+          moveDelay: 440,
+          hopInterval: null,
+          turnPassDelay: 950
+        };
+      }
+
+      const DEFAULT_AI_KNOWLEDGE = {
+        generation: 1,
+        totalMatches: 0,
+        experiencesLearned: 0,
+        mistakesCorrected: 0,
+        tacticsMastered: 0,
+        weights: {
+          dangerAvoidance: 1.0,
+          safeStopPriority: 1.0,
+          killHunger: 1.0,
+          wipeoutDefense: 1.0,
+          lockCaution: 1.0,
+          stackCaution: 1.0,
+          loopDiscouragement: 1.0,
+          homeStretchRush: 1.0
+        },
+        trackDangerStats: {}
+      };
+      let aiKnowledgeBase = JSON.parse(JSON.stringify(DEFAULT_AI_KNOWLEDGE));
+
+      function loadAiKnowledge() {
+        try {
+          const raw = localStorage.getItem('bannu_ludo_ai_knowledge_v1');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            aiKnowledgeBase = Object.assign({}, DEFAULT_AI_KNOWLEDGE, parsed);
+            if (!aiKnowledgeBase.weights) aiKnowledgeBase.weights = Object.assign({}, DEFAULT_AI_KNOWLEDGE.weights);
+            if (!aiKnowledgeBase.trackDangerStats) aiKnowledgeBase.trackDangerStats = {};
+          }
+        } catch (e) {}
+      }
+
+      function saveAiKnowledge() {
+        try {
+          localStorage.setItem('bannu_ludo_ai_knowledge_v1', JSON.stringify(aiKnowledgeBase));
+        } catch (e) {}
+        updateAiLearningBadgeUI();
+      }
+
+      function resetAiKnowledge() {
+        aiKnowledgeBase = JSON.parse(JSON.stringify(DEFAULT_AI_KNOWLEDGE));
+        saveAiKnowledge();
+        showToast('🧠 AI Learned Memory reset to Generation 1 baseline.', true);
+      }
+
+      function updateAiLearningBadgeUI() {
+        const shortTxt = '🧠 Hardest AI: Gen ' + aiKnowledgeBase.generation + ' (' + aiKnowledgeBase.experiencesLearned + ' Exp • ' + aiKnowledgeBase.mistakesCorrected + ' Fixes)';
+        const fullTxt = '🧠 Hardest AI Adaptive Memory: Gen ' + aiKnowledgeBase.generation + ' (' + aiKnowledgeBase.experiencesLearned + ' Experiences Learned • ' + aiKnowledgeBase.mistakesCorrected + ' Mistakes Corrected • ' + aiKnowledgeBase.tacticsMastered + ' Mastered)';
+        const pLabel = document.getElementById('pauseAiLearningLabel');
+        if (pLabel) pLabel.textContent = shortTxt;
+        const rLabel = document.getElementById('rulesAiLearningLabel');
+        if (rLabel) rLabel.textContent = fullTxt;
+      }
+
+      function checkAiGenerationMilestone() {
+        const targetGen = 1 + Math.floor(aiKnowledgeBase.experiencesLearned / 20);
+        if (targetGen > aiKnowledgeBase.generation) {
+          aiKnowledgeBase.generation = targetGen;
+          showToast('🧠 Hardest AI evolved to Generation ' + targetGen + '! (Adaptive Intelligence Upgraded)', true);
+        }
+      }
+
+      function learnFromCaptureEvent(capturerOwnerIdx, capturingToken, victimInfo) {
+        const victimPlayer = gameState.players[victimInfo.ownerIdx];
+        const capturerPlayer = gameState.players[capturerOwnerIdx];
+        if (!victimPlayer) return;
+
+        const victimTk = victimPlayer.tokens[victimInfo.tokenId];
+        const victimTrack = (victimTk && victimTk.state === 'board') ? getOuterTrackIndex(victimTk) : -1;
+
+        aiKnowledgeBase.experiencesLearned += 1;
+        aiKnowledgeBase.mistakesCorrected += 1;
+
+        if (victimTrack >= 0) {
+          if (!aiKnowledgeBase.trackDangerStats[victimTrack]) {
+            aiKnowledgeBase.trackDangerStats[victimTrack] = { capturesSuffered: 0, capturesAchieved: 0 };
+          }
+          aiKnowledgeBase.trackDangerStats[victimTrack].capturesSuffered += 1;
+        }
+
+        aiKnowledgeBase.weights.dangerAvoidance = Math.min(3.5, Number((aiKnowledgeBase.weights.dangerAvoidance + 0.02).toFixed(3)));
+        aiKnowledgeBase.weights.safeStopPriority = Math.min(3.0, Number((aiKnowledgeBase.weights.safeStopPriority + 0.015).toFixed(3)));
+
+        if (victimTk && victimTk.lockedThisTurn) {
+          aiKnowledgeBase.weights.lockCaution = Math.min(3.5, Number((aiKnowledgeBase.weights.lockCaution + 0.04).toFixed(3)));
+        }
+
+        const insideHomeCount = victimPlayer.tokens.filter(function (t) { return t.state === 'home_stretch' || t.state === 'completed'; }).length;
+        if (victimPlayer.kills > 0 && insideHomeCount === 0) {
+          aiKnowledgeBase.weights.wipeoutDefense = Math.min(4.0, Number((aiKnowledgeBase.weights.wipeoutDefense + 0.05).toFixed(3)));
+        }
+
+        if (capturerPlayer && capturerPlayer.type === 'ai') {
+          aiKnowledgeBase.tacticsMastered += 1;
+          if (victimTrack >= 0) {
+            if (!aiKnowledgeBase.trackDangerStats[victimTrack]) {
+              aiKnowledgeBase.trackDangerStats[victimTrack] = { capturesSuffered: 0, capturesAchieved: 0 };
+            }
+            aiKnowledgeBase.trackDangerStats[victimTrack].capturesAchieved += 1;
+          }
+          aiKnowledgeBase.weights.killHunger = Math.min(3.0, Number((aiKnowledgeBase.weights.killHunger + 0.02).toFixed(3)));
+        }
+
+        checkAiGenerationMilestone();
+        saveAiKnowledge();
+      }
+
+      function learnFromHomeArrival(ownerIdx, token) {
+        aiKnowledgeBase.experiencesLearned += 1;
+        aiKnowledgeBase.tacticsMastered += 1;
+        aiKnowledgeBase.weights.homeStretchRush = Math.min(3.0, Number((aiKnowledgeBase.weights.homeStretchRush + 0.01).toFixed(3)));
+        checkAiGenerationMilestone();
+        saveAiKnowledge();
+      }
+
+      function learnFromMatchOutcome(vic, humanWon) {
+        aiKnowledgeBase.totalMatches += 1;
+        aiKnowledgeBase.experiencesLearned += 4;
+
+        const aiWon = !humanWon || (rulesConfig.teamMode && vic.winningTeam !== 0) || (!rulesConfig.teamMode && vic.winnerIdx !== 0);
+        if (aiWon) {
+          aiKnowledgeBase.tacticsMastered += 2;
+          aiKnowledgeBase.weights.safeStopPriority = Math.min(3.0, Number((aiKnowledgeBase.weights.safeStopPriority + 0.01).toFixed(3)));
+          aiKnowledgeBase.weights.killHunger = Math.min(3.0, Number((aiKnowledgeBase.weights.killHunger + 0.015).toFixed(3)));
+        } else {
+          aiKnowledgeBase.mistakesCorrected += 2;
+          aiKnowledgeBase.weights.dangerAvoidance = Math.min(3.5, Number((aiKnowledgeBase.weights.dangerAvoidance + 0.025).toFixed(3)));
+          aiKnowledgeBase.weights.wipeoutDefense = Math.min(4.0, Number((aiKnowledgeBase.weights.wipeoutDefense + 0.03).toFixed(3)));
+          aiKnowledgeBase.weights.loopDiscouragement = Math.min(3.0, Number((aiKnowledgeBase.weights.loopDiscouragement + 0.02).toFixed(3)));
+        }
+
+        checkAiGenerationMilestone();
+        saveAiKnowledge();
+      }
 
       let rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG);
 
@@ -2797,6 +3033,13 @@
           if (raw) {
             const parsed = JSON.parse(raw);
             rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, parsed);
+          }
+          loadAiKnowledge();
+          if (rulesConfig.aiSpeed === undefined) {
+            rulesConfig.aiSpeed = 'default';
+          }
+          if (rulesConfig.aiCustomSpeedSec === undefined) {
+            rulesConfig.aiCustomSpeedSec = 1.5;
           }
           if (localStorage.getItem('bannu_ludo_auto_roll_v1') !== null) {
             rulesConfig.autoRollOnTurn = localStorage.getItem('bannu_ludo_auto_roll_v1') === 'true';
@@ -4511,6 +4754,13 @@
 
         gameState.phase = 'ANIMATING';
 
+        const actorPlayer = gameState.players[actorIdx];
+        const isAiActor = Boolean(actorPlayer && (actorPlayer.type === 'ai' || actorPlayer.isBotTakeover));
+        const timings = getAiSpeedTimings();
+        const hopDelay = (isAiActor && timings.hopInterval !== null)
+          ? timings.hopInterval
+          : Math.min(65, Math.floor(260 / Math.max(1, pathCoords.length)));
+
         let stepIdx = 0;
         function hopNext() {
           if (stepIdx < pathCoords.length) {
@@ -4518,7 +4768,7 @@
             playSound('step');
             drawBoard();
             stepIdx += 1;
-            setTimeout(hopNext, Math.min(65, Math.floor(260 / Math.max(1, pathCoords.length))));
+            setTimeout(hopNext, hopDelay);
           } else {
             token.animCoords = null;
             finalizeMoveExecution(actorIdx, owner, token, move);
@@ -4535,6 +4785,9 @@
         if (token.state === 'completed') {
           playSound('home');
           gameState.earnedHomeBonusThisTurn = true;
+        }
+        if (token.state === 'completed' || token.state === 'home_stretch') {
+          learnFromHomeArrival(owner.id, token);
         }
 
         const nowTs = Date.now();
@@ -4740,6 +4993,7 @@
             addGameLog('🔒 Close Game Rule: Capturing Bead #' + (capturingToken.id + 1) + ' locked on this square for the rest of this Bari' + (rulesConfig.keepCaptureLockOnBonusRoll ? ' (including bonus re-rolls until your next Bari).' : '.'), 'warn');
           }
         }
+        learnFromCaptureEvent(capturerOwnerIdx, capturingToken, victimInfo);
         saveCareerStats();
       }
 
@@ -5022,6 +5276,7 @@
           }
           recordCompletedMatchTelemetry(vic, humanWon);
           saveCareerStats();
+          learnFromMatchOutcome(vic, humanWon);
 
           const sweepBadge = document.getElementById('victoryCleanSweepBadge');
           const crownIcon = document.getElementById('victoryCrownIcon');
@@ -5186,6 +5441,10 @@
         dSlot0.classList.add('dice-rolling');
         dSlot1.classList.add('dice-rolling');
 
+        const timings = getAiSpeedTimings();
+        const isAiActor = Boolean(actor && (actor.type === 'ai' || actor.isBotTakeover));
+        const rollTumbleDuration = isAiActor ? timings.diceRollDuration : 280;
+
         setTimeout(function () {
           dSlot0.classList.remove('dice-rolling');
           dSlot1.classList.remove('dice-rolling');
@@ -5283,7 +5542,7 @@
             showToast('🚫 3 Consecutive Sixes Penalty! Entire turn canceled.', true);
             triggerPlayerEmote(actor.id, '🚫 3 چھکے باری ضائع!');
             updateAllUI();
-            setTimeout(advanceToNextTurn, 850);
+            setTimeout(advanceToNextTurn, isAiActor ? timings.turnPassDelay : 850);
             return;
           }
 
@@ -5303,7 +5562,7 @@
             } else {
               addGameLog(actor.name + ' rolled ' + v1 + ' (Needs a 6 on 1 Die to unlock Partner Assist).', 'warn');
               updateAllUI();
-              setTimeout(advanceToNextTurn, 750);
+              setTimeout(advanceToNextTurn, isAiActor ? timings.turnPassDelay : 750);
               return;
             }
           }
@@ -5341,14 +5600,14 @@
             } else {
               addGameLog('No legal moves available for ' + actor.name + '. Turn passes.', 'warn');
             }
-            setTimeout(advanceToNextTurn, 950);
+            setTimeout(advanceToNextTurn, isAiActor ? timings.turnPassDelay : 950);
             return;
           }
 
           if (!checkAndTriggerAutoMoveIfForced()) {
             scheduleAiIfNeeded();
           }
-        }, 280);
+        }, rollTumbleDuration);
       }
 
       function isSquareSafeFromCapture(trackIdx) {
@@ -5669,6 +5928,17 @@
           return medScore;
         }
 
+        const isHardest = (diff === 'hardest');
+        const kWeights = (isHardest && aiKnowledgeBase && aiKnowledgeBase.weights) ? aiKnowledgeBase.weights : null;
+        const dangerAvoidMult = kWeights ? (kWeights.dangerAvoidance || 1.0) : 1.0;
+        const safeStopMult = kWeights ? (kWeights.safeStopPriority || 1.0) : 1.0;
+        const killHungerMult = kWeights ? (kWeights.killHunger || 1.0) : 1.0;
+        const wipeoutDefenseMult = kWeights ? (kWeights.wipeoutDefense || 1.0) : 1.0;
+        const lockCautionMult = kWeights ? (kWeights.lockCaution || 1.0) : 1.0;
+        const stackCautionMult = kWeights ? (kWeights.stackCaution || 1.0) : 1.0;
+        const loopDiscouragementMult = kWeights ? (kWeights.loopDiscouragement || 1.0) : 1.0;
+        const homeStretchMult = kWeights ? (kWeights.homeStretchRush || 1.0) : 1.0;
+
         const curLapPos = tk.state === 'board' ? (tk.steps % 52) : 0;
         const curTrack = tk.state === 'board' ? getOuterTrackIndex(tk) : -1;
         const curDanger = (tk.state === 'board' && curTrack >= 0) ? computeSquareThreatScore(move.ownerIdx, curTrack, pList) : 0;
@@ -5711,7 +5981,7 @@
         if (move.sim.isSpawn) {
           score += ownerGroundCount === 0 ? 360 : (ownerGroundCount === 1 ? 245 : 140);
           if (isVulnerableToWipeout) {
-            score += 340;
+            score += 340 * wipeoutDefenseMult;
           }
           if (rulesConfig.closeGameMode && ownerGroundCount === 1) {
             score += 95;
@@ -5722,21 +5992,21 @@
           const spawnTrack = START_TRACK_INDEX[tk.owner];
           const spawnVictims = getCaptureCandidatesOnPlayers(move.ownerIdx, spawnTrack, pList);
           if (spawnVictims.length > 0) {
-            score += ownerNeedsKill ? 680 : 380;
+            score += (ownerNeedsKill ? 680 : 380) * killHungerMult;
           }
         }
 
         if (move.sim.newState === 'completed') {
-          score += 460 + (rulesConfig.bonusRollOnHome ? 180 : 0);
+          score += (460 + (rulesConfig.bonusRollOnHome ? 180 : 0)) * homeStretchMult;
           score += curDanger * (1.25 + curLapPos / 26);
           if (rulesConfig.wipeoutResetsHomeEligibility !== false && ownerInsideHomeCount === 0) {
-            score += 620;
+            score += 620 * wipeoutDefenseMult;
           }
         } else if (move.sim.newState === 'home_stretch') {
-          score += 310 + move.sim.newHomeStep * 18;
+          score += (310 + move.sim.newHomeStep * 18) * homeStretchMult;
           score += curDanger * (1.25 + curLapPos / 26);
           if (rulesConfig.wipeoutResetsHomeEligibility !== false && ownerInsideHomeCount === 0) {
-            score += 580;
+            score += 580 * wipeoutDefenseMult;
           }
         }
 
@@ -5756,7 +6026,7 @@
         }
 
         if (move.sim.loopedPastHome && !move.isOptionalLoop && ownerNeedsKill) {
-          score -= 340;
+          score -= 340 * loopDiscouragementMult;
         }
 
         if (tk.state === 'board' && rulesConfig.pairBlockadeRule && !isSquareSafeFromCapture(curTrack)) {
@@ -5776,17 +6046,23 @@
 
           const curValFactor = 1.0 + (curLapPos / 30) + (isVulnerableToWipeout ? 1.4 : 0);
           const newValFactor = 1.0 + (newLapPos / 30) + (isVulnerableToWipeout ? 1.4 : 0);
-          score += (curDanger * curValFactor) - (destDanger * newValFactor);
+          score += (curDanger * curValFactor) - (destDanger * newValFactor * dangerAvoidMult);
+
+          if (isHardest && aiKnowledgeBase && aiKnowledgeBase.trackDangerStats && aiKnowledgeBase.trackDangerStats[destTrack]) {
+            const tStat = aiKnowledgeBase.trackDangerStats[destTrack];
+            if (tStat.capturesSuffered > 0) score -= Math.min(280, tStat.capturesSuffered * 32 * dangerAvoidMult);
+            if (tStat.capturesAchieved > 0) score += Math.min(240, tStat.capturesAchieved * 25 * killHungerMult);
+          }
 
           if (tk.state === 'board' && isSquareSafeFromCapture(curTrack) && !isSquareSafeFromCapture(destTrack) && victims.length === 0) {
-            score -= (65 + destDanger * 1.05);
+            score -= (65 + destDanger * 1.05) * dangerAvoidMult;
             if (ownerNeedsKill && curLapPos >= 44) {
               score -= 140;
             }
           }
 
           if (isSquareSafeFromCapture(destTrack)) {
-            score += 125 + (newLapPos > 24 ? 55 : 0) + (isVulnerableToWipeout ? 210 : 0);
+            score += (125 + (newLapPos > 24 ? 55 : 0) + (isVulnerableToWipeout ? 210 : 0)) * safeStopMult;
           }
 
           if (victims.length > 0) {
@@ -5818,11 +6094,11 @@
               }
 
               if (rulesConfig.closeGameMode && ownerGroundCount > 1 && destDanger > 25 && !ownerNeedsKill) {
-                const lockRiskPenalty = destDanger * (0.55 + (newLapPos / 42));
-                killScore -= lockRiskPenalty;
+                const lockRiskPenalty = destDanger * (0.55 + (newLapPos / 42)) * lockCautionMult;
+                score -= lockRiskPenalty;
               }
 
-              score += killScore;
+              score += killScore * killHungerMult;
             }
           }
 
@@ -5838,7 +6114,7 @@
                   const oTrack = getOuterTrackIndex(ot);
                   const distInFrontOfStarvingEnemy = (destTrack - oTrack + 52) % 52;
                   if (distInFrontOfStarvingEnemy >= 1 && distInFrontOfStarvingEnemy <= 8) {
-                    score -= 145;
+                    score -= 145 * dangerAvoidMult;
                   }
                 });
               }
@@ -5853,7 +6129,7 @@
             if (rulesConfig.pairBlockadeRule) {
               score += 155;
             } else if (rulesConfig.killAllStackedEnemies && destDanger > 0) {
-              score -= (195 + destDanger * 1.35);
+              score -= (195 + destDanger * 1.35) * stackCautionMult;
             }
           }
 
@@ -6297,10 +6573,12 @@
         if (actor.type !== 'ai') return;
         if (netMatch.isActive && !netMatch.isHost) return;
 
+        const timings = getAiSpeedTimings();
+
         if (gameState.phase === 'ROLL') {
           gameState.aiTimer = setTimeout(function () {
             rollDiceForCurrentPlayer();
-          }, 420);
+          }, timings.rollDelay);
         } else if (gameState.phase === 'MOVE') {
           gameState.aiTimer = setTimeout(function () {
             if (canPlayerRollBonusNow()) {
@@ -6320,7 +6598,7 @@
             }
             const chosen = chooseBestAiMove(legal);
             executeMove(chosen || legal[0]);
-          }, 440);
+          }, timings.moveDelay);
         }
       }
       // --- 8. CANVAS BOARD RENDERER (With Active Turn Yard Glow, Moved Bead Trail, Teammate Badges & On-Board Dice!) ---
@@ -7662,6 +7940,53 @@
         if (homeAiSel) homeAiSel.value = rulesConfig.aiDifficulty;
         const pauseAiSel = document.getElementById('pauseAiDifficultySelect');
         if (pauseAiSel) pauseAiSel.value = rulesConfig.aiDifficulty;
+
+        const presetSpeeds = ['default', 'slow', 'dramatic', 'slowest'];
+        const curSpeed = rulesConfig.aiSpeed || 'default';
+        const isPresetSpeed = presetSpeeds.includes(curSpeed);
+        const curCustomSec = rulesConfig.aiCustomSpeedSec || 1.5;
+
+        const rulesSpeedSel = document.getElementById('aiSpeedSelect');
+        const rulesCustomSpeedInp = document.getElementById('rulesCustomAiSpeedInput');
+        if (rulesSpeedSel) {
+          rulesSpeedSel.value = isPresetSpeed ? curSpeed : 'custom';
+          if (rulesCustomSpeedInp) {
+            rulesCustomSpeedInp.classList.toggle('hidden', isPresetSpeed);
+            if (!isPresetSpeed) rulesCustomSpeedInp.value = curCustomSec;
+          }
+        }
+
+        const homeSpeedSel = document.getElementById('homeQuickAiSpeedSelect');
+        const homeCustomSpeedInp = document.getElementById('homeCustomAiSpeedInput');
+        if (homeSpeedSel) {
+          homeSpeedSel.value = isPresetSpeed ? curSpeed : 'custom';
+          if (homeCustomSpeedInp) {
+            homeCustomSpeedInp.classList.toggle('hidden', isPresetSpeed);
+            if (!isPresetSpeed) homeCustomSpeedInp.value = curCustomSec;
+          }
+        }
+
+        const pauseSpeedSel = document.getElementById('pauseAiSpeedSelect');
+        const pauseCustomSpeedInp = document.getElementById('pauseAiCustomSpeedInput');
+        if (pauseSpeedSel) {
+          pauseSpeedSel.value = isPresetSpeed ? curSpeed : 'custom';
+          if (pauseCustomSpeedInp) {
+            pauseCustomSpeedInp.classList.toggle('hidden', isPresetSpeed);
+            if (!isPresetSpeed) pauseCustomSpeedInp.value = curCustomSec;
+          }
+        }
+
+        const quickAiSpeedLabel = document.getElementById('quickAiSpeedLabel');
+        if (quickAiSpeedLabel) {
+          const shortMap = {
+            default: 'Fast',
+            slow: 'Slow',
+            dramatic: 'Drama',
+            slowest: 'Slowest',
+            custom: (rulesConfig.aiCustomSpeedSec || 1.5) + 's'
+          };
+          quickAiSpeedLabel.textContent = shortMap[rulesConfig.aiSpeed] || 'Fast';
+        }
         const presetTimers = ['0', '15', '30', '60', '120', '180'];
         const curTimerStr = String(rulesConfig.turnTimeSeconds);
         const isPresetTimer = presetTimers.includes(curTimerStr);
@@ -7696,6 +8021,7 @@
         document.getElementById('presetYallaQuickBtn').className =
           'py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-bold border-2 transition flex items-center justify-center gap-1.5 ' +
           (!isBannu ? 'bg-amber-500 border-amber-600 text-white shadow' : 'bg-white border-amber-200 text-slate-700 hover:bg-amber-50');
+        updateAiLearningBadgeUI();
       }
 
       function applyBannuRulesPreset(restartNow) {
@@ -10923,12 +11249,77 @@
         syncRulesStudioControls();
         showToast('🧠 AI Intelligence set to: ' + this.options[this.selectedIndex].text, true);
       });
+      document.getElementById('pauseResetAiLearningBtn').addEventListener('click', resetAiKnowledge);
+      document.getElementById('rulesResetAiLearningBtn').addEventListener('click', resetAiKnowledge);
+      document.getElementById('homeQuickAiSpeedSelect').addEventListener('change', function () {
+        const isCustom = this.value === 'custom';
+        document.getElementById('homeCustomAiSpeedInput').classList.toggle('hidden', !isCustom);
+        rulesConfig.aiSpeed = this.value;
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('homeCustomAiSpeedInput').addEventListener('input', function () {
+        rulesConfig.aiCustomSpeedSec = Math.max(0.2, Math.min(10, parseFloat(this.value) || 1.5));
+        rulesConfig.aiSpeed = 'custom';
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('pauseAiSpeedSelect').addEventListener('change', function () {
+        const isCustom = this.value === 'custom';
+        document.getElementById('pauseAiCustomSpeedInput').classList.toggle('hidden', !isCustom);
+        rulesConfig.aiSpeed = this.value;
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+        showToast('⏱️ AI Pace set to: ' + this.options[this.selectedIndex].text, true);
+      });
+      document.getElementById('pauseAiCustomSpeedInput').addEventListener('input', function () {
+        rulesConfig.aiCustomSpeedSec = Math.max(0.2, Math.min(10, parseFloat(this.value) || 1.5));
+        rulesConfig.aiSpeed = 'custom';
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('aiSpeedSelect').addEventListener('change', function () {
+        const isCustom = this.value === 'custom';
+        document.getElementById('rulesCustomAiSpeedInput').classList.toggle('hidden', !isCustom);
+        rulesConfig.aiSpeed = this.value;
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('rulesCustomAiSpeedInput').addEventListener('input', function () {
+        rulesConfig.aiCustomSpeedSec = Math.max(0.2, Math.min(10, parseFloat(this.value) || 1.5));
+        rulesConfig.aiSpeed = 'custom';
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('quickAiSpeedBtn').addEventListener('click', function () {
+        const order = ['default', 'slow', 'dramatic', 'slowest'];
+        let curIdx = order.indexOf(rulesConfig.aiSpeed);
+        if (curIdx === -1) curIdx = 0;
+        const nextSpeed = order[(curIdx + 1) % order.length];
+        rulesConfig.aiSpeed = nextSpeed;
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+        const labelMap = {
+          default: '⚡ Fast (Default)',
+          slow: '🐢 Slow (Deliberate)',
+          dramatic: '🎭 Dramatic (Suspenseful)',
+          slowest: '⏳ Slowest (Spectator)'
+        };
+        showToast('⏱️ AI Match Pace: ' + (labelMap[nextSpeed] || nextSpeed), true);
+      });
 
       document.getElementById('startMatchHeroBtn').addEventListener('click', function () {
         netMatch.isActive = false;
         const fmt = document.getElementById('homeQuickFormatSelect').value;
         const homeAiEl = document.getElementById('homeQuickAiDiffSelect');
         if (homeAiEl) rulesConfig.aiDifficulty = homeAiEl.value;
+        const homeSpeedEl = document.getElementById('homeQuickAiSpeedSelect');
+        if (homeSpeedEl) {
+          rulesConfig.aiSpeed = homeSpeedEl.value;
+          if (rulesConfig.aiSpeed === 'custom') {
+            rulesConfig.aiCustomSpeedSec = Math.max(0.2, Math.min(10, parseFloat(document.getElementById('homeCustomAiSpeedInput').value) || 1.5));
+          }
+        }
         rulesConfig.tokensPerPlayer = Number(document.getElementById('homeQuickTokensSelect').value);
         rulesConfig.closeGameMode = (document.getElementById('homeQuickCloseSelect').value === 'close');
         const homeTimerVal = document.getElementById('homeQuickTimerSelect').value;
@@ -10948,11 +11339,41 @@
           seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
           seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
           seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === '3p_ai') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
         } else if (fmt === '4p_ai') {
           rulesConfig.teamMode = false;
           seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
           seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
           seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === 'ai_2p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'ai_3p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'ai_4p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === 'ai_vs_ai') {
+          rulesConfig.teamMode = true;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
           seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
         } else if (fmt === 'pass_2p') {
           rulesConfig.teamMode = false;
@@ -11439,6 +11860,12 @@
         setAutoRollPreference(document.getElementById('chkAutoRollTurn').checked);
         setShowTooltipsPreference(document.getElementById('chkShowTooltips').checked);
         rulesConfig.aiDifficulty = document.getElementById('aiDifficultySelect').value;
+        const speedSel = document.getElementById('aiSpeedSelect');
+        if (speedSel) rulesConfig.aiSpeed = speedSel.value;
+        const customSpeedInp = document.getElementById('rulesCustomAiSpeedInput');
+        if (rulesConfig.aiSpeed === 'custom' && customSpeedInp) {
+          rulesConfig.aiCustomSpeedSec = Math.max(0.2, Math.min(10, parseFloat(customSpeedInp.value) || 1.5));
+        }
         const rulesTimerVal = document.getElementById('turnTimerSelect').value;
         rulesConfig.turnTimeSeconds = rulesTimerVal === 'custom'
           ? Math.max(5, parseInt(document.getElementById('rulesCustomTimerInput').value, 10) || 45)
@@ -11458,9 +11885,13 @@
       document.getElementById('resetDefaultRulesBtn').addEventListener('click', function () {
         const keepAuto = rulesConfig.autoRollOnTurn;
         const keepTips = rulesConfig.showTooltips;
+        const keepSpeed = rulesConfig.aiSpeed;
+        const keepCustom = rulesConfig.aiCustomSpeedSec;
         rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, {
           autoRollOnTurn: keepAuto,
-          showTooltips: keepTips
+          showTooltips: keepTips,
+          aiSpeed: keepSpeed,
+          aiCustomSpeedSec: keepCustom
         });
         saveRulesPreferences(true);
         syncRulesStudioControls();
@@ -11658,7 +12089,8 @@
           dedication: "Dedicated to Muhib Ullah, the author's little brother.",
           exportedAt: new Date().toISOString(),
           careerStats: careerStats,
-          rulesConfig: rulesConfig
+          rulesConfig: rulesConfig,
+          aiKnowledgeBase: aiKnowledgeBase
         };
         const blob = new Blob([JSON.stringify(backupPayload, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -11680,6 +12112,10 @@
             if (data.careerStats) {
               careerStats = Object.assign({}, DEFAULT_STATS, data.careerStats);
               if (data.rulesConfig) rulesConfig = Object.assign({}, rulesConfig, data.rulesConfig);
+              if (data.aiKnowledgeBase) {
+                aiKnowledgeBase = Object.assign({}, DEFAULT_AI_KNOWLEDGE, data.aiKnowledgeBase);
+                saveAiKnowledge();
+              }
               saveCareerStats();
               syncRulesStudioControls();
               showToast('✅ Career Stats & Custom Rules Restored Successfully!');
