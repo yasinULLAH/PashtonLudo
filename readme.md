@@ -5,6 +5,20 @@
 **Dedication:** 💛 Dedicated to my little brother **Muhib Ullah**  
 **Edition:** v5.0 Master Production Suite (PWA Offline Enabled)
 
+> ### © 2026 Yasin Ullah — Bannu Software Solutions. **All Rights Reserved.**
+>
+> **Proprietary & confidential.** This software, its source code, game rules engine, UI/UX,
+> artwork and all assets are the exclusive property of **Yasin Ullah**.
+>
+> **Copying, modification, reuse, redistribution, republishing, re-skinning, reverse
+> engineering and creation of derivative works are strictly prohibited** without the
+> author's prior **written** permission.
+>
+> Any use permitted in writing must carry the attribution:
+> *“Bannu Royale Ludo / Khyber Saanp Seedhi Pro — © 2026 Yasin Ullah, All Rights Reserved.”*
+>
+> Full legal terms: **[LICENSE](./LICENSE)** · Permission requests: WhatsApp `0336-1593533`
+
 ---
 
 ## 📌 Table of Contents / فہرست مضامین
@@ -442,3 +456,51 @@ npx serve .
 *پاکستان اور بین الاقوامی دنیا کے لیے جدید ترین روایتی و سائنسی سافٹ ویئر سلوشنز*
 
 &lt;/div&gt;
+
+---
+
+## ⚖️ Copyright & License (جملہ حقوق محفوظ ہیں)
+
+**© 2026 Yasin Ullah — Bannu Software Solutions. All Rights Reserved.**
+
+This software suite — **Bannu Royale Ludo** (`index.html`) and **Khyber Saanp Seedhi Pro**
+(`snakes.html`), together with all source code, the rules engines, AI logic, UI/UX, artwork,
+icons, text, build scripts and documentation — is the exclusive proprietary property of
+**Yasin Ullah**.
+
+**You may not**, without the author's prior written permission:
+
+- copy, clone or mirror any part of the work;
+- modify, adapt, re-skin, re-brand or create derivative works from it;
+- reuse or extract any code, algorithm, layout, graphic or asset in another project;
+- redistribute, publish, upload, bundle, sell, rent, sublicense or host it anywhere;
+- reverse engineer, decompile or deobfuscate it;
+- remove or alter this copyright notice, the author credits or the `LICENSE` file;
+- publish it to any app store, storefront, registry or public repository;
+- use it as training data for machine-learning / AI models.
+
+Personal, private, non-commercial use and installation as a PWA on your own devices **is** allowed.
+
+**Attribution (required for any use permitted in writing):**
+> “Bannu Royale Ludo / Khyber Saanp Seedhi Pro — © 2026 Yasin Ullah, All Rights Reserved.”
+
+Full legal terms: see **[LICENSE](./LICENSE)**.
+Permission requests: WhatsApp `0336-1593533` ·
+[LinkedIn](https://www.linkedin.com/in/yasin-ullah-029229232/)
+
+---
+
+## ⚖️ کاپی رائٹ اور قانونی حقوق (اردو خلاصہ)
+
+**© 2026 یاسین اللہ — بنوں سافٹ ویئر سلوشنز۔ جملہ حقوق محفوظ ہیں۔**
+
+یہ سافٹ ویئر، اس کا سارا کوڈ، گرافکس، ڈیزائن اور تحریر مکمل طور پر **یاسین اللہ** کی ذاتی ملکیت ہے۔
+مصنف کی **تحریری اجازت کے بغیر** اس کی کاپی کرنا، تبدیل کرنا، دوبارہ استعمال کرنا، کسی اور
+پروجیکٹ میں ڈالنا، تقسیم کرنا، شائع کرنا، بیچنا یا اس سے نیا ورژن بنانا **سختی سے ممنوع** ہے۔
+اس نوٹس یا مصنف کے نام کو مٹانا بھی منع ہے۔
+
+ذاتی، غیر تجارتی استعمال اور اپنے موبائل/کمپیوٹر پر ایپ کی تنصیب کی اجازت ہے۔
+اجازت ملنے کی صورت میں کریڈٹ لکھنا لازمی ہوگا:
+*“Bannu Royale Ludo / Khyber Saanp Seedhi Pro — © 2026 Yasin Ullah, All Rights Reserved.”*
+
+مکمل شرائط کے لیے **[LICENSE](./LICENSE)** فائل دیکھیں · رابطہ: `0336-1593533`

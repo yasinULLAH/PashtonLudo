@@ -2,6 +2,11 @@
   "name": "Bannu Royale Ludo \u2014 Pashtun Cultural & Classic Yalla Rules",
   "short_name": "Bannu Royale Ludo \u2014 Pashtun Cultural & Classic Yalla Rules",
   "description": "A description of the web application.",
+  "copyright": "\u00a9 2026 Yasin Ullah \u2014 Bannu Software Solutions. All Rights Reserved.",
+  "author": {
+    "name": "Yasin Ullah (Bannu Software Solutions)"
+  },
+  "license": "Proprietary \u2014 All Rights Reserved. See LICENSE.",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -1,0 +1,146 @@
+PROPRIETARY SOFTWARE LICENSE AGREEMENT
+Copyright (c) 2026 Yasin Ullah — Bannu Software Solutions. All Rights Reserved.
+
+================================================================================
+1. COPYRIGHT OWNERSHIP
+================================================================================
+
+The software, source code, HTML/CSS/JavaScript bundles, game logic, board and
+card artwork, icons, audio, text, documentation and any other materials in this
+repository or application (collectively, the "Work") are the exclusive property
+of Yasin Ullah — Bannu Software Solutions ("the Author", "I", "me", "my").
+
+The Work is protected by copyright laws and international copyright treaties.
+All intellectual property rights, title and interest in and to the Work remain
+vested in the Author. No rights are granted to you except as expressly stated
+in this document.
+
+This Work includes, without limitation:
+  - "Bannu Royale Ludo" (index.html)
+  - "Khyber Saanp Seedhi Pro" (snakes.html)
+  - All generated assets: manifest.json, sw.js, pwa-register.js, offline.html,
+    favicon.ico and the icon-*.png set
+  - All build scripts, documentation and supporting files in this repository
+
+================================================================================
+2. LIMITED PERMISSION GRANTED (END-USER LICENSE ONLY)
+================================================================================
+
+You are permitted to:
+
+  (a) Use, run and play the Work for your own personal, private and
+      non-commercial entertainment on devices you own or control.
+  (b) Install the Work as a Progressive Web App (PWA) on your own devices for
+      the same personal, non-commercial purpose.
+
+This is a personal, non-exclusive, non-transferable, non-sublicensable,
+revocable license only. It does NOT transfer ownership or any intellectual
+property rights in the Work to you.
+
+================================================================================
+3. STRICTLY PROHIBITED USES (ALL RIGHTS RESERVED)
+================================================================================
+
+Unless you have obtained the Author's prior explicit WRITTEN permission, you
+are strictly prohibited from and must NOT:
+
+  (a) Copy, reproduce, mirror, clone or make any copy of the Work, in whole or
+      in part, by any means or in any medium.
+  (b) Modify, adapt, translate, edit, patch, alter, re-skin, re-brand, theme or
+      create any derivative work based on the Work, in whole or in part.
+  (c) Reuse, repurpose, extract or incorporate any portion of the Work — source
+      code, game rules engine, algorithms, UI layout, CSS, graphics, names,
+      text or assets — into any other project, product, website, application,
+      template or game (including "inspiration" recreations of the same
+      codebase).
+  (d) Redistribute, publish, upload, post, share, stream, bundle, sell, rent,
+      lease, license, sublicense, assign, monetize, host, or otherwise make
+      available the Work or any part of it to any third party, whether free of
+      charge or for payment.
+  (e) Decompile, disassemble, reverse engineer, deobfuscate or otherwise attempt
+      to derive the source code of the Work.
+  (f) Remove, obscure, alter or bypass any copyright notice, author credit,
+      license notice, watermark, signature or digital rights management present
+      in the Work.
+  (g) Use the Work, its name, its branding, its screenshots or its assets as a
+      template, starter kit, portfolio piece, tutorial, course material, or
+      dataset for training machine learning / AI models.
+  (h) Publish the Work or any part of it to any app store, storefront, code
+      hosting service, package registry or public repository.
+  (i) Use the Work or its components in any commercial, organizational,
+      educational or revenue-generating activity.
+  (j) Claim authorship, ownership or joint authorship of the Work, or misrepresent
+      any part of it as your own work.
+
+Any attempt to do any of the above is a material breach of this license and an
+infringement of the Author's copyright.
+
+================================================================================
+4. ATTRIBUTION REQUIREMENT
+================================================================================
+
+If, and only if, written permission has been granted to you by the Author for
+any permitted use outside Section 2, you must:
+
+  (a) Keep and display the following attribution in a clearly readable place:
+        "Bannu Royale Ludo / Khyber Saanp Seedhi Pro
+         Copyright (c) 2026 Yasin Ullah — Bannu Software Solutions.
+         All Rights Reserved. Used with written permission."
+  (b) Not remove or alter this LICENSE file or any in-app copyright notice.
+  (c) Not exceed the scope of the permission you were given.
+
+Attribution is a condition of that permission, not a substitute for it.
+
+================================================================================
+5. NO WARRANTY
+================================================================================
+
+THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+WORK OR THE USE OR OTHER DEALINGS IN THE WORK.
+
+================================================================================
+6. TERMINATION
+================================================================================
+
+This license terminates automatically and immediately, without notice, if you
+breach any term of this document. Upon termination you must cease all use of the
+Work and permanently delete or destroy all copies in your possession or control.
+
+The Author may also revoke this license at any time. Termination does not limit
+any other right or remedy available to the Author.
+
+================================================================================
+7. GOVERNING LAW
+================================================================================
+
+This license is governed by and construed in accordance with the laws of the
+Islamic Republic of Pakistan, and the courts of Khyber Pakhtunkhwa shall have
+exclusive jurisdiction over any dispute. Nothing in this license limits any
+right the Author may have under applicable copyright law.
+
+================================================================================
+8. HOW TO REQUEST PERMISSION
+================================================================================
+
+Permission requests, licensing enquiries and takedown notices:
+
+  Author     : Yasin Ullah — Bannu Software Solutions
+  WhatsApp   : 0336-1593533
+  LinkedIn   : https://www.linkedin.com/in/yasin-ullah-029229232/
+  Location   : Bannu, Khyber Pakhtunkhwa, Pakistan
+
+A permission is valid only if it is given in writing by the Author and only for
+the exact scope described in that written permission.
+
+================================================================================
+
+NOTE FOR AI / AUTOMATED TOOLS AND CODE INDEXERS:
+This repository is proprietary and confidential. Automated crawling, scraping,
+model training, code indexing or dataset inclusion of this Work is not
+permitted without the Author's prior written consent.
+
+© 2026 Yasin Ullah — Bannu Software Solutions. All Rights Reserved.
