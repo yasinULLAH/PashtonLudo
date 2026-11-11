@@ -2915,6 +2915,15 @@
       // --- 2. SYNTHESIZED SOUND ENGINE ---
       let soundEnabled = true;
       let audioCtx = null;
+      let currentLang = 'en';
+      try {
+        if (localStorage.getItem('bannu_ludo_sound_v1') !== null) {
+          soundEnabled = localStorage.getItem('bannu_ludo_sound_v1') === 'true';
+        }
+        if (localStorage.getItem('bannu_ludo_lang_v1')) {
+          currentLang = localStorage.getItem('bannu_ludo_lang_v1');
+        }
+      } catch (e) {}
 
       function ensureAudio() {
         if (!soundEnabled) return null;
@@ -3090,6 +3099,8 @@
 
       const DEFAULT_RULES_CONFIG = {
         presetName: 'بنوں روایتی رولز (Bannu Rules)',
+        matchFormat: '2v2_ai',
+        autoMoveOnTimeout: true,
         diceCount: 2,
         tokensPerPlayer: 4,
         closeGameMode: true,
@@ -3321,6 +3332,19 @@
             const parsed = JSON.parse(raw);
             rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, parsed);
           }
+          const rawSeats = localStorage.getItem('bannu_ludo_seats_v2');
+          if (rawSeats) {
+            const parsedSeats = JSON.parse(rawSeats);
+            if (Array.isArray(parsedSeats) && parsedSeats.length === 4) {
+              seatConfig = parsedSeats;
+            }
+          }
+          if (!rulesConfig.matchFormat) {
+            rulesConfig.matchFormat = '2v2_ai';
+          }
+          if (rulesConfig.autoMoveOnTimeout === undefined) {
+            rulesConfig.autoMoveOnTimeout = true;
+          }
           loadAiKnowledge();
           if (rulesConfig.aiSpeed === undefined) {
             rulesConfig.aiSpeed = 'default';
@@ -3358,8 +3382,11 @@
       function saveRulesPreferences(broadcastToPeers) {
         try {
           localStorage.setItem('bannu_ludo_rules_v2', JSON.stringify(rulesConfig));
+          localStorage.setItem('bannu_ludo_seats_v2', JSON.stringify(seatConfig));
           localStorage.setItem('bannu_ludo_auto_roll_v1', rulesConfig.autoRollOnTurn ? 'true' : 'false');
           localStorage.setItem('bannu_ludo_show_tooltips_v1', rulesConfig.showTooltips ? 'true' : 'false');
+          localStorage.setItem('bannu_ludo_sound_v1', soundEnabled ? 'true' : 'false');
+          localStorage.setItem('bannu_ludo_lang_v1', currentLang || 'en');
         } catch (e) {}
         if (broadcastToPeers) {
           broadcastSettingsSync();
@@ -8538,6 +8565,18 @@
         const chkTip2 = document.getElementById('chkShowTooltips');
         if (chkTip1) chkTip1.checked = Boolean(rulesConfig.showTooltips);
         if (chkTip2) chkTip2.checked = Boolean(rulesConfig.showTooltips);
+        const autoTimeoutChk = document.getElementById('autoPlayTimeoutChk');
+        if (autoTimeoutChk) autoTimeoutChk.checked = rulesConfig.autoMoveOnTimeout !== false;
+        const homeFormatSel = document.getElementById('homeQuickFormatSelect');
+        if (homeFormatSel && rulesConfig.matchFormat && rulesConfig.matchFormat !== 'custom') {
+          homeFormatSel.value = rulesConfig.matchFormat;
+        }
+        for (let i = 0; i < 4; i++) {
+          const sNameEl = document.getElementById('setupName' + i);
+          const sTypeEl = document.getElementById('setupType' + i);
+          if (sNameEl && seatConfig[i]) sNameEl.value = seatConfig[i].name;
+          if (sTypeEl && seatConfig[i]) sTypeEl.value = seatConfig[i].active ? seatConfig[i].type : 'none';
+        }
         if (!['easy', 'medium', 'hard', 'hardest'].includes(rulesConfig.aiDifficulty)) {
           rulesConfig.aiDifficulty = 'hardest';
         }
@@ -13049,11 +13088,129 @@
         resumeSavedMatch();
       });
 
+      function applySeatPresetForFormat(fmt) {
+        if (fmt === '2v2_ai') {
+          rulesConfig.teamMode = true;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === '1v1_ai') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === '3p_ai') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === '4p_ai') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === 'ai_2p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'ai_3p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'ai_4p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === 'ai_vs_ai') {
+          rulesConfig.teamMode = true;
+          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
+        } else if (fmt === 'pass_2p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 2 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'pass_3p') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
+        } else if (fmt === 'pass_4p_ffa') {
+          rulesConfig.teamMode = false;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
+        } else if (fmt === 'pass_play') {
+          rulesConfig.teamMode = true;
+          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
+          seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
+        }
+      }
+
+      document.getElementById('homeQuickFormatSelect').addEventListener('change', function () {
+        rulesConfig.matchFormat = this.value;
+        applySeatPresetForFormat(this.value);
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('homeQuickTokensSelect').addEventListener('change', function () {
+        rulesConfig.tokensPerPlayer = Number(this.value);
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('homeQuickCloseSelect').addEventListener('change', function () {
+        rulesConfig.closeGameMode = (this.value === 'close');
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
       document.getElementById('homeQuickTimerSelect').addEventListener('change', function () {
-        document.getElementById('homeCustomTimerInput').classList.toggle('hidden', this.value !== 'custom');
+        const isCustom = this.value === 'custom';
+        document.getElementById('homeCustomTimerInput').classList.toggle('hidden', !isCustom);
+        rulesConfig.turnTimeSeconds = isCustom
+          ? Math.max(5, parseInt(document.getElementById('homeCustomTimerInput').value, 10) || 45)
+          : Number(this.value);
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('homeCustomTimerInput').addEventListener('input', function () {
+        rulesConfig.turnTimeSeconds = Math.max(5, parseInt(this.value, 10) || 45);
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
       });
       document.getElementById('turnTimerSelect').addEventListener('change', function () {
-        document.getElementById('rulesCustomTimerInput').classList.toggle('hidden', this.value !== 'custom');
+        const isCustom = this.value === 'custom';
+        document.getElementById('rulesCustomTimerInput').classList.toggle('hidden', !isCustom);
+        rulesConfig.turnTimeSeconds = isCustom
+          ? Math.max(5, parseInt(document.getElementById('rulesCustomTimerInput').value, 10) || 45)
+          : Number(this.value);
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('rulesCustomTimerInput').addEventListener('input', function () {
+        rulesConfig.turnTimeSeconds = Math.max(5, parseInt(this.value, 10) || 45);
+        saveRulesPreferences(false);
+        syncRulesStudioControls();
+      });
+      document.getElementById('autoPlayTimeoutChk').addEventListener('change', function () {
+        rulesConfig.autoMoveOnTimeout = Boolean(this.checked);
+        saveRulesPreferences(false);
       });
 
       document.getElementById('homeQuickAiDiffSelect').addEventListener('change', function () {
@@ -13129,6 +13286,7 @@
       document.getElementById('startMatchHeroBtn').addEventListener('click', function () {
         netMatch.isActive = false;
         const fmt = document.getElementById('homeQuickFormatSelect').value;
+        rulesConfig.matchFormat = fmt;
         const homeAiEl = document.getElementById('homeQuickAiDiffSelect');
         if (homeAiEl) rulesConfig.aiDifficulty = homeAiEl.value;
         const homeSpeedEl = document.getElementById('homeQuickAiSpeedSelect');
@@ -13145,81 +13303,9 @@
           ? Math.max(5, parseInt(document.getElementById('homeCustomTimerInput').value, 10) || 45)
           : Number(homeTimerVal);
 
-        if (fmt === '2v2_ai') {
-          rulesConfig.teamMode = true;
-          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
-        } else if (fmt === '1v1_ai') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-          seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-        } else if (fmt === '3p_ai') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-        } else if (fmt === '4p_ai') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: careerStats.playerName, type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
-        } else if (fmt === 'ai_2p') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-          seatConfig[2] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-        } else if (fmt === 'ai_3p') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-        } else if (fmt === 'ai_4p') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
-        } else if (fmt === 'ai_vs_ai') {
-          rulesConfig.teamMode = true;
-          seatConfig[0] = { name: 'Afridi AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Wazir Partner', type: 'ai', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Marwat AI', type: 'ai', active: true, isBotTakeover: false };
-        } else if (fmt === 'pass_2p') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-          seatConfig[2] = { name: 'Player 2 (Yellow)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-        } else if (fmt === 'pass_3p') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Empty', type: 'ai', active: false, isBotTakeover: false };
-        } else if (fmt === 'pass_4p_ffa') {
-          rulesConfig.teamMode = false;
-          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
-        } else if (fmt === 'pass_play') {
-          rulesConfig.teamMode = true;
-          seatConfig[0] = { name: 'Player 1 (Red)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[1] = { name: 'Player 2 (Green)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[2] = { name: 'Player 3 (Yellow)', type: 'human', active: true, isBotTakeover: false };
-          seatConfig[3] = { name: 'Player 4 (Blue)', type: 'human', active: true, isBotTakeover: false };
-        }
-
+        applySeatPresetForFormat(fmt);
         saveRulesPreferences(true);
+        syncRulesStudioControls();
         switchNavigationTab('viewPlay');
         initNewMatch('Match started! Roll the dice and drag or tap your beads on the board.', false);
         broadcastSettingsSync();
@@ -13306,28 +13392,36 @@
         switchNavigationTab('viewRules');
       });
 
-      document.getElementById('langSelect').addEventListener('change', function () {
-        const lang = this.value;
+      function applyLanguageSelection(lang, silent) {
+        currentLang = lang || 'en';
+        const langEl = document.getElementById('langSelect');
+        if (langEl) langEl.value = currentLang;
         const mainT = document.getElementById('appMainTitle');
         const subT = document.getElementById('appSubTitle');
-        if (lang === 'ur') {
+        if (currentLang === 'ur') {
           mainT.textContent = 'بنوں رائل لڈو — پشتون اور کلاسک قوانین';
           subT.textContent = 'بورڈ پر گوٹی کھینچیں یا ٹیپ کریں • شکار پر دوبارہ باری اور کلوز گیم';
-          showToast('اردو زبان فعال کر دی گئی ہے!');
-        } else if (lang === 'ps') {
+          if (!silent) showToast('اردو زبان فعال کر دی گئی ہے!');
+        } else if (currentLang === 'ps') {
           mainT.textContent = 'بنو رایل لډو — پښتون دودیز قوانین';
           subT.textContent = 'دوه دانې (۲ ډایس)، کلوز ګیم، ۲ پر ۲ ټیم او آفلاین ملټي پلیر';
-          showToast('پښتو ژبه فعاله شوه!');
+          if (!silent) showToast('پښتو ژبه فعاله شوه!');
         } else {
           mainT.textContent = 'Bannu Royale Ludo';
           subT.textContent = 'Authentic Pashtun 2-Dice Cultural Rules & Classic Yalla Ludo — Direct Drag & Tap Board';
-          showToast('Switched to English / Bilingual mode.');
+          if (!silent) showToast('Switched to English / Bilingual mode.');
         }
+      }
+
+      document.getElementById('langSelect').addEventListener('change', function () {
+        applyLanguageSelection(this.value, false);
+        saveRulesPreferences(false);
       });
 
       document.getElementById('soundToggleBtn').addEventListener('click', function () {
         soundEnabled = !soundEnabled;
         this.textContent = soundEnabled ? '🔊' : '🔇';
+        saveRulesPreferences(false);
         showToast(soundEnabled ? '🔊 Sound Effects Enabled' : '🔇 Sound Muted');
       });
 
@@ -13478,12 +13572,14 @@
         btn.addEventListener('click', function () {
           rulesConfig.diceCount = Number(btn.dataset.dice);
           rulesConfig.presetName = 'Custom Rules';
+          saveRulesPreferences(false);
           syncRulesStudioControls();
         });
       });
       document.querySelectorAll('.rule-token-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
           rulesConfig.tokensPerPlayer = Number(btn.dataset.tokens);
+          saveRulesPreferences(false);
           syncRulesStudioControls();
         });
       });
@@ -13491,6 +13587,31 @@
         btn.addEventListener('click', function () {
           rulesConfig.closeGameMode = (btn.dataset.closemode === 'true');
           rulesConfig.presetName = 'Custom Rules';
+          saveRulesPreferences(false);
+          syncRulesStudioControls();
+        });
+      });
+      [
+        'chkBonusOnKill', 'chkKeepCaptureLockOnBonus', 'chkMandatorySpawn',
+        'chkKillForHome', 'chkWipeoutResetsHomeEligibility', 'chkOptionalLoopAfterKill',
+        'chkWaitAllGroundAtGate', 'chkBonusOnHome', 'chkDoubleSixBonus',
+        'chkSafeStopImmunity', 'chkTeamMode', 'chkStrictRemainder',
+        'chkTeamAssistSix', 'chkThreeConsecutiveSixes', 'chkSingleSixBonusTwoDice',
+        'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
+        'chkFirstBeadOnBoard', 'initialBeadsOnBoardSelect', 'chkPairBlockadeRule',
+        'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft',
+        'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover', 'aiDifficultySelect',
+        'setupName0', 'setupType0', 'setupName1', 'setupType1',
+        'setupName2', 'setupType2', 'setupName3', 'setupType3'
+      ].forEach(function (elId) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const evType = el.tagName === 'INPUT' && el.type === 'text' ? 'input' : 'change';
+        el.addEventListener(evType, function () {
+          if (elId.indexOf('setupType') === 0) {
+            rulesConfig.matchFormat = 'custom';
+          }
+          readRulesFormIntoConfig();
           syncRulesStudioControls();
         });
       });
@@ -14343,6 +14464,12 @@
       window.addEventListener('load', function () {
         loadCareerStats();
         loadRulesPreferences();
+        if (!localStorage.getItem('bannu_ludo_seats_v2') && rulesConfig.matchFormat && rulesConfig.matchFormat !== 'custom') {
+          applySeatPresetForFormat(rulesConfig.matchFormat);
+        }
+        const sndBtn = document.getElementById('soundToggleBtn');
+        if (sndBtn) sndBtn.textContent = soundEnabled ? '🔊' : '🔇';
+        applyLanguageSelection(currentLang, true);
         syncRulesStudioControls();
         initNewMatch('Ready on Home Lobby.', true);
         initLanRadarAndWebRtc();

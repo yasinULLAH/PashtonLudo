@@ -89,57 +89,55 @@
     .dice-rolling {
       animation: diceBounceSlot3D 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
     }
-    /* ==================== TRUE 6-FACE 3D CSS DICE CUBE ==================== */
+    /* ==================== TRUE 6-FACE 3D CSS DICE CUBE (FULL CLEAR FRONT FACE) ==================== */
     .die-3d-scene {
-      width: 26px;
-      height: 26px;
-      perspective: 240px;
+      width: 30px;
+      height: 30px;
+      perspective: 520px;
       display: flex;
       align-items: center;
       justify-content: center;
-      --cube-size: 24px;
-      --cube-half: 12px;
+      --cube-size: 28px;
+      --cube-half: 14px;
     }
     .die-3d-cube {
       width: var(--cube-size);
       height: var(--cube-size);
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform;
     }
     .die-3d-cube.is-tumbling-3d {
-      transition: transform 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+      transition: transform 0.40s cubic-bezier(0.36, 0.07, 0.19, 0.97);
     }
-    .die-3d-core-plane {
-      position: absolute;
-      inset: 1px;
-      background: #d97706;
-      border-radius: 4px;
-      pointer-events: none;
-    }
-    .die-3d-core-x { transform: rotateY(90deg); }
-    .die-3d-core-y { transform: rotateX(90deg); }
-    .die-3d-core-z { transform: translateZ(0px); }
     .die-3d-face {
       position: absolute;
+      top: 0;
+      left: 0;
       width: var(--cube-size);
       height: var(--cube-size);
-      border-radius: 5px;
-      background: radial-gradient(circle at 30% 28%, #ffffff 0%, #f8fafc 68%, #e2e8f0 100%);
-      border: 1.5px solid #cbd5e1;
-      box-shadow: inset 0 0 4px rgba(15, 23, 42, 0.22), 0 0 1px rgba(217, 119, 6, 0.5);
+      border-radius: 6px;
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 72%, #e2e8f0 100%);
+      border: 1.8px solid #cbd5e1;
+      box-shadow: inset 0 0 3px rgba(15, 23, 42, 0.18);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      padding: 2.5px;
-      gap: 1.5px;
+      padding: 3px;
+      gap: 2px;
       backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       box-sizing: border-box;
     }
+    .die-3d-face.active-landed-face {
+      border-color: #f59e0b;
+      background: linear-gradient(145deg, #ffffff 0%, #fffbeb 80%, #fef3c7 100%);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45), inset 0 0 2px rgba(217, 119, 6, 0.35);
+    }
     .die-3d-cube.die-used-dim .die-3d-face {
-      background: radial-gradient(circle at 30% 28%, #f1f5f9 0%, #e2e8f0 75%, #cbd5e1 100%);
-      opacity: 0.55;
+      background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+      opacity: 0.42;
     }
     .die-3d-face-1 { transform: rotateY(0deg) translateZ(var(--cube-half)); }
     .die-3d-face-6 { transform: rotateY(180deg) translateZ(var(--cube-half)); }
@@ -151,16 +149,24 @@
       width: 100%;
       height: 100%;
       border-radius: 9999px;
-      box-shadow: inset 0 1px 1.5px rgba(0, 0, 0, 0.55);
+      box-shadow: inset 0 1px 1.5px rgba(0, 0, 0, 0.6);
     }
     .die-3d-pip.pip-red {
       background: radial-gradient(circle at 35% 35%, #fb7185 0%, #e11d48 65%, #9f1239 100%);
     }
     .die-3d-pip.pip-dark {
-      background: radial-gradient(circle at 35% 35%, #475569 0%, #0f172a 75%, #020617 100%);
+      background: radial-gradient(circle at 35% 35%, #334155 0%, #0f172a 75%, #020617 100%);
     }
     .die-3d-face-1 .die-3d-pip.pip-red {
-      transform: scale(1.32);
+      transform: scale(1.38);
+    }
+    #dieStatus0, #dieStatus1 {
+      bottom: -5px !important;
+      z-index: 25;
+      pointer-events: none;
+      font-size: 7.5px !important;
+      line-height: 1.1;
+      padding: 0 3px !important;
     }
 
     @keyframes pulseRing {
@@ -426,11 +432,12 @@
       box-shadow: 0 5px 12px rgba(15, 23, 42, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
     }
     #dieFace0, #dieFace1 {
-      width: 26px;
-      height: 26px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 3px;
     }
     .bg-rose-600 { background-color: #e11d48; }
     .bg-slate-900 { background-color: #0f172a; }
@@ -782,19 +789,20 @@
       }
       #centerDiceDock #dieFace0,
       #centerDiceDock #dieFace1 {
-        width: 20px !important;
-        height: 20px !important;
+        width: 24px !important;
+        height: 24px !important;
+        margin-bottom: 2px !important;
       }
       #centerDiceDock .die-3d-scene {
-        width: 20px !important;
-        height: 20px !important;
-        --cube-size: 19px;
-        --cube-half: 9.5px;
+        width: 24px !important;
+        height: 24px !important;
+        --cube-size: 22px;
+        --cube-half: 11px;
       }
       #centerDiceDock .die-3d-face {
-        padding: 1.8px;
-        gap: 1px;
-        border-radius: 4px;
+        padding: 2.2px;
+        gap: 1.5px;
+        border-radius: 4.5px;
       }
       #centerDiceDock #dieStatus0,
       #centerDiceDock #dieStatus1 {
@@ -7879,13 +7887,14 @@
         6: [0, 2, 3, 5, 6, 8]
       };
 
+      // Exact front-facing 3D angles so the landed face is 100% clear, square, and unobstructed
       const FACE_3D_BASE_ANGLES = {
-        1: { rx: -16, ry: -20, rz: 0 },
-        6: { rx: -16, ry: 160, rz: 0 },
-        2: { rx: -16, ry: -110, rz: 0 },
-        5: { rx: -16, ry: 70, rz: 0 },
-        3: { rx: -106, ry: 0, rz: -18 },
-        4: { rx: 74, ry: 0, rz: 18 }
+        1: { rx: -5, ry: 5, rz: 0 },
+        6: { rx: -5, ry: 185, rz: 0 },
+        2: { rx: -5, ry: -85, rz: 0 },
+        5: { rx: -5, ry: 95, rz: 0 },
+        3: { rx: -95, ry: 0, rz: 0 },
+        4: { rx: 85, ry: 0, rz: 0 }
       };
 
       const die3dSpinState = {
@@ -7918,15 +7927,10 @@
         cube = document.createElement('div');
         cube.className = 'die-3d-cube';
 
-        ['x', 'y', 'z'].forEach(function (axis) {
-          const core = document.createElement('div');
-          core.className = 'die-3d-core-plane die-3d-core-' + axis;
-          cube.appendChild(core);
-        });
-
         [1, 2, 3, 4, 5, 6].forEach(function (faceVal) {
           const faceEl = document.createElement('div');
           faceEl.className = 'die-3d-face die-3d-face-' + faceVal;
+          faceEl.dataset.faceVal = String(faceVal);
           const pips = PIP_LAYOUTS[faceVal] || [4];
           const isRedPip = (faceVal === 1 || faceVal === 6);
           for (let i = 0; i < 9; i++) {
@@ -7957,7 +7961,6 @@
         if (forceExtraSpin) {
           st.spinsX += 2;
           st.spinsY += 2;
-          st.spinsZ += 1;
         } else if (st.lastVal !== cleanVal) {
           st.spinsX += 1;
           st.spinsY += 1;
@@ -7967,7 +7970,11 @@
         const base = FACE_3D_BASE_ANGLES[cleanVal] || FACE_3D_BASE_ANGLES[6];
         const rx = base.rx + st.spinsX * 360;
         const ry = base.ry + st.spinsY * 360;
-        const rz = base.rz + st.spinsZ * 360;
+        const rz = base.rz;
+
+        cube.querySelectorAll('.die-3d-face').forEach(function (fEl) {
+          fEl.classList.toggle('active-landed-face', Number(fEl.dataset.faceVal) === cleanVal);
+        });
 
         cube.classList.remove('is-tumbling-3d');
         cube.classList.toggle('die-used-dim', Boolean(isUsed));
@@ -8039,9 +8046,9 @@
 
       function drawIsometric3dDieOnCanvas(ctx, cx, cy, size, value, isUsed, rotAngle, bounceHeight) {
         const val = (value >= 1 && value <= 6) ? value : 6;
-        const half = size * 0.44;
-        const depthX = size * 0.20;
-        const depthY = size * 0.18;
+        const half = size * 0.48;
+        const depthX = size * 0.14;
+        const depthY = size * 0.13;
         const liftY = (bounceHeight || 0) * size * 0.65;
 
         ctx.save();
