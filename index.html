@@ -4591,12 +4591,8 @@
                 updateAllUI();
                 return;
               } else {
-                enemies.sort(function (a, b) {
-                  const tkA = gameState.players[a.ownerIdx].tokens[a.tokenId];
-                  const tkB = gameState.players[b.ownerIdx].tokens[b.tokenId];
-                  return tkB.steps - tkA.steps;
-                });
-                const targetOwner = enemies[0].ownerIdx;
+                const bestVictim = chooseBestCaptureVictim(move.ownerIdx, enemies, true);
+                const targetOwner = bestVictim.ownerIdx;
                 const victims = enemies.filter(function (e) { return e.ownerIdx === targetOwner; });
                 victims.forEach(function (enemy) {
                   performSingleCapture(move.ownerIdx, token, enemy);
@@ -4612,12 +4608,8 @@
                 updateAllUI();
                 return;
               } else {
-                enemies.sort(function (a, b) {
-                  const tkA = gameState.players[a.ownerIdx].tokens[a.tokenId];
-                  const tkB = gameState.players[b.ownerIdx].tokens[b.tokenId];
-                  return tkB.steps - tkA.steps;
-                });
-                performSingleCapture(move.ownerIdx, token, enemies[0]);
+                const bestVictim = chooseBestCaptureVictim(move.ownerIdx, enemies, false);
+                performSingleCapture(move.ownerIdx, token, bestVictim);
               }
             }
           }
@@ -5306,7 +5298,6 @@
         }, 280);
       }
 
-      // --- 7. 4-TIER INTELLIGENT AI ENGINE (Easy, Medium, Hard, Hardest Utmost Expert) ---
       function isSquareSafeFromCapture(trackIdx) {
         if (rulesConfig.safeStopImmunity) {
           return SAFE_TRACK_INDICES.has(trackIdx);
@@ -5314,57 +5305,205 @@
         return START_TRACK_INDEX.includes(trackIdx);
       }
 
-      function computeSquareThreatScore(ownerIdx, trackIdx) {
+      function isTrackBlockedByJoraOnPlayers(moverOwnerIdx, trackIdx, playersList) {
+        if (!rulesConfig.pairBlockadeRule) return false;
+        const pList = playersList || gameState.players;
+        const moverMeta = PLAYER_META[moverOwnerIdx];
+        if (rulesConfig.teamMode) {
+          let oppTeamCount = 0;
+          pList.forEach(function (pl) {
+            if (!pl || !pl.active || pl.team === moverMeta.team) return;
+            pl.tokens.forEach(function (tk) {
+              if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+                oppTeamCount += 1;
+              }
+            });
+          });
+          return oppTeamCount >= 2;
+        }
+        for (let i = 0; i < pList.length; i++) {
+          const pl = pList[i];
+          if (!pl || !pl.active || pl.id === moverOwnerIdx) continue;
+          let count = 0;
+          pl.tokens.forEach(function (tk) {
+            if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+              count += 1;
+            }
+          });
+          if (count >= 2) return true;
+        }
+        return false;
+      }
+
+      function getCaptureCandidatesOnPlayers(moverOwnerIdx, trackIdx, playersList) {
+        if (isSquareSafeFromCapture(trackIdx)) return [];
+        const pList = playersList || gameState.players;
+        const moverMeta = PLAYER_META[moverOwnerIdx];
+        const candidates = [];
+        pList.forEach(function (pl) {
+          if (!pl || !pl.active || pl.id === moverOwnerIdx) return;
+          if (rulesConfig.teamMode && pl.team === moverMeta.team) return;
+          pl.tokens.forEach(function (tk) {
+            if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+              candidates.push({
+                ownerIdx: pl.id,
+                tokenId: tk.id,
+                playerName: pl.name,
+                colorName: PLAYER_META[pl.id].colorName,
+                steps: tk.steps
+              });
+            }
+          });
+        });
+        return candidates;
+      }
+
+      function willCaptureTriggerGroundWipeout(victimPlayer, killedCountFromOwner) {
+        if (rulesConfig.wipeoutResetsHomeEligibility === false) return false;
+        if (!victimPlayer || (victimPlayer.kills || 0) <= 0) return false;
+        const hasInsideHome = victimPlayer.tokens.some(function (t) {
+          return t.state === 'home_stretch' || t.state === 'completed';
+        });
+        if (hasInsideHome) return false;
+        const boardCount = victimPlayer.tokens.filter(function (t) {
+          return t.state === 'board';
+        }).length;
+        return boardCount <= killedCountFromOwner;
+      }
+
+      function chooseBestCaptureVictim(capturerOwnerIdx, enemies, killSameOwnerGroup, customPlayers) {
+        if (!enemies || enemies.length === 0) return null;
+        const pList = customPlayers || gameState.players;
+        const reqKills = getRequiredKillsForHome();
+        let bestEnemy = enemies[0];
+        let bestScore = -999999;
+
+        enemies.forEach(function (cand) {
+          const vPlayer = pList[cand.ownerIdx];
+          if (!vPlayer) return;
+          const sameOwnerVictims = enemies.filter(function (e) { return e.ownerIdx === cand.ownerIdx; });
+          const killedCount = killSameOwnerGroup ? sameOwnerVictims.length : 1;
+          const vToken = vPlayer.tokens[cand.tokenId];
+          let score = killedCount * 380;
+
+          if (killSameOwnerGroup) {
+            score += sameOwnerVictims.reduce(function (acc, item) {
+              const tk = vPlayer.tokens[item.tokenId];
+              return acc + (tk ? (tk.steps % 52) * 6.5 : 20);
+            }, 0);
+          } else {
+            score += (vToken ? (vToken.steps % 52) * 6.5 : 20);
+          }
+
+          if (willCaptureTriggerGroundWipeout(vPlayer, killedCount)) {
+            score += 2200;
+          }
+
+          if (reqKills > 0 && (vPlayer.kills || 0) >= reqKills) {
+            score += 240;
+          }
+
+          const remainingOutside = vPlayer.tokens.filter(function (t) {
+            return t.state === 'yard' || t.state === 'board';
+          }).length;
+          if (remainingOutside <= 2) {
+            score += 360;
+          }
+
+          if (score > bestScore) {
+            bestScore = score;
+            bestEnemy = cand;
+          }
+        });
+
+        return bestEnemy;
+      }
+
+      function computeSquareThreatScore(ownerIdx, trackIdx, customPlayers) {
         if (isSquareSafeFromCapture(trackIdx)) return 0;
+        const pList = customPlayers || gameState.players;
         const ownerMeta = PLAYER_META[ownerIdx];
+        const reqKills = getRequiredKillsForHome();
         let threat = 0;
-        const twoDiceWeights = {
-          1: 11, 2: 12, 3: 13, 4: 14, 5: 15, 6: 16,
+
+        const twoDiceHitProbs = {
+          1: 11, 2: 11, 3: 13, 4: 14, 5: 15, 6: 16,
           7: 6, 8: 5, 9: 4, 10: 3, 11: 2, 12: 1
         };
+        const twoDiceNoSixHitProbs = {
+          1: 9, 2: 9, 3: 11, 4: 12, 5: 13, 6: 5,
+          7: 4, 8: 3, 9: 2, 10: 1, 11: 0, 12: 0
+        };
 
-        gameState.players.forEach(function (pl) {
+        pList.forEach(function (pl) {
           if (!pl || !pl.active || pl.id === ownerIdx) return;
           if (rulesConfig.teamMode && pl.team === ownerMeta.team) return;
 
-          const enemyEffectiveDice = getEffectiveDiceCountForOwner(pl.id, pl.id);
+          const enemyRemaining = pl.tokens.filter(function (t) { return t.state !== 'completed'; });
+          const enemyAllInHome = enemyRemaining.length > 0 && enemyRemaining.every(function (t) { return t.state === 'home_stretch'; });
+          const enemyOneLeft = rulesConfig.oneDieWhenOneBeadLeft && enemyRemaining.length === 1;
+          const enemyEffectiveDice = (rulesConfig.diceCount === 1 || enemyAllInHome || enemyOneLeft) ? 1 : 2;
           const enemyMaxReach = enemyEffectiveDice === 2 ? 12 : 6;
-          const enemyNeedsBloodKill = (getRequiredKillsForHome() > 0 && (pl.kills || 0) < getRequiredKillsForHome());
-          const aggressionMultiplier = enemyNeedsBloodKill ? 1.55 : 1.0;
+          const enemyNeedsBloodKill = (reqKills > 0 && (pl.kills || 0) < reqKills);
+          const aggressionMultiplier = enemyNeedsBloodKill ? 1.65 : 1.1;
 
-          // Check if enemy has yard beads that can spawn onto their start square or strike from start
-          const enemyHasYardBeads = pl.tokens.some(function (et) { return et.state === 'yard'; });
-          if (enemyHasYardBeads) {
+          const enemyYardCount = pl.tokens.filter(function (et) { return et.state === 'yard'; }).length;
+          const spawnFactor = rulesConfig.spawnOnOneAndSix ? 1.85 : 1.0;
+
+          if (enemyYardCount > 0) {
             const enemyStartIdx = START_TRACK_INDEX[pl.id];
             if (trackIdx === enemyStartIdx && !isSquareSafeFromCapture(trackIdx)) {
-              threat += 28 * aggressionMultiplier;
+              threat += 34 * spawnFactor * aggressionMultiplier;
             } else if (enemyEffectiveDice === 2) {
               const distFromStart = (trackIdx - enemyStartIdx + 52) % 52;
               if (distFromStart >= 1 && distFromStart <= 6) {
-                threat += 12 * aggressionMultiplier;
+                let blockedFromStart = false;
+                if (rulesConfig.pairBlockadeRule && distFromStart > 1) {
+                  for (let s = 1; s < distFromStart; s++) {
+                    if (isTrackBlockedByJoraOnPlayers(pl.id, (enemyStartIdx + s) % 52, pList)) {
+                      blockedFromStart = true;
+                      break;
+                    }
+                  }
+                }
+                if (!blockedFromStart) {
+                  threat += 14 * spawnFactor * aggressionMultiplier;
+                }
               }
             }
           }
+
+          const mustSpendSixOnYard = Boolean(rulesConfig.mandatoryYardSpawn && enemyYardCount > 0 && !rulesConfig.spawnOnOneAndSix);
+          const probTable = mustSpendSixOnYard ? twoDiceNoSixHitProbs : twoDiceHitProbs;
 
           pl.tokens.forEach(function (et) {
             if (et.state !== 'board') return;
             const eTrack = getOuterTrackIndex(et);
             const dist = (trackIdx - eTrack + 52) % 52;
             if (dist >= 1 && dist <= enemyMaxReach) {
-              // Check if a Jora wall blocks the enemy from jumping to trackIdx
+              const ePosInLap = et.steps % 52;
+              const eStepsToGate = 50 - ePosInLap;
+              const enemyEntersHomeInstead = Boolean(
+                eStepsToGate >= 0 &&
+                dist > eStepsToGate &&
+                (reqKills <= 0 || (pl.kills || 0) >= reqKills) &&
+                !rulesConfig.allowOptionalLoopAfterKill
+              );
+              if (enemyEntersHomeInstead) return;
+
               let blockedByJora = false;
               if (rulesConfig.pairBlockadeRule && dist > 1) {
                 for (let s = 1; s < dist; s++) {
                   const midIdx = (eTrack + s) % 52;
-                  if (isTrackSquareBlockedByOpponentJora(pl.id, midIdx)) {
+                  if (isTrackBlockedByJoraOnPlayers(pl.id, midIdx, pList)) {
                     blockedByJora = true;
                     break;
                   }
                 }
               }
               if (!blockedByJora) {
-                const weight = enemyEffectiveDice === 2 ? (twoDiceWeights[dist] || 2) : (dist <= 6 ? 10 : 0);
-                threat += weight * 2.4 * aggressionMultiplier;
+                const weight = enemyEffectiveDice === 2 ? (probTable[dist] || 0) : (dist <= 6 ? 8 : 0);
+                threat += weight * 2.55 * aggressionMultiplier;
               }
             }
           });
@@ -5373,13 +5512,14 @@
         return threat;
       }
 
-      function computeOffensiveStalkScore(ownerIdx, trackIdx, ownerNeedsKill) {
+      function computeOffensiveStalkScore(ownerIdx, trackIdx, ownerNeedsKill, customPlayers) {
+        const pList = customPlayers || gameState.players;
         const ownerMeta = PLAYER_META[ownerIdx];
         const myEffectiveDice = getEffectiveDiceCountForOwner(ownerIdx, ownerIdx);
-        const maxStrike = myEffectiveDice === 2 ? 10 : 6;
+        const maxStrike = myEffectiveDice === 2 ? 11 : 6;
         let stalkBonus = 0;
 
-        gameState.players.forEach(function (pl) {
+        pList.forEach(function (pl) {
           if (!pl || !pl.active || pl.id === ownerIdx) return;
           if (rulesConfig.teamMode && pl.team === ownerMeta.team) return;
 
@@ -5389,8 +5529,21 @@
             if (isSquareSafeFromCapture(eTrack)) return;
             const distAhead = (eTrack - trackIdx + 52) % 52;
             if (distAhead >= 1 && distAhead <= maxStrike) {
-              const valueOfVictim = 18 + (et.steps * 0.65) + (ownerNeedsKill ? 42 : 12);
-              const probFactor = distAhead <= 6 ? 1.0 : 0.45;
+              let blockedByJora = false;
+              if (rulesConfig.pairBlockadeRule && distAhead > 1) {
+                for (let s = 1; s < distAhead; s++) {
+                  if (isTrackBlockedByJoraOnPlayers(ownerIdx, (trackIdx + s) % 52, pList)) {
+                    blockedByJora = true;
+                    break;
+                  }
+                }
+              }
+              if (blockedByJora) return;
+
+              const eLapPos = et.steps % 52;
+              const wipeoutTarget = willCaptureTriggerGroundWipeout(pl, 1) ? 95 : 0;
+              const valueOfVictim = 24 + (eLapPos * 0.9) + (ownerNeedsKill ? 68 : 18) + wipeoutTarget;
+              const probFactor = distAhead <= 6 ? 1.15 : 0.48;
               stalkBonus += valueOfVictim * probFactor;
             }
           });
@@ -5399,18 +5552,40 @@
         return stalkBonus;
       }
 
-      function evaluateMoveScore(move) {
+      function shouldLeaveKillForPartner(ownerIdx, destTrack, victims, pList) {
+        if (!rulesConfig.teamMode || victims.length === 0) return false;
+        const reqKills = getRequiredKillsForHome();
+        if (reqKills <= 0) return false;
+        const owner = pList[ownerIdx];
+        if (!owner || (owner.kills || 0) < reqKills) return false;
+        const partner = pList[owner.partner];
+        if (!partner || !partner.active || (partner.kills || 0) >= reqKills) return false;
+
+        const anyVictimNearHome = victims.some(function (v) {
+          const vTk = pList[v.ownerIdx].tokens[v.tokenId];
+          return vTk && (vTk.steps % 52) >= 42;
+        });
+        if (anyVictimNearHome) return false;
+
+        return partner.tokens.some(function (pt) {
+          if (pt.state !== 'board') return false;
+          const pTrack = getOuterTrackIndex(pt);
+          const dist = (destTrack - pTrack + 52) % 52;
+          return dist >= 1 && dist <= 6;
+        });
+      }
+
+      function evaluateMoveScoreOnPlayers(move, pList) {
         const diff = rulesConfig.aiDifficulty || 'hardest';
-        const owner = gameState.players[move.ownerIdx];
+        const owner = pList[move.ownerIdx];
         const tk = owner.tokens[move.tokenId];
         const reqKills = getRequiredKillsForHome();
         const ownerNeedsKill = reqKills > 0 && (owner.kills || 0) < reqKills;
-        const activePlayersCount = gameState.players.filter(function (pl) { return pl && pl.active; }).length;
+        const activePlayersCount = pList.filter(function (pl) { return pl && pl.active; }).length;
         const is1v1Mode = !rulesConfig.teamMode && activePlayersCount === 2;
         const isFfaMode = !rulesConfig.teamMode && activePlayersCount >= 3;
         const is2v2Mode = Boolean(rulesConfig.teamMode);
 
-        // 1. EASY MODE: Normal & Easy — casual, forgiving, sometimes moves non-optimal beads so players can comfortably win
         if (diff === 'easy') {
           let easyScore = Math.random() * 85 + move.delta * 1.2;
           if (move.sim.isSpawn) easyScore += 35;
@@ -5418,14 +5593,13 @@
           else if (move.sim.newState === 'home_stretch') easyScore += 30;
           if (move.sim.newState === 'board') {
             const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
-            if (getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack).length > 0) {
+            if (getCaptureCandidatesOnPlayers(move.ownerIdx, destTrack, pList).length > 0) {
               easyScore += 45;
             }
           }
           return easyScore;
         }
 
-        // 2. MEDIUM MODE: Balanced standard AI — takes direct kills, spawns, and safe squares with moderate human-like variance
         if (diff === 'medium') {
           let medScore = (Math.random() * 22) + move.delta * 2.8;
           if (move.sim.isSpawn) medScore += 90;
@@ -5433,7 +5607,7 @@
           else if (move.sim.newState === 'home_stretch') medScore += 125 + move.sim.newHomeStep * 8;
           if (move.sim.newState === 'board') {
             const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
-            const victims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
+            const victims = getCaptureCandidatesOnPlayers(move.ownerIdx, destTrack, pList);
             if (victims.length > 0) {
               medScore += ownerNeedsKill ? 310 : 185;
             }
@@ -5442,197 +5616,519 @@
           return medScore;
         }
 
-        // 3. HARD & HARDEST MODES: Deep rule-aware tactical engine
-        let score = move.delta * 3.4;
+        const curLapPos = tk.state === 'board' ? (tk.steps % 52) : 0;
         const curTrack = tk.state === 'board' ? getOuterTrackIndex(tk) : -1;
-        const curDanger = (tk.state === 'board' && curTrack >= 0) ? computeSquareThreatScore(move.ownerIdx, curTrack) : 0;
+        const curDanger = (tk.state === 'board' && curTrack >= 0) ? computeSquareThreatScore(move.ownerIdx, curTrack, pList) : 0;
+        const ownerInsideHomeCount = owner.tokens.filter(function (t) {
+          return t.state === 'home_stretch' || t.state === 'completed';
+        }).length;
+        const ownerGroundCount = owner.tokens.filter(function (t) {
+          return t.state === 'board';
+        }).length;
+        const isVulnerableToWipeout = Boolean(
+          rulesConfig.wipeoutResetsHomeEligibility !== false &&
+          (owner.kills || 0) > 0 &&
+          ownerInsideHomeCount === 0 &&
+          ownerGroundCount === 1
+        );
 
-        // Check if this move triggers an immediate Flawless Clean Sweep Victory!
-        const otherBeadsAllInsideHome = owner.tokens.every(function (otherTk) {
-          if (otherTk.id === tk.id) return true;
-          return otherTk.state === 'home_stretch' || otherTk.state === 'completed';
+        let score = move.delta * 3.2;
+
+        const otherBeadsAllCompleted = owner.tokens.every(function (otherTk) {
+          return otherTk.id === tk.id || otherTk.state === 'completed';
         });
-        if (
-          otherBeadsAllInsideHome &&
-          (move.sim.newState === 'home_stretch' || move.sim.newState === 'completed') &&
-          areOpponentsWithoutKillsForPlayer(move.ownerIdx)
-        ) {
-          score += (diff === 'hardest' ? 5000 : 1200);
+        const otherBeadsAllInsideHome = owner.tokens.every(function (otherTk) {
+          return otherTk.id === tk.id || otherTk.state === 'home_stretch' || otherTk.state === 'completed';
+        });
+
+        const opponentsLockedOut = pList.filter(function (op) {
+          if (!op || !op.active) return false;
+          return is2v2Mode ? (op.team !== owner.team) : (op.id !== move.ownerIdx);
+        }).every(function (op) {
+          const k = op.kills || 0;
+          return k === 0 || (reqKills > 0 && k < reqKills);
+        });
+
+        if (otherBeadsAllInsideHome && (move.sim.newState === 'home_stretch' || move.sim.newState === 'completed') && opponentsLockedOut) {
+          score += 12000;
+        } else if (otherBeadsAllCompleted && move.sim.newState === 'completed') {
+          score += 9500;
         }
 
-        // Spawn evaluation
         if (move.sim.isSpawn) {
-          const groundCount = owner.tokens.filter(function (t) { return t.state === 'board'; }).length;
-          score += groundCount === 0 ? 240 : (groundCount === 1 ? 155 : 105);
-          if (rulesConfig.closeGameMode && groundCount === 1) {
-            // Having at least 2 beads on the board in Close Game mode lets 1 bead kill and the 2nd bead play the remaining die!
-            score += 65;
+          score += ownerGroundCount === 0 ? 360 : (ownerGroundCount === 1 ? 245 : 140);
+          if (isVulnerableToWipeout) {
+            score += 340;
+          }
+          if (rulesConfig.closeGameMode && ownerGroundCount === 1) {
+            score += 95;
+          }
+          if (rulesConfig.strictHomeRemainder && rulesConfig.diceCount === 2 && ownerGroundCount === 1) {
+            score += 85;
+          }
+          const spawnTrack = START_TRACK_INDEX[tk.owner];
+          const spawnVictims = getCaptureCandidatesOnPlayers(move.ownerIdx, spawnTrack, pList);
+          if (spawnVictims.length > 0) {
+            score += ownerNeedsKill ? 680 : 380;
           }
         }
 
-        // Home Stretch & Completion evaluation
         if (move.sim.newState === 'completed') {
-          score += 340 + (rulesConfig.bonusRollOnHome ? 95 : 0);
-          score += curDanger * (1 + tk.steps / 35);
+          score += 460 + (rulesConfig.bonusRollOnHome ? 180 : 0);
+          score += curDanger * (1.25 + curLapPos / 26);
+          if (rulesConfig.wipeoutResetsHomeEligibility !== false && ownerInsideHomeCount === 0) {
+            score += 620;
+          }
         } else if (move.sim.newState === 'home_stretch') {
-          score += 210 + move.sim.newHomeStep * 14;
-          score += curDanger * (1 + tk.steps / 35);
+          score += 310 + move.sim.newHomeStep * 18;
+          score += curDanger * (1.25 + curLapPos / 26);
+          if (rulesConfig.wipeoutResetsHomeEligibility !== false && ownerInsideHomeCount === 0) {
+            score += 580;
+          }
         }
 
-        // Optional outer loop evaluation: only loop past Home Gate after a kill if it directly captures an enemy!
         if (move.isOptionalLoop) {
           const destTrackLoop = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
-          const loopVictims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrackLoop);
-          if (loopVictims.length === 0) {
-            score -= 320;
-          } else {
-            score += 140;
+          const loopVictims = getCaptureCandidatesOnPlayers(move.ownerIdx, destTrackLoop, pList);
+          const opponentsThreateningCleanSweep = pList.some(function (op) {
+            if (!op || !op.active || (is2v2Mode ? op.team === owner.team : op.id === move.ownerIdx)) return false;
+            const opRem = op.tokens.filter(function (t) { return t.state === 'yard' || t.state === 'board'; }).length;
+            return opRem <= 1 && ownerNeedsKill;
+          });
+          if (loopVictims.length > 0) {
+            score += 240;
+          } else if (!opponentsThreateningCleanSweep) {
+            score -= 520;
           }
         }
 
-        // No-Kill Forced Outer Loop penalty: if AI has 0 kills and this move forces a bead past step 50 into another 52-cell lap, prefer moving/stalking with another bead unless forced
         if (move.sim.loopedPastHome && !move.isOptionalLoop && ownerNeedsKill) {
-          score -= (diff === 'hardest' ? 190 : 80);
+          score -= 340;
+        }
+
+        if (tk.state === 'board' && rulesConfig.pairBlockadeRule && !isSquareSafeFromCapture(curTrack)) {
+          const sameOnCur = owner.tokens.filter(function (ft) {
+            return ft.id !== tk.id && ft.state === 'board' && getOuterTrackIndex(ft) === curTrack;
+          }).length;
+          if (sameOnCur === 1) {
+            score -= 75;
+          }
         }
 
         if (move.sim.newState === 'board') {
           const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
-          const victims = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
-          const destDanger = computeSquareThreatScore(move.ownerIdx, destTrack);
+          const newLapPos = move.sim.newSteps % 52;
+          const victims = getCaptureCandidatesOnPlayers(move.ownerIdx, destTrack, pList);
+          const destDanger = computeSquareThreatScore(move.ownerIdx, destTrack, pList);
 
-          // Escape from danger vs walking into danger
-          const stepValueFactor = 1 + (tk.steps / 38);
-          score += (curDanger * stepValueFactor) - (destDanger * (1 + (move.sim.newSteps / 36)));
+          const curValFactor = 1.0 + (curLapPos / 30) + (isVulnerableToWipeout ? 1.4 : 0);
+          const newValFactor = 1.0 + (newLapPos / 30) + (isVulnerableToWipeout ? 1.4 : 0);
+          score += (curDanger * curValFactor) - (destDanger * newValFactor);
 
-          // Leaving a safe square without a kill
           if (tk.state === 'board' && isSquareSafeFromCapture(curTrack) && !isSquareSafeFromCapture(destTrack) && victims.length === 0) {
-            score -= (45 + destDanger * 0.85);
+            score -= (65 + destDanger * 1.05);
+            if (ownerNeedsKill && curLapPos >= 44) {
+              score -= 140;
+            }
           }
 
-          // Landing on a Safe Stop square
           if (isSquareSafeFromCapture(destTrack)) {
-            score += 95 + (move.sim.newSteps > 25 ? 35 : 0);
+            score += 125 + (newLapPos > 24 ? 55 : 0) + (isVulnerableToWipeout ? 210 : 0);
           }
 
-          // Capture / Kill evaluation
           if (victims.length > 0) {
-            const uniqueVictimOwners = Array.from(new Set(victims.map(function (v) { return v.ownerIdx; })));
-            let maxKillCount = 1;
-            let victimStepsDestroyed = 0;
-            uniqueVictimOwners.forEach(function (vOwnerIdx) {
-              const sameOwnerVictims = victims.filter(function (v) { return v.ownerIdx === vOwnerIdx; });
+            if (shouldLeaveKillForPartner(move.ownerIdx, destTrack, victims, pList)) {
+              score -= 220;
+            } else {
+              const bestVictim = chooseBestCaptureVictim(move.ownerIdx, victims, rulesConfig.killAllStackedEnemies, pList);
+              const vOwner = pList[bestVictim.ownerIdx];
+              const sameOwnerVictims = victims.filter(function (v) { return v.ownerIdx === bestVictim.ownerIdx; });
               const countKilled = rulesConfig.killAllStackedEnemies ? sameOwnerVictims.length : 1;
-              const stepsSum = sameOwnerVictims.slice(0, countKilled).reduce(function (acc, v) {
-                const vTk = gameState.players[v.ownerIdx].tokens[v.tokenId];
-                return acc + (vTk ? vTk.steps : 10);
+              const victimStepsSum = sameOwnerVictims.slice(0, countKilled).reduce(function (acc, v) {
+                const vTk = vOwner.tokens[v.tokenId];
+                return acc + (vTk ? (vTk.steps % 52) : 12);
               }, 0);
-              if (countKilled > maxKillCount || stepsSum > victimStepsDestroyed) {
-                maxKillCount = Math.max(maxKillCount, countKilled);
-                victimStepsDestroyed = Math.max(victimStepsDestroyed, stepsSum);
+
+              let killScore = ownerNeedsKill ? 780 : 360;
+              killScore += countKilled * 210 + victimStepsSum * (is1v1Mode ? 4.2 : 3.0);
+              if (rulesConfig.bonusRollOnKill) killScore += 165;
+
+              if (willCaptureTriggerGroundWipeout(vOwner, countKilled)) {
+                killScore += 820;
+              }
+
+              const vRemainingOutside = vOwner.tokens.filter(function (vt) {
+                return vt.state === 'yard' || vt.state === 'board';
+              }).length;
+              if (vRemainingOutside <= 2) {
+                killScore += 420;
+              }
+
+              if (rulesConfig.closeGameMode && ownerGroundCount > 1 && destDanger > 25 && !ownerNeedsKill) {
+                const lockRiskPenalty = destDanger * (0.55 + (newLapPos / 42));
+                killScore -= lockRiskPenalty;
+              }
+
+              score += killScore;
+            }
+          }
+
+          score += computeOffensiveStalkScore(move.ownerIdx, destTrack, ownerNeedsKill, pList);
+
+          if (!isSquareSafeFromCapture(destTrack)) {
+            pList.forEach(function (op) {
+              if (!op || !op.active || op.id === move.ownerIdx) return;
+              if (is2v2Mode && op.team === owner.team) return;
+              if (reqKills > 0 && (op.kills || 0) < reqKills) {
+                op.tokens.forEach(function (ot) {
+                  if (ot.state !== 'board') return;
+                  const oTrack = getOuterTrackIndex(ot);
+                  const distInFrontOfStarvingEnemy = (destTrack - oTrack + 52) % 52;
+                  if (distInFrontOfStarvingEnemy >= 1 && distInFrontOfStarvingEnemy <= 8) {
+                    score -= 145;
+                  }
+                });
               }
             });
-
-            // Blood Gate urgency
-            let killScore = ownerNeedsKill ? 560 : 280;
-            killScore += maxKillCount * 150 + victimStepsDestroyed * (is1v1Mode ? 3.5 : 2.2);
-            if (rulesConfig.bonusRollOnKill) killScore += 110;
-
-            // Emergency Clean Sweep Interception: if an opponent has almost all beads inside home while AI has 0 kills!
-            if (diff === 'hardest') {
-              victims.forEach(function (v) {
-                const vPlayer = gameState.players[v.ownerIdx];
-                if (!vPlayer) return;
-                const vRemainingOutside = vPlayer.tokens.filter(function (vt) {
-                  return vt.state === 'yard' || vt.state === 'board';
-                }).length;
-                if (vRemainingOutside <= 2) {
-                  killScore += 320;
-                }
-              });
-
-              // Close Game Lock Risk Check: if capturing locks our bead on destTrack, check if destTrack is exposed to immediate revenge kill
-              if (rulesConfig.closeGameMode && destDanger > 30 && !ownerNeedsKill) {
-                killScore -= destDanger * 0.65;
-              }
-            }
-
-            score += killScore;
           }
 
-          if (diff === 'hardest') {
-            // Stalking bonus (positioning within strike distance behind vulnerable enemy beads, especially when AI needs a kill)
-            score += computeOffensiveStalkScore(move.ownerIdx, destTrack, ownerNeedsKill);
+          const friendlyOnDest = owner.tokens.filter(function (ft) {
+            return ft.id !== tk.id && ft.state === 'board' && getOuterTrackIndex(ft) === destTrack;
+          }).length;
 
-            // Clean Sweep Denial: if an enemy has 0 kills (needs a kill to open their gate), avoid placing our bead 1..7 steps ahead of that enemy on an unsafe square!
-            if (!isSquareSafeFromCapture(destTrack)) {
-              gameState.players.forEach(function (op) {
-                if (!op || !op.active || op.id === move.ownerIdx) return;
-                if (is2v2Mode && op.team === owner.team) return;
-                if (reqKills > 0 && (op.kills || 0) < reqKills) {
-                  op.tokens.forEach(function (ot) {
-                    if (ot.state !== 'board') return;
-                    const oTrack = getOuterTrackIndex(ot);
-                    const distInFrontOfStarvingEnemy = (destTrack - oTrack + 52) % 52;
-                    if (distInFrontOfStarvingEnemy >= 1 && distInFrontOfStarvingEnemy <= 8) {
-                      score -= 95;
-                    }
-                  });
-                }
+          if (friendlyOnDest >= 1 && !isSquareSafeFromCapture(destTrack)) {
+            if (rulesConfig.pairBlockadeRule) {
+              score += 155;
+            } else if (rulesConfig.killAllStackedEnemies && destDanger > 0) {
+              score -= (195 + destDanger * 1.35);
+            }
+          }
+
+          if (is2v2Mode) {
+            const partner = pList[owner.partner];
+            if (partner && partner.active) {
+              const partnerOnDest = partner.tokens.some(function (pt) {
+                return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack;
+              });
+              if (partnerOnDest && !isSquareSafeFromCapture(destTrack)) {
+                score += rulesConfig.pairBlockadeRule ? 145 : 55;
+              }
+            }
+          }
+
+          if (isFfaMode) {
+            score -= destDanger * 0.5;
+          }
+
+          if (!ownerNeedsKill) {
+            score += (newLapPos / 50) * 85;
+          } else if (newLapPos >= 45 && victims.length === 0) {
+            score -= 35;
+          }
+        }
+
+        return score;
+      }
+
+      function evaluateMoveScore(move) {
+        return evaluateMoveScoreOnPlayers(move, gameState.players);
+      }
+
+      function clonePlayersForAiSim(srcPlayers) {
+        return srcPlayers.map(function (pl) {
+          return {
+            id: pl.id,
+            name: pl.name,
+            type: pl.type,
+            active: pl.active,
+            team: pl.team,
+            partner: pl.partner,
+            kills: pl.kills,
+            assistUnlocked: pl.assistUnlocked,
+            tokens: pl.tokens.map(function (tk) {
+              return {
+                owner: tk.owner,
+                id: tk.id,
+                state: tk.state,
+                steps: tk.steps,
+                homeStep: tk.homeStep,
+                lockedThisTurn: tk.lockedThisTurn
+              };
+            })
+          };
+        });
+      }
+
+      function simulateAdvanceOnSimPlayers(token, delta, simPlayers, forceOuterLoop) {
+        if (token.state === 'completed') return { valid: false };
+        if (token.state === 'yard') {
+          if (isSpawnDieValue(delta)) {
+            return { valid: true, isSpawn: true, newState: 'board', newSteps: 0, newHomeStep: 0 };
+          }
+          return { valid: false };
+        }
+        if (token.lockedThisTurn && rulesConfig.closeGameMode) {
+          return { valid: false };
+        }
+
+        const owner = simPlayers[token.owner];
+        const reqKills = getRequiredKillsForHome();
+        const eligibleHome = reqKills <= 0 || (owner && owner.kills >= reqKills);
+
+        if (token.state === 'home_stretch') {
+          const targetHome = token.homeStep + delta;
+          if (targetHome === 6) return { valid: true, newState: 'completed', newSteps: token.steps, newHomeStep: 6 };
+          if (targetHome < 6) return { valid: true, newState: 'home_stretch', newSteps: token.steps, newHomeStep: targetHome };
+          return { valid: false };
+        }
+
+        const posInLap = token.steps % 52;
+        const stepsToHomeGate = 50 - posInLap;
+
+        if (rulesConfig.pairBlockadeRule && token.state === 'board') {
+          const entersHomeColumn = (stepsToHomeGate >= 0 && delta > stepsToHomeGate && eligibleHome && !(forceOuterLoop && rulesConfig.allowOptionalLoopAfterKill));
+          const maxOuterStep = entersHomeColumn ? stepsToHomeGate : (delta - 1);
+          for (let s = 1; s <= maxOuterStep; s++) {
+            const stepTrackIdx = (START_TRACK_INDEX[token.owner] + token.steps + s) % 52;
+            if (isTrackBlockedByJoraOnPlayers(token.owner, stepTrackIdx, simPlayers)) {
+              return { valid: false };
+            }
+          }
+        }
+
+        if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
+          if (eligibleHome) {
+            if (forceOuterLoop && rulesConfig.allowOptionalLoopAfterKill) {
+              return { valid: true, loopedPastHome: true, optionalOuterLoop: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
+            }
+            const intoHome = delta - stepsToHomeGate;
+            if (intoHome === 6) return { valid: true, newState: 'completed', newSteps: token.steps + stepsToHomeGate, newHomeStep: 6 };
+            if (intoHome < 6) return { valid: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: intoHome };
+            return { valid: false };
+          }
+          if (rulesConfig.waitAllGroundAtGateBeforeLoop) {
+            const otherGround = owner.tokens.filter(function (t) { return t.id !== token.id && t.state === 'board'; });
+            if (otherGround.length > 0 && !otherGround.every(function (t) { return (t.steps % 52) === 50; })) {
+              return { valid: false };
+            }
+          }
+          return { valid: true, loopedPastHome: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
+        }
+
+        return { valid: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
+      }
+
+      function generateSimLegalMoves(targetOwnerIdx, simPlayers, unusedDice, spawnedCountThisRoll, rolledDoubleSixBatch) {
+        if (!unusedDice || unusedDice.length === 0) return [];
+        const owner = simPlayers[targetOwnerIdx];
+        if (!owner) return [];
+        const tokens = owner.tokens;
+        const yardTokens = tokens.filter(function (t) { return t.state === 'yard'; });
+        const groundTokens = tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
+        const reqKills = getRequiredKillsForHome();
+        const eligibleHome = reqKills <= 0 || (owner.kills >= reqKills);
+
+        const lockedTokens = groundTokens.filter(function (t) { return t.lockedThisTurn; });
+        if (lockedTokens.length > 0 && rulesConfig.closeGameMode) {
+          const otherPlayable = tokens.some(function (t) {
+            if (t.lockedThisTurn || t.state === 'completed') return false;
+            return unusedDice.some(function (d) {
+              return simulateAdvanceOnSimPlayers(t, d.value, simPlayers, false).valid ||
+                     (t.state === 'board' && eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateAdvanceOnSimPlayers(t, d.value, simPlayers, true).valid);
+            });
+          });
+          if (groundTokens.length <= 1 || !otherPlayable) {
+            lockedTokens.forEach(function (t) { t.lockedThisTurn = false; });
+          }
+        }
+
+        const hasUnusedSpawnDie = unusedDice.some(function (d) { return isSpawnDieValue(d.value); });
+        const forceDoubleSixTwoSpawns = Boolean(
+          rulesConfig.doubleSixSpawnsTwoBeads &&
+          rolledDoubleSixBatch &&
+          yardTokens.length > 0 &&
+          spawnedCountThisRoll < 2 &&
+          unusedDice.some(function (d) { return d.value === 6; })
+        );
+
+        if ((rulesConfig.mandatoryYardSpawn || forceDoubleSixTwoSpawns) && yardTokens.length > 0 && hasUnusedSpawnDie) {
+          const spawnDie = unusedDice.find(function (d) { return d.value === 6; }) || unusedDice.find(function (d) { return isSpawnDieValue(d.value); });
+          const yt = yardTokens[0];
+          const sim = simulateAdvanceOnSimPlayers(yt, spawnDie.value, simPlayers, false);
+          return [{
+            tokenId: yt.id,
+            ownerIdx: targetOwnerIdx,
+            diceIds: [spawnDie.id],
+            delta: spawnDie.value,
+            isMandatorySpawn: true,
+            sim: sim
+          }];
+        }
+
+        const candidateMoves = [];
+        tokens.forEach(function (tk) {
+          if (tk.state === 'completed') return;
+          const seenVals = new Set();
+          unusedDice.forEach(function (die) {
+            if (seenVals.has(die.value)) return;
+            seenVals.add(die.value);
+            const sim = simulateAdvanceOnSimPlayers(tk, die.value, simPlayers, false);
+            if (sim.valid) {
+              candidateMoves.push({
+                tokenId: tk.id,
+                ownerIdx: targetOwnerIdx,
+                diceIds: [die.id],
+                delta: die.value,
+                sim: sim
               });
             }
-
-            // Jora Wall / Pair Blockade & Stacking awareness
-            const friendlyOnDest = owner.tokens.filter(function (ft) {
-              return ft.id !== tk.id && ft.state === 'board' && getOuterTrackIndex(ft) === destTrack;
-            }).length;
-
-            if (friendlyOnDest >= 1 && !isSquareSafeFromCapture(destTrack)) {
-              if (rulesConfig.pairBlockadeRule) {
-                // Forming a Jora wall blocks opponents from jumping past destTrack!
-                score += 85;
-              } else if (rulesConfig.killAllStackedEnemies && destDanger > 0) {
-                // Avoid stacking 2 of our own beads on an unsafe square when killAllStackedEnemies is ON!
-                score -= (110 + destDanger * 0.9);
-              }
-            }
-
-            // 2v2 Partner Synergy
-            if (is2v2Mode) {
-              const partner = gameState.players[owner.partner];
-              if (partner && partner.active) {
-                const partnerOnDest = partner.tokens.some(function (pt) {
-                  return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack;
-                });
-                if (partnerOnDest) {
-                  score += rulesConfig.pairBlockadeRule ? 80 : 38;
+            if (tk.state === 'board' && eligibleHome && rulesConfig.allowOptionalLoopAfterKill) {
+              const posInLap = tk.steps % 52;
+              const stepsToGate = 50 - posInLap;
+              if (stepsToGate >= 0 && die.value > stepsToGate) {
+                const loopSim = simulateAdvanceOnSimPlayers(tk, die.value, simPlayers, true);
+                if (loopSim.valid) {
+                  candidateMoves.push({
+                    tokenId: tk.id,
+                    ownerIdx: targetOwnerIdx,
+                    diceIds: [die.id],
+                    delta: die.value,
+                    isOptionalLoop: true,
+                    sim: loopSim
+                  });
                 }
               }
             }
+          });
 
-            // FFA Self-Preservation: in 4P FFA, 3 opponents roll before our next turn, so safety and advancing the lead bead toward Home are critical
-            if (isFfaMode) {
-              score -= destDanger * 0.45;
-              if (!ownerNeedsKill && tk.steps > 26) {
-                score += 45;
+          if (unusedDice.length >= 2 && (tk.state === 'board' || tk.state === 'home_stretch')) {
+            const seenSums = new Set();
+            for (let i = 0; i < unusedDice.length; i++) {
+              for (let j = i + 1; j < unusedDice.length; j++) {
+                const d0 = unusedDice[i];
+                const d1 = unusedDice[j];
+                const sumDelta = d0.value + d1.value;
+                if (seenSums.has(sumDelta)) continue;
+                seenSums.add(sumDelta);
+                const simC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, false);
+                if (simC.valid) {
+                  candidateMoves.push({
+                    tokenId: tk.id,
+                    ownerIdx: targetOwnerIdx,
+                    diceIds: [d0.id, d1.id],
+                    delta: sumDelta,
+                    isCombined: true,
+                    sim: simC
+                  });
+                }
               }
             }
+          }
+        });
 
-            // Progress pacing: if we already have the required kill(s), prioritize advancing our furthest bead into Home!
-            if (!ownerNeedsKill && tk.state === 'board') {
-              score += (move.sim.newSteps / 50) * 55;
-            }
-          } else {
-            // HARD MODE (without full hardest heuristics)
-            if (is2v2Mode) {
-              const partner = gameState.players[owner.partner];
-              if (partner && partner.tokens.some(function (pt) { return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack; })) {
-                score += 28;
+        if (rulesConfig.mandatoryCapture && candidateMoves.length > 0) {
+          const capOnly = candidateMoves.filter(function (mv) {
+            if (!mv.sim || mv.sim.newState !== 'board') return false;
+            const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
+            return getCaptureCandidatesOnPlayers(mv.ownerIdx, destTrack, simPlayers).length > 0;
+          });
+          if (capOnly.length > 0) return capOnly;
+        }
+
+        return candidateMoves;
+      }
+
+      function applyMoveOnSimPlayers(mv, simPlayers) {
+        const owner = simPlayers[mv.ownerIdx];
+        const tk = owner.tokens[mv.tokenId];
+        tk.state = mv.sim.newState;
+        tk.steps = mv.sim.newSteps;
+        tk.homeStep = mv.sim.newHomeStep;
+
+        let earnedBonus = false;
+        if (tk.state === 'completed' && rulesConfig.bonusRollOnHome) {
+          earnedBonus = true;
+        }
+
+        if (tk.state === 'board') {
+          const destTrack = getOuterTrackIndex(tk);
+          const enemies = getCaptureCandidatesOnPlayers(mv.ownerIdx, destTrack, simPlayers);
+          if (enemies.length > 0) {
+            const bestVictim = chooseBestCaptureVictim(mv.ownerIdx, enemies, rulesConfig.killAllStackedEnemies, simPlayers);
+            if (bestVictim) {
+              const victimsToKill = rulesConfig.killAllStackedEnemies
+                ? enemies.filter(function (e) { return e.ownerIdx === bestVictim.ownerIdx; })
+                : [bestVictim];
+              const vPlayer = simPlayers[bestVictim.ownerIdx];
+
+              victimsToKill.forEach(function (v) {
+                const vTk = vPlayer.tokens[v.tokenId];
+                vTk.state = 'yard';
+                vTk.steps = 0;
+                vTk.homeStep = 0;
+                vTk.lockedThisTurn = false;
+                owner.kills += 1;
+              });
+
+              if (rulesConfig.wipeoutResetsHomeEligibility !== false && (vPlayer.kills || 0) > 0) {
+                const hasInHome = vPlayer.tokens.some(function (t) { return t.state === 'home_stretch' || t.state === 'completed'; });
+                const hasOnBoard = vPlayer.tokens.some(function (t) { return t.state === 'board'; });
+                if (!hasInHome && !hasOnBoard) {
+                  vPlayer.kills = 0;
+                }
+              }
+
+              if (rulesConfig.bonusRollOnKill) {
+                earnedBonus = true;
+              }
+
+              const groundCount = owner.tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; }).length;
+              if (rulesConfig.closeGameMode && groundCount > 1) {
+                tk.lockedThisTurn = true;
               }
             }
           }
         }
 
-        return score;
+        return { earnedBonus: earnedBonus };
+      }
+
+      function evaluatePostTurnBoardSafety(ownerIdx, simPlayers) {
+        const owner = simPlayers[ownerIdx];
+        if (!owner) return 0;
+        const reqKills = getRequiredKillsForHome();
+        const ownerNeedsKill = reqKills > 0 && (owner.kills || 0) < reqKills;
+        const insideHomeCount = owner.tokens.filter(function (t) {
+          return t.state === 'home_stretch' || t.state === 'completed';
+        }).length;
+        const groundBeads = owner.tokens.filter(function (t) {
+          return t.state === 'board';
+        });
+        const isVulnerableToWipeout = Boolean(
+          rulesConfig.wipeoutResetsHomeEligibility !== false &&
+          (owner.kills || 0) > 0 &&
+          insideHomeCount === 0 &&
+          groundBeads.length === 1
+        );
+
+        let boardScore = 0;
+
+        groundBeads.forEach(function (tk) {
+          const tIdx = getOuterTrackIndex(tk);
+          const lapPos = tk.steps % 52;
+          const threat = computeSquareThreatScore(ownerIdx, tIdx, simPlayers);
+          const valMult = 1.0 + (lapPos / 28) + (isVulnerableToWipeout ? 1.5 : 0);
+
+          boardScore -= threat * valMult * 0.92;
+
+          if (isSquareSafeFromCapture(tIdx)) {
+            boardScore += 65 + (lapPos > 24 ? 30 : 0);
+          }
+
+          boardScore += computeOffensiveStalkScore(ownerIdx, tIdx, ownerNeedsKill, simPlayers) * 0.55;
+        });
+
+        return boardScore;
       }
 
       function chooseBestAiMove(legalMoves) {
@@ -5641,96 +6137,85 @@
 
         const diff = rulesConfig.aiDifficulty || 'hardest';
 
-        // In EASY mode, 45% of the time pick a random legal move so beginners can win comfortably
         if (diff === 'easy' && Math.random() < 0.45) {
           return legalMoves[Math.floor(Math.random() * legalMoves.length)];
         }
 
-        // In HARDEST mode, perform full 2-Die Turn Lookahead across (move1, move2) pairs and combined moves!
+        if (diff === 'easy' || diff === 'medium') {
+          const scored = legalMoves.slice().sort(function (a, b) {
+            return evaluateMoveScore(b) - evaluateMoveScore(a);
+          });
+          return scored[0];
+        }
+
         const unusedDice = gameState.dicePool.filter(function (d) { return !d.used; });
-        if (diff === 'hardest' && unusedDice.length === 2) {
-          let bestMove = legalMoves[0];
-          let bestTurnScore = -999999;
+        const maxLookaheadDepth = diff === 'hardest' ? 3 : 2;
 
-          legalMoves.forEach(function (mv1) {
-            let turnScore = evaluateMoveScore(mv1);
+        function searchRemainingTurn(targetOwnerIdx, simPlayers, remDice, depthLeft, spawnedSoFar) {
+          if (depthLeft <= 0 || remDice.length === 0) {
+            return evaluatePostTurnBoardSafety(targetOwnerIdx, simPlayers);
+          }
+          const nextMoves = generateSimLegalMoves(targetOwnerIdx, simPlayers, remDice, spawnedSoFar, gameState.rolledDoubleSixThisBatch);
+          if (nextMoves.length === 0) {
+            return evaluatePostTurnBoardSafety(targetOwnerIdx, simPlayers);
+          }
 
-            // If mv1 is a single-die move, simulate the board state after mv1 and find the best second-die move (mv2)
-            if (!mv1.isCombined && mv1.diceIds.length === 1) {
-              const remainingDie = unusedDice.find(function (d) { return d.id !== mv1.diceIds[0]; });
-              if (remainingDie) {
-                const owner = gameState.players[mv1.ownerIdx];
-                const tk1 = owner.tokens[mv1.tokenId];
-                const destTrack1 = mv1.sim.newState === 'board' ? ((START_TRACK_INDEX[tk1.owner] + mv1.sim.newSteps) % 52) : -1;
-                const victims1 = destTrack1 >= 0 ? getCaptureCandidatesAtTrackIndex(mv1.ownerIdx, destTrack1) : [];
-                const locksAfterMv1 = Boolean(victims1.length > 0 && rulesConfig.closeGameMode);
-                const addedKills1 = rulesConfig.killAllStackedEnemies ? victims1.length : (victims1.length > 0 ? 1 : 0);
-                const willHomeBeEligible = canOwnerEnterHomeStretch(mv1.ownerIdx) || ((owner.kills + addedKills1) >= getRequiredKillsForHome());
+          nextMoves.forEach(function (nm) {
+            nm._heurScore = evaluateMoveScoreOnPlayers(nm, simPlayers);
+          });
+          nextMoves.sort(function (a, b) { return b._heurScore - a._heurScore; });
 
-                const simTokens = owner.tokens.map(function (orig) {
-                  if (orig.id !== mv1.tokenId) return Object.assign({}, orig);
-                  return {
-                    owner: orig.owner,
-                    id: orig.id,
-                    state: mv1.sim.newState,
-                    steps: mv1.sim.newSteps,
-                    homeStep: mv1.sim.newHomeStep,
-                    lockedThisTurn: locksAfterMv1
-                  };
-                });
+          const beam = nextMoves.slice(0, 6);
+          let bestContinuation = -999999;
 
-                // Check if Close Game lock unlocks because no other token can move
-                const simGround = simTokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
-                const unlockedCanMove = simTokens.some(function (t) {
-                  if (t.lockedThisTurn || t.state === 'completed') return false;
-                  return simulateTokenAdvance(t, remainingDie.value, willHomeBeEligible, simTokens, false).valid;
-                });
-                if (simGround.length <= 1 || !unlockedCanMove) {
-                  simTokens.forEach(function (t) { t.lockedThisTurn = false; });
-                }
+          beam.forEach(function (nm) {
+            const nextSimPlayers = clonePlayersForAiSim(simPlayers);
+            const stepRes = applyMoveOnSimPlayers(nm, nextSimPlayers);
+            const nextRemDice = remDice.filter(function (d) { return !nm.diceIds.includes(d.id); });
+            const nextSpawned = spawnedSoFar + (nm.sim && nm.sim.isSpawn ? 1 : 0);
 
-                let bestMv2Score = -99999;
-                simTokens.forEach(function (simTk) {
-                  if (simTk.state === 'completed') return;
-                  const sim2 = simulateTokenAdvance(simTk, remainingDie.value, willHomeBeEligible, simTokens, false);
-                  if (sim2.valid) {
-                    let s2 = remainingDie.value * 3.2;
-                    if (sim2.isSpawn) s2 += 120;
-                    if (sim2.newState === 'completed') s2 += 320;
-                    else if (sim2.newState === 'home_stretch') s2 += 200 + sim2.newHomeStep * 12;
-                    else if (sim2.newState === 'board') {
-                      const dTrack2 = (START_TRACK_INDEX[simTk.owner] + sim2.newSteps) % 52;
-                      const v2 = getCaptureCandidatesAtTrackIndex(mv1.ownerIdx, dTrack2);
-                      if (v2.length > 0) s2 += 300;
-                      if (isSquareSafeFromCapture(dTrack2)) s2 += 90;
-                      s2 -= computeSquareThreatScore(mv1.ownerIdx, dTrack2) * 0.85;
-                    }
-                    if (s2 > bestMv2Score) bestMv2Score = s2;
-                  }
-                });
-
-                if (bestMv2Score > -99999) {
-                  turnScore += bestMv2Score * 0.88;
-                }
-              }
-            } else if (mv1.isCombined) {
-              // Combined move uses both dice at once; scale appropriately so it competes fairly with 2-move sequences
-              turnScore *= 1.15;
+            let branchScore = nm._heurScore;
+            if (stepRes.earnedBonus) {
+              branchScore += 280;
             }
-
-            if (turnScore > bestTurnScore) {
-              bestTurnScore = turnScore;
-              bestMove = mv1;
+            branchScore += searchRemainingTurn(targetOwnerIdx, nextSimPlayers, nextRemDice, depthLeft - 1, nextSpawned) * 0.9;
+            if (branchScore > bestContinuation) {
+              bestContinuation = branchScore;
             }
           });
 
-          return bestMove;
+          return bestContinuation;
         }
 
-        const scored = legalMoves.slice().sort(function (a, b) {
-          return evaluateMoveScore(b) - evaluateMoveScore(a);
+        let bestMove = legalMoves[0];
+        let bestTotalScore = -9999999;
+
+        legalMoves.forEach(function (mv1) {
+          const step1Score = evaluateMoveScoreOnPlayers(mv1, gameState.players);
+          const simPlayersAfter1 = clonePlayersForAiSim(gameState.players);
+          const res1 = applyMoveOnSimPlayers(mv1, simPlayersAfter1);
+          const remDiceAfter1 = unusedDice.filter(function (d) { return !mv1.diceIds.includes(d.id); });
+          const nextSpawned = (gameState.spawnedBeadsThisRoll || 0) + (mv1.sim && mv1.sim.isSpawn ? 1 : 0);
+
+          let totalSeqScore = step1Score;
+          if (res1.earnedBonus) {
+            totalSeqScore += 320;
+          }
+
+          if (remDiceAfter1.length > 0) {
+            const contScore = searchRemainingTurn(mv1.ownerIdx, simPlayersAfter1, remDiceAfter1, maxLookaheadDepth - 1, nextSpawned);
+            totalSeqScore += contScore * 0.92;
+          } else {
+            totalSeqScore += evaluatePostTurnBoardSafety(mv1.ownerIdx, simPlayersAfter1);
+          }
+
+          if (totalSeqScore > bestTotalScore) {
+            bestTotalScore = totalSeqScore;
+            bestMove = mv1;
+          }
         });
-        return scored[0];
+
+        return bestMove;
       }
 
       function scheduleAiIfNeeded() {
@@ -5766,13 +6251,11 @@
         } else if (gameState.phase === 'MOVE') {
           gameState.aiTimer = setTimeout(function () {
             if (canPlayerRollBonusNow()) {
-              const legal = computeLegalMoves();
-              const hasCapture = legal.some(function (m) {
-                if (!m.sim || m.sim.newState !== 'board') return false;
-                const dTrack = (START_TRACK_INDEX[m.ownerIdx] + m.sim.newSteps) % 52;
-                return getCaptureCandidatesAtTrackIndex(m.ownerIdx, dTrack).length > 0;
+              const legalNow = computeLegalMoves();
+              const hasImmediateWinningMove = legalNow.some(function (m) {
+                return evaluateMoveScore(m) >= 8500;
               });
-              if (!hasCapture) {
+              if (!hasImmediateWinningMove) {
                 rollDiceForCurrentPlayer();
                 return;
               }
@@ -5787,7 +6270,6 @@
           }, 440);
         }
       }
-
       // --- 8. CANVAS BOARD RENDERER (With Active Turn Yard Glow, Moved Bead Trail, Teammate Badges & On-Board Dice!) ---
       const canvas = document.getElementById('ludoCanvas');
       const ctx = canvas.getContext('2d');
