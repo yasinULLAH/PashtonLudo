@@ -5401,6 +5401,7 @@
           break;
         }
         gameState.phase = 'ROLL';
+        gameState.dicePool = [];
         gameState.selectedTokenKey = null;
         gameState.draggingToken = null;
         gameState.preferredDieFilter = null;
@@ -5567,18 +5568,24 @@
             }
           }
 
-          // Stack Roll / Accumulate Sixes Before Moving check
           if (rulesConfig.stackRollBeforeMoving && isSixBonusRoll) {
-            const curStackStr = gameState.dicePool.filter(function (d) { return !d.used; }).map(function (d) { return d.value; }).join(' + ');
-            gameState.earnedSixBonusThisRoll = false;
-            gameState.phase = 'ROLL';
-            addGameLog('📚 Stack Roll: ' + actor.name + ' queued [' + curStackStr + '] — Bonus roll earned! Roll again before moving.', 'gold');
-            showToast('📚 Queued [' + curStackStr + ']! Roll your bonus turn first, then move all together!');
-            saveActiveMatchSnapshot();
-            resetTurnCountdown();
-            updateAllUI();
-            scheduleAiIfNeeded();
-            return;
+            const targetOwnerIdx = getControlledOwnerIndex(actor.id);
+            const targetPlayer = gameState.players[targetOwnerIdx];
+            const hasGroundBeads = Boolean(targetPlayer && targetPlayer.tokens.some(function (t) {
+              return t.state === 'board' || t.state === 'home_stretch';
+            }));
+            if (hasGroundBeads) {
+              const curStackStr = gameState.dicePool.filter(function (d) { return !d.used; }).map(function (d) { return d.value; }).join(' + ');
+              gameState.earnedSixBonusThisRoll = false;
+              gameState.phase = 'ROLL';
+              addGameLog('📚 Stack Roll: ' + actor.name + ' queued [' + curStackStr + '] — Bonus roll earned! Roll again before moving.', 'gold');
+              showToast('📚 Queued [' + curStackStr + ']! Roll your bonus turn first, then move all together!');
+              saveActiveMatchSnapshot();
+              resetTurnCountdown();
+              updateAllUI();
+              scheduleAiIfNeeded();
+              return;
+            }
           }
 
           gameState.phase = 'MOVE';

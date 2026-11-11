@@ -76,7 +76,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "26894a6595d2f0bfef361455fd365bd5"
+        "revision": "7f7b6abbfdb0b576c84bc90f6035190f"
     },
     {
         "url": "LICENSE",
@@ -104,7 +104,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "1c36de464c017d6211dce56998285c1a"
+        "revision": "a7cf3deb21d98c5b571057d759cc6b3b"
     },
     {
         "url": "transcript of the vioces.txt",
