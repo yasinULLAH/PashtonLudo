@@ -72,6 +72,10 @@ if (workbox) {
     },
     {
         "url": "easy and short V5 via python and json.py",
+        "revision": "9c8b29467d8795a44e0ce2e4404f2613"
+    },
+    {
+        "url": "easy and short V5 via python and json.py.bak",
         "revision": "843b5c45bd34ca3b08e6d46f993b2f37"
     },
     {
@@ -80,11 +84,11 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "2e7663a9b239bca40b5bab601bd44c4b"
+        "revision": "e2504f463e42efb4c04399bbe312e7ff"
     },
     {
         "url": "index.html.bak",
-        "revision": "7f7b6abbfdb0b576c84bc90f6035190f"
+        "revision": "696ee2868e5005111504be62f890aaac"
     },
     {
         "url": "LICENSE",
@@ -100,7 +104,7 @@ if (workbox) {
     },
     {
         "url": "patch.json",
-        "revision": "a930e5c035784d7c1d614cf044fdaa7f"
+        "revision": "e14d335c2b885b3466bef88378e42ea2"
     },
     {
         "url": "pwa-register.js",
@@ -116,7 +120,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "d648d3169c4d9a73d969caf560606100"
+        "revision": "c0149e53811c5a98c2227287072290c3"
     },
     {
         "url": "transcript of the vioces.txt",

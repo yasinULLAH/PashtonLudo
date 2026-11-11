@@ -79,15 +79,94 @@
     ::-webkit-scrollbar-track { background: rgba(251, 191, 36, 0.1); }
     ::-webkit-scrollbar-thumb { background: rgba(217, 119, 6, 0.35); border-radius: 9999px; }
 
-    @keyframes diceShake {
-      0% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(-16deg) scale(1.1) translateY(-2px); }
-      50% { transform: rotate(16deg) scale(1.14) translateY(-4px); }
-      75% { transform: rotate(-12deg) scale(1.08) translateY(-2px); }
-      100% { transform: rotate(0deg) scale(1); }
+    @keyframes diceBounceSlot3D {
+      0% { transform: translateY(0px) scale(1); }
+      30% { transform: translateY(-7px) scale(1.14); }
+      60% { transform: translateY(-3px) scale(1.08); }
+      85% { transform: translateY(-5px) scale(1.11); }
+      100% { transform: translateY(0px) scale(1); }
     }
     .dice-rolling {
-      animation: diceShake 0.34s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+      animation: diceBounceSlot3D 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    }
+    /* ==================== TRUE 6-FACE 3D CSS DICE CUBE (FULL CLEAR FRONT FACE) ==================== */
+    .die-3d-scene {
+      width: 30px;
+      height: 30px;
+      perspective: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      --cube-size: 28px;
+      --cube-half: 14px;
+    }
+    .die-3d-cube {
+      width: var(--cube-size);
+      height: var(--cube-size);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+    .die-3d-cube.is-tumbling-3d {
+      transition: transform 0.40s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+    .die-3d-face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--cube-size);
+      height: var(--cube-size);
+      border-radius: 6px;
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 72%, #e2e8f0 100%);
+      border: 1.8px solid #cbd5e1;
+      box-shadow: inset 0 0 3px rgba(15, 23, 42, 0.18);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      padding: 3px;
+      gap: 2px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      box-sizing: border-box;
+    }
+    .die-3d-face.active-landed-face {
+      border-color: #f59e0b;
+      background: linear-gradient(145deg, #ffffff 0%, #fffbeb 80%, #fef3c7 100%);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45), inset 0 0 2px rgba(217, 119, 6, 0.35);
+    }
+    .die-3d-cube.die-used-dim .die-3d-face {
+      background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+      opacity: 0.42;
+    }
+    .die-3d-face-1 { transform: rotateY(0deg) translateZ(var(--cube-half)); }
+    .die-3d-face-6 { transform: rotateY(180deg) translateZ(var(--cube-half)); }
+    .die-3d-face-2 { transform: rotateY(90deg) translateZ(var(--cube-half)); }
+    .die-3d-face-5 { transform: rotateY(-90deg) translateZ(var(--cube-half)); }
+    .die-3d-face-3 { transform: rotateX(90deg) translateZ(var(--cube-half)); }
+    .die-3d-face-4 { transform: rotateX(-90deg) translateZ(var(--cube-half)); }
+    .die-3d-pip {
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      box-shadow: inset 0 1px 1.5px rgba(0, 0, 0, 0.6);
+    }
+    .die-3d-pip.pip-red {
+      background: radial-gradient(circle at 35% 35%, #fb7185 0%, #e11d48 65%, #9f1239 100%);
+    }
+    .die-3d-pip.pip-dark {
+      background: radial-gradient(circle at 35% 35%, #334155 0%, #0f172a 75%, #020617 100%);
+    }
+    .die-3d-face-1 .die-3d-pip.pip-red {
+      transform: scale(1.38);
+    }
+    #dieStatus0, #dieStatus1 {
+      bottom: -5px !important;
+      z-index: 25;
+      pointer-events: none;
+      font-size: 7.5px !important;
+      line-height: 1.1;
+      padding: 0 3px !important;
     }
 
     @keyframes pulseRing {
@@ -337,27 +416,28 @@
       overflow: hidden;
       box-sizing: border-box;
     }
+    #centerDiceDock {
+      overflow: visible !important;
+    }
     #dieSlot0, #dieSlot1 {
-      width: 42px;
-      height: 42px;
-      padding: 4px;
+      width: 44px;
+      height: 44px;
+      padding: 3px;
       box-sizing: border-box;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      overflow: visible !important;
+      background: radial-gradient(circle at 30% 25%, #1e293b 0%, #0f172a 100%) !important;
+      box-shadow: 0 5px 12px rgba(15, 23, 42, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
     }
     #dieFace0, #dieFace1 {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 2px;
-    }
-    #dieFace0 > div, #dieFace1 > div {
-      border-radius: 9999px;
-      width: 100%;
-      height: 100%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3px;
     }
     .bg-rose-600 { background-color: #e11d48; }
     .bg-slate-900 { background-color: #0f172a; }
@@ -709,9 +789,20 @@
       }
       #centerDiceDock #dieFace0,
       #centerDiceDock #dieFace1 {
-        width: 21px !important;
-        height: 21px !important;
-        gap: 1.5px !important;
+        width: 24px !important;
+        height: 24px !important;
+        margin-bottom: 2px !important;
+      }
+      #centerDiceDock .die-3d-scene {
+        width: 24px !important;
+        height: 24px !important;
+        --cube-size: 22px;
+        --cube-half: 11px;
+      }
+      #centerDiceDock .die-3d-face {
+        padding: 2.2px;
+        gap: 1.5px;
+        border-radius: 4.5px;
       }
       #centerDiceDock #dieStatus0,
       #centerDiceDock #dieStatus1 {
@@ -2848,12 +2939,16 @@
 
         if (type === 'roll') {
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(220, now);
-          osc.frequency.exponentialRampToValueAtTime(520, now + 0.14);
-          gain.gain.setValueAtTime(0.16, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+          osc.frequency.setValueAtTime(210, now);
+          osc.frequency.exponentialRampToValueAtTime(540, now + 0.09);
+          osc.frequency.setValueAtTime(260, now + 0.10);
+          osc.frequency.exponentialRampToValueAtTime(620, now + 0.21);
+          osc.frequency.setValueAtTime(320, now + 0.22);
+          osc.frequency.exponentialRampToValueAtTime(480, now + 0.34);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.36);
           osc.start(now);
-          osc.stop(now + 0.16);
+          osc.stop(now + 0.36);
         } else if (type === 'step') {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(460, now);
@@ -5697,7 +5792,9 @@
 
         const timings = getAiSpeedTimings();
         const isAiActor = Boolean(actor && (actor.type === 'ai' || actor.isBotTakeover));
-        const rollTumbleDuration = isAiActor ? timings.diceRollDuration : 280;
+        const rollTumbleDuration = isAiActor ? Math.max(420, timings.diceRollDuration) : 440;
+
+        trigger3dDiceRollTumble(effectiveDiceCount, actor.id, rollTumbleDuration);
 
         setTimeout(function () {
           dSlot0.classList.remove('dice-rolling');
@@ -5775,6 +5872,7 @@
           }
 
           gameState.earnedSixBonusThisRoll = isSixBonusRoll;
+          gameState.justRolled3dFlag = true;
           gameState.preferredDieFilter = null;
           gameState.selectedTokenKey = null;
 
@@ -7112,33 +7210,43 @@
             ctx.restore();
           }
 
-          // On-Board Interactive Dice / Roll Pill in the center of the Active Player's Yard (Especially handy in Immersive Board-Only Mode!)
+          // On-Board Interactive 3D Dice & Roll Stage in the center of the Active Player's Yard
           if (isCurrentTurnYard && pl && pl.active) {
-            const pillW = Math.min(sizeW - cellW * 1.3, cell * (isCompactCanvas ? 2.2 : 2.5));
-            const pillH = Math.max(cellH * (isCompactCanvas ? 0.50 : 0.60), cell * (isCompactCanvas ? 0.54 : 0.68));
+            const pillW = Math.min(sizeW - cellW * 1.15, cell * (isCompactCanvas ? 2.5 : 2.8));
+            const pillH = Math.max(cellH * (isCompactCanvas ? 0.58 : 0.68), cell * (isCompactCanvas ? 0.62 : 0.76));
             const px = x + (sizeW - pillW) / 2;
             const py = y + (sizeH - pillH) / 2;
-            ctx.save();
-            ctx.fillStyle = gameState.phase === 'ROLL' ? '#f59e0b' : '#0f172a';
-            ctx.beginPath();
-            ctx.roundRect(px, py, pillW, pillH, 8);
-            ctx.fill();
-            ctx.lineWidth = 1.6;
-            ctx.strokeStyle = '#ffffff';
-            ctx.stroke();
+            renderedYardRollHitbox = { x: px, y: py, w: pillW, h: pillH };
 
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.20 : 0.24)) + 'px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            if (gameState.phase === 'ROLL') {
-              ctx.fillText('🎲 TAP TO ROLL', x + sizeW / 2, y + sizeH / 2);
-              renderedYardRollHitbox = { x: px, y: py, w: pillW, h: pillH };
+            if (canvas3dRollState.active && canvas3dRollState.actorIdx === yo.pIdx) {
+              drawCanvas3dRollingDiceInYard(ctx, x + sizeW / 2, y + sizeH / 2, cell, canvas3dRollState);
+            } else if (gameState.phase === 'ROLL') {
+              ctx.save();
+              ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+              ctx.beginPath();
+              ctx.roundRect(px, py, pillW, pillH, 10);
+              ctx.fill();
+              ctx.lineWidth = 2;
+              ctx.strokeStyle = '#f59e0b';
+              ctx.stroke();
+              const dSize = cell * (isCompactCanvas ? 0.42 : 0.48);
+              drawIsometric3dDieOnCanvas(ctx, px + dSize * 0.95, y + sizeH / 2, dSize, 6, false, 0, 0);
+              ctx.fillStyle = '#fde047';
+              ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.22)) + 'px Inter, sans-serif';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              ctx.fillText('TAP TO ROLL', px + dSize * 1.65, y + sizeH / 2);
+              ctx.restore();
             } else {
-              const dVals = gameState.dicePool.map(function (d) { return d.used ? ('✓' + d.value) : String(d.value); }).join(' + ');
-              ctx.fillText('🎲 ' + dVals, x + sizeW / 2, y + sizeH / 2);
+              const poolToShow = gameState.dicePool.slice(0, 2);
+              const dSize = cell * (isCompactCanvas ? 0.46 : 0.54);
+              if (poolToShow.length === 1) {
+                drawIsometric3dDieOnCanvas(ctx, x + sizeW / 2, y + sizeH / 2, dSize, poolToShow[0].value, poolToShow[0].used, 0, 0);
+              } else if (poolToShow.length >= 2) {
+                drawIsometric3dDieOnCanvas(ctx, x + sizeW / 2 - dSize * 0.68, y + sizeH / 2, dSize, poolToShow[0].value, poolToShow[0].used, 0, 0);
+                drawIsometric3dDieOnCanvas(ctx, x + sizeW / 2 + dSize * 0.68, y + sizeH / 2, dSize, poolToShow[1].value, poolToShow[1].used, 0, 0);
+              }
             }
-            ctx.restore();
           }
         });
 
@@ -7769,7 +7877,7 @@
         window.addEventListener('touchend', handlePointerEnd);
       }
 
-      // --- 10. UI RENDERING & DICE PIP FACES ---
+      // --- 10. TRUE 3D DICE ENGINE (CSS 3D CUBES + ON-BOARD 3D ISOMETRIC TUMBLE) ---
       const PIP_LAYOUTS = {
         1: [4],
         2: [0, 8],
@@ -7779,16 +7887,240 @@
         6: [0, 2, 3, 5, 6, 8]
       };
 
-      function renderDieFace(containerId, value, isUsed) {
-        const container = document.getElementById(containerId);
+      // Exact front-facing 3D angles so the landed face is 100% clear, square, and unobstructed
+      const FACE_3D_BASE_ANGLES = {
+        1: { rx: -5, ry: 5, rz: 0 },
+        6: { rx: -5, ry: 185, rz: 0 },
+        2: { rx: -5, ry: -85, rz: 0 },
+        5: { rx: -5, ry: 95, rz: 0 },
+        3: { rx: -95, ry: 0, rz: 0 },
+        4: { rx: 85, ry: 0, rz: 0 }
+      };
+
+      const die3dSpinState = {
+        dieFace0: { spinsX: 0, spinsY: 0, spinsZ: 0, lastVal: 6 },
+        dieFace1: { spinsX: 0, spinsY: 0, spinsZ: 0, lastVal: 6 },
+        replayDieFace0: { spinsX: 0, spinsY: 0, spinsZ: 0, lastVal: 6 },
+        replayDieFace1: { spinsX: 0, spinsY: 0, spinsZ: 0, lastVal: 6 }
+      };
+
+      let canvas3dRollState = {
+        active: false,
+        actorIdx: 0,
+        diceCount: 2,
+        startTime: 0,
+        duration: 440,
+        rafId: null,
+        tempVal0: 6,
+        tempVal1: 5,
+        angle0: 0,
+        angle1: 0,
+        bounce: 0
+      };
+
+      function ensure3dCubeDom(container) {
+        if (!container) return null;
+        let cube = container.querySelector('.die-3d-cube');
+        if (cube) return cube;
         container.innerHTML = '';
-        const pips = PIP_LAYOUTS[value] || [4];
-        for (let i = 0; i < 9; i++) {
-          const dot = document.createElement('div');
-          if (pips.includes(i)) {
-            dot.className = 'w-full h-full rounded-full ' + (value === 6 ? 'bg-rose-600' : 'bg-slate-900') + (isUsed ? ' opacity-30' : '');
+        container.classList.add('die-3d-scene');
+        cube = document.createElement('div');
+        cube.className = 'die-3d-cube';
+
+        [1, 2, 3, 4, 5, 6].forEach(function (faceVal) {
+          const faceEl = document.createElement('div');
+          faceEl.className = 'die-3d-face die-3d-face-' + faceVal;
+          faceEl.dataset.faceVal = String(faceVal);
+          const pips = PIP_LAYOUTS[faceVal] || [4];
+          const isRedPip = (faceVal === 1 || faceVal === 6);
+          for (let i = 0; i < 9; i++) {
+            const cell = document.createElement('div');
+            if (pips.includes(i)) {
+              cell.className = 'die-3d-pip ' + (isRedPip ? 'pip-red' : 'pip-dark');
+            }
+            faceEl.appendChild(cell);
           }
-          container.appendChild(dot);
+          cube.appendChild(faceEl);
+        });
+
+        container.appendChild(cube);
+        return cube;
+      }
+
+      function renderDieFace(containerId, value, isUsed, forceExtraSpin) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const cube = ensure3dCubeDom(container);
+        if (!cube) return;
+
+        const cleanVal = (value >= 1 && value <= 6) ? value : 6;
+        if (!die3dSpinState[containerId]) {
+          die3dSpinState[containerId] = { spinsX: 0, spinsY: 0, spinsZ: 0, lastVal: 6 };
+        }
+        const st = die3dSpinState[containerId];
+        if (forceExtraSpin) {
+          st.spinsX += 2;
+          st.spinsY += 2;
+        } else if (st.lastVal !== cleanVal) {
+          st.spinsX += 1;
+          st.spinsY += 1;
+        }
+        st.lastVal = cleanVal;
+
+        const base = FACE_3D_BASE_ANGLES[cleanVal] || FACE_3D_BASE_ANGLES[6];
+        const rx = base.rx + st.spinsX * 360;
+        const ry = base.ry + st.spinsY * 360;
+        const rz = base.rz;
+
+        cube.querySelectorAll('.die-3d-face').forEach(function (fEl) {
+          fEl.classList.toggle('active-landed-face', Number(fEl.dataset.faceVal) === cleanVal);
+        });
+
+        cube.classList.remove('is-tumbling-3d');
+        cube.classList.toggle('die-used-dim', Boolean(isUsed));
+        cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg)';
+      }
+
+      function trigger3dDiceRollTumble(diceCount, actorIdx, durationMs) {
+        ['dieFace0', 'dieFace1'].forEach(function (id, idx) {
+          const container = document.getElementById(id);
+          if (!container) return;
+          const cube = ensure3dCubeDom(container);
+          if (!cube) return;
+          const st = die3dSpinState[id];
+          st.spinsX += (idx === 0 ? 3 : 2);
+          st.spinsY += (idx === 0 ? 2 : 3);
+          st.spinsZ += 1;
+          cube.classList.remove('die-used-dim');
+          cube.classList.add('is-tumbling-3d');
+          const tumbleRx = st.spinsX * 360 + (idx === 0 ? 195 : -215);
+          const tumbleRy = st.spinsY * 360 + (idx === 0 ? -230 : 205);
+          const tumbleRz = st.spinsZ * 360 + (idx === 0 ? 110 : -125);
+          cube.style.transform = 'scale(1.16) rotateX(' + tumbleRx + 'deg) rotateY(' + tumbleRy + 'deg) rotateZ(' + tumbleRz + 'deg)';
+        });
+
+        if (canvas3dRollState.rafId) cancelAnimationFrame(canvas3dRollState.rafId);
+        canvas3dRollState.active = true;
+        canvas3dRollState.actorIdx = actorIdx || 0;
+        canvas3dRollState.diceCount = diceCount || 2;
+        canvas3dRollState.startTime = performance.now();
+        canvas3dRollState.duration = durationMs || 440;
+
+        function animateCanvasDiceTick(now) {
+          const elapsed = now - canvas3dRollState.startTime;
+          const progress = Math.min(1, elapsed / Math.max(1, canvas3dRollState.duration));
+          canvas3dRollState.bounce = Math.abs(Math.sin(progress * Math.PI * 2.5)) * (1 - progress * 0.45);
+          canvas3dRollState.angle0 = progress * Math.PI * 6;
+          canvas3dRollState.angle1 = -progress * Math.PI * 6.5;
+          if (Math.random() < 0.42) {
+            canvas3dRollState.tempVal0 = Math.floor(Math.random() * 6) + 1;
+            canvas3dRollState.tempVal1 = Math.floor(Math.random() * 6) + 1;
+          }
+          drawBoard();
+          if (progress < 1 && canvas3dRollState.active) {
+            canvas3dRollState.rafId = requestAnimationFrame(animateCanvasDiceTick);
+          } else {
+            canvas3dRollState.active = false;
+            canvas3dRollState.rafId = null;
+            drawBoard();
+          }
+        }
+        canvas3dRollState.rafId = requestAnimationFrame(animateCanvasDiceTick);
+      }
+
+      function drawDiePipsOnCanvasQuad(ctx, cx, cy, faceSize, val, isRed) {
+        const pips = PIP_LAYOUTS[val] || [4];
+        const step = faceSize * 0.27;
+        const pipR = faceSize * (val === 1 ? 0.135 : 0.095);
+        pips.forEach(function (idx) {
+          const r = Math.floor(idx / 3) - 1;
+          const c = (idx % 3) - 1;
+          const px = cx + c * step;
+          const py = cy + r * step;
+          ctx.beginPath();
+          ctx.arc(px, py, pipR, 0, Math.PI * 2);
+          ctx.fillStyle = isRed ? '#e11d48' : '#0f172a';
+          ctx.fill();
+        });
+      }
+
+      function drawIsometric3dDieOnCanvas(ctx, cx, cy, size, value, isUsed, rotAngle, bounceHeight) {
+        const val = (value >= 1 && value <= 6) ? value : 6;
+        const half = size * 0.48;
+        const depthX = size * 0.14;
+        const depthY = size * 0.13;
+        const liftY = (bounceHeight || 0) * size * 0.65;
+
+        ctx.save();
+        if (isUsed) ctx.globalAlpha = 0.48;
+
+        const shadowScale = 1 + (bounceHeight || 0) * 0.28;
+        ctx.beginPath();
+        ctx.ellipse(cx + depthX * 0.5, cy + half * 0.95, half * 1.15 * shadowScale, half * 0.42 * shadowScale, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.36)';
+        ctx.fill();
+
+        ctx.translate(cx - depthX * 0.3, cy - liftY + depthY * 0.25);
+        if (rotAngle) {
+          ctx.rotate(rotAngle);
+        }
+
+        const x0 = -half, y0 = -half, w = half * 2, h = half * 2;
+
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x0 + depthX, y0 - depthY);
+        ctx.lineTo(x0 + w + depthX, y0 - depthY);
+        ctx.lineTo(x0 + w, y0);
+        ctx.closePath();
+        ctx.fillStyle = '#fef3c7';
+        ctx.fill();
+        ctx.lineWidth = 1.3;
+        ctx.strokeStyle = '#d97706';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(x0 + w * 0.35 + depthX * 0.5, y0 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
+        ctx.arc(x0 + w * 0.68 + depthX * 0.5, y0 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
+        ctx.fillStyle = '#78350f';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(x0 + w, y0);
+        ctx.lineTo(x0 + w + depthX, y0 - depthY);
+        ctx.lineTo(x0 + w + depthX, y0 + h - depthY);
+        ctx.lineTo(x0 + w, y0 + h);
+        ctx.closePath();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fill();
+        ctx.strokeStyle = '#94a3b8';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(x0 + w + depthX * 0.5, y0 + h * 0.32 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
+        ctx.arc(x0 + w + depthX * 0.5, y0 + h * 0.65 - depthY * 0.5, size * 0.045, 0, Math.PI * 2);
+        ctx.fillStyle = '#334155';
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(x0, y0, w, h, Math.max(3, size * 0.12));
+        ctx.fill();
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = val === 6 ? '#e11d48' : '#f59e0b';
+        ctx.stroke();
+
+        drawDiePipsOnCanvasQuad(ctx, 0, 0, w, val, val === 6 || val === 1);
+        ctx.restore();
+      }
+
+      function drawCanvas3dRollingDiceInYard(ctx, centerX, centerY, cell, animState) {
+        const dSize = cell * 0.58;
+        if (animState.diceCount === 1) {
+          drawIsometric3dDieOnCanvas(ctx, centerX, centerY, dSize, animState.tempVal0, false, animState.angle0, animState.bounce);
+        } else {
+          drawIsometric3dDieOnCanvas(ctx, centerX - dSize * 0.72, centerY, dSize, animState.tempVal0, false, animState.angle0, animState.bounce);
+          drawIsometric3dDieOnCanvas(ctx, centerX + dSize * 0.72, centerY, dSize, animState.tempVal1, false, animState.angle1, animState.bounce * 0.85);
         }
       }
 
@@ -7873,7 +8205,8 @@
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
         const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : (gameState.dicePool[0] || { id: 0, value: 6, used: true });
         const d1 = (gameState.dicePool.length > 2 && activePool.length > 1) ? activePool[1] : (gameState.dicePool[1] || { id: 1, value: 6, used: true });
-        renderDieFace('dieFace0', d0.value, d0.used && gameState.phase === 'MOVE');
+        const justRolledSpin = Boolean(gameState.justRolled3dFlag);
+        renderDieFace('dieFace0', d0.value, d0.used && gameState.phase === 'MOVE', justRolledSpin);
         document.getElementById('dieStatus0').textContent = (d0.used && gameState.phase === 'MOVE') ? '✓' : ('D' + (d0.id + 1) + ':' + d0.value);
 
         const dieSlot0 = document.getElementById('dieSlot0');
@@ -7886,7 +8219,10 @@
         if (effectiveDiceCount === 2 || (gameState.dicePool.length >= 2 && activePool.length >= 2)) {
           dieSlot1.classList.remove('hidden');
           divider.classList.remove('hidden');
-          renderDieFace('dieFace1', d1.value, d1.used && gameState.phase === 'MOVE');
+          renderDieFace('dieFace1', d1.value, d1.used && gameState.phase === 'MOVE', justRolledSpin);
+        }
+        gameState.justRolled3dFlag = false;
+        if (effectiveDiceCount === 2 || (gameState.dicePool.length >= 2 && activePool.length >= 2)) {
           document.getElementById('dieStatus1').textContent = (d1.used && gameState.phase === 'MOVE') ? '✓' : ('D' + (d1.id + 1) + ':' + d1.value);
           const totalUnusedSum = activePool.length >= 2
             ? activePool.reduce(function (acc, item) { return acc + item.value; }, 0)
@@ -11393,10 +11729,26 @@
         document.getElementById('replayEventTitle').textContent = fr.title || 'Replay Step';
         document.getElementById('replayEventSubtitle').textContent = fr.subtitle || ('Step ' + idx + ' of ' + total);
 
+        const diceReadoutBox = document.getElementById('replayDiceReadout');
+        if (diceReadoutBox && !document.getElementById('replayDieFace0')) {
+          diceReadoutBox.innerHTML =
+            '<div class="die-3d-scene" id="replayDieFace0" style="--cube-size: 18px; --cube-half: 9px; width: 19px; height: 19px;"></div>' +
+            '<div class="die-3d-scene hidden" id="replayDieFace1" style="--cube-size: 18px; --cube-half: 9px; width: 19px; height: 19px;"></div>' +
+            '<span class="font-mono font-black text-[11px] text-amber-300 ml-0.5" id="replayDiceText">-</span>';
+        }
         const diceTextEl = document.getElementById('replayDiceText');
+        const rDie1El = document.getElementById('replayDieFace1');
         if (Array.isArray(fr.dicePool) && fr.dicePool.length > 0) {
-          diceTextEl.textContent = fr.dicePool.map(function (d) { return d.value; }).join(' + ');
-        } else {
+          if (diceTextEl) diceTextEl.textContent = fr.dicePool.map(function (d) { return d.value; }).join('+');
+          const forceReplaySpin = (fr.type === 'ROLL');
+          renderDieFace('replayDieFace0', fr.dicePool[0].value, false, forceReplaySpin);
+          if (fr.dicePool.length >= 2) {
+            if (rDie1El) rDie1El.classList.remove('hidden');
+            renderDieFace('replayDieFace1', fr.dicePool[1].value, false, forceReplaySpin);
+          } else if (rDie1El) {
+            rDie1El.classList.add('hidden');
+          }
+        } else if (diceTextEl) {
           diceTextEl.textContent = '-';
         }
 
@@ -11704,6 +12056,16 @@
             rCtx.textAlign = 'center';
             rCtx.textBaseline = 'middle';
             rCtx.fillText((pl.kills > 0 ? '🔓 HOME OPEN (⚔️' : '🔒 NEED KILL (⚔️') + pl.kills + ')', x + sizeW / 2, badgeY + badgeH / 2);
+          }
+
+          if (isTurn && pl && pl.active && Array.isArray(fr.dicePool) && fr.dicePool.length > 0) {
+            const dSize = cell * 0.50;
+            if (fr.dicePool.length === 1) {
+              drawIsometric3dDieOnCanvas(rCtx, x + sizeW / 2, y + sizeH / 2, dSize, fr.dicePool[0].value, false, 0, 0);
+            } else {
+              drawIsometric3dDieOnCanvas(rCtx, x + sizeW / 2 - dSize * 0.68, y + sizeH / 2, dSize, fr.dicePool[0].value, false, 0, 0);
+              drawIsometric3dDieOnCanvas(rCtx, x + sizeW / 2 + dSize * 0.68, y + sizeH / 2, dSize, fr.dicePool[1].value, false, 0, 0);
+            }
           }
         });
 
@@ -12669,7 +13031,7 @@
           showToast('⏳ Waiting for ' + (actor ? actor.name : 'other player') + '\'s turn...');
           return;
         }
-        if (gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
+        if ((gameState.phase === 'ROLL' || canPlayerRollBonusNow()) && gameState.players[gameState.currentTurn].type === 'human') {
           rollDiceForCurrentPlayer();
         }
       });
@@ -13007,7 +13369,7 @@
           }
           if (!verifyMultiMouseAccess(e.pointerId, 'roll the dice')) return;
           actor.consecutiveTimeouts = 0;
-          if (gameState.phase === 'ROLL') {
+          if (gameState.phase === 'ROLL' || canPlayerRollBonusNow()) {
             rollDiceForCurrentPlayer();
           }
         }

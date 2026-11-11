@@ -144,8 +144,21 @@ def run_patcher():
         if rule_type == "exact":
             occurrences = buffer.count(find_str)
             if occurrences == 0:
-                print(f"  [X] Step {i} [EXACT]: Pattern not found in '{target_path.name}'.")
-                all_matched = False
+                # Fallback: try matching with flexible leading/trailing whitespace per line
+                # (Prevents false failures when HTML indentation differs slightly)
+                lines = [ln.strip() for ln in find_str.split("\n") if ln.strip()]
+                ws_pattern_str = r"^[ \t]*" + r"[ \t]*\n[ \t]*".join(re.escape(ln) for ln in lines)
+                ws_pattern = re.compile(ws_pattern_str, re.MULTILINE)
+                ws_matches = list(ws_pattern.finditer(buffer))
+                if ws_matches:
+                    max_replace = 0 if count == 0 else count
+                    files_state[target_path]["current"] = ws_pattern.sub(lambda m: replace_str, buffer, count=max_replace)
+                    files_state[target_path]["modified"] = True
+                    print(f"  [✓] Step {i} [EXACT-WS]: Matched ({len(ws_matches)} found via flexible indentation) in '{target_path.name}'.")
+                else:
+                    first_line = lines[0][:60] if lines else "<empty>"
+                    print(f"  [X] Step {i} [EXACT]: Pattern not found in '{target_path.name}' (starts with: {first_line!r}).")
+                    all_matched = False
             else:
                 max_replace = occurrences if count == 0 else count
                 files_state[target_path]["current"] = buffer.replace(find_str, replace_str, max_replace)
