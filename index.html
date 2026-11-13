@@ -1210,6 +1210,9 @@
 <button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-extrabold text-[10px] sm:text-[11px] border border-amber-400/50 shadow-sm flex items-center gap-1" id="quickAiSpeedBtn" title="Cycle AI Match Pace" type="button">
 <span>⏱️</span><span id="quickAiSpeedLabel">Fast</span>
 </button>
+<button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-extrabold text-[10px] sm:text-[11px] border border-amber-400/50 shadow-sm flex items-center gap-1" id="quickTimerBtn" title="Change Turn Timer (Cycle or Off)" type="button">
+<span>⏳</span><span id="quickTimerLabel">30s</span>
+</button>
 <button class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm" id="exitScenarioDrillBtn" title="Exit Drill &amp; Return to Match" type="button">
           🔙 Match
         </button>
@@ -1422,6 +1425,34 @@
 <div class="text-[10px] font-extrabold uppercase text-amber-900 pt-1 border-t border-amber-200/70">🤖 Player Left / Disconnect Bot Takeover</div>
 <div class="grid grid-cols-2 gap-1.5" id="seatTakeoverButtons"></div>
 </div>
+<div class="p-2.5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1.5" id="pauseTurnTimerCard">
+<div class="flex items-center justify-between gap-2">
+<span class="text-[10px] font-extrabold uppercase text-amber-900">⏱️ Turn Timer &amp; Timeout</span>
+<div class="flex items-center gap-1">
+<select class="bg-white border border-amber-300 rounded-lg px-2 py-0.5 text-[11px] font-extrabold text-amber-950" id="pauseTurnTimerSelect">
+<option value="0">🚫 No Timer (Off)</option>
+<option value="15">⏱️ 15s Timer</option>
+<option selected="" value="30">⏱️ 30s Timer</option>
+<option value="45">⏱️ 45s Timer</option>
+<option value="60">⏱️ 1 Min (60s)</option>
+<option value="120">⏱️ 2 Min (120s)</option>
+<option value="180">⏱️ 3 Min (180s)</option>
+<option value="custom">✏️ Custom...</option>
+</select>
+<input class="hidden w-14 bg-white border border-amber-400 rounded-lg px-1.5 py-0.5 text-[11px] font-bold text-slate-900" id="pauseCustomTimerInput" max="3600" min="5" placeholder="Sec" type="number" value="45"/>
+</div>
+</div>
+<div class="text-[10px] text-slate-600 leading-tight">Controls turn countdown for human seats. AI bots always move autonomously and never wait forever.</div>
+<label class="flex items-center justify-between pt-1 border-t border-amber-200/70 text-xs font-semibold text-slate-700 cursor-pointer">
+<span>Auto-Move on Timeout</span>
+<input checked="" class="accent-amber-600 rounded w-4 h-4" id="autoPlayTimeoutChk" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between text-xs font-semibold text-slate-700 cursor-pointer">
+<span>🤖 3-Timeouts Bot Takeover</span>
+<input checked="" class="accent-amber-600 rounded w-4 h-4" id="pauseThreeTimeoutsBotTakeoverChk" type="checkbox"/>
+</label>
+<div class="hidden text-[10px] font-bold text-amber-800 bg-amber-100/70 border border-amber-300/80 rounded-lg px-2 py-1" id="pauseTimerHostPill"></div>
+</div>
 <div class="p-2.5 rounded-2xl bg-indigo-50/90 border border-indigo-300 space-y-1.5">
 <label class="flex items-center justify-between text-xs font-bold text-indigo-950 cursor-pointer">
 <span>🖱️ Multi-Mouse Lock (2–4 Mice)</span>
@@ -1434,10 +1465,6 @@
 <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-xs font-bold text-slate-900 cursor-pointer">
 <span>🎲 Auto-Roll Dice on My Turn</span>
 <input class="accent-amber-600 rounded w-4 h-4" id="autoRollTurnChk" type="checkbox"/>
-</label>
-<label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
-<span>Auto-Move on Timeout</span>
-<input checked="" class="accent-amber-600 rounded w-4 h-4" id="autoPlayTimeoutChk" type="checkbox"/>
 </label>
 <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
 <span>💬 Show Top Tooltips &amp; Hints</span>
@@ -1455,6 +1482,9 @@
 <div class="flex items-center gap-2">
 <button class="back-to-home-btn px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs" type="button">
             ⬅️ Home
+          </button>
+<button class="hidden px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow" id="rulesReturnToMatchBtn" type="button">
+            ◀️ Return to Match
           </button>
 <h2 class="text-base sm:text-xl font-black text-slate-900">⚙️ Custom Rulebook &amp; Match Setup</h2>
 </div>
@@ -3960,6 +3990,77 @@
         drawBoard();
       }
 
+      function updateTimerHostControlsUI() {
+        const pill = document.getElementById('pauseTimerHostPill');
+        const pauseTimerSel = document.getElementById('pauseTurnTimerSelect');
+        const pauseCustInp = document.getElementById('pauseCustomTimerInput');
+        const pauseAutoTimeout = document.getElementById('autoPlayTimeoutChk');
+        const pauseBotTakeover = document.getElementById('pauseThreeTimeoutsBotTakeoverChk');
+        const quickTimerBtn = document.getElementById('quickTimerBtn');
+        const quickTimerLabel = document.getElementById('quickTimerLabel');
+
+        if (quickTimerLabel) {
+          quickTimerLabel.textContent = rulesConfig.turnTimeSeconds === 0 ? 'Off' : (rulesConfig.turnTimeSeconds + 's');
+        }
+
+        if (netMatch.isActive) {
+          if (netMatch.isHost) {
+            if (pill) {
+              pill.classList.remove('hidden');
+              pill.textContent = '👑 Room Host • Timer changes auto-sync to all players';
+              pill.className = 'text-[10px] font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 rounded-lg px-2 py-1';
+            }
+            if (pauseTimerSel) pauseTimerSel.disabled = false;
+            if (pauseCustInp) pauseCustInp.disabled = false;
+            if (pauseAutoTimeout) pauseAutoTimeout.disabled = false;
+            if (pauseBotTakeover) pauseBotTakeover.disabled = false;
+            if (quickTimerBtn) quickTimerBtn.title = 'Change Turn Timer (Cycle or Off) • Syncs to peers';
+          } else {
+            if (pill) {
+              pill.classList.remove('hidden');
+              pill.textContent = '🔒 Room Host (' + (netMatch.remoteName || 'Host') + ') controls timer settings';
+              pill.className = 'text-[10px] font-bold text-amber-900 bg-amber-100/80 border border-amber-300 rounded-lg px-2 py-1';
+            }
+            if (pauseTimerSel) pauseTimerSel.disabled = true;
+            if (pauseCustInp) pauseCustInp.disabled = true;
+            if (pauseAutoTimeout) pauseAutoTimeout.disabled = true;
+            if (pauseBotTakeover) pauseBotTakeover.disabled = true;
+            if (quickTimerBtn) quickTimerBtn.title = 'Turn Timer set by Room Host (' + (netMatch.remoteName || 'Host') + ')';
+          }
+        } else {
+          if (pill) pill.classList.add('hidden');
+          if (pauseTimerSel) pauseTimerSel.disabled = false;
+          if (pauseCustInp) pauseCustInp.disabled = false;
+          if (pauseAutoTimeout) pauseAutoTimeout.disabled = false;
+          if (pauseBotTakeover) pauseBotTakeover.disabled = false;
+          if (quickTimerBtn) quickTimerBtn.title = 'Change Turn Timer (Cycle or Off)';
+        }
+      }
+
+      function setTurnTimerPreference(seconds, broadcast) {
+        if (netMatch.isActive && !netMatch.isHost) {
+          showToast('🔒 Only Room Host can change turn timer in multiplayer.');
+          syncRulesStudioControls();
+          return;
+        }
+        const sec = Math.max(0, parseInt(seconds, 10) || 0);
+        rulesConfig.turnTimeSeconds = sec;
+        saveRulesPreferences(Boolean(broadcast && (netMatch.isActive ? netMatch.isHost : true)));
+        syncRulesStudioControls();
+        resetTurnCountdown();
+        saveActiveMatchSnapshot();
+        const label = sec === 0 ? 'Turn timer turned OFF (No Timer)' : ('Turn timer set to ' + sec + 's');
+        showToast('⏱️ ' + label, true);
+        if (gameState.isMatchActive && !gameState.isPaused && gameState.phase !== 'GAME_OVER' && gameState.phase !== 'ANIMATING') {
+          const curP = gameState.players[gameState.currentTurn];
+          if (curP && curP.type === 'ai' && (!netMatch.isActive || netMatch.isHost)) {
+            if (!gameState.aiTimer) {
+              scheduleAiIfNeeded();
+            }
+          }
+        }
+      }
+
       let seatConfig = [
         { name: 'You (Red)', type: 'human', active: true, isBotTakeover: false },
         { name: 'Sher Khan AI', type: 'ai', active: true, isBotTakeover: false },
@@ -4436,15 +4537,21 @@
                 showToast('⏰ Turn Timeout (' + curP.consecutiveTimeouts + '/3)! AI Bot takes over after 3 missed turns.');
               }
             }
-            const autoChk = document.getElementById('autoPlayTimeoutChk');
-            if (autoChk && autoChk.checked) {
+            const isAiActor = curP && curP.type === 'ai';
+            const autoMoveEnabled = isAiActor ? true : (rulesConfig.autoMoveOnTimeout !== false);
+            if (autoMoveEnabled) {
               if (gameState.phase === 'ROLL') {
                 rollDiceForCurrentPlayer();
               } else if (gameState.phase === 'MOVE') {
                 const legal = computeLegalMoves();
                 if (legal.length > 0) {
-                  legal.sort(function (a, b) { return evaluateMoveScore(b) - evaluateMoveScore(a); });
-                  executeMove(legal[0]);
+                  if (isAiActor) {
+                    const chosen = chooseBestAiMove(legal);
+                    executeMove(chosen || legal[0]);
+                  } else {
+                    legal.sort(function (a, b) { return evaluateMoveScore(b) - evaluateMoveScore(a); });
+                    executeMove(legal[0]);
+                  }
                 } else {
                   advanceToNextTurn();
                 }
@@ -9003,6 +9110,21 @@
           }
         }
 
+        const pauseTimerSel = document.getElementById('pauseTurnTimerSelect');
+        const pauseCustomInp = document.getElementById('pauseCustomTimerInput');
+        if (pauseTimerSel) {
+          pauseTimerSel.value = isPresetTimer ? curTimerStr : 'custom';
+          if (pauseCustomInp) {
+            pauseCustomInp.classList.toggle('hidden', isPresetTimer);
+            if (!isPresetTimer) pauseCustomInp.value = curTimerStr;
+          }
+        }
+        const pauseBotTakeover = document.getElementById('pauseThreeTimeoutsBotTakeoverChk');
+        if (pauseBotTakeover) {
+          pauseBotTakeover.checked = Boolean(rulesConfig.threeTimeoutsBotTakeover);
+        }
+        updateTimerHostControlsUI();
+
         document.getElementById('homeQuickTokensSelect').value = String(rulesConfig.tokensPerPlayer);
         document.getElementById('homeQuickCloseSelect').value = rulesConfig.closeGameMode ? 'close' : 'open';
 
@@ -9906,7 +10028,13 @@
           return;
         }
         if (payload.type === 'SYNC_SETTINGS') {
+          let timerChangedMsg = null;
           if (payload.rulesConfig) {
+            const oldTimer = rulesConfig.turnTimeSeconds;
+            const newTimer = payload.rulesConfig.turnTimeSeconds;
+            if (newTimer !== undefined && newTimer !== oldTimer) {
+              timerChangedMsg = newTimer === 0 ? 'turned off Turn Timer (No Timer)' : ('set Turn Timer to ' + newTimer + 's');
+            }
             const keepAuto = rulesConfig.autoRollOnTurn;
             const keepTips = rulesConfig.showTooltips;
             rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, payload.rulesConfig, {
@@ -9930,7 +10058,11 @@
           syncRulesStudioControls();
           resetTurnCountdown();
           updateAllUI();
-          showToast('⚙️ Host (' + (payload.hostName || 'Host') + ') synced match rules & settings!', true);
+          if (timerChangedMsg) {
+            showToast('⏱️ Host (' + (payload.hostName || 'Host') + ') ' + timerChangedMsg + '!', true);
+          } else {
+            showToast('⚙️ Host (' + (payload.hostName || 'Host') + ') synced match rules & settings!', true);
+          }
           return;
         }
         if (payload.type === 'SYNC_SNAPSHOT' && payload.snapshot) {
@@ -10009,6 +10141,16 @@
           }
         });
       }, 3500);
+
+      setInterval(function () {
+        if (!gameState.isMatchActive || gameState.isPaused || gameState.phase === 'GAME_OVER' || gameState.phase === 'ANIMATING') return;
+        const actor = gameState.players[gameState.currentTurn];
+        if (actor && actor.active && actor.type === 'ai' && (!netMatch.isActive || netMatch.isHost)) {
+          if (!gameState.aiTimer) {
+            scheduleAiIfNeeded();
+          }
+        }
+      }, 1000);
 
       // --- 14. COMPREHENSIVE COMMAND DASHBOARD, 20 RANKS, 64 ACHIEVEMENTS, 8 CHARTS, REPORTS & EXPORT ENGINE ---
       const OFFICIAL_RANKS_LADDER = [
@@ -13573,34 +13715,76 @@
       document.getElementById('homeQuickTimerSelect').addEventListener('change', function () {
         const isCustom = this.value === 'custom';
         document.getElementById('homeCustomTimerInput').classList.toggle('hidden', !isCustom);
-        rulesConfig.turnTimeSeconds = isCustom
+        const sec = isCustom
           ? Math.max(5, parseInt(document.getElementById('homeCustomTimerInput').value, 10) || 45)
           : Number(this.value);
-        saveRulesPreferences(false);
-        syncRulesStudioControls();
+        setTurnTimerPreference(sec, false);
       });
       document.getElementById('homeCustomTimerInput').addEventListener('input', function () {
-        rulesConfig.turnTimeSeconds = Math.max(5, parseInt(this.value, 10) || 45);
-        saveRulesPreferences(false);
-        syncRulesStudioControls();
+        const sec = Math.max(5, parseInt(this.value, 10) || 45);
+        setTurnTimerPreference(sec, false);
       });
       document.getElementById('turnTimerSelect').addEventListener('change', function () {
         const isCustom = this.value === 'custom';
         document.getElementById('rulesCustomTimerInput').classList.toggle('hidden', !isCustom);
-        rulesConfig.turnTimeSeconds = isCustom
+        const sec = isCustom
           ? Math.max(5, parseInt(document.getElementById('rulesCustomTimerInput').value, 10) || 45)
           : Number(this.value);
-        saveRulesPreferences(false);
-        syncRulesStudioControls();
+        setTurnTimerPreference(sec, true);
       });
       document.getElementById('rulesCustomTimerInput').addEventListener('input', function () {
-        rulesConfig.turnTimeSeconds = Math.max(5, parseInt(this.value, 10) || 45);
-        saveRulesPreferences(false);
-        syncRulesStudioControls();
+        const sec = Math.max(5, parseInt(this.value, 10) || 45);
+        setTurnTimerPreference(sec, true);
+      });
+      document.getElementById('pauseTurnTimerSelect').addEventListener('change', function () {
+        const isCustom = this.value === 'custom';
+        const customInp = document.getElementById('pauseCustomTimerInput');
+        if (customInp) customInp.classList.toggle('hidden', !isCustom);
+        const sec = isCustom
+          ? Math.max(5, parseInt(customInp ? customInp.value : '45', 10) || 45)
+          : Number(this.value);
+        setTurnTimerPreference(sec, true);
+      });
+      document.getElementById('pauseCustomTimerInput').addEventListener('input', function () {
+        const sec = Math.max(5, parseInt(this.value, 10) || 45);
+        setTurnTimerPreference(sec, true);
+      });
+      document.getElementById('quickTimerBtn').addEventListener('click', function () {
+        if (netMatch.isActive && !netMatch.isHost) {
+          showToast('🔒 Only Room Host (' + (netMatch.remoteName || 'Host') + ') can change turn timer in multiplayer.');
+          return;
+        }
+        const cur = Number(rulesConfig.turnTimeSeconds) || 0;
+        let next = 30;
+        if (cur === 30) next = 45;
+        else if (cur === 45) next = 60;
+        else if (cur === 60) next = 0;
+        else if (cur === 0) next = 15;
+        else if (cur === 15) next = 30;
+        else next = 30;
+        setTurnTimerPreference(next, true);
       });
       document.getElementById('autoPlayTimeoutChk').addEventListener('change', function () {
+        if (netMatch.isActive && !netMatch.isHost) {
+          showToast('🔒 Only Room Host can change timeout rules in multiplayer.');
+          this.checked = rulesConfig.autoMoveOnTimeout !== false;
+          return;
+        }
         rulesConfig.autoMoveOnTimeout = Boolean(this.checked);
-        saveRulesPreferences(false);
+        saveRulesPreferences(Boolean(netMatch.isActive ? netMatch.isHost : true));
+        showToast(rulesConfig.autoMoveOnTimeout ? '⚡ Auto-Move on Timeout: ON' : '⚡ Auto-Move on Timeout: OFF', true);
+      });
+      document.getElementById('pauseThreeTimeoutsBotTakeoverChk').addEventListener('change', function () {
+        if (netMatch.isActive && !netMatch.isHost) {
+          showToast('🔒 Only Room Host can change timeout rules in multiplayer.');
+          this.checked = Boolean(rulesConfig.threeTimeoutsBotTakeover);
+          return;
+        }
+        rulesConfig.threeTimeoutsBotTakeover = Boolean(this.checked);
+        const chkInRules = document.getElementById('chkThreeTimeoutsBotTakeover');
+        if (chkInRules) chkInRules.checked = rulesConfig.threeTimeoutsBotTakeover;
+        saveRulesPreferences(Boolean(netMatch.isActive ? netMatch.isHost : true));
+        showToast(rulesConfig.threeTimeoutsBotTakeover ? '🤖 3-Timeouts Bot Takeover: ON' : '🤖 3-Timeouts Bot Takeover: OFF', true);
       });
 
       document.getElementById('homeQuickAiDiffSelect').addEventListener('change', function () {
@@ -13703,6 +13887,8 @@
 
       document.getElementById('navRulesBtn').addEventListener('click', function () {
         syncRulesStudioControls();
+        const rulesReturnBtn = document.getElementById('rulesReturnToMatchBtn');
+        if (rulesReturnBtn) rulesReturnBtn.classList.toggle('hidden', !gameState.isMatchActive);
         switchNavigationTab('viewRules');
       });
       document.getElementById('navNetworkBtn').addEventListener('click', function () {
@@ -13779,8 +13965,25 @@
       document.getElementById('quickCustomizeRulesBtn').addEventListener('click', function () {
         document.getElementById('pauseMenuModal').classList.add('hidden');
         syncRulesStudioControls();
+        const rulesReturnBtn = document.getElementById('rulesReturnToMatchBtn');
+        if (rulesReturnBtn) rulesReturnBtn.classList.remove('hidden');
         switchNavigationTab('viewRules');
       });
+      const rulesReturnBtn = document.getElementById('rulesReturnToMatchBtn');
+      if (rulesReturnBtn) {
+        rulesReturnBtn.addEventListener('click', function () {
+          readRulesFormIntoConfig();
+          setGamePaused(false);
+          switchNavigationTab('viewPlay');
+          syncRulesStudioControls();
+          resetTurnCountdown();
+          updateAllUI();
+          if (netMatch.isActive && netMatch.isHost) {
+            broadcastSettingsSync();
+          }
+          showToast('🎮 Returned to active match!', true);
+        });
+      }
 
       function applyLanguageSelection(lang, silent) {
         currentLang = lang || 'en';
@@ -14212,6 +14415,19 @@
           seatConfig[i].isBotTakeover = false;
         }
         saveRulesPreferences(true);
+        if (gameState.isMatchActive) {
+          resetTurnCountdown();
+          saveActiveMatchSnapshot();
+          updateAllUI();
+          if (!gameState.isPaused && gameState.phase !== 'GAME_OVER' && gameState.phase !== 'ANIMATING') {
+            const curP = gameState.players[gameState.currentTurn];
+            if (curP && curP.type === 'ai' && (!netMatch.isActive || netMatch.isHost)) {
+              if (!gameState.aiTimer) {
+                scheduleAiIfNeeded();
+              }
+            }
+          }
+        }
       }
 
       document.getElementById('resetDefaultRulesBtn').addEventListener('click', function () {
