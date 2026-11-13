@@ -6,7 +6,7 @@ const baseDir = path.resolve(__dirname, '..', '..');
 const distLudo = path.join(baseDir, 'dist', 'ludo');
 const distSnakes = path.join(baseDir, 'dist', 'snakes');
 const outputDir = path.join(baseDir, 'dist_exe');
-const faviconPath = path.join(baseDir, 'favicon.ico');
+const iconSrc = path.join(baseDir, 'icon-512.png');
 
 const electronMainCode = `const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
@@ -24,7 +24,7 @@ if (!gotTheLock) {
       fullscreen: true,
       autoHideMenuBar: true,
       backgroundColor: '#050c1a',
-      icon: path.join(__dirname, 'favicon.ico'),
+      icon: path.join(__dirname, 'icon-512.png'),
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
@@ -70,8 +70,8 @@ if (!gotTheLock) {
 
 function prepareAndBuild(appDir, appId, productName, artifactName) {
   fs.writeFileSync(path.join(appDir, 'main.js'), electronMainCode, 'utf8');
-  if (fs.existsSync(faviconPath)) {
-    fs.copyFileSync(faviconPath, path.join(appDir, 'favicon.ico'));
+  if (fs.existsSync(iconSrc)) {
+    fs.copyFileSync(iconSrc, path.join(appDir, 'icon-512.png'));
   }
   const pkgConfig = {
     name: appId.toLowerCase(),
@@ -92,7 +92,7 @@ function prepareAndBuild(appDir, appId, productName, artifactName) {
         output: outputDir
       },
       win: {
-        icon: 'favicon.ico',
+        icon: 'icon-512.png',
         target: 'portable'
       },
       portable: {
