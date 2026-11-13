@@ -71,11 +71,17 @@ EXTRA_FILES = {
 def download_file(url, target_path):
     if os.path.exists(target_path) and os.path.getsize(target_path) > 0:
         return
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        content = resp.read()
-    with open(target_path, "wb") as f:
-        f.write(content)
+    for attempt in range(4):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                content = resp.read()
+            with open(target_path, "wb") as f:
+                f.write(content)
+            return
+        except Exception:
+            if attempt == 3:
+                raise
 
 for url, (_, target_path) in URL_MAPPING.items():
     download_file(url, target_path)
@@ -92,7 +98,7 @@ def copy_shared_assets(dest_dir):
     vendor_dest = os.path.join(dest_dir, "vendor")
     shutil.copytree(CACHE_DIR, vendor_dest, dirs_exist_ok=True)
     with open(os.path.join(dest_dir, "pwa-register.js"), "w", encoding="utf-8") as f:
-        f.write('console.log("PWA service worker disabled for native APK build.");\n')
+        f.write('console.log("PWA service worker disabled for native build.");\n')
 
 copy_shared_assets(LUDO_DIR)
 copy_shared_assets(SNAKES_DIR)

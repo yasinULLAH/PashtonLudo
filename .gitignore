@@ -2,9 +2,11 @@ node_modules/
 android/
 www/
 dist/
+dist_exe/
 build-ludo/
 build-snakes/
 *.apk
+*.exe
 package.json
 package-lock.json
 capacitor.config.json

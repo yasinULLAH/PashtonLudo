@@ -1,4 +1,4 @@
-name: Build Offline Android APKs
+name: Build Standalone Offline APKs and EXEs
 
 on:
   push:
@@ -7,15 +7,15 @@ on:
       - master
     paths-ignore:
       - '**.md'
-      - 'build pwa make html app offline and installable yasin best working re-run this for updates best for html only.pyw'
-      - 'transcript of the vioces.txt'
+      - 'LICENSE'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  build-android:
+    name: Build Offline Android APKs
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4
@@ -42,6 +42,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.2.1'
+
+      - name: Setup Consistent Android Keystore
+        run: |
+          mkdir -p ~/.android
+          cp .github/keystore/debug.keystore ~/.android/debug.keystore
 
       - name: Prepare Offline Web Assets
         run: python .github/scripts/prepare_offline.py
@@ -99,13 +104,79 @@ jobs:
           path: KhyberSaanpSeedhi.apk
           if-no-files-found: error
 
+  build-windows:
+    name: Build Offline Windows Portable EXEs
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Prepare Offline Web Assets
+        run: python .github/scripts/prepare_offline.py
+
+      - name: Install Electron and Electron Builder
+        run: |
+          npm init -y
+          npm install --save-dev electron@33.2.0 electron-builder@25.1.8
+
+      - name: Package Windows Portable EXEs
+        run: node .github/scripts/build_exe.js
+
+      - name: Upload Bannu Royale Ludo EXE Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BannuRoyaleLudo-EXE
+          path: dist_exe/BannuRoyaleLudo.exe
+          if-no-files-found: error
+
+      - name: Upload Khyber Saanp Seedhi EXE Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KhyberSaanpSeedhi-EXE
+          path: dist_exe/KhyberSaanpSeedhi.exe
+          if-no-files-found: error
+
+  release:
+    name: Publish Release Assets
+    needs: [build-android, build-windows]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release_assets
+          merge-multiple: true
+
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
           tag_name: latest
-          name: "Offline Android APKs (Build ${{ github.run_number }})"
-          body: "Standalone fully offline working APKs for Bannu Royale Ludo and Khyber Saanp Seedhi Pro. Commit: ${{ github.sha }}"
+          name: "Offline Games Suite - Android APKs and Windows Portable EXEs"
+          body: |
+            Standalone and fully offline working Android APKs and Windows Portable EXEs.
+            Built automatically from commit ${{ github.sha }}.
+
+            Downloads:
+            - BannuRoyaleLudo.apk (Android APK - Full Screen & Offline)
+            - KhyberSaanpSeedhi.apk (Android APK - Full Screen & Offline)
+            - BannuRoyaleLudo.exe (Windows 64-bit Portable EXE - Full Screen & Offline)
+            - KhyberSaanpSeedhi.exe (Windows 64-bit Portable EXE - Full Screen & Offline)
           files: |
-            BannuRoyaleLudo.apk
-            KhyberSaanpSeedhi.apk
+            release_assets/BannuRoyaleLudo.apk
+            release_assets/KhyberSaanpSeedhi.apk
+            release_assets/BannuRoyaleLudo.exe
+            release_assets/KhyberSaanpSeedhi.exe
