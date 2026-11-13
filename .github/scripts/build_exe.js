@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const builder = require('electron-builder');
+const { execSync } = require('child_process');
 
 const baseDir = path.resolve(__dirname, '..', '..');
 const distLudo = path.join(baseDir, 'dist', 'ludo');
@@ -68,54 +68,47 @@ if (!gotTheLock) {
 }
 `;
 
-async function buildApp(appDir, appId, productName, artifactName) {
+function prepareAndBuild(appDir, appId, productName, artifactName) {
   fs.writeFileSync(path.join(appDir, 'main.js'), electronMainCode, 'utf8');
   if (fs.existsSync(faviconPath)) {
     fs.copyFileSync(faviconPath, path.join(appDir, 'favicon.ico'));
   }
-  fs.writeFileSync(
-    path.join(appDir, 'package.json'),
-    JSON.stringify({
-      name: appId.toLowerCase(),
-      version: '1.0.0',
-      description: productName,
-      main: 'main.js',
-      author: 'Yasin Ullah',
-      devDependencies: {
-        electron: '33.2.0'
-      }
-    }, null, 2),
-    'utf8'
-  );
-
-  await builder.build({
-    targets: builder.Platform.WINDOWS.createTargets(['portable'], builder.Arch.x64),
-    config: {
+  const pkgConfig = {
+    name: appId.toLowerCase(),
+    version: '1.0.0',
+    description: productName,
+    main: 'main.js',
+    author: 'Yasin Ullah',
+    build: {
       appId: 'com.yasinullah.' + appId,
       productName: productName,
-      copyright: 'Copyright © 2026 Yasin Ullah',
+      copyright: 'Copyright \u00a9 2026 Yasin Ullah',
       asar: true,
       directories: {
-        app: appDir,
         output: outputDir
       },
       win: {
-        icon: path.join(appDir, 'favicon.ico'),
+        icon: 'favicon.ico',
         target: 'portable'
       },
       portable: {
         artifactName: artifactName
       }
     }
+  };
+  fs.writeFileSync(path.join(appDir, 'package.json'), JSON.stringify(pkgConfig, null, 2), 'utf8');
+  execSync('npx electron-builder --win portable --x64', {
+    cwd: appDir,
+    stdio: 'inherit',
+    env: process.env,
+    shell: true
   });
 }
 
-async function run() {
-  await buildApp(distLudo, 'bannuroyaleludo', 'Bannu Royale Ludo', 'BannuRoyaleLudo.exe');
-  await buildApp(distSnakes, 'khybersaanpseedhi', 'Khyber Saanp Seedhi Pro', 'KhyberSaanpSeedhi.exe');
+function run() {
+  fs.mkdirSync(outputDir, { recursive: true });
+  prepareAndBuild(distLudo, 'bannuroyaleludo', 'Bannu Royale Ludo', 'BannuRoyaleLudo.exe');
+  prepareAndBuild(distSnakes, 'khybersaanpseedhi', 'Khyber Saanp Seedhi Pro', 'KhyberSaanpSeedhi.exe');
 }
 
-run().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+run();
