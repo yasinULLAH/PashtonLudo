@@ -79,7 +79,11 @@ function prepareAndBuild(appDir, appId, productName, artifactName) {
     description: productName,
     main: 'main.js',
     author: 'Yasin Ullah',
+    devDependencies: {
+      electron: '33.2.0'
+    },
     build: {
+      electronVersion: '33.2.0',
       appId: 'com.yasinullah.' + appId,
       productName: productName,
       copyright: 'Copyright \u00a9 2026 Yasin Ullah',
@@ -97,7 +101,7 @@ function prepareAndBuild(appDir, appId, productName, artifactName) {
     }
   };
   fs.writeFileSync(path.join(appDir, 'package.json'), JSON.stringify(pkgConfig, null, 2), 'utf8');
-  execSync('npx electron-builder --win portable --x64', {
+  execSync('npx electron-builder --win portable --x64 -c.electronVersion=33.2.0', {
     cwd: appDir,
     stdio: 'inherit',
     env: process.env,
