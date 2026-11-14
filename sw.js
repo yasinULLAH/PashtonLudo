@@ -60,7 +60,7 @@ if (workbox) {
     },
     {
         "url": ".gitignore",
-        "revision": "4d91a2cea178eb696162e89246528ea6"
+        "revision": "fec75d6a969471514e3b95a67d913372"
     },
     {
         "url": "build pwa make html app offline and installable yasin best working re-run this for updates best for html only.pyw",
@@ -80,11 +80,11 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "413c278358b7e5eeff4eb7c1e4a3015a"
+        "revision": "484d17097dc95f981a61492f5fa70c72"
     },
     {
         "url": "index.html.bak",
-        "revision": "2d32835864aae9e16ab376124be63f9b"
+        "revision": "b33ff9f1a22eec8c4e229747e4482735"
     },
     {
         "url": "LICENSE",
@@ -116,7 +116,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "acc39f438167117ec757d92458186c8d"
+        "revision": "d79177b90abbefbfc381ce33a231f13f"
     },
     {
         "url": "transcript of the vioces.txt",

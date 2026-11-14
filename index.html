@@ -1592,11 +1592,11 @@
 <p class="text-[11px] text-slate-600">Default OFF (must enter Home once kill is done). Enable to let players with a kill choose between entering Home or looping around the outer board again.</p>
 </div>
 </label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkWaitAllGroundAtGate" type="checkbox"/>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkWaitAllGroundAtGate" type="checkbox"/>
 <div>
-<div class="font-bold text-xs text-slate-900">⏳ No-Kill Gate Wait Until All Ground Beads Gather (بغیر شکار تمام میدانی گوٹیاں جمع ہونے تک رکنا)</div>
-<p class="text-[11px] text-slate-600">Default OFF (loop immediately if no kill). Enable so a player with 0 kills cannot enter Home or loop past the gate until all of their on-ground beads have reached the gate area.</p>
+<div class="font-bold text-xs text-slate-900">⏳ No-Kill Gate Wait Until All Ground Beads Gather (بغیر شکار تمام میدانی گوٹیاں جمع ہونے تک رکنا — Default: ON)</div>
+<p class="text-[11px] text-slate-600">Default ON: A player with 0 kills cannot go around Home (loop past the gate) until all of their on-ground beads have reached the last home point (step 50) and no movement is possible for their on-ground beads—then one bead can go around.</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -2757,6 +2757,16 @@
 <button class="h-8 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow flex items-center gap-1" id="replayScreenshotBtn" title="Download HD Replay Screenshot (.PNG)" type="button">
 <span>📸</span><span class="hidden sm:inline">Shot</span>
 </button>
+<div class="flex items-center bg-slate-800 border border-rose-400/60 rounded-xl p-0.5 gap-0.5">
+<select aria-label="Video Export Resolution" class="h-7 bg-slate-900 text-amber-200 text-[10px] sm:text-xs font-extrabold px-1.5 rounded-lg cursor-pointer focus:outline-none" id="replayVideoResSelect" title="Select Video Export Resolution">
+<option value="small">🎥 Small (480p)</option>
+<option selected="" value="mid">🎥 Mid (720p)</option>
+<option value="high">🎥 High (1080p)</option>
+</select>
+<button class="h-7 px-2 sm:px-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] sm:text-xs shadow flex items-center gap-1" id="replayExportVideoBtn" title="Export Full Replay as Video File" type="button">
+<span id="replayExportVideoIcon">🎥</span><span class="hidden md:inline" id="replayExportVideoLabel">Video</span>
+</button>
+</div>
 <button class="h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 font-bold text-xs flex items-center gap-1" id="replayExportJsonBtn" title="Download Replay File (.json)" type="button">
 <span>💾</span><span class="hidden lg:inline">Save</span>
 </button>
@@ -3239,7 +3249,7 @@
         killRequiredForHome: true,
         wipeoutResetsHomeEligibility: true,
         allowOptionalLoopAfterKill: false,
-        waitAllGroundAtGateBeforeLoop: false,
+        waitAllGroundAtGateBeforeLoop: true,
         bonusRollOnHome: true,
         doubleSixBonusRoll: true,
         safeStopImmunity: true,
@@ -3324,14 +3334,18 @@
         mistakesCorrected: 0,
         tacticsMastered: 0,
         weights: {
-          dangerAvoidance: 1.0,
-          safeStopPriority: 1.0,
-          killHunger: 1.0,
-          wipeoutDefense: 1.0,
-          lockCaution: 1.0,
-          stackCaution: 1.0,
-          loopDiscouragement: 1.0,
-          homeStretchRush: 1.0
+          dangerAvoidance: 1.25,
+          safeStopPriority: 1.25,
+          killHunger: 1.30,
+          wipeoutDefense: 1.35,
+          lockCaution: 1.20,
+          stackCaution: 1.20,
+          loopDiscouragement: 1.25,
+          homeStretchRush: 1.30,
+          gateWaitDiscipline: 1.35,
+          cleanSweepUrgency: 1.40,
+          endgamePrecision: 1.30,
+          joraBlockadeMastery: 1.25
         },
         trackDangerStats: {}
       };
@@ -3343,7 +3357,7 @@
           if (raw) {
             const parsed = JSON.parse(raw);
             aiKnowledgeBase = Object.assign({}, DEFAULT_AI_KNOWLEDGE, parsed);
-            if (!aiKnowledgeBase.weights) aiKnowledgeBase.weights = Object.assign({}, DEFAULT_AI_KNOWLEDGE.weights);
+            aiKnowledgeBase.weights = Object.assign({}, DEFAULT_AI_KNOWLEDGE.weights, parsed.weights || {});
             if (!aiKnowledgeBase.trackDangerStats) aiKnowledgeBase.trackDangerStats = {};
           }
         } catch (e) {}
@@ -3372,7 +3386,7 @@
       }
 
       function checkAiGenerationMilestone() {
-        const targetGen = 1 + Math.floor(aiKnowledgeBase.experiencesLearned / 20);
+        const targetGen = 1 + Math.floor(aiKnowledgeBase.experiencesLearned / 15);
         if (targetGen > aiKnowledgeBase.generation) {
           aiKnowledgeBase.generation = targetGen;
           showToast('🧠 Hardest AI evolved to Generation ' + targetGen + '! (Adaptive Intelligence Upgraded)', true);
@@ -3387,7 +3401,7 @@
         const victimTk = victimPlayer.tokens[victimInfo.tokenId];
         const victimTrack = (victimTk && victimTk.state === 'board') ? getOuterTrackIndex(victimTk) : -1;
 
-        aiKnowledgeBase.experiencesLearned += 1;
+        aiKnowledgeBase.experiencesLearned += 2;
         aiKnowledgeBase.mistakesCorrected += 1;
 
         if (victimTrack >= 0) {
@@ -3397,16 +3411,19 @@
           aiKnowledgeBase.trackDangerStats[victimTrack].capturesSuffered += 1;
         }
 
-        aiKnowledgeBase.weights.dangerAvoidance = Math.min(3.5, Number((aiKnowledgeBase.weights.dangerAvoidance + 0.02).toFixed(3)));
-        aiKnowledgeBase.weights.safeStopPriority = Math.min(3.0, Number((aiKnowledgeBase.weights.safeStopPriority + 0.015).toFixed(3)));
+        aiKnowledgeBase.weights.dangerAvoidance = Math.min(4.0, Number((aiKnowledgeBase.weights.dangerAvoidance + 0.025).toFixed(3)));
+        aiKnowledgeBase.weights.safeStopPriority = Math.min(3.5, Number((aiKnowledgeBase.weights.safeStopPriority + 0.02).toFixed(3)));
 
+        if (victimTk && (victimTk.steps % 52) >= 48) {
+          aiKnowledgeBase.weights.gateWaitDiscipline = Math.min(4.0, Number(((aiKnowledgeBase.weights.gateWaitDiscipline || 1.35) + 0.04).toFixed(3)));
+        }
         if (victimTk && victimTk.lockedThisTurn) {
-          aiKnowledgeBase.weights.lockCaution = Math.min(3.5, Number((aiKnowledgeBase.weights.lockCaution + 0.04).toFixed(3)));
+          aiKnowledgeBase.weights.lockCaution = Math.min(3.8, Number((aiKnowledgeBase.weights.lockCaution + 0.045).toFixed(3)));
         }
 
         const insideHomeCount = victimPlayer.tokens.filter(function (t) { return t.state === 'home_stretch' || t.state === 'completed'; }).length;
         if (victimPlayer.kills > 0 && insideHomeCount === 0) {
-          aiKnowledgeBase.weights.wipeoutDefense = Math.min(4.0, Number((aiKnowledgeBase.weights.wipeoutDefense + 0.05).toFixed(3)));
+          aiKnowledgeBase.weights.wipeoutDefense = Math.min(4.5, Number((aiKnowledgeBase.weights.wipeoutDefense + 0.055).toFixed(3)));
         }
 
         if (capturerPlayer && capturerPlayer.type === 'ai') {
@@ -3417,7 +3434,7 @@
             }
             aiKnowledgeBase.trackDangerStats[victimTrack].capturesAchieved += 1;
           }
-          aiKnowledgeBase.weights.killHunger = Math.min(3.0, Number((aiKnowledgeBase.weights.killHunger + 0.02).toFixed(3)));
+          aiKnowledgeBase.weights.killHunger = Math.min(3.8, Number((aiKnowledgeBase.weights.killHunger + 0.025).toFixed(3)));
         }
 
         checkAiGenerationMilestone();
@@ -3427,25 +3444,29 @@
       function learnFromHomeArrival(ownerIdx, token) {
         aiKnowledgeBase.experiencesLearned += 1;
         aiKnowledgeBase.tacticsMastered += 1;
-        aiKnowledgeBase.weights.homeStretchRush = Math.min(3.0, Number((aiKnowledgeBase.weights.homeStretchRush + 0.01).toFixed(3)));
+        aiKnowledgeBase.weights.homeStretchRush = Math.min(3.8, Number((aiKnowledgeBase.weights.homeStretchRush + 0.015).toFixed(3)));
+        aiKnowledgeBase.weights.endgamePrecision = Math.min(3.8, Number(((aiKnowledgeBase.weights.endgamePrecision || 1.3) + 0.015).toFixed(3)));
         checkAiGenerationMilestone();
         saveAiKnowledge();
       }
 
       function learnFromMatchOutcome(vic, humanWon) {
         aiKnowledgeBase.totalMatches += 1;
-        aiKnowledgeBase.experiencesLearned += 4;
+        aiKnowledgeBase.experiencesLearned += 5;
 
         const aiWon = !humanWon || (rulesConfig.teamMode && vic.winningTeam !== 0) || (!rulesConfig.teamMode && vic.winnerIdx !== 0);
         if (aiWon) {
-          aiKnowledgeBase.tacticsMastered += 2;
-          aiKnowledgeBase.weights.safeStopPriority = Math.min(3.0, Number((aiKnowledgeBase.weights.safeStopPriority + 0.01).toFixed(3)));
-          aiKnowledgeBase.weights.killHunger = Math.min(3.0, Number((aiKnowledgeBase.weights.killHunger + 0.015).toFixed(3)));
+          aiKnowledgeBase.tacticsMastered += 3;
+          aiKnowledgeBase.weights.safeStopPriority = Math.min(3.5, Number((aiKnowledgeBase.weights.safeStopPriority + 0.015).toFixed(3)));
+          aiKnowledgeBase.weights.killHunger = Math.min(3.8, Number((aiKnowledgeBase.weights.killHunger + 0.02).toFixed(3)));
+          aiKnowledgeBase.weights.cleanSweepUrgency = Math.min(4.0, Number(((aiKnowledgeBase.weights.cleanSweepUrgency || 1.4) + 0.02).toFixed(3)));
         } else {
-          aiKnowledgeBase.mistakesCorrected += 2;
-          aiKnowledgeBase.weights.dangerAvoidance = Math.min(3.5, Number((aiKnowledgeBase.weights.dangerAvoidance + 0.025).toFixed(3)));
-          aiKnowledgeBase.weights.wipeoutDefense = Math.min(4.0, Number((aiKnowledgeBase.weights.wipeoutDefense + 0.03).toFixed(3)));
-          aiKnowledgeBase.weights.loopDiscouragement = Math.min(3.0, Number((aiKnowledgeBase.weights.loopDiscouragement + 0.02).toFixed(3)));
+          aiKnowledgeBase.mistakesCorrected += 3;
+          aiKnowledgeBase.weights.dangerAvoidance = Math.min(4.0, Number((aiKnowledgeBase.weights.dangerAvoidance + 0.035).toFixed(3)));
+          aiKnowledgeBase.weights.wipeoutDefense = Math.min(4.5, Number((aiKnowledgeBase.weights.wipeoutDefense + 0.04).toFixed(3)));
+          aiKnowledgeBase.weights.loopDiscouragement = Math.min(3.5, Number((aiKnowledgeBase.weights.loopDiscouragement + 0.03).toFixed(3)));
+          aiKnowledgeBase.weights.gateWaitDiscipline = Math.min(4.0, Number(((aiKnowledgeBase.weights.gateWaitDiscipline || 1.35) + 0.035).toFixed(3)));
+          aiKnowledgeBase.weights.cleanSweepUrgency = Math.min(4.0, Number(((aiKnowledgeBase.weights.cleanSweepUrgency || 1.4) + 0.035).toFixed(3)));
         }
 
         checkAiGenerationMilestone();
@@ -3504,6 +3525,13 @@
           if (localStorage.getItem('bannu_ludo_stack_roll_default_v2') !== 'migrated') {
             rulesConfig.stackRollBeforeMoving = true;
             localStorage.setItem('bannu_ludo_stack_roll_default_v2', 'migrated');
+          }
+          if (rulesConfig.waitAllGroundAtGateBeforeLoop === undefined) {
+            rulesConfig.waitAllGroundAtGateBeforeLoop = true;
+          }
+          if (localStorage.getItem('bannu_ludo_wait_gate_default_v2') !== 'migrated') {
+            rulesConfig.waitAllGroundAtGateBeforeLoop = true;
+            localStorage.setItem('bannu_ludo_wait_gate_default_v2', 'migrated');
           }
         } catch (e) {}
       }
@@ -4359,6 +4387,7 @@
           dicePool: gameState.dicePool,
           earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
           earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
+          finishOrder: gameState.finishOrder || [],
           lastMovedTrail: gameState.lastMovedTrail
         });
       }
@@ -4381,6 +4410,7 @@
         gameState.dicePool = snap.dicePool;
         gameState.earnedKillBonusThisTurn = Boolean(snap.earnedKillBonusThisTurn);
         gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
+        gameState.finishOrder = Array.isArray(snap.finishOrder) ? snap.finishOrder : [];
         gameState.lastMovedTrail = snap.lastMovedTrail || null;
         if (Array.isArray(gameState.replayFrames) && gameState.replayFrames.length > 1) {
           gameState.replayFrames.pop();
@@ -4422,6 +4452,7 @@
           team: PLAYER_META[idx].team,
           partner: PLAYER_META[idx].partner,
           kills: 0,
+          finishRank: 0,
           assistUnlocked: false,
           lastRolledDice: [],
           tokens: tokens
@@ -4435,6 +4466,7 @@
         }
         gameState.isPaused = false;
         gameState.players = [0, 1, 2, 3].map(createPlayerObject);
+        gameState.finishOrder = [];
         gameState.currentTurn = 0;
         gameState.phase = 'ROLL';
         gameState.dicePool = [
@@ -4708,13 +4740,18 @@
         if (!rulesConfig.waitAllGroundAtGateBeforeLoop) return true;
         const ownerObj = gameState.players[token.owner];
         const tokensRef = customTokensList || (ownerObj ? ownerObj.tokens : []);
-        const otherGroundBeads = tokensRef.filter(function (t) {
-          return t.id !== token.id && t.state === 'board';
+        const groundBeads = tokensRef.filter(function (t) {
+          return t.state === 'board';
         });
-        if (otherGroundBeads.length === 0) return true;
-        return otherGroundBeads.every(function (t) {
+        if (groundBeads.length <= 1) return true;
+        // All on-ground beads must have reached the last home point (step 50) so no non-looping ground movement is possible
+        const allGroundAtLastHomePoint = groundBeads.every(function (t) {
           return (t.steps % 52) === 50;
         });
+        if (!allGroundAtLastHomePoint) return false;
+        // Only allow ONE bead from the gathered gate beads to go around
+        const firstGateBead = groundBeads[0];
+        return firstGateBead ? (firstGateBead.id === token.id) : true;
       }
 
       function simulateTokenAdvance(token, delta, customEligibleHome, customTokensList, forceOuterLoop) {
@@ -5581,8 +5618,111 @@
         modal.classList.remove('hidden');
       }
 
+      function formatOrdinalPlace(rank) {
+        if (rank === 1) return '🥇 1st Place';
+        if (rank === 2) return '🥈 2nd Place';
+        if (rank === 3) return '🥉 3rd Place';
+        return rank + 'th Place';
+      }
+
       function checkVictoryCondition() {
         const reqKills = getRequiredKillsForHome();
+        if (!Array.isArray(gameState.finishOrder)) gameState.finishOrder = [];
+        const activePlayers = gameState.players.filter(function (pl) { return pl && pl.active; });
+
+        if (!rulesConfig.teamMode && activePlayers.length >= 3) {
+          let newlyFinishedPlayer = null;
+          for (let i = 0; i < 4; i++) {
+            const p = gameState.players[i];
+            if (!p || !p.active || p.finishRank > 0) continue;
+            const unfinishedRivals = activePlayers.filter(function (op) {
+              return op.id !== i && !op.finishRank;
+            });
+            const allUnfinishedRivalsLockedOut = unfinishedRivals.length === 1 && unfinishedRivals.every(function (op) {
+              const k = op.kills || 0;
+              return k === 0 || (reqKills > 0 && k < reqKills);
+            });
+            if (hasPlayerCompletedAllTokens(i) || (hasPlayerAllTokensInsideHome(i) && allUnfinishedRivalsLockedOut)) {
+              p.tokens.forEach(function (tk) {
+                if (tk.state === 'home_stretch') {
+                  tk.state = 'completed';
+                  tk.homeStep = 6;
+                }
+              });
+              if (!gameState.finishOrder.includes(i)) {
+                gameState.finishOrder.push(i);
+              }
+              p.finishRank = gameState.finishOrder.indexOf(i) + 1;
+              newlyFinishedPlayer = p;
+            }
+          }
+
+          // Also check if after a player finished, only 2 unfinished players were left and one of them now qualifies for immediate clean-sweep 2nd place
+          const stillUnfinished = activePlayers.filter(function (pl) { return !pl.finishRank; });
+          if (stillUnfinished.length === 2) {
+            for (let u = 0; u < stillUnfinished.length; u++) {
+              const candP = stillUnfinished[u];
+              const otherP = stillUnfinished[1 - u];
+              const otherLocked = (otherP.kills || 0) === 0 || (reqKills > 0 && (otherP.kills || 0) < reqKills);
+              if (hasPlayerAllTokensInsideHome(candP.id) && otherLocked) {
+                candP.tokens.forEach(function (tk) {
+                  if (tk.state === 'home_stretch') {
+                    tk.state = 'completed';
+                    tk.homeStep = 6;
+                  }
+                });
+                if (!gameState.finishOrder.includes(candP.id)) {
+                  gameState.finishOrder.push(candP.id);
+                }
+                candP.finishRank = gameState.finishOrder.indexOf(candP.id) + 1;
+                newlyFinishedPlayer = candP;
+                break;
+              }
+            }
+          }
+
+          const remainingUnfinished = activePlayers.filter(function (pl) { return !pl.finishRank; });
+          if (remainingUnfinished.length <= 1) {
+            if (remainingUnfinished.length === 1) {
+              const lastPl = remainingUnfinished[0];
+              if (!gameState.finishOrder.includes(lastPl.id)) {
+                gameState.finishOrder.push(lastPl.id);
+              }
+              lastPl.finishRank = gameState.finishOrder.indexOf(lastPl.id) + 1;
+            }
+            const firstIdx = gameState.finishOrder[0] !== undefined ? gameState.finishOrder[0] : 0;
+            const firstPlayer = gameState.players[firstIdx];
+            const podiumSummary = gameState.finishOrder.map(function (pId, idx) {
+              const plObj = gameState.players[pId];
+              return formatOrdinalPlace(idx + 1) + ': ' + (plObj ? plObj.name : ('Player ' + (pId + 1)));
+            }).join('  •  ');
+            const allRivalsZeroKills = activePlayers.filter(function (op) { return op.id !== firstIdx; }).every(function (op) {
+              const k = op.kills || 0;
+              return k === 0 || (reqKills > 0 && k < reqKills);
+            });
+            return {
+              won: true,
+              isCleanSweep: allRivalsZeroKills,
+              isTeamWin: false,
+              winnerIdx: firstIdx,
+              title: '👑 ' + (firstPlayer ? firstPlayer.name : 'Champion') + ' Wins 1st Place!',
+              subtitle: 'Final Standings — ' + podiumSummary
+            };
+          }
+
+          if (newlyFinishedPlayer) {
+            return {
+              won: false,
+              rankAwarded: true,
+              playerIdx: newlyFinishedPlayer.id,
+              playerName: newlyFinishedPlayer.name,
+              rank: newlyFinishedPlayer.finishRank,
+              remainingCount: remainingUnfinished.length
+            };
+          }
+          return { won: false };
+        }
+
         for (let i = 0; i < 4; i++) {
           const p = gameState.players[i];
           if (!p.active) continue;
@@ -5598,7 +5738,6 @@
             const thisPlayerDone = hasPlayerCompletedAllTokens(i);
             const partnerDone = !partner || !partner.active || hasPlayerCompletedAllTokens(p.partner);
 
-            // Immediate Flawless Clean Sweep in 2v2: As soon as all of a player's beads (or both partners' beads) have gone inside Home while opponents haven't killed/eaten yet, crown them and win right then!
             if (thisPlayerAllInsideHome && allOpponentsLockedOut && (rulesConfig.killRequiredForHome || rulesConfig.twoKillsForHome || partnerAllInsideHome)) {
               p.tokens.forEach(function (tk) {
                 if (tk.state === 'home_stretch') {
@@ -5643,7 +5782,6 @@
               return k === 0 || (reqKills > 0 && k < reqKills);
             });
 
-            // Immediate Flawless Victory in 1v1 / FFA: As soon as all of player i's beads have gone inside Home (home_stretch or completed) while opponent(s) haven't killed/eaten yet, crown them and win right then!
             if (hasPlayerAllTokensInsideHome(i) && allOpponentsLockedOut) {
               p.tokens.forEach(function (tk) {
                 if (tk.state === 'home_stretch') {
@@ -5828,6 +5966,19 @@
           });
         }
         const vic = checkVictoryCondition();
+        if (vic.rankAwarded && !vic.won) {
+          playSound('win');
+          const placeStr = formatOrdinalPlace(vic.rank);
+          const nextPlaceStr = formatOrdinalPlace(vic.rank + 1);
+          triggerPlayerEmote(vic.playerIdx, placeStr + '!');
+          addGameLog(placeStr + ' secured by ' + vic.playerName + '! Match continues for ' + nextPlaceStr + ' among remaining players!', 'gold');
+          showToast(placeStr + ': ' + vic.playerName + '! Playing on for ' + nextPlaceStr + '!', true);
+          updateAllUI();
+          if (!rulesConfig.teamMode && hasPlayerCompletedAllTokens(gameState.currentTurn)) {
+            advanceToNextTurn();
+            return;
+          }
+        }
         if (vic.won) {
           recordLiveReplayFrame({
             type: 'VICTORY',
@@ -6632,6 +6783,17 @@
           }
         }
 
+        const gateWaitMult = kWeights ? (kWeights.gateWaitDiscipline || 1.35) : 1.0;
+        const cleanSweepUrgencyMult = kWeights ? (kWeights.cleanSweepUrgency || 1.40) : 1.0;
+        const endgamePrecisionMult = kWeights ? (kWeights.endgamePrecision || 1.30) : 1.0;
+
+        const emergencySweepThreat = pList.some(function (op) {
+          if (!op || !op.active || op.finishRank > 0) return false;
+          if (is2v2Mode ? (op.team === owner.team) : (op.id === move.ownerIdx)) return false;
+          const opOutside = op.tokens.filter(function (t) { return t.state === 'yard' || t.state === 'board'; }).length;
+          return opOutside <= 2 && ownerNeedsKill;
+        });
+
         if (move.sim.loopedPastHome && !move.isOptionalLoop && ownerNeedsKill) {
           score -= 340 * loopDiscouragementMult;
         }
@@ -6641,7 +6803,7 @@
             return ft.id !== tk.id && ft.state === 'board' && getOuterTrackIndex(ft) === curTrack;
           }).length;
           if (sameOnCur === 1) {
-            score -= 75;
+            score -= 85 * (kWeights ? (kWeights.joraBlockadeMastery || 1.25) : 1.0);
           }
         }
 
@@ -6651,25 +6813,45 @@
           const victims = getCaptureCandidatesOnPlayers(move.ownerIdx, destTrack, pList);
           const destDanger = computeSquareThreatScore(move.ownerIdx, destTrack, pList);
 
-          const curValFactor = 1.0 + (curLapPos / 30) + (isVulnerableToWipeout ? 1.4 : 0);
-          const newValFactor = 1.0 + (newLapPos / 30) + (isVulnerableToWipeout ? 1.4 : 0);
+          const curValFactor = 1.0 + (curLapPos / 28) + (isVulnerableToWipeout ? 1.55 : 0);
+          const newValFactor = 1.0 + (newLapPos / 28) + (isVulnerableToWipeout ? 1.55 : 0);
           score += (curDanger * curValFactor) - (destDanger * newValFactor * dangerAvoidMult);
+
+          // Clean Sweep Protection: if all opponents are currently at 0 kills, never feed a free kill to a 0-kill opponent!
+          if (opponentsLockedOut && destDanger > 0 && !isSquareSafeFromCapture(destTrack)) {
+            score -= destDanger * 1.45 * cleanSweepUrgencyMult;
+          }
+
+          // No-Kill Gate Wait Discipline: Step 47 is a Star Safe Stop (★ STOP), whereas Step 50 (the gate) is unprotected and freezes the bead until all ground beads gather!
+          if (ownerNeedsKill && rulesConfig.waitAllGroundAtGateBeforeLoop) {
+            const otherGroundNotAtGate = owner.tokens.some(function (ot) {
+              return ot.id !== tk.id && ot.state === 'board' && (ot.steps % 52) < 50;
+            });
+            if (newLapPos === 47 && victims.length === 0) {
+              score += 240 * gateWaitMult;
+            } else if (newLapPos === 50 && otherGroundNotAtGate && destDanger > 0) {
+              score -= (220 + destDanger * 1.4) * gateWaitMult;
+            }
+            if (curLapPos < 45 && newLapPos >= 48 && ownerGroundCount <= 2 && !otherGroundNotAtGate) {
+              score -= 110 * gateWaitMult;
+            }
+          }
 
           if (isHardest && aiKnowledgeBase && aiKnowledgeBase.trackDangerStats && aiKnowledgeBase.trackDangerStats[destTrack]) {
             const tStat = aiKnowledgeBase.trackDangerStats[destTrack];
-            if (tStat.capturesSuffered > 0) score -= Math.min(280, tStat.capturesSuffered * 32 * dangerAvoidMult);
-            if (tStat.capturesAchieved > 0) score += Math.min(240, tStat.capturesAchieved * 25 * killHungerMult);
+            if (tStat.capturesSuffered > 0) score -= Math.min(310, tStat.capturesSuffered * 34 * dangerAvoidMult);
+            if (tStat.capturesAchieved > 0) score += Math.min(260, tStat.capturesAchieved * 28 * killHungerMult);
           }
 
           if (tk.state === 'board' && isSquareSafeFromCapture(curTrack) && !isSquareSafeFromCapture(destTrack) && victims.length === 0) {
-            score -= (65 + destDanger * 1.05) * dangerAvoidMult;
-            if (ownerNeedsKill && curLapPos >= 44) {
-              score -= 140;
+            score -= (75 + destDanger * 1.15) * dangerAvoidMult;
+            if (ownerNeedsKill && curLapPos === 47) {
+              score -= 230 * gateWaitMult;
             }
           }
 
           if (isSquareSafeFromCapture(destTrack)) {
-            score += (125 + (newLapPos > 24 ? 55 : 0) + (isVulnerableToWipeout ? 210 : 0)) * safeStopMult;
+            score += (140 + (newLapPos > 24 ? 65 : 0) + (isVulnerableToWipeout ? 250 : 0)) * safeStopMult;
           }
 
           if (victims.length > 0) {
@@ -6685,23 +6867,23 @@
                 return acc + (vTk ? (vTk.steps % 52) : 12);
               }, 0);
 
-              let killScore = ownerNeedsKill ? 780 : 360;
-              killScore += countKilled * 210 + victimStepsSum * (is1v1Mode ? 4.2 : 3.0);
-              if (rulesConfig.bonusRollOnKill) killScore += 165;
+              let killScore = ownerNeedsKill ? (920 + (emergencySweepThreat ? 650 : 0)) : 410;
+              killScore += countKilled * 230 + victimStepsSum * (is1v1Mode ? 4.5 : 3.4);
+              if (rulesConfig.bonusRollOnKill) killScore += 185;
 
               if (willCaptureTriggerGroundWipeout(vOwner, countKilled)) {
-                killScore += 820;
+                killScore += 980 * cleanSweepUrgencyMult;
               }
 
               const vRemainingOutside = vOwner.tokens.filter(function (vt) {
                 return vt.state === 'yard' || vt.state === 'board';
               }).length;
               if (vRemainingOutside <= 2) {
-                killScore += 420;
+                killScore += 480 * cleanSweepUrgencyMult;
               }
 
               if (rulesConfig.closeGameMode && ownerGroundCount > 1 && destDanger > 25 && !ownerNeedsKill) {
-                const lockRiskPenalty = destDanger * (0.55 + (newLapPos / 42)) * lockCautionMult;
+                const lockRiskPenalty = destDanger * (0.60 + (newLapPos / 40)) * lockCautionMult;
                 score -= lockRiskPenalty;
               }
 
@@ -6709,7 +6891,8 @@
             }
           }
 
-          score += computeOffensiveStalkScore(move.ownerIdx, destTrack, ownerNeedsKill, pList);
+          const stalkMult = emergencySweepThreat ? (1.75 * cleanSweepUrgencyMult) : 1.0;
+          score += computeOffensiveStalkScore(move.ownerIdx, destTrack, ownerNeedsKill, pList) * stalkMult;
 
           if (!isSquareSafeFromCapture(destTrack)) {
             pList.forEach(function (op) {
@@ -6721,7 +6904,7 @@
                   const oTrack = getOuterTrackIndex(ot);
                   const distInFrontOfStarvingEnemy = (destTrack - oTrack + 52) % 52;
                   if (distInFrontOfStarvingEnemy >= 1 && distInFrontOfStarvingEnemy <= 8) {
-                    score -= 145 * dangerAvoidMult;
+                    score -= 175 * dangerAvoidMult * cleanSweepUrgencyMult;
                   }
                 });
               }
@@ -6734,9 +6917,9 @@
 
           if (friendlyOnDest >= 1 && !isSquareSafeFromCapture(destTrack)) {
             if (rulesConfig.pairBlockadeRule) {
-              score += 155;
+              score += 175 * (kWeights ? (kWeights.joraBlockadeMastery || 1.25) : 1.0);
             } else if (rulesConfig.killAllStackedEnemies && destDanger > 0) {
-              score -= (195 + destDanger * 1.35) * stackCautionMult;
+              score -= (220 + destDanger * 1.45) * stackCautionMult;
             }
           }
 
@@ -6747,19 +6930,19 @@
                 return pt.state === 'board' && getOuterTrackIndex(pt) === destTrack;
               });
               if (partnerOnDest && !isSquareSafeFromCapture(destTrack)) {
-                score += rulesConfig.pairBlockadeRule ? 145 : 55;
+                score += rulesConfig.pairBlockadeRule ? 165 : 60;
               }
             }
           }
 
           if (isFfaMode) {
-            score -= destDanger * 0.5;
+            score -= destDanger * 0.55;
           }
 
           if (!ownerNeedsKill) {
-            score += (newLapPos / 50) * 85;
-          } else if (newLapPos >= 45 && victims.length === 0) {
-            score -= 35;
+            score += (newLapPos / 50) * 105 * endgamePrecisionMult;
+          } else if (newLapPos >= 48 && victims.length === 0) {
+            score -= 60 * gateWaitMult;
           }
         }
 
@@ -6780,6 +6963,7 @@
             team: pl.team,
             partner: pl.partner,
             kills: pl.kills,
+            finishRank: pl.finishRank || 0,
             assistUnlocked: pl.assistUnlocked,
             tokens: pl.tokens.map(function (tk) {
               return {
@@ -6843,9 +7027,14 @@
             return { valid: false };
           }
           if (rulesConfig.waitAllGroundAtGateBeforeLoop) {
-            const otherGround = owner.tokens.filter(function (t) { return t.id !== token.id && t.state === 'board'; });
-            if (otherGround.length > 0 && !otherGround.every(function (t) { return (t.steps % 52) === 50; })) {
-              return { valid: false };
+            const groundBeads = owner.tokens.filter(function (t) { return t.state === 'board'; });
+            if (groundBeads.length > 1) {
+              if (!groundBeads.every(function (t) { return (t.steps % 52) === 50; })) {
+                return { valid: false };
+              }
+              if (groundBeads[0] && groundBeads[0].id !== token.id) {
+                return { valid: false };
+              }
             }
           }
           return { valid: true, loopedPastHome: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
@@ -7037,6 +7226,9 @@
         const insideHomeCount = owner.tokens.filter(function (t) {
           return t.state === 'home_stretch' || t.state === 'completed';
         }).length;
+        const completedCount = owner.tokens.filter(function (t) {
+          return t.state === 'completed';
+        }).length;
         const groundBeads = owner.tokens.filter(function (t) {
           return t.state === 'board';
         });
@@ -7047,21 +7239,23 @@
           groundBeads.length === 1
         );
 
-        let boardScore = 0;
+        let boardScore = completedCount * 380 + (insideHomeCount - completedCount) * 210;
 
         groundBeads.forEach(function (tk) {
           const tIdx = getOuterTrackIndex(tk);
           const lapPos = tk.steps % 52;
           const threat = computeSquareThreatScore(ownerIdx, tIdx, simPlayers);
-          const valMult = 1.0 + (lapPos / 28) + (isVulnerableToWipeout ? 1.5 : 0);
+          const valMult = 1.0 + (lapPos / 26) + (isVulnerableToWipeout ? 1.65 : 0);
 
-          boardScore -= threat * valMult * 0.92;
+          boardScore -= threat * valMult * 1.05;
 
           if (isSquareSafeFromCapture(tIdx)) {
-            boardScore += 65 + (lapPos > 24 ? 30 : 0);
+            boardScore += 85 + (lapPos > 24 ? 40 : 0) + (ownerNeedsKill && lapPos === 47 ? 160 : 0);
+          } else if (ownerNeedsKill && lapPos === 50 && threat > 0) {
+            boardScore -= 190;
           }
 
-          boardScore += computeOffensiveStalkScore(ownerIdx, tIdx, ownerNeedsKill, simPlayers) * 0.55;
+          boardScore += computeOffensiveStalkScore(ownerIdx, tIdx, ownerNeedsKill, simPlayers) * 0.65;
         });
 
         return boardScore;
@@ -7085,7 +7279,8 @@
         }
 
         const unusedDice = gameState.dicePool.filter(function (d) { return !d.used; });
-        const maxLookaheadDepth = diff === 'hardest' ? 3 : 2;
+        const maxLookaheadDepth = diff === 'hardest' ? 4 : 2;
+        const beamWidth = diff === 'hardest' ? 10 : 6;
 
         function searchRemainingTurn(targetOwnerIdx, simPlayers, remDice, depthLeft, spawnedSoFar) {
           if (depthLeft <= 0 || remDice.length === 0) {
@@ -7101,7 +7296,7 @@
           });
           nextMoves.sort(function (a, b) { return b._heurScore - a._heurScore; });
 
-          const beam = nextMoves.slice(0, 6);
+          const beam = nextMoves.slice(0, beamWidth);
           let bestContinuation = -999999;
 
           beam.forEach(function (nm) {
@@ -7112,9 +7307,9 @@
 
             let branchScore = nm._heurScore;
             if (stepRes.earnedBonus) {
-              branchScore += 280;
+              branchScore += 340;
             }
-            branchScore += searchRemainingTurn(targetOwnerIdx, nextSimPlayers, nextRemDice, depthLeft - 1, nextSpawned) * 0.9;
+            branchScore += searchRemainingTurn(targetOwnerIdx, nextSimPlayers, nextRemDice, depthLeft - 1, nextSpawned) * 0.92;
             if (branchScore > bestContinuation) {
               bestContinuation = branchScore;
             }
@@ -7135,12 +7330,12 @@
 
           let totalSeqScore = step1Score;
           if (res1.earnedBonus) {
-            totalSeqScore += 320;
+            totalSeqScore += 360;
           }
 
           if (remDiceAfter1.length > 0) {
             const contScore = searchRemainingTurn(mv1.ownerIdx, simPlayersAfter1, remDiceAfter1, maxLookaheadDepth - 1, nextSpawned);
-            totalSeqScore += contScore * 0.92;
+            totalSeqScore += contScore * 0.94;
           } else {
             totalSeqScore += evaluatePostTurnBoardSafety(mv1.ownerIdx, simPlayersAfter1);
           }
@@ -7150,6 +7345,12 @@
             bestMove = mv1;
           }
         });
+
+        if (diff === 'hardest') {
+          aiKnowledgeBase.experiencesLearned += 1;
+          checkAiGenerationMilestone();
+          saveAiKnowledge();
+        }
 
         return bestMove;
       }
@@ -8653,8 +8854,13 @@
             statusEl.className = 'text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-900 text-amber-300 shadow';
           } else {
             card.classList.remove('active-turn-glow');
-            statusEl.textContent = hasPlayerCompletedAllTokens(i) ? (p.assistUnlocked ? 'ASSIST' : 'DONE') : 'WAIT';
-            statusEl.className = 'text-[8px] font-extrabold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800';
+            if (p.finishRank > 0) {
+              statusEl.textContent = p.finishRank === 1 ? '🥇 1ST' : (p.finishRank === 2 ? '🥈 2ND' : (p.finishRank === 3 ? '🥉 3RD' : 'DONE'));
+              statusEl.className = 'text-[8px] font-black px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 shadow';
+            } else {
+              statusEl.textContent = hasPlayerCompletedAllTokens(i) ? (p.assistUnlocked ? 'ASSIST' : 'DONE') : 'WAIT';
+              statusEl.className = 'text-[8px] font-extrabold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800';
+            }
           }
         }
 
@@ -9148,7 +9354,7 @@
         rulesConfig.killRequiredForHome = true;
         rulesConfig.wipeoutResetsHomeEligibility = true;
         rulesConfig.allowOptionalLoopAfterKill = false;
-        rulesConfig.waitAllGroundAtGateBeforeLoop = false;
+        rulesConfig.waitAllGroundAtGateBeforeLoop = true;
         rulesConfig.bonusRollOnHome = true;
         rulesConfig.doubleSixBonusRoll = true;
         rulesConfig.safeStopImmunity = true;
@@ -12779,93 +12985,250 @@
         rCtx.restore();
       }
 
-      function downloadReplayScreenshotPng() {
-        const fr = (replayState.frames && replayState.frames[replayState.currentFrameIdx]);
-        if (!fr) return;
-        const rSnap = replayState.rulesSnap || rulesConfig;
-        const decodedPlayers = decodePlayersStateFromReplay(fr.players, rSnap.tokensPerPlayer || 4);
-
-        const outCanvas = document.createElement('canvas');
-        outCanvas.width = 1080;
-        outCanvas.height = 1320;
+      function renderCompositeReplayCanvasFrame(outCanvas, boardTemp, fr, frameIdx, totalFrames) {
+        const W = outCanvas.width;
+        const H = outCanvas.height;
+        const scale = W / 1080;
         const g = outCanvas.getContext('2d');
+        const rSnap = replayState.rulesSnap || rulesConfig;
+        const baseEncoded = (replayState.animTokenOverride && replayState.animTokenOverride.basePlayersEncoded)
+          ? replayState.animTokenOverride.basePlayersEncoded
+          : fr.players;
+        const decodedPlayers = decodePlayersStateFromReplay(baseEncoded, rSnap.tokensPerPlayer || 4);
 
-        // Background
-        const bgGrad = g.createLinearGradient(0, 0, 0, 1320);
+        const bgGrad = g.createLinearGradient(0, 0, 0, H);
         bgGrad.addColorStop(0, '#0f172a');
         bgGrad.addColorStop(0.5, '#1e293b');
         bgGrad.addColorStop(1, '#090d16');
         g.fillStyle = bgGrad;
-        g.fillRect(0, 0, 1080, 1320);
+        g.fillRect(0, 0, W, H);
 
-        // Gold border
         g.strokeStyle = '#f59e0b';
-        g.lineWidth = 6;
-        g.strokeRect(16, 16, 1048, 1288);
+        g.lineWidth = Math.max(2, 6 * scale);
+        g.strokeRect(16 * scale, 16 * scale, 1048 * scale, 1288 * scale);
 
-        // Top Header
         g.fillStyle = '#fbbf24';
-        g.font = '900 28px Inter, sans-serif';
-        g.fillText('🎬 BANNU ROYALE LUDO — OFFICIAL MATCH REPLAY SNAPSHOT', 42, 66);
+        g.font = '900 ' + Math.round(28 * scale) + 'px Inter, sans-serif';
+        g.fillText('🎬 BANNU ROYALE LUDO — MATCH REPLAY', 42 * scale, 66 * scale);
 
         g.fillStyle = '#e2e8f0';
-        g.font = '700 20px Inter, sans-serif';
+        g.font = '700 ' + Math.round(20 * scale) + 'px Inter, sans-serif';
         const mLabel = (replayState.matchMeta && replayState.matchMeta.label) ? replayState.matchMeta.label : 'Match Replay';
-        g.fillText(mLabel + '  •  Step ' + replayState.currentFrameIdx + ' / ' + Math.max(1, replayState.frames.length - 1) + '  •  Elapsed: ' + formatReplayClock(fr.elapsedMs || 0), 42, 102);
+        g.fillText(mLabel + '  •  Step ' + frameIdx + ' / ' + Math.max(1, totalFrames) + '  •  Elapsed: ' + formatReplayClock(fr.elapsedMs || 0), 42 * scale, 102 * scale);
 
-        // Event Banner Box
         g.fillStyle = '#020617';
-        g.fillRect(42, 122, 996, 68);
+        g.fillRect(42 * scale, 122 * scale, 996 * scale, 68 * scale);
         g.strokeStyle = '#f59e0b';
-        g.lineWidth = 2;
-        g.strokeRect(42, 122, 996, 68);
+        g.lineWidth = Math.max(1.5, 2 * scale);
+        g.strokeRect(42 * scale, 122 * scale, 996 * scale, 68 * scale);
         g.fillStyle = '#fde047';
-        g.font = '900 22px Inter, sans-serif';
-        g.fillText('[' + (fr.type || 'STEP') + ']  ' + (fr.title || ''), 60, 152);
+        g.font = '900 ' + Math.round(22 * scale) + 'px Inter, sans-serif';
+        g.fillText('[' + (fr.type || 'STEP') + ']  ' + (fr.title || ''), 60 * scale, 152 * scale);
         g.fillStyle = '#94a3b8';
-        g.font = '600 16px Inter, sans-serif';
-        g.fillText(fr.subtitle || '', 60, 178);
+        g.font = '600 ' + Math.round(16 * scale) + 'px Inter, sans-serif';
+        g.fillText(fr.subtitle || '', 60 * scale, 178 * scale);
 
-        // 4 Player Score Boxes
         const pCols = ['#e11d48', '#059669', '#d97706', '#2563eb'];
         decodedPlayers.forEach(function (pl, i) {
-          const bx = 42 + i * 252;
-          const by = 204;
+          const bx = (42 + i * 252) * scale;
+          const by = 204 * scale;
           g.fillStyle = fr.turn === i ? '#332407' : '#0f172a';
-          g.fillRect(bx, by, 240, 62);
+          g.fillRect(bx, by, 240 * scale, 62 * scale);
           g.strokeStyle = fr.turn === i ? '#fbbf24' : pCols[i];
-          g.lineWidth = fr.turn === i ? 3.5 : 2;
-          g.strokeRect(bx, by, 240, 62);
+          g.lineWidth = (fr.turn === i ? 3.5 : 2) * scale;
+          g.strokeRect(bx, by, 240 * scale, 62 * scale);
           g.fillStyle = '#ffffff';
-          g.font = '900 18px Inter, sans-serif';
-          g.fillText(pl.name.slice(0, 14), bx + 14, by + 26);
+          g.font = '900 ' + Math.round(18 * scale) + 'px Inter, sans-serif';
+          g.fillText(pl.name.slice(0, 14), bx + 14 * scale, by + 26 * scale);
           const done = pl.tokens.filter(function (t) { return t.state === 'completed'; }).length;
           g.fillStyle = '#cbd5e1';
-          g.font = '700 15px Inter, sans-serif';
-          g.fillText('⚔️ Kills: ' + pl.kills + '   🏠 Home: ' + done + '/' + (rSnap.tokensPerPlayer || 4), bx + 14, by + 50);
+          g.font = '700 ' + Math.round(15 * scale) + 'px Inter, sans-serif';
+          g.fillText('⚔️ Kills: ' + pl.kills + '   🏠 Home: ' + done + '/' + (rSnap.tokensPerPlayer || 4), bx + 14 * scale, by + 50 * scale);
         });
 
-        // Render Board onto offscreen 960x960 canvas and composite
-        const boardTemp = document.createElement('canvas');
-        boardTemp.width = 960;
-        boardTemp.height = 960;
         drawReplayBoardCanvas(boardTemp);
 
         g.fillStyle = '#d97706';
-        g.fillRect(54, 280, 972, 972);
-        g.drawImage(boardTemp, 60, 286, 960, 960);
+        g.fillRect(54 * scale, 280 * scale, 972 * scale, 972 * scale);
+        g.drawImage(boardTemp, 60 * scale, 286 * scale, 960 * scale, 960 * scale);
 
-        // Footer
         g.fillStyle = '#fbbf24';
-        g.font = '700 16px Inter, sans-serif';
-        g.fillText('Bannu Royale Ludo — © 2026 Yasin Ullah (Bannu Software Solutions) • Dedicated to Muhib Ullah', 42, 1284);
+        g.font = '700 ' + Math.round(16 * scale) + 'px Inter, sans-serif';
+        g.fillText('Bannu Royale Ludo — © 2026 Yasin Ullah (Bannu Software Solutions) • Dedicated to Muhib Ullah', 42 * scale, 1284 * scale);
+      }
 
+      function downloadReplayScreenshotPng() {
+        const fr = (replayState.frames && replayState.frames[replayState.currentFrameIdx]);
+        if (!fr) return;
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width = 1080;
+        outCanvas.height = 1320;
+        const boardTemp = document.createElement('canvas');
+        boardTemp.width = 960;
+        boardTemp.height = 960;
+        renderCompositeReplayCanvasFrame(outCanvas, boardTemp, fr, replayState.currentFrameIdx, Math.max(1, replayState.frames.length - 1));
         const dataUrl = outCanvas.toDataURL('image/png');
         const a = document.createElement('a');
         a.href = dataUrl;
         a.download = 'bannu_ludo_replay_' + (replayState.activeMatchId || 'match') + '_step_' + replayState.currentFrameIdx + '.png';
         a.click();
         showToast('📸 Downloaded HD Replay Screenshot (.PNG)!', true);
+      }
+
+      function exportReplayAsVideoFile() {
+        if (!replayState.frames || replayState.frames.length === 0) {
+          showToast('⚠️ No replay frames available to export.', true);
+          return;
+        }
+        if (replayState.isExportingVideo) {
+          replayState.cancelVideoExport = true;
+          return;
+        }
+        if (typeof MediaRecorder === 'undefined') {
+          showToast('⚠️ Video recording is not supported in this browser.', true);
+          return;
+        }
+
+        pauseReplayPlayback();
+        const resKey = (document.getElementById('replayVideoResSelect') && document.getElementById('replayVideoResSelect').value) || 'mid';
+        const resPresets = {
+          small: { width: 540, height: 660, boardSize: 480, bitrate: 1500000, tag: '480p_Small' },
+          mid: { width: 720, height: 880, boardSize: 640, bitrate: 3500000, tag: '720p_Mid' },
+          high: { width: 1080, height: 1320, boardSize: 960, bitrate: 7500000, tag: '1080p_High' }
+        };
+        const preset = resPresets[resKey] || resPresets.mid;
+
+        const vidCanvas = document.createElement('canvas');
+        vidCanvas.width = preset.width;
+        vidCanvas.height = preset.height;
+        const boardTemp = document.createElement('canvas');
+        boardTemp.width = preset.boardSize;
+        boardTemp.height = preset.boardSize;
+
+        const stream = vidCanvas.captureStream ? vidCanvas.captureStream(30) : (vidCanvas.mozCaptureStream ? vidCanvas.mozCaptureStream(30) : null);
+        if (!stream) {
+          showToast('⚠️ Canvas video stream capture is not supported on this device.', true);
+          return;
+        }
+
+        const mimeCandidates = [
+          'video/mp4;codecs=avc1',
+          'video/mp4',
+          'video/webm;codecs=vp9',
+          'video/webm;codecs=vp8',
+          'video/webm'
+        ];
+        let chosenMime = '';
+        for (let m = 0; m < mimeCandidates.length; m++) {
+          if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(mimeCandidates[m])) {
+            chosenMime = mimeCandidates[m];
+            break;
+          }
+        }
+
+        let recorder = null;
+        try {
+          recorder = chosenMime
+            ? new MediaRecorder(stream, { mimeType: chosenMime, videoBitsPerSecond: preset.bitrate })
+            : new MediaRecorder(stream, { videoBitsPerSecond: preset.bitrate });
+        } catch (err) {
+          recorder = new MediaRecorder(stream);
+        }
+
+        const chunks = [];
+        recorder.ondataavailable = function (ev) {
+          if (ev.data && ev.data.size > 0) chunks.push(ev.data);
+        };
+
+        const btnIcon = document.getElementById('replayExportVideoIcon');
+        const btnLabel = document.getElementById('replayExportVideoLabel');
+        replayState.isExportingVideo = true;
+        replayState.cancelVideoExport = false;
+        if (btnIcon) btnIcon.textContent = '⏹️';
+        if (btnLabel) {
+          btnLabel.classList.remove('hidden');
+          btnLabel.textContent = '0%';
+        }
+        showToast('🎥 Rendering ' + preset.tag.replace('_', ' ') + ' Replay Video... (Tap button again to finish early)', true);
+
+        recorder.onstop = function () {
+          replayState.isExportingVideo = false;
+          replayState.cancelVideoExport = false;
+          replayState.animTokenOverride = null;
+          if (btnIcon) btnIcon.textContent = '🎥';
+          if (btnLabel) btnLabel.textContent = 'Video';
+          const finalMime = recorder.mimeType || chosenMime || 'video/webm';
+          const ext = finalMime.indexOf('mp4') !== -1 ? 'mp4' : 'webm';
+          const blob = new Blob(chunks, { type: finalMime });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'bannu_ludo_replay_' + (replayState.activeMatchId || 'match') + '_' + preset.tag + '.' + ext;
+          a.click();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 6000);
+          drawReplayBoardCanvas();
+          showToast('✅ Downloaded Replay Video (' + preset.tag.replace('_', ' ') + ')!', true);
+        };
+
+        recorder.start(100);
+        const totalFrames = replayState.frames.length;
+        let fIdx = 0;
+
+        function renderNextVideoStep() {
+          if (!replayState.isOpen || replayState.cancelVideoExport || fIdx >= totalFrames) {
+            if (recorder && recorder.state === 'recording') {
+              setTimeout(function () {
+                try { recorder.stop(); } catch (e) {}
+              }, 350);
+            }
+            return;
+          }
+
+          replayState.currentFrameIdx = fIdx;
+          const fr = replayState.frames[fIdx];
+          const slider = document.getElementById('replayTimelineSlider');
+          if (slider) slider.value = String(fIdx);
+          updateReplayHudForFrame(fr, fIdx);
+
+          const pct = Math.round(((fIdx + 1) / totalFrames) * 100);
+          if (btnLabel) btnLabel.textContent = pct + '%';
+
+          const prevFr = fIdx > 0 ? replayState.frames[fIdx - 1] : fr;
+          const coords = (fr.trail && Array.isArray(fr.trail.pathCoords)) ? fr.trail.pathCoords : [];
+          const sampledCoords = coords.length > 4
+            ? [coords[0], coords[Math.floor(coords.length / 3)], coords[Math.floor((coords.length * 2) / 3)], coords[coords.length - 1]]
+            : coords;
+
+          let subIdx = 0;
+          function renderSubHop() {
+            if (!replayState.isOpen || replayState.cancelVideoExport) {
+              renderNextVideoStep();
+              return;
+            }
+            if (subIdx < sampledCoords.length && fIdx > 0) {
+              replayState.animTokenOverride = {
+                basePlayersEncoded: prevFr.players,
+                ownerIdx: fr.trail.ownerIdx,
+                tokenId: fr.trail.tokenId,
+                rc: sampledCoords[subIdx]
+              };
+              drawReplayBoardCanvas();
+              renderCompositeReplayCanvasFrame(vidCanvas, boardTemp, fr, fIdx, totalFrames - 1);
+              subIdx += 1;
+              setTimeout(renderSubHop, 42);
+            } else {
+              replayState.animTokenOverride = null;
+              drawReplayBoardCanvas();
+              renderCompositeReplayCanvasFrame(vidCanvas, boardTemp, fr, fIdx, totalFrames - 1);
+              fIdx += 1;
+              const holdMs = (fr.type === 'KILL' || fr.type === 'HOME' || fr.type === 'VICTORY') ? 260 : 130;
+              setTimeout(renderNextVideoStep, holdMs);
+            }
+          }
+          renderSubHop();
+        }
+
+        renderNextVideoStep();
       }
 
       function exportCurrentReplayAsJson() {
@@ -13280,17 +13643,17 @@
           id: 'wait_all_ground_at_gate',
           cat: 'combat',
           ruleKey: 'waitAllGroundAtGateBeforeLoop',
-          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
           titleEn: '19. No-Kill Gate Wait Until All Ground Beads Gather',
           titleUr: 'بغیر شکار تمام میدانی گوٹیاں دروازے پر جمع ہونے تک رکنا',
-          enDesc: 'For players with 0 kills: instead of immediately looping past the Home gate with a single bead, a bead at the gate must wait until all of your other on-ground beads also reach the gate area before looping.',
-          urDesc: 'اگر کھلاڑی کا ابھی کوئی شکار نہیں ہوا اور ایک گوٹی گھر کے دروازے پر پہنچ گئی، تو وہ اکیلی اگلا چکر شروع نہیں کرے گی بلکہ انتظار کرے گی جب تک میدان میں موجود باقی گوٹیاں بھی دروازے پر جمع نہ ہو جائیں۔',
-          onEffectEn: 'ENABLED (ON): A 0-kill bead at step 50 (Home gate) waits until all other board beads of that player gather at step 50 before looping.',
-          onEffectUr: 'آن (ON): بغیر شکار والی گوٹی دروازے پر دوسری میدانی گوٹیوں کا انتظار کرے گی۔',
-          offEffectEn: 'DISABLED (Default OFF): Any 0-kill bead reaching the gate immediately loops past the gate on its own.',
-          offEffectUr: 'آف (OFF — ڈیفالٹ): بغیر شکار والی گوٹی دروازے پر رکے بغیر فوراً اپنا اگلا چکر شروع کر لیتی ہے۔',
-          exampleEn: 'You have 0 kills, Bead #1 is at step 50 (gate), and Bead #2 is at step 12. When ON, Bead #1 waits at the gate while you advance Bead #2.',
-          exampleUr: 'مثال: آپ کا 0 شکار ہے، گوٹی نمبر 1 دروازے پر ہے اور گوٹی نمبر 2 پیچھے ہے؛ آن ہونے پر پہلے گوٹی نمبر 2 کو آگے لانا ہو گا۔'
+          enDesc: 'For players with 0 kills: a bead cannot go around Home (loop past the Home gate at step 50) until all of that player’s on-ground beads have reached the last home point (step 50) and no movement is possible for their on-ground beads—then one bead can go around.',
+          urDesc: 'اگر کھلاڑی کا ابھی کوئی شکار نہیں ہوا اور گوٹی گھر کے دروازے (آخری خانہ 50) پر پہنچ گئی، تو وہ اس وقت تک باہر کے چکر پر نہیں گھوم سکتی جب تک میدان میں موجود اس کی تمام گوٹیاں آخری پوائنٹ پر جمع نہ ہو جائیں اور کوئی دوسری چال ممکن نہ رہے—اس کے بعد ایک گوٹی چکر لگا سکتی ہے۔',
+          onEffectEn: 'ENABLED (Default ON): A 0-kill bead at step 50 (Home gate) stays there until all other on-ground beads of that player reach step 50, then one bead goes around.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): بغیر شکار والی گوٹی دروازے پر تمام میدانی گوٹیاں جمع ہونے تک رکے گی، پھر ایک گوٹی چکر پر نکلے گی۔',
+          offEffectEn: 'DISABLED (OFF): Any 0-kill bead reaching the gate immediately loops past the gate on its own.',
+          offEffectUr: 'آف (OFF): بغیر شکار والی گوٹی دروازے پر رکے بغیر فوراً اپنا اگلا چکر شروع کر لیتی ہے۔',
+          exampleEn: 'You have 0 kills, Bead #1 is at step 50 (gate), and Bead #2 is at step 12. When ON, Bead #1 stays at the gate while you advance Bead #2 until Bead #2 also reaches step 50, then one bead loops around.',
+          exampleUr: 'مثال: آپ کا 0 شکار ہے، گوٹی نمبر 1 دروازے پر ہے اور گوٹی نمبر 2 پیچھے ہے؛ آن ہونے پر پہلے گوٹی نمبر 2 بھی دروازے تک آئے گی، پھر ایک گوٹی باہر چکر لگائے گی۔'
         },
         {
           id: 'team_mode',
@@ -14827,6 +15190,7 @@
         jumpToReplayEventType(['HOME', 'VICTORY'], 1);
       });
       document.getElementById('replayScreenshotBtn').addEventListener('click', downloadReplayScreenshotPng);
+      document.getElementById('replayExportVideoBtn').addEventListener('click', exportReplayAsVideoFile);
       document.getElementById('replayExportJsonBtn').addEventListener('click', exportCurrentReplayAsJson);
       document.getElementById('replayImportJsonInput').addEventListener('change', function (e) {
         const f = e.target.files && e.target.files[0];
