@@ -4827,7 +4827,7 @@
 
         if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
           if (eligibleHome) {
-            if (forceOuterLoop && rulesConfig.allowOptionalLoopAfterKill) {
+            if (forceOuterLoop && isOptionalLoopAfterKillAllowed()) {
               return {
                 valid: true,
                 loopedPastHome: true,
@@ -4849,7 +4849,9 @@
             if (!canNoKillBeadLoopAroundBoard(token, customTokensList)) {
               return {
                 valid: false,
-                reason: 'No kill yet & other ground beads have not all gathered at Home Gate'
+                reason: rulesConfig.singleGroundLoopOnlyWithoutKill !== false
+                  ? 'Cannot come around Home without a kill when you have more than 1 bead on the ground'
+                  : 'No kill yet & other ground beads have not all gathered at Home Gate'
               };
             }
             return {
@@ -4941,7 +4943,7 @@
             if (t.lockedThisTurn || t.state === 'completed') return false;
             return unusedDice.some(function (d) {
               if (simulateTokenAdvance(t, d.value, undefined, tokens, false).valid) return true;
-              if (t.state === 'board' && rulesConfig.allowOptionalLoopAfterKill && canOwnerEnterHomeStretch(targetOwnerIdx)) {
+              if (t.state === 'board' && isOptionalLoopAfterKillAllowed() && canOwnerEnterHomeStretch(targetOwnerIdx)) {
                 if (simulateTokenAdvance(t, d.value, true, tokens, true).valid) return true;
               }
               return false;
