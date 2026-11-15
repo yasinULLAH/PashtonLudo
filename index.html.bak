@@ -1585,11 +1585,18 @@
 <p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
 </div>
 </label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
-<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOptionalLoopAfterKill" type="checkbox"/>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSingleGroundLoopOnlyWithoutKill" type="checkbox"/>
 <div>
-<div class="font-bold text-xs text-slate-900">🔄 Optional Outer Loop After Kill (شکار کے بعد اندر جانے یا باہر گھومنے کی مرضی)</div>
-<p class="text-[11px] text-slate-600">Default OFF (must enter Home once kill is done). Enable to let players with a kill choose between entering Home or looping around the outer board again.</p>
+<div class="font-bold text-xs text-slate-900">🚫🔄 No-Kill Loop Only With Single Ground Bead &amp; Free Choice After Kill (بغیر شکار صرف اکیلی میدانی گوٹی کا چکر اور شکار کے بعد آزادی — Default: ON)</div>
+<p class="text-[11px] text-slate-600">Default ON: If a player hasn't eaten someone, they cannot come around their Home unless that bead is their ONLY bead on the ground (if they have more beads on the ground, they cannot come around Home). Once they eat an opponent, they are free to either come around Home or go inside it to complete.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOptionalLoopAfterKill" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔄 Optional Outer Loop After Kill (شکار کے بعد اندر جانے یا باہر گھومنے کی مرضی — Default: ON)</div>
+<p class="text-[11px] text-slate-600">Default ON: Once a player has eaten an opponent, they are free to choose between going inside Home to complete or coming around their Home (looping the outer board again).</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
@@ -2577,7 +2584,7 @@
 <!-- Category Filter Bar & Search -->
 <div class="flex flex-wrap items-center justify-between gap-2 bg-amber-50/80 p-2.5 rounded-2xl border border-amber-200">
 <div class="flex flex-wrap items-center gap-1.5" id="guideCategoryTabs">
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Rules (27)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Rules (28)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="core" type="button">🏔️ Core Bannu Rules</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 Dice &amp; Spawn Rules</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ Kill, Jora &amp; Home</button>
@@ -3248,7 +3255,8 @@
         mandatoryYardSpawn: true,
         killRequiredForHome: true,
         wipeoutResetsHomeEligibility: true,
-        allowOptionalLoopAfterKill: false,
+        singleGroundLoopOnlyWithoutKill: true,
+        allowOptionalLoopAfterKill: true,
         waitAllGroundAtGateBeforeLoop: true,
         bonusRollOnHome: true,
         doubleSixBonusRoll: true,
@@ -3525,6 +3533,14 @@
           if (localStorage.getItem('bannu_ludo_stack_roll_default_v2') !== 'migrated') {
             rulesConfig.stackRollBeforeMoving = true;
             localStorage.setItem('bannu_ludo_stack_roll_default_v2', 'migrated');
+          }
+          if (rulesConfig.singleGroundLoopOnlyWithoutKill === undefined) {
+            rulesConfig.singleGroundLoopOnlyWithoutKill = true;
+          }
+          if (localStorage.getItem('bannu_ludo_single_ground_loop_v1') !== 'migrated') {
+            rulesConfig.singleGroundLoopOnlyWithoutKill = true;
+            rulesConfig.allowOptionalLoopAfterKill = true;
+            localStorage.setItem('bannu_ludo_single_ground_loop_v1', 'migrated');
           }
           if (rulesConfig.waitAllGroundAtGateBeforeLoop === undefined) {
             rulesConfig.waitAllGroundAtGateBeforeLoop = true;
@@ -4387,6 +4403,7 @@
           dicePool: gameState.dicePool,
           earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
           earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
+          finishOrder: gameState.finishOrder || [],
           lastMovedTrail: gameState.lastMovedTrail
         });
       }
@@ -4409,6 +4426,7 @@
         gameState.dicePool = snap.dicePool;
         gameState.earnedKillBonusThisTurn = Boolean(snap.earnedKillBonusThisTurn);
         gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
+        gameState.finishOrder = Array.isArray(snap.finishOrder) ? snap.finishOrder : [];
         gameState.lastMovedTrail = snap.lastMovedTrail || null;
         if (Array.isArray(gameState.replayFrames) && gameState.replayFrames.length > 1) {
           gameState.replayFrames.pop();
@@ -4450,6 +4468,7 @@
           team: PLAYER_META[idx].team,
           partner: PLAYER_META[idx].partner,
           kills: 0,
+          finishRank: 0,
           assistUnlocked: false,
           lastRolledDice: [],
           tokens: tokens
@@ -4463,6 +4482,7 @@
         }
         gameState.isPaused = false;
         gameState.players = [0, 1, 2, 3].map(createPlayerObject);
+        gameState.finishOrder = [];
         gameState.currentTurn = 0;
         gameState.phase = 'ROLL';
         gameState.dicePool = [
@@ -4732,14 +4752,21 @@
         return (START_TRACK_INDEX[token.owner] + token.steps) % 52;
       }
 
+      function isOptionalLoopAfterKillAllowed() {
+        return Boolean(rulesConfig.singleGroundLoopOnlyWithoutKill !== false || rulesConfig.allowOptionalLoopAfterKill);
+      }
+
       function canNoKillBeadLoopAroundBoard(token, customTokensList) {
-        if (!rulesConfig.waitAllGroundAtGateBeforeLoop) return true;
         const ownerObj = gameState.players[token.owner];
         const tokensRef = customTokensList || (ownerObj ? ownerObj.tokens : []);
         const groundBeads = tokensRef.filter(function (t) {
           return t.state === 'board';
         });
         if (groundBeads.length <= 1) return true;
+        if (rulesConfig.singleGroundLoopOnlyWithoutKill !== false) {
+          return false;
+        }
+        if (!rulesConfig.waitAllGroundAtGateBeforeLoop) return true;
         // All on-ground beads must have reached the last home point (step 50) so no non-looping ground movement is possible
         const allGroundAtLastHomePoint = groundBeads.every(function (t) {
           return (t.steps % 52) === 50;
@@ -4873,7 +4900,7 @@
           const unlockedPlayable = simTokens.some(function (t) {
             if (t.lockedThisTurn || t.state === 'completed') return false;
             return simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, false).valid ||
-                   (eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
+                   (eligibleHome && isOptionalLoopAfterKillAllowed() && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
           });
           if (simGround.length <= 1 || !unlockedPlayable) {
             locked.forEach(function (t) { t.lockedThisTurn = false; });
@@ -4882,7 +4909,7 @@
 
         return simTokens.some(function (t) {
           return simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, false).valid ||
-                 (eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
+                 (eligibleHome && isOptionalLoopAfterKillAllowed() && simulateTokenAdvance(t, secondDieValue, eligibleHome, simTokens, true).valid);
         });
       }
 
@@ -4959,7 +4986,7 @@
           const soleToken = groundTokens[0];
           const sumVal = unusedDice[0].value + unusedDice[1].value;
           const combinedSim = simulateTokenAdvance(soleToken, sumVal, undefined, tokens, false);
-          const combinedLoopSim = (canOwnerEnterHomeStretch(targetOwnerIdx) && rulesConfig.allowOptionalLoopAfterKill)
+          const combinedLoopSim = (canOwnerEnterHomeStretch(targetOwnerIdx) && isOptionalLoopAfterKillAllowed())
             ? simulateTokenAdvance(soleToken, sumVal, true, tokens, true)
             : { valid: false };
           const singleTriggersFlawlessWin = areOpponentsWithoutKillsForPlayer(targetOwnerIdx) &&
@@ -5036,7 +5063,7 @@
 
             if (
               tk.state === 'board' &&
-              rulesConfig.allowOptionalLoopAfterKill &&
+              isOptionalLoopAfterKillAllowed() &&
               canOwnerEnterHomeStretch(targetOwnerIdx)
             ) {
               const posInLap = tk.steps % 52;
@@ -5085,7 +5112,7 @@
                 }
                 if (
                   tk.state === 'board' &&
-                  rulesConfig.allowOptionalLoopAfterKill &&
+                  isOptionalLoopAfterKillAllowed() &&
                   canOwnerEnterHomeStretch(targetOwnerIdx)
                 ) {
                   const posInLap = tk.steps % 52;
@@ -5120,7 +5147,7 @@
             filteredSingles = candidateSingleMoves.filter(function (m) { return m.allowsSecondDie; });
           } else {
             const allNearHome = groundTokens.every(function (gt) {
-              return gt.state === 'home_stretch' || (gt.steps % 52) >= 44;
+              return gt.state === 'home_stretch' || (canOwnerEnterHomeStretch(targetOwnerIdx) && (gt.steps % 52) >= 44);
             });
             if (allNearHome) return [];
           }
@@ -5214,13 +5241,17 @@
           return true;
         }
 
+        const uniqueTokenKeys = Array.from(new Set(legal.map(function (m) { return m.ownerIdx + '_' + m.tokenId; })));
         const hasOptionalLoopChoice = legal.some(function (m) { return m.isOptionalLoop; }) &&
                                       legal.some(function (m) { return !m.isOptionalLoop && (m.sim.newState === 'home_stretch' || m.sim.newState === 'completed'); });
         if (hasOptionalLoopChoice) {
+          if (uniqueTokenKeys.length === 1) {
+            gameState.selectedTokenKey = uniqueTokenKeys[0];
+            drawBoard();
+            showToast('🔄🏠 Free Choice: Tap Green Home target to go inside OR Purple Loop target to come around Home!');
+          }
           return false;
         }
-
-        const uniqueTokenKeys = Array.from(new Set(legal.map(function (m) { return m.ownerIdx + '_' + m.tokenId; })));
         if (uniqueTokenKeys.length === 1) {
           let chosenMove = legal[0];
           const captureSingle = legal.find(function (m) {
@@ -6553,7 +6584,7 @@
                 eStepsToGate >= 0 &&
                 dist > eStepsToGate &&
                 (reqKills <= 0 || (pl.kills || 0) >= reqKills) &&
-                !rulesConfig.allowOptionalLoopAfterKill
+                !isOptionalLoopAfterKillAllowed()
               );
               if (enemyEntersHomeInstead) return;
 
@@ -6818,15 +6849,18 @@
             score -= destDanger * 1.45 * cleanSweepUrgencyMult;
           }
 
-          // No-Kill Gate Wait Discipline: Step 47 is a Star Safe Stop (★ STOP), whereas Step 50 (the gate) is unprotected and freezes the bead until all ground beads gather!
-          if (ownerNeedsKill && rulesConfig.waitAllGroundAtGateBeforeLoop) {
+          // No-Kill Gate Wait Discipline: Step 47 is a Star Safe Stop (★ STOP), whereas Step 50 (the gate) is unprotected and blocks looping when more than 1 bead is on the ground!
+          if (ownerNeedsKill && (rulesConfig.singleGroundLoopOnlyWithoutKill !== false || rulesConfig.waitAllGroundAtGateBeforeLoop)) {
+            const blockedByMultiGround = (rulesConfig.singleGroundLoopOnlyWithoutKill !== false) && (ownerGroundCount > 1);
             const otherGroundNotAtGate = owner.tokens.some(function (ot) {
               return ot.id !== tk.id && ot.state === 'board' && (ot.steps % 52) < 50;
             });
             if (newLapPos === 47 && victims.length === 0) {
-              score += 240 * gateWaitMult;
-            } else if (newLapPos === 50 && otherGroundNotAtGate && destDanger > 0) {
-              score -= (220 + destDanger * 1.4) * gateWaitMult;
+              score += (blockedByMultiGround ? 290 : 240) * gateWaitMult;
+            } else if (newLapPos === 50 && (blockedByMultiGround || otherGroundNotAtGate) && destDanger > 0) {
+              score -= (260 + destDanger * 1.5) * gateWaitMult;
+            } else if (blockedByMultiGround && newLapPos >= 48 && victims.length === 0) {
+              score -= 145 * gateWaitMult;
             }
             if (curLapPos < 45 && newLapPos >= 48 && ownerGroundCount <= 2 && !otherGroundNotAtGate) {
               score -= 110 * gateWaitMult;
@@ -7014,7 +7048,7 @@
 
         if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
           if (eligibleHome) {
-            if (forceOuterLoop && rulesConfig.allowOptionalLoopAfterKill) {
+            if (forceOuterLoop && isOptionalLoopAfterKillAllowed()) {
               return { valid: true, loopedPastHome: true, optionalOuterLoop: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
             }
             const intoHome = delta - stepsToHomeGate;
@@ -7022,16 +7056,8 @@
             if (intoHome < 6) return { valid: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: intoHome };
             return { valid: false };
           }
-          if (rulesConfig.waitAllGroundAtGateBeforeLoop) {
-            const groundBeads = owner.tokens.filter(function (t) { return t.state === 'board'; });
-            if (groundBeads.length > 1) {
-              if (!groundBeads.every(function (t) { return (t.steps % 52) === 50; })) {
-                return { valid: false };
-              }
-              if (groundBeads[0] && groundBeads[0].id !== token.id) {
-                return { valid: false };
-              }
-            }
+          if (!canNoKillBeadLoopAroundBoard(token, owner.tokens)) {
+            return { valid: false };
           }
           return { valid: true, loopedPastHome: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
         }
@@ -7055,7 +7081,7 @@
             if (t.lockedThisTurn || t.state === 'completed') return false;
             return unusedDice.some(function (d) {
               return simulateAdvanceOnSimPlayers(t, d.value, simPlayers, false).valid ||
-                     (t.state === 'board' && eligibleHome && rulesConfig.allowOptionalLoopAfterKill && simulateAdvanceOnSimPlayers(t, d.value, simPlayers, true).valid);
+                     (t.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed() && simulateAdvanceOnSimPlayers(t, d.value, simPlayers, true).valid);
             });
           });
           if (groundTokens.length <= 1 || !otherPlayable) {
@@ -7103,7 +7129,7 @@
                 sim: sim
               });
             }
-            if (tk.state === 'board' && eligibleHome && rulesConfig.allowOptionalLoopAfterKill) {
+            if (tk.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed()) {
               const posInLap = tk.steps % 52;
               const stepsToGate = 50 - posInLap;
               if (stepsToGate >= 0 && die.value > stepsToGate) {
@@ -7141,6 +7167,24 @@
                     isCombined: true,
                     sim: simC
                   });
+                }
+                if (tk.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed()) {
+                  const posInLap = tk.steps % 52;
+                  const stepsToGate = 50 - posInLap;
+                  if (stepsToGate >= 0 && sumDelta > stepsToGate) {
+                    const loopSimC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, true);
+                    if (loopSimC.valid) {
+                      candidateMoves.push({
+                        tokenId: tk.id,
+                        ownerIdx: targetOwnerIdx,
+                        diceIds: [d0.id, d1.id],
+                        delta: sumDelta,
+                        isCombined: true,
+                        isOptionalLoop: true,
+                        sim: loopSimC
+                      });
+                    }
+                  }
                 }
               }
             }
@@ -8435,8 +8479,11 @@
           });
           const fallbackHb = myOwnHits.length > 0 ? myOwnHits[0] : matchedHitboxes[matchedHitboxes.length - 1];
           const tk = gameState.players[fallbackHb.ownerIdx].tokens[fallbackHb.tokenId];
+          const ownerGroundBeads = gameState.players[fallbackHb.ownerIdx].tokens.filter(function (t) { return t.state === 'board'; });
           if (tk.lockedThisTurn && rulesConfig.closeGameMode) {
             showToast('🔒 Close Game Rule: This bead just made a kill and is locked for the rest of this turn!');
+          } else if (tk.state === 'board' && !canOwnerEnterHomeStretch(tk.owner) && ownerGroundBeads.length > 1 && rulesConfig.singleGroundLoopOnlyWithoutKill !== false && (tk.steps % 52) >= 45) {
+            showToast('🚫 Cannot come around Home without a kill while you have multiple beads on the ground!');
           } else {
             showToast('This bead cannot move with the current dice.');
           }
@@ -9176,6 +9223,8 @@
         document.getElementById('chkTeamMode').checked = Boolean(rulesConfig.teamMode);
         document.getElementById('chkStrictRemainder').checked = Boolean(rulesConfig.strictHomeRemainder);
         document.getElementById('chkTeamAssistSix').checked = Boolean(rulesConfig.teamAssistRequiresSix);
+        const chkSingleGroundLoop = document.getElementById('chkSingleGroundLoopOnlyWithoutKill');
+        if (chkSingleGroundLoop) chkSingleGroundLoop.checked = rulesConfig.singleGroundLoopOnlyWithoutKill !== false;
         const chkOptLoop = document.getElementById('chkOptionalLoopAfterKill');
         if (chkOptLoop) chkOptLoop.checked = Boolean(rulesConfig.allowOptionalLoopAfterKill);
         const chkWaitGate = document.getElementById('chkWaitAllGroundAtGate');
@@ -9349,8 +9398,9 @@
         rulesConfig.mandatoryYardSpawn = true;
         rulesConfig.killRequiredForHome = true;
         rulesConfig.wipeoutResetsHomeEligibility = true;
-        rulesConfig.allowOptionalLoopAfterKill = false;
-        rulesConfig.waitAllGroundAtGateBeforeLoop = false;
+        rulesConfig.singleGroundLoopOnlyWithoutKill = true;
+        rulesConfig.allowOptionalLoopAfterKill = true;
+        rulesConfig.waitAllGroundAtGateBeforeLoop = true;
         rulesConfig.bonusRollOnHome = true;
         rulesConfig.doubleSixBonusRoll = true;
         rulesConfig.safeStopImmunity = true;
@@ -9387,6 +9437,7 @@
         rulesConfig.mandatoryYardSpawn = false;
         rulesConfig.killRequiredForHome = false;
         rulesConfig.wipeoutResetsHomeEligibility = false;
+        rulesConfig.singleGroundLoopOnlyWithoutKill = false;
         rulesConfig.allowOptionalLoopAfterKill = false;
         rulesConfig.waitAllGroundAtGateBeforeLoop = false;
         rulesConfig.bonusRollOnHome = true;
@@ -13620,18 +13671,34 @@
           exampleUr: 'مثال: آپ کا 4 اور 2 آیا۔ گوٹی نمبر 1 چار خانے چل کر مخالف کو مار سکتی ہے؛ یہ اصول آن ہو تو آپ کو لازمی گوٹی نمبر 1 سے شکار ہی کرنا پڑے گا۔'
         },
         {
+          id: 'single_ground_loop_only_without_kill',
+          cat: 'combat',
+          ruleKey: 'singleGroundLoopOnlyWithoutKill',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '18. No-Kill Loop Only With Single Ground Bead & Free Choice After Kill',
+          titleUr: 'بغیر شکار صرف اکیلی میدانی گوٹی کا چکر اور شکار کے بعد اندر یا باہر کی آزادی',
+          enDesc: 'If a player has not eaten an opponent (0 kills), they cannot come around their Home (loop past step 50) unless that bead is their ONLY bead on the ground. If they have 2 or more beads on the ground, they cannot come around their Home. However, once they have eaten an opponent, they are completely free to either come around their Home or go inside it to complete.',
+          urDesc: 'اگر کھلاڑی نے ابھی تک کسی مخالف گوٹی کا شکار نہیں کیا (0 شکار)، تو اس کی گوٹی اپنے گھر کے آگے سے گھوم کر دوبارہ چکر نہیں لگا سکتی سوائے اس کے کہ پورے میدان (گراؤنڈ) میں اس کی صرف وہی ایک گوٹی موجود ہو۔ اگر میدان میں اس کی ایک سے زیادہ گوٹیاں ہیں تو وہ بغیر شکار اپنے گھر کے گرد نہیں گھوم سکتا۔ البتہ جب وہ شکار کر لے تو وہ آزاد ہے کہ چاہے گھر کے اندر جا کر پکی کرے یا باہر سے دوبارہ چکر لگائے۔',
+          onEffectEn: 'ENABLED (Default ON): Blocks 0-kill players from looping past their Home gate whenever they have more than 1 bead on the ground; allows looping with 1 sole ground bead, and gives players with a kill free choice to loop or enter Home.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): بغیر شکار کیے ایک سے زیادہ میدانی گوٹیاں ہونے پر گھر کے آگے چکر لگانا بند ہو گا (صرف اکیلی گوٹی چکر لگا سکے گی)، جبکہ شکار کرنے کے بعد اندر جانے یا باہر گھومنے کی مکمل آزادی ہو گی۔',
+          offEffectEn: 'DISABLED (OFF): Defers to the standard Gate Wait / Optional Loop settings.',
+          offEffectUr: 'آف (OFF): یہ شرط ختم ہو کر عام گیٹ رولز لاگو ہوں گے۔',
+          exampleEn: '1) Red has 0 kills and 2 beads on the ground (at steps 50 and 15): the bead at step 50 cannot loop around Home because Red has more than 1 bead on the ground. 2) Red has 1 kill and reaches the Home gate: Red sees both the Green Home target (go inside) and Purple Loop target (come around Home) and can freely pick either!',
+          exampleUr: 'مثال: 1) لال کھلاڑی کا 0 شکار ہے اور میدان میں 2 گوٹیاں ہیں: دروازے والی گوٹی باہر چکر نہیں لگا سکتی۔ 2) لال نے 1 شکار کر لیا ہے: اب دروازے پر پہنچنے پر وہ اپنی مرضی سے گھر کے اندر بھی جا سکتا ہے اور باہر کا چکر بھی لگا سکتا ہے!'
+        },
+        {
           id: 'optional_loop_after_kill',
           cat: 'combat',
           ruleKey: 'allowOptionalLoopAfterKill',
-          defaultBadge: 'Default: OFF (پہلے سے آف)',
-          titleEn: '18. Optional Outer Loop After Kill',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: '18B. Optional Outer Loop After Kill',
           titleUr: 'شکار کرنے کے بعد گھر جانے یا باہر گھومنے کی مرضی',
-          enDesc: 'Normally, once you have at least 1 kill, a bead passing its Home gate automatically turns inside the Home column. Enabling this lets you choose whether to enter Home OR loop around the outer board again to hunt more enemies.',
-          urDesc: 'عام طور پر جب کھلاڑی کا شکار مکمل ہو جائے تو گوٹی دروازے پر پہنچ کر سیدھی گھر کے اندر جاتی ہے۔ اس آپشن کو آن کرنے سے کھلاڑی کو اختیار ملتا ہے کہ وہ چاہے تو گوٹی گھر کے اندر ڈالے یا مزید شکار کے لیے دوبارہ باہر کے چکر پر گھمائے۔',
-          onEffectEn: 'ENABLED (ON): Shows two target rings at the Home gate—one inside Home (+delta) and one continuing around the outer loop (Loop +delta).',
-          onEffectUr: 'آن (ON): دروازے کے قریب گوٹی سلیکٹ کرنے پر اندر جانے اور باہر گھومنے دونوں کے نشان نظر آئیں گے۔',
-          offEffectEn: 'DISABLED (Default OFF): Eligible beads with a kill always turn into their Home column.',
-          offEffectUr: 'آف (OFF — ڈیفالٹ): شکار ہونے کے بعد گوٹی لازمی اپنے گھر کی لائن میں ہی داخل ہو گی۔',
+          enDesc: 'Once you have eaten an opponent (at least 1 kill), you are free to choose whether a bead passing its Home gate turns inside the Home column to complete OR comes around the outer board again to hunt more enemies.',
+          urDesc: 'جب کھلاڑی کم از کم ایک شکار کر لے تو اسے مکمل آزادی ہوتی ہے کہ وہ دروازے پر پہنچ کر چاہے تو گوٹی گھر کے اندر ڈال کر پکی کرے یا مزید شکار کے لیے دوبارہ باہر کے چکر پر گھمائے۔',
+          onEffectEn: 'ENABLED (Default ON): Shows two target rings at the Home gate—one inside Home (+delta) and one continuing around the outer loop (Loop +delta).',
+          onEffectUr: 'آن (ON — ڈیفالٹ): دروازے کے قریب گوٹی سلیکٹ کرنے پر اندر جانے اور باہر گھومنے دونوں کے نشان نظر آئیں گے۔',
+          offEffectEn: 'DISABLED (OFF): If Single-Bead Loop & Free Choice rule is also OFF, eligible beads with a kill must turn into their Home column.',
+          offEffectUr: 'آف (OFF): شکار ہونے کے بعد گوٹی لازمی اپنے گھر کی لائن میں ہی داخل ہو گی۔',
           exampleEn: 'You already have 1 kill, and your partner needs help hunting an enemy ahead of your start square. With this ON, you can choose "Loop +4" to bypass your Home gate and chase the enemy!',
           exampleUr: 'مثال: آپ کا شکار ہو چکا ہے لیکن آپ آگے کھڑی مخالف گوٹی کو مارنا چاہتے ہیں؛ آن ہونے پر آپ گھر جانے کے بجائے باہر کا چکر منتخب کر سکتے ہیں۔'
         },
@@ -14545,7 +14612,7 @@
       });
       [
         'chkBonusOnKill', 'chkKeepCaptureLockOnBonus', 'chkMandatorySpawn',
-        'chkKillForHome', 'chkWipeoutResetsHomeEligibility', 'chkOptionalLoopAfterKill',
+        'chkKillForHome', 'chkWipeoutResetsHomeEligibility', 'chkSingleGroundLoopOnlyWithoutKill', 'chkOptionalLoopAfterKill',
         'chkWaitAllGroundAtGate', 'chkBonusOnHome', 'chkDoubleSixBonus',
         'chkSafeStopImmunity', 'chkTeamMode', 'chkStrictRemainder',
         'chkTeamAssistSix', 'chkThreeConsecutiveSixes', 'chkSingleSixBonusTwoDice',
@@ -14729,6 +14796,8 @@
         rulesConfig.killRequiredForHome = document.getElementById('chkKillForHome').checked;
         const chkWipeout = document.getElementById('chkWipeoutResetsHomeEligibility');
         if (chkWipeout) rulesConfig.wipeoutResetsHomeEligibility = chkWipeout.checked;
+        const chkSingleGroundLoop = document.getElementById('chkSingleGroundLoopOnlyWithoutKill');
+        if (chkSingleGroundLoop) rulesConfig.singleGroundLoopOnlyWithoutKill = chkSingleGroundLoop.checked;
         rulesConfig.allowOptionalLoopAfterKill = document.getElementById('chkOptionalLoopAfterKill').checked;
         rulesConfig.waitAllGroundAtGateBeforeLoop = document.getElementById('chkWaitAllGroundAtGate').checked;
         rulesConfig.bonusRollOnHome = document.getElementById('chkBonusOnHome').checked;

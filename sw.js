@@ -80,11 +80,11 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "484d17097dc95f981a61492f5fa70c72"
+        "revision": "c2d3049e54b4dbffb256b36484a53360"
     },
     {
         "url": "index.html.bak",
-        "revision": "b33ff9f1a22eec8c4e229747e4482735"
+        "revision": "f5ebd3871dba749247ddf540847c32d4"
     },
     {
         "url": "LICENSE",
@@ -116,7 +116,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "d79177b90abbefbfc381ce33a231f13f"
+        "revision": "45f7146d0fd22df72b16d690c0320366"
     },
     {
         "url": "transcript of the vioces.txt",
