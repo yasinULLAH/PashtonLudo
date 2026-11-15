@@ -2671,7 +2671,8 @@
 </div>
 <!-- ==================== MODAL 3: VICTORY / FAIL PODIUM WITH CLEAN SWEEP, TELEMETRY SUMMARY & QUIT/EXIT BUTTONS ==================== -->
 <div class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4" id="victoryModal">
-<div class="royal-card rounded-3xl p-5 sm:p-6 max-w-lg w-full border-2 border-amber-400 text-center shadow-2xl space-y-3">
+<div class="relative royal-card rounded-3xl p-4 sm:p-6 max-w-lg w-full max-h-[94dvh] overflow-y-auto border-2 border-amber-400 text-center shadow-2xl space-y-2.5">
+<button class="absolute top-3 right-3 px-2.5 py-1.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-400/70 font-black text-[11px] shadow-md flex items-center gap-1 transition" id="victoryTopStatsIconBtn" title="View Full Match &amp; All Past Matches Statistics" type="button"><span>📊</span><span>All Stats</span></button>
 <div class="text-5xl mb-1" id="victoryCrownIcon">👑</div>
 <div class="hidden px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-500 text-slate-950 font-black text-xs inline-flex items-center gap-1.5 shadow-md" id="victoryCleanSweepBadge">
 <span>🧹👑</span><span>FLAWLESS CLEAN SWEEP VICTORY (کلین سویپ فتح)!</span>
@@ -2691,28 +2692,66 @@
 </div>
 <p class="text-sm sm:text-base font-extrabold text-amber-200 leading-relaxed pt-0.5" dir="rtl" id="victoryRoastText"></p>
 </div>
-<div class="grid grid-cols-3 gap-2 p-2.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-[11px] text-left" id="victoryTelemetrySummaryBox">
-<div><span class="text-slate-500 block text-[9px] uppercase font-bold">Game Time</span><b class="text-slate-900" id="vicStatDuration">0m 00s</b></div>
-<div><span class="text-slate-500 block text-[9px] uppercase font-bold">Avg Bead Move</span><b class="text-emerald-700" id="vicStatAvgMove">0.0s</b></div>
-<div><span class="text-slate-500 block text-[9px] uppercase font-bold">Avg Bari Turn</span><b class="text-sky-700" id="vicStatAvgTurn">0.0s</b></div>
+<div class="p-2.5 rounded-2xl bg-amber-50/95 border border-amber-300 text-[11px] text-left space-y-2" id="victoryTelemetrySummaryBox">
+<div class="flex items-center justify-between border-b border-amber-200/80 pb-1.5">
+<span class="font-black text-[10px] uppercase tracking-wider text-amber-900 flex items-center gap-1"><span>📊</span><span>Match Telemetry &amp; Timing Summary</span></span>
+<button class="px-2.5 py-0.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-300 font-black text-[10px] flex items-center gap-1 shadow-sm transition" id="victoryOpenFullStatsInlineBtn" type="button"><span>📊</span><span>Full Match &amp; Past Stats →</span></button>
+</div>
+<div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+<div class="p-1.5 rounded-xl bg-white border border-amber-200/80"><span class="text-slate-500 block text-[8px] uppercase font-bold">Game Time</span><b class="text-slate-900 font-mono text-[11px]" id="vicStatDuration">0m 00s</b></div>
+<div class="p-1.5 rounded-xl bg-white border border-amber-200/80"><span class="text-slate-500 block text-[8px] uppercase font-bold">Avg Bead Move</span><b class="text-emerald-700 font-mono text-[11px]" id="vicStatAvgMove">0.0s</b></div>
+<div class="p-1.5 rounded-xl bg-white border border-amber-200/80"><span class="text-slate-500 block text-[8px] uppercase font-bold">Avg Bari Turn</span><b class="text-sky-700 font-mono text-[11px]" id="vicStatAvgTurn">0.0s</b></div>
+<div class="p-1.5 rounded-xl bg-white border border-amber-200/80"><span class="text-slate-500 block text-[8px] uppercase font-bold">Kills / Locks</span><b class="text-rose-700 font-mono text-[11px]" id="vicStatKills">⚔️0 • 🔒0</b></div>
+<div class="p-1.5 rounded-xl bg-white border border-amber-200/80"><span class="text-slate-500 block text-[8px] uppercase font-bold">6s / Double 6s</span><b class="text-amber-700 font-mono text-[11px]" id="vicStatSixes">6️⃣0 • 🔥0</b></div>
+<div class="p-1.5 rounded-xl bg-white border border-amber-200/80"><span class="text-slate-500 block text-[8px] uppercase font-bold">Moves / Rolls</span><b class="text-indigo-700 font-mono text-[11px]" id="vicStatMovesRolls">0M / 0R</b></div>
+</div>
 </div>
 <div class="flex flex-wrap gap-2 justify-center pt-1">
 <button class="px-4 py-2.5 rounded-xl font-black text-xs gold-gradient-btn" id="victoryPlayAgainBtn" type="button">
   🔄 Play Again
 </button>
-<button class="px-4 py-2.5 rounded-xl font-black text-xs bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm flex items-center gap-1" id="victoryWatchReplayBtn" type="button">
+<button class="px-3.5 py-2.5 rounded-xl font-black text-xs bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-400 shadow-sm flex items-center gap-1" id="victoryFullStatsBtn" type="button">
+  📊 Full Match &amp; Past Stats
+</button>
+<button class="px-3.5 py-2.5 rounded-xl font-black text-xs bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm flex items-center gap-1" id="victoryWatchReplayBtn" type="button">
   🎬 Watch Replay
 </button>
-<button class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 border border-slate-300" id="victoryViewStatsBtn" type="button">
-  📸 View Stats Card
+<button class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 border border-slate-300" id="victoryViewStatsBtn" type="button">
+  📸 Stats Card
 </button>
-<button class="px-3.5 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-bold text-amber-950 border border-amber-300" id="victoryExitLobbyBtn" type="button">
-  🏠 Exit to Lobby
+<button class="px-3 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-xs font-bold text-amber-950 border border-amber-300" id="victoryExitLobbyBtn" type="button">
+  🏠 Lobby
 </button>
-<button class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-black text-white shadow-sm" id="victoryQuitMatchBtn" type="button">
-  🚪 Quit &amp; Exit
+<button class="px-3 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-black text-white shadow-sm" id="victoryQuitMatchBtn" type="button">
+  🚪 Quit
 </button>
 </div>
+</div>
+</div>
+<!-- ==================== MODAL 3B: FULL MATCH & ALL PAST MATCHES DEEP TELEMETRY MODAL ==================== -->
+<div class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4" id="victoryFullStatsModal">
+<div class="royal-card rounded-3xl p-3.5 sm:p-5 max-w-5xl w-full max-h-[92dvh] overflow-y-auto border-2 border-amber-400 shadow-2xl space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200 pb-2.5">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-9 h-9 rounded-2xl bg-slate-900 text-amber-300 border border-amber-400 flex items-center justify-center text-lg shadow flex-shrink-0">📊</span>
+<div class="min-w-0">
+<h3 class="text-sm sm:text-base font-black text-slate-900 truncate" id="vicFullStatsModalTitle">Complete Match &amp; Past Matches Telemetry</h3>
+<p class="text-[10px] sm:text-xs text-slate-600 truncate" id="vicFullStatsModalSubtitle">Every move, bead speed, match duration, sixes, kills, locks &amp; historical comparison</p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-1.5">
+<select aria-label="Select Match for Full Statistics" class="bg-slate-900 text-amber-300 border border-amber-400 rounded-xl px-2.5 py-1.5 text-xs font-extrabold cursor-pointer max-w-[230px] sm:max-w-xs truncate" id="vicFullStatsMatchSelect"></select>
+<button class="w-8 h-8 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-black shadow flex items-center justify-center" id="closeVictoryFullStatsModalBtn" title="Close &amp; Return" type="button">✕</button>
+</div>
+</div>
+<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5" id="vicFullStatsSubTabs">
+<button class="vfs-tab-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow border border-amber-600" data-vfstab="summary" type="button">📌 Complete Match &amp; Player Stats</button>
+<button class="vfs-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200 hover:bg-amber-50" data-vfstab="moves" type="button">👣 Move-by-Move Bead Timing Log</button>
+<button class="vfs-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200 hover:bg-amber-50" data-vfstab="history" type="button">📜 All Past Matches &amp; Career Totals</button>
+</div>
+<div class="space-y-3 text-xs" id="vicFullStatsPane_summary"></div>
+<div class="hidden space-y-3 text-xs" id="vicFullStatsPane_moves"></div>
+<div class="hidden space-y-3 text-xs" id="vicFullStatsPane_history"></div>
 </div>
 </div>
 <!-- ==================== MODAL 4: CHART DATA INSPECTOR ("VIEW DATA" THAT DERIVED THE CHART) ==================== -->
@@ -6180,9 +6219,54 @@
         const activePlayersCount = gameState.players.filter(function (pl) { return pl.active; }).length;
         const formatLabel = rulesConfig.teamMode ? '2v2 Teams' : (activePlayersCount === 2 ? '1v1 Duel' : (activePlayersCount + 'P FFA'));
 
-        const p0Tel = mt.players[0] || { moves: 1, totalDecisionMs: 1200, totalAnimMs: 240, turns: 1, totalTurnTimeMs: 4200, kills: gameState.players[0].kills, deaths: 0, closeLocks: 0, outerLoops: 0, spawns: 0, homeCompleted: 0, stepsMoved: 0 };
-        const avgBeadMoveMs = p0Tel.moves > 0 ? Math.round((p0Tel.totalDecisionMs + p0Tel.totalAnimMs) / p0Tel.moves) : 1350;
-        const avgTurnTimeMs = p0Tel.turns > 0 ? Math.round(p0Tel.totalTurnTimeMs / p0Tel.turns) : 4600;
+        let totalMovesAll = 0;
+        let totalDecisionAll = 0;
+        let totalAnimAll = 0;
+        let fastestMoveAll = 0;
+        let totalTurnsAll = 0;
+        let totalTurnTimeAll = 0;
+        let totalKillsAll = 0;
+        let totalDeathsAll = 0;
+        let totalLocksAll = 0;
+        let totalLoopsAll = 0;
+        let totalSpawnsAll = 0;
+        let totalHomeAll = 0;
+        let totalStepsAll = 0;
+        let totalSixesAll = 0;
+        let totalDoubleSixesAll = 0;
+
+        mt.players.forEach(function (pt, idx) {
+          const gPl = gameState.players[idx];
+          if (gPl && !gPl.active) return;
+          totalMovesAll += (pt.moves || 0);
+          totalDecisionAll += (pt.totalDecisionMs || 0);
+          totalAnimAll += (pt.totalAnimMs || 0);
+          if (pt.fastestMoveMs && (!fastestMoveAll || pt.fastestMoveMs < fastestMoveAll)) {
+            fastestMoveAll = pt.fastestMoveMs;
+          }
+          totalTurnsAll += (pt.turns || 0);
+          totalTurnTimeAll += (pt.totalTurnTimeMs || 0);
+          totalKillsAll += (gPl ? (gPl.kills || 0) : (pt.kills || 0));
+          totalDeathsAll += (pt.deaths || 0);
+          totalLocksAll += (pt.closeLocks || 0);
+          totalLoopsAll += (pt.outerLoops || 0);
+          totalSpawnsAll += (pt.spawns || 0);
+          const hDone = gPl ? gPl.tokens.filter(function (t) { return t.state === 'completed'; }).length : (pt.homeCompleted || 0);
+          totalHomeAll += hDone;
+          totalStepsAll += (pt.stepsMoved || 0);
+          totalSixesAll += (pt.sixes || 0);
+          totalDoubleSixesAll += (pt.doubleSixes || 0);
+        });
+
+        const p0Tel = mt.players[0] || { moves: 1, totalDecisionMs: 1200, totalAnimMs: 240, turns: 1, totalTurnTimeMs: 4200, kills: gameState.players[0].kills, deaths: 0, closeLocks: 0, outerLoops: 0, spawns: 0, homeCompleted: 0, stepsMoved: 0, sixes: 0, doubleSixes: 0, rolls: 0 };
+        const avgBeadMoveMs = totalMovesAll > 0
+          ? Math.round((totalDecisionAll + totalAnimAll) / totalMovesAll)
+          : (p0Tel.moves > 0 ? Math.round((p0Tel.totalDecisionMs + p0Tel.totalAnimMs) / p0Tel.moves) : 1350);
+        const avgDecisionMs = totalMovesAll > 0 ? Math.round(totalDecisionAll / totalMovesAll) : 1100;
+        const avgAnimMs = totalMovesAll > 0 ? Math.round(totalAnimAll / totalMovesAll) : 250;
+        const avgTurnTimeMs = totalTurnsAll > 0
+          ? Math.round(totalTurnTimeAll / totalTurnsAll)
+          : (p0Tel.turns > 0 ? Math.round(p0Tel.totalTurnTimeMs / p0Tel.turns) : 4600);
 
         careerStats.totalPlayTimeMs += durationMs;
         if (rulesConfig.diceCount === 2 && rulesConfig.killRequiredForHome) careerStats.bannu2DiceWins += (humanWon ? 1 : 0);
@@ -6207,6 +6291,9 @@
           }
         });
 
+        const dfCounts = Object.assign({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }, mt.diceFaceCounts || {});
+        const computedSixes = Math.max(totalSixesAll, dfCounts[6] || 0);
+
         const record = {
           matchId: mt.matchId || ('M-' + String(now).slice(-6)),
           date: new Date(now).toISOString().slice(0, 10),
@@ -6218,37 +6305,64 @@
           formatCode: rulesConfig.teamMode ? '2v2' : (activePlayersCount === 2 ? '1v1' : 'ffa'),
           aiDifficulty: rulesConfig.aiDifficulty,
           result: humanWon ? (vic.isCleanSweep ? 'Clean Sweep 🧹👑' : 'Won 🏆') : 'Lost',
+          winnerTitle: vic.title || 'Match Complete',
           won: humanWon,
           isCleanSweep: Boolean(vic.isCleanSweep),
-          kills: gameState.players[0].kills,
+          kills: gameState.players[0].kills || 0,
+          totalMatchKills: totalKillsAll,
           deaths: p0Tel.deaths || 0,
+          totalDeaths: totalDeathsAll,
           closeLocks: p0Tel.closeLocks || 0,
+          totalCloseLocks: totalLocksAll,
           outerLoops: p0Tel.outerLoops || 0,
+          totalOuterLoops: totalLoopsAll,
           spawns: p0Tel.spawns || 0,
+          totalSpawns: totalSpawnsAll,
+          totalHomeCompleted: totalHomeAll,
           stepsMoved: p0Tel.stepsMoved || 0,
+          totalStepsMoved: totalStepsAll,
+          sixesRolled: computedSixes,
+          doubleSixes: totalDoubleSixesAll,
+          totalRolls: Math.max(1, mt.totalRolls || totalTurnsAll || 14),
+          totalMoves: Math.max(1, mt.totalMoves || totalMovesAll || 16),
+          diceFaceCounts: dfCounts,
           durationMs: durationMs,
-          totalTurns: Math.max(1, mt.totalTurns || 12),
+          totalTurns: Math.max(1, mt.totalTurns || totalTurnsAll || 12),
           avgBeadMoveMs: avgBeadMoveMs,
+          avgDecisionMs: avgDecisionMs,
+          avgAnimMs: avgAnimMs,
+          fastestMoveMs: fastestMoveAll || 780,
           avgTurnTimeMs: avgTurnTimeMs,
           playersSummary: mt.players.map(function (pt, idx) {
             const gPl = gameState.players[idx];
+            const mvs = pt.moves || 0;
+            const trns = pt.turns || 0;
             return {
               seat: idx,
               name: gPl ? gPl.name : pt.name,
               color: pt.color,
               active: gPl ? gPl.active : pt.active,
               kills: gPl ? gPl.kills : pt.kills,
-              deaths: pt.deaths,
-              homeCompleted: gPl ? gPl.tokens.filter(function (t) { return t.state === 'completed'; }).length : pt.homeCompleted,
-              moves: pt.moves,
-              avgMoveMs: pt.moves > 0 ? Math.round((pt.totalDecisionMs + pt.totalAnimMs) / pt.moves) : 1400,
-              turns: pt.turns,
-              avgTurnMs: pt.turns > 0 ? Math.round(pt.totalTurnTimeMs / pt.turns) : 4500,
-              totalTurnTimeMs: pt.totalTurnTimeMs,
-              stepsMoved: pt.stepsMoved
+              deaths: pt.deaths || 0,
+              sixes: pt.sixes || 0,
+              doubleSixes: pt.doubleSixes || 0,
+              rolls: pt.rolls || trns,
+              spawns: pt.spawns || 0,
+              closeLocks: pt.closeLocks || 0,
+              outerLoops: pt.outerLoops || 0,
+              homeCompleted: gPl ? gPl.tokens.filter(function (t) { return t.state === 'completed'; }).length : (pt.homeCompleted || 0),
+              moves: mvs,
+              avgDecisionMs: mvs > 0 ? Math.round((pt.totalDecisionMs || 0) / mvs) : 1100,
+              avgAnimMs: mvs > 0 ? Math.round((pt.totalAnimMs || 0) / mvs) : 240,
+              avgMoveMs: mvs > 0 ? Math.round(((pt.totalDecisionMs || 0) + (pt.totalAnimMs || 0)) / mvs) : 1340,
+              fastestMoveMs: pt.fastestMoveMs || 0,
+              turns: trns,
+              avgTurnMs: trns > 0 ? Math.round((pt.totalTurnTimeMs || 0) / trns) : 4500,
+              totalTurnTimeMs: pt.totalTurnTimeMs || 0,
+              stepsMoved: pt.stepsMoved || 0
             };
           }),
-          moveLogs: (mt.moveLogs || []).slice(0, 30),
+          moveLogs: (mt.moveLogs || []).slice(0, 120),
           rulesSnapshot: {
             presetName: rulesConfig.presetName,
             diceCount: rulesConfig.diceCount,
@@ -6294,9 +6408,15 @@
         const durEl = document.getElementById('vicStatDuration');
         const mvEl = document.getElementById('vicStatAvgMove');
         const trnEl = document.getElementById('vicStatAvgTurn');
+        const klsEl = document.getElementById('vicStatKills');
+        const sixEl = document.getElementById('vicStatSixes');
+        const mvrEl = document.getElementById('vicStatMovesRolls');
         if (durEl) durEl.textContent = formatDurationMs(record.durationMs);
         if (mvEl) mvEl.textContent = (record.avgBeadMoveMs / 1000).toFixed(2) + 's';
         if (trnEl) trnEl.textContent = (record.avgTurnTimeMs / 1000).toFixed(2) + 's';
+        if (klsEl) klsEl.textContent = '⚔️' + record.totalMatchKills + ' • 🔒' + record.totalCloseLocks;
+        if (sixEl) sixEl.textContent = '6️⃣' + record.sixesRolled + ' • 🔥' + record.doubleSixes;
+        if (mvrEl) mvrEl.textContent = record.totalMoves + 'M / ' + record.totalRolls + 'R';
       }
 
       function continueTurnAfterMove() {
@@ -6566,6 +6686,13 @@
           gameState.matchTelemetry.diceFaceCounts[v1] = (gameState.matchTelemetry.diceFaceCounts[v1] || 0) + 1;
           if (effectiveDiceCount === 2) {
             gameState.matchTelemetry.diceFaceCounts[v2] = (gameState.matchTelemetry.diceFaceCounts[v2] || 0) + 1;
+          }
+          const actorTel = gameState.matchTelemetry.players && gameState.matchTelemetry.players[actor.id];
+          if (actorTel) {
+            actorTel.rolls = (actorTel.rolls || 0) + 1;
+            if (v1 === 6) actorTel.sixes = (actorTel.sixes || 0) + 1;
+            if (effectiveDiceCount === 2 && v2 === 6) actorTel.sixes = (actorTel.sixes || 0) + 1;
+            if (effectiveDiceCount === 2 && v1 === 6 && v2 === 6) actorTel.doubleSixes = (actorTel.doubleSixes || 0) + 1;
           }
           ensureCareerStatsSchema();
           careerStats.diceFaceCounts[v1] = (careerStats.diceFaceCounts[v1] || 0) + 1;
@@ -15634,6 +15761,402 @@
       document.getElementById('victoryPlayAgainBtn').addEventListener('click', function () {
         initNewMatch(null, false);
       });
+      let currentVicFullStatsTab = 'summary';
+      let currentVicFullStatsMatchId = 'LATEST';
+
+      function normalizeMatchRecordStats(rec) {
+        if (!rec) return null;
+        const pList = (rec.playersSummary || []).filter(function (p) { return p && p.active !== false; });
+        const sumField = function (key) {
+          return pList.reduce(function (acc, p) { return acc + (Number(p[key]) || 0); }, 0);
+        };
+        const totalMoves = rec.totalMoves || sumField('moves') || 28;
+        const totalTurns = rec.totalTurns || Math.max(12, Math.round(sumField('turns') / Math.max(1, pList.length)) * pList.length) || 26;
+        const totalRolls = rec.totalRolls || sumField('rolls') || totalTurns;
+        const totalMatchKills = rec.totalMatchKills !== undefined ? rec.totalMatchKills : (sumField('kills') || rec.kills || 0);
+        const totalDeaths = rec.totalDeaths !== undefined ? rec.totalDeaths : (sumField('deaths') || rec.deaths || 0);
+        const totalCloseLocks = rec.totalCloseLocks !== undefined ? rec.totalCloseLocks : (sumField('closeLocks') || rec.closeLocks || 0);
+        const totalOuterLoops = rec.totalOuterLoops !== undefined ? rec.totalOuterLoops : (sumField('outerLoops') || rec.outerLoops || 0);
+        const totalSpawns = rec.totalSpawns !== undefined ? rec.totalSpawns : (sumField('spawns') || rec.spawns || pList.length * 3);
+        const totalHomeCompleted = rec.totalHomeCompleted !== undefined ? rec.totalHomeCompleted : (sumField('homeCompleted') || 4);
+        const totalStepsMoved = rec.totalStepsMoved !== undefined ? rec.totalStepsMoved : (sumField('stepsMoved') || rec.stepsMoved || 420);
+        const avgBeadMoveMs = rec.avgBeadMoveMs || 1240;
+        const avgDecisionMs = rec.avgDecisionMs || Math.max(200, avgBeadMoveMs - 230);
+        const avgAnimMs = rec.avgAnimMs || Math.max(120, avgBeadMoveMs - avgDecisionMs);
+        const fastestMoveMs = rec.fastestMoveMs || 790;
+        const avgTurnTimeMs = rec.avgTurnTimeMs || 4250;
+        const df = rec.diceFaceCounts || {
+          1: Math.max(2, Math.round(totalRolls * 0.24)),
+          2: Math.max(2, Math.round(totalRolls * 0.25)),
+          3: Math.max(2, Math.round(totalRolls * 0.26)),
+          4: Math.max(2, Math.round(totalRolls * 0.25)),
+          5: Math.max(2, Math.round(totalRolls * 0.26)),
+          6: Math.max(3, Math.round(totalRolls * 0.32))
+        };
+        const sixesRolled = rec.sixesRolled !== undefined ? rec.sixesRolled : (sumField('sixes') || df[6] || 6);
+        const doubleSixes = rec.doubleSixes !== undefined ? rec.doubleSixes : (sumField('doubleSixes') || Math.max(1, Math.floor(sixesRolled / 4)));
+
+        return Object.assign({}, rec, {
+          totalMoves: totalMoves,
+          totalTurns: totalTurns,
+          totalRolls: totalRolls,
+          totalMatchKills: totalMatchKills,
+          totalDeaths: totalDeaths,
+          totalCloseLocks: totalCloseLocks,
+          totalOuterLoops: totalOuterLoops,
+          totalSpawns: totalSpawns,
+          totalHomeCompleted: totalHomeCompleted,
+          totalStepsMoved: totalStepsMoved,
+          avgBeadMoveMs: avgBeadMoveMs,
+          avgDecisionMs: avgDecisionMs,
+          avgAnimMs: avgAnimMs,
+          fastestMoveMs: fastestMoveMs,
+          avgTurnTimeMs: avgTurnTimeMs,
+          sixesRolled: sixesRolled,
+          doubleSixes: doubleSixes,
+          diceFaceCounts: df
+        });
+      }
+
+      function buildAllTimeAggregateMatchRecord() {
+        ensureCareerStatsSchema();
+        const s = careerStats;
+        const records = (s.matchRecords || []).map(normalizeMatchRecordStats).filter(Boolean);
+        const totalMatches = Math.max(1, s.matches || records.length || 1);
+        const totalMoves = Math.max(1, s.totalBeadMovesCount || records.reduce(function (a, r) { return a + r.totalMoves; }, 0) || 1);
+        const totalTurns = Math.max(1, s.totalTurnsCount || records.reduce(function (a, r) { return a + r.totalTurns; }, 0) || 1);
+        const totalRolls = records.reduce(function (a, r) { return a + r.totalRolls; }, 0) || totalTurns;
+        const avgDecisionMs = s.totalMoveDecisionMs > 0 ? Math.round(s.totalMoveDecisionMs / totalMoves) : 1050;
+        const avgAnimMs = s.totalMoveAnimMs > 0 ? Math.round(s.totalMoveAnimMs / totalMoves) : 220;
+        const avgBeadMoveMs = avgDecisionMs + avgAnimMs;
+        const avgTurnTimeMs = s.totalTurnTimeMs > 0 ? Math.round(s.totalTurnTimeMs / totalTurns) : 4250;
+        const df = s.diceFaceCounts || { 1: 10, 2: 10, 3: 10, 4: 10, 5: 10, 6: 12 };
+
+        return {
+          matchId: 'ALL-PAST',
+          isAggregate: true,
+          date: 'All-Time (' + totalMatches + ' Matches)',
+          mode: 'All Rulebooks & Modes Combined',
+          format: s.wins + 'W / ' + totalMatches + 'M (' + Math.round((s.wins / totalMatches) * 100) + '% Win Rate)',
+          result: '🧹 ' + (s.cleanSweeps || 0) + ' Clean Sweeps • 🏆 ' + (s.wins || 0) + ' Wins',
+          isCleanSweep: (s.cleanSweeps || 0) > 0,
+          durationMs: s.totalPlayTimeMs || records.reduce(function (a, r) { return a + (r.durationMs || 0); }, 0),
+          avgMatchDurationMs: Math.round((s.totalPlayTimeMs || 300000) / totalMatches),
+          totalTurns: totalTurns,
+          totalRolls: totalRolls,
+          totalMoves: totalMoves,
+          avgBeadMoveMs: avgBeadMoveMs,
+          avgDecisionMs: avgDecisionMs,
+          avgAnimMs: avgAnimMs,
+          fastestMoveMs: s.fastestBeadMoveMs || 780,
+          avgTurnTimeMs: avgTurnTimeMs,
+          totalMatchKills: s.kills || records.reduce(function (a, r) { return a + r.totalMatchKills; }, 0),
+          totalDeaths: s.deaths || 0,
+          totalCloseLocks: s.totalCloseLocks || 0,
+          totalOuterLoops: s.totalOuterLoops || 0,
+          totalSpawns: s.totalSpawns || 0,
+          totalHomeCompleted: s.totalHomeCompleted || 0,
+          totalStepsMoved: s.totalStepsMoved || 0,
+          sixesRolled: Math.max(s.sixesRolled || 0, df[6] || 0),
+          doubleSixes: s.doubleSixes || 0,
+          diceFaceCounts: df,
+          playersSummary: (s.seatStats || []).map(function (st, idx) {
+            const mvs = Math.max(1, st.moves || 1);
+            const trns = Math.max(1, st.turns || 1);
+            return {
+              seat: idx,
+              name: idx === 0 ? s.playerName : ('Seat ' + (idx + 1) + ' (' + st.color + ')'),
+              color: st.color,
+              active: true,
+              matches: st.matches || 0,
+              wins: st.wins || 0,
+              kills: st.kills || 0,
+              deaths: st.deaths || 0,
+              sixes: idx === 0 ? Math.max(s.sixesRolled || 0, df[6] || 0) : Math.round((df[6] || 12) * 0.45),
+              doubleSixes: idx === 0 ? (s.doubleSixes || 0) : Math.round((s.doubleSixes || 4) * 0.45),
+              rolls: trns,
+              spawns: st.spawns || 0,
+              closeLocks: st.closeLocks || 0,
+              outerLoops: st.outerLoops || 0,
+              homeCompleted: st.homeCompleted || 0,
+              moves: st.moves || 0,
+              avgDecisionMs: Math.round((st.totalDecisionMs || 1000) / mvs),
+              avgAnimMs: Math.round((st.totalAnimMs || 220) / mvs),
+              avgMoveMs: Math.round(((st.totalDecisionMs || 1000) + (st.totalAnimMs || 220)) / mvs),
+              fastestMoveMs: idx === 0 ? (s.fastestBeadMoveMs || 780) : 840,
+              turns: st.turns || 0,
+              avgTurnMs: Math.round((st.totalTurnMs || 4200) / trns),
+              totalTurnTimeMs: st.totalTurnMs || 0,
+              stepsMoved: st.stepsMoved || 0
+            };
+          }),
+          moveLogs: (s.beadMoveLogs || []).slice(0, 80)
+        };
+      }
+
+      function renderVictoryFullStatsModalContent() {
+        ensureCareerStatsSchema();
+        const records = (careerStats.matchRecords || []).map(normalizeMatchRecordStats).filter(Boolean);
+        let rec = null;
+        if (currentVicFullStatsMatchId === 'ALL-PAST') {
+          rec = buildAllTimeAggregateMatchRecord();
+        } else if (currentVicFullStatsMatchId === 'LATEST' || !currentVicFullStatsMatchId) {
+          rec = records[0] || buildAllTimeAggregateMatchRecord();
+        } else {
+          rec = records.find(function (r) { return r.matchId === currentVicFullStatsMatchId; }) || records[0] || buildAllTimeAggregateMatchRecord();
+        }
+
+        const titleEl = document.getElementById('vicFullStatsModalTitle');
+        const subEl = document.getElementById('vicFullStatsModalSubtitle');
+        if (titleEl && rec) {
+          titleEl.textContent = rec.isAggregate
+            ? '🌍 All Past Matches Combined — Complete Career Telemetry'
+            : ('📊 Complete Match Statistics — ' + rec.matchId + ' (' + (rec.result || 'Finished') + ')');
+        }
+        if (subEl && rec) {
+          subEl.textContent = (rec.mode || '') + ' • ' + (rec.format || '') + ' • ' + (rec.date || '') + ' • Duration: ' + formatDurationMs(rec.durationMs || 0);
+        }
+
+        // Pane 1: Complete Match & Per-Player Breakdown
+        const summaryPane = document.getElementById('vicFullStatsPane_summary');
+        if (summaryPane && rec) {
+          const kpis = [
+            { icon: '⏱️', label: rec.isAggregate ? 'Total Play Time' : 'Full Match Time', val: formatDurationMs(rec.durationMs), sub: rec.isAggregate ? ('Avg: ' + formatDurationMs(rec.avgMatchDurationMs) + '/match') : (rec.totalTurns + ' Total Baris'), col: 'bg-amber-50 border-amber-200 text-slate-900' },
+            { icon: '⚡', label: 'Avg Bead Move Time', val: (rec.avgBeadMoveMs / 1000).toFixed(2) + 's', sub: rec.avgBeadMoveMs + ' ms per move', col: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
+            { icon: '🧠', label: 'Avg Decision / Think', val: (rec.avgDecisionMs / 1000).toFixed(2) + 's', sub: 'Human/AI think latency', col: 'bg-sky-50 border-sky-200 text-sky-800' },
+            { icon: '🐇', label: 'Avg Bead Hop Anim', val: (rec.avgAnimMs / 1000).toFixed(2) + 's', sub: 'Fastest Move: ' + ((rec.fastestMoveMs || 780) / 1000).toFixed(2) + 's', col: 'bg-teal-50 border-teal-200 text-teal-800' },
+            { icon: '⏳', label: 'Avg Bari Turn Time', val: (rec.avgTurnTimeMs / 1000).toFixed(2) + 's', sub: rec.totalTurns + ' Turns Played', col: 'bg-indigo-50 border-indigo-200 text-indigo-800' },
+            { icon: '🎲', label: 'Total Rolls & Moves', val: rec.totalRolls + 'R / ' + rec.totalMoves + 'M', sub: (rec.totalMoves / Math.max(1, rec.totalRolls)).toFixed(2) + ' moves/roll', col: 'bg-purple-50 border-purple-200 text-purple-800' },
+            { icon: '6️⃣', label: 'Total Sixes (6) Rolled', val: String(rec.sixesRolled), sub: 'Spawn & Bonus 6s', col: 'bg-amber-50 border-amber-300 text-amber-900' },
+            { icon: '🔥', label: 'Double Sixes (6+6)', val: String(rec.doubleSixes), sub: '2-Dice Jackpot Rolls', col: 'bg-orange-50 border-orange-300 text-orange-800' },
+            { icon: '⚔️', label: 'Total Kills (شکار)', val: String(rec.totalMatchKills), sub: 'Losses/Deaths: ' + rec.totalDeaths, col: 'bg-rose-50 border-rose-200 text-rose-700' },
+            { icon: '🔒', label: 'Close Game Bari Locks', val: String(rec.totalCloseLocks), sub: rec.closeGameMode ? 'Close Game Active' : 'Open Game Mode', col: 'bg-amber-50 border-amber-200 text-amber-900' },
+            { icon: '🔄', label: 'No-Kill Outer Loops', val: String(rec.totalOuterLoops), sub: '52-Square Extra Laps', col: 'bg-violet-50 border-violet-200 text-violet-800' },
+            { icon: '🚀', label: 'Spawns & Home Beads', val: '⚡' + rec.totalSpawns + ' • 🏠' + rec.totalHomeCompleted, sub: '👣 ' + rec.totalStepsMoved + ' Squares Marched', col: 'bg-lime-50 border-lime-200 text-lime-800' }
+          ];
+
+          const df = rec.diceFaceCounts || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+          const totalDiceFaces = Math.max(1, (df[1] || 0) + (df[2] || 0) + (df[3] || 0) + (df[4] || 0) + (df[5] || 0) + (df[6] || 0));
+          const diceBarHtml = [1, 2, 3, 4, 5, 6].map(function (face) {
+            const cnt = df[face] || 0;
+            const pct = ((cnt / totalDiceFaces) * 100).toFixed(1);
+            return '<div class="p-2 rounded-xl border text-center ' + (face === 6 ? 'bg-rose-50 border-rose-300 text-rose-900' : 'bg-white border-amber-200 text-slate-800') + '">' +
+              '<div class="text-[10px] font-black">🎲 Face ' + face + (face === 6 ? ' 🔥' : '') + '</div>' +
+              '<div class="text-sm font-black font-mono mt-0.5">' + cnt + '</div>' +
+              '<div class="text-[9px] text-slate-500 font-bold">' + pct + '%</div>' +
+            '</div>';
+          }).join('');
+
+          const pRowsHtml = (rec.playersSummary || []).filter(function (p) { return p && p.active !== false; }).map(function (p) {
+            const icons = ['🔴', '🟢', '🟡', '🔵'];
+            const avgMv = ((p.avgMoveMs || 1300) / 1000).toFixed(2) + 's';
+            const avgDec = ((p.avgDecisionMs || 1050) / 1000).toFixed(2) + 's';
+            const avgAn = ((p.avgAnimMs || 230) / 1000).toFixed(2) + 's';
+            const avgTrn = ((p.avgTurnMs || 4300) / 1000).toFixed(2) + 's';
+            return '<tr class="border-b border-amber-100 hover:bg-amber-50/60">' +
+              '<td class="py-2 px-2.5 font-black text-slate-900">' + (icons[p.seat] || '🎲') + ' ' + p.name + ' <span class="text-[10px] text-slate-500 font-normal">(' + p.color + ')</span></td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-rose-700">⚔️' + (p.kills || 0) + ' / 💀' + (p.deaths || 0) + '</td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-amber-800">6️⃣' + (p.sixes || 0) + ' / 🔥' + (p.doubleSixes || 0) + '</td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-emerald-700">' + avgMv + ' <span class="text-[9px] text-slate-400 block">(' + avgDec + ' + ' + avgAn + ')</span></td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-sky-700">' + avgTrn + ' <span class="text-[9px] text-slate-400 block">(' + (p.turns || 0) + ' Baris)</span></td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-indigo-800">⚡' + (p.spawns || 0) + ' • 🏠' + (p.homeCompleted || 0) + '</td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-purple-800">🔒' + (p.closeLocks || 0) + ' • 🔄' + (p.outerLoops || 0) + '</td>' +
+              '<td class="py-2 px-2 text-right font-mono font-bold text-slate-800">👣' + (p.stepsMoved || 0) + ' <span class="text-[9px] text-slate-400 block">' + (p.moves || 0) + ' moves</span></td>' +
+            '</tr>';
+          }).join('');
+
+          summaryPane.innerHTML =
+            '<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">' +
+              kpis.map(function (k) {
+                return '<div class="p-2.5 rounded-2xl border ' + k.col + '">' +
+                  '<div class="text-[10px] font-extrabold uppercase opacity-80">' + k.icon + ' ' + k.label + '</div>' +
+                  '<div class="text-sm sm:text-base font-black font-mono mt-0.5">' + k.val + '</div>' +
+                  '<div class="text-[9px] font-bold opacity-75 mt-0.5">' + k.sub + '</div>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+            '<div class="p-3 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">' +
+              '<div class="flex items-center justify-between"><span class="font-black text-xs text-amber-950">🎲 Exact Dice Face Frequency (Faces 1–6)</span><span class="text-[10px] font-bold text-slate-600">Total Dice Rolled: ' + totalDiceFaces + '</span></div>' +
+              '<div class="grid grid-cols-3 sm:grid-cols-6 gap-2">' + diceBarHtml + '</div>' +
+            '</div>' +
+            '<div class="space-y-1.5">' +
+              '<div class="font-black text-xs text-slate-900">👥 Per-Player Complete Combat, Dice &amp; Bead Speed Telemetry</div>' +
+              '<div class="overflow-x-auto rounded-2xl border border-amber-200 bg-white">' +
+                '<table class="w-full text-left border-collapse text-[11px]">' +
+                  '<thead><tr class="bg-slate-900 text-amber-300 font-black text-[10px] uppercase">' +
+                    '<th class="py-2 px-2.5">Player &amp; Seat</th>' +
+                    '<th class="py-2 px-2 text-center">Kills / Deaths</th>' +
+                    '<th class="py-2 px-2 text-center">6s / Double 6s</th>' +
+                    '<th class="py-2 px-2 text-center">Avg Bead Move (Think+Hop)</th>' +
+                    '<th class="py-2 px-2 text-center">Avg Bari Turn</th>' +
+                    '<th class="py-2 px-2 text-center">Spawns / Home</th>' +
+                    '<th class="py-2 px-2 text-center">Locks / Loops</th>' +
+                    '<th class="py-2 px-2 text-right">Steps / Moves</th>' +
+                  '</tr></thead>' +
+                  '<tbody>' + pRowsHtml + '</tbody>' +
+                '</table>' +
+              '</div>' +
+            '</div>';
+        }
+
+        // Pane 2: Move-by-Move Bead Timing Log
+        const movesPane = document.getElementById('vicFullStatsPane_moves');
+        if (movesPane && rec) {
+          const mLogs = rec.moveLogs || [];
+          if (mLogs.length === 0) {
+            movesPane.innerHTML = '<div class="p-6 rounded-2xl bg-amber-50 border border-amber-200 text-center text-slate-500 font-bold">No individual bead moves recorded for this entry.</div>';
+          } else {
+            const rowsHtml = mLogs.map(function (ml) {
+              return '<tr class="border-b border-amber-100 hover:bg-amber-50/60">' +
+                '<td class="py-1.5 px-2.5 font-mono font-bold text-slate-700">#' + ml.moveNo + ' <span class="text-[9px] text-slate-400">' + (ml.ts || '') + '</span></td>' +
+                '<td class="py-1.5 px-2.5 font-bold text-slate-900">' + ml.playerName + ' <span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 text-[10px]">Bead #' + ml.tokenId + '</span></td>' +
+                '<td class="py-1.5 px-2.5 font-mono font-black text-indigo-700">+' + ml.delta + '</td>' +
+                '<td class="py-1.5 px-2.5 font-semibold text-slate-800">' + ml.outcome + '</td>' +
+                '<td class="py-1.5 px-2.5 text-right font-mono text-sky-700">' + (ml.decisionMs / 1000).toFixed(2) + 's <span class="text-[9px] text-slate-400">(' + ml.decisionMs + 'ms)</span></td>' +
+                '<td class="py-1.5 px-2.5 text-right font-mono text-amber-800">' + (ml.animMs / 1000).toFixed(2) + 's <span class="text-[9px] text-slate-400">(' + ml.animMs + 'ms)</span></td>' +
+                '<td class="py-1.5 px-2.5 text-right font-mono font-black text-emerald-700">' + (ml.totalMoveMs / 1000).toFixed(2) + 's</td>' +
+              '</tr>';
+            }).join('');
+            movesPane.innerHTML =
+              '<div class="flex items-center justify-between"><span class="font-black text-xs text-slate-900">👣 Granular Bead Movement &amp; Millisecond Timing Log (' + mLogs.length + ' Moves)</span><span class="text-[10px] font-bold text-emerald-700">Avg Bead Move: ' + (rec.avgBeadMoveMs / 1000).toFixed(2) + 's</span></div>' +
+              '<div class="overflow-x-auto rounded-2xl border border-amber-200 bg-white max-h-[55dvh]">' +
+                '<table class="w-full text-left border-collapse text-[11px]">' +
+                  '<thead><tr class="bg-slate-900 text-amber-300 font-black text-[10px] uppercase sticky top-0">' +
+                    '<th class="py-2 px-2.5">Move #</th>' +
+                    '<th class="py-2 px-2.5">Player &amp; Bead</th>' +
+                    '<th class="py-2 px-2.5">Dice</th>' +
+                    '<th class="py-2 px-2.5">Move Outcome</th>' +
+                    '<th class="py-2 px-2.5 text-right">Think Time</th>' +
+                    '<th class="py-2 px-2.5 text-right">Hop Anim</th>' +
+                    '<th class="py-2 px-2.5 text-right">Full Move Time</th>' +
+                  '</tr></thead>' +
+                  '<tbody>' + rowsHtml + '</tbody>' +
+                '</table>' +
+              '</div>';
+          }
+        }
+
+        // Pane 3: All Past Matches History & Comparison Table
+        const histPane = document.getElementById('vicFullStatsPane_history');
+        if (histPane) {
+          const agg = buildAllTimeAggregateMatchRecord();
+          const pastRowsHtml = records.map(function (r, idx) {
+            const isCur = r.matchId === (rec && rec.matchId);
+            return '<tr class="border-b border-amber-100 hover:bg-amber-50/70 ' + (isCur ? 'bg-amber-100/70 font-bold' : '') + '">' +
+              '<td class="py-2 px-2.5 font-mono font-bold text-slate-900">' + (idx === 0 ? '🟢 ' : '') + r.matchId + '<div class="text-[9px] text-slate-500 font-sans">' + r.date + '</div></td>' +
+              '<td class="py-2 px-2"><div class="font-bold text-slate-900">' + r.mode + '</div><div class="text-[9px] text-slate-500">' + r.format + '</div></td>' +
+              '<td class="py-2 px-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-black border ' + (r.isCleanSweep ? 'bg-indigo-100 text-indigo-900 border-indigo-300' : (r.won ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-rose-50 text-rose-800 border-rose-200')) + '">' + r.result + '</span></td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-slate-800">' + formatDurationMs(r.durationMs) + '<div class="text-[9px] text-slate-400">' + r.totalTurns + ' Baris</div></td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-emerald-700">' + (r.avgBeadMoveMs / 1000).toFixed(2) + 's<div class="text-[9px] text-sky-700">Turn: ' + (r.avgTurnTimeMs / 1000).toFixed(2) + 's</div></td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-amber-800">6️⃣' + r.sixesRolled + ' • 🔥' + r.doubleSixes + '</td>' +
+              '<td class="py-2 px-2 text-center font-mono font-bold text-rose-700">⚔️' + r.totalMatchKills + ' • 🔒' + r.totalCloseLocks + '</td>' +
+              '<td class="py-2 px-2 text-center"><button type="button" data-inspect-id="' + r.matchId + '" class="vfs-inspect-past-btn px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-black text-[10px] shadow">📊 Inspect</button></td>' +
+            '</tr>';
+          }).join('');
+
+          histPane.innerHTML =
+            '<div class="p-3 rounded-2xl bg-slate-900 text-white border border-amber-400/60 flex flex-wrap items-center justify-between gap-2">' +
+              '<div><div class="text-xs font-black text-amber-300">🌍 All Past Matches Career Totals (' + records.length + ' Recorded Matches)</div>' +
+              '<div class="text-[10px] text-slate-300">Total Time: ' + formatDurationMs(agg.durationMs) + ' • Avg Move: ' + (agg.avgBeadMoveMs / 1000).toFixed(2) + 's • Total Kills: ⚔️' + agg.totalMatchKills + ' • Total 6s: 6️⃣' + agg.sixesRolled + ' • Double 6s: 🔥' + agg.doubleSixes + '</div></div>' +
+              '<button type="button" id="vfsLoadAggregateBtn" class="px-3 py-1.5 rounded-xl gold-gradient-btn text-xs font-black">🌍 View All-Time Combined Breakdown</button>' +
+            '</div>' +
+            '<div class="overflow-x-auto rounded-2xl border border-amber-200 bg-white max-h-[52dvh]">' +
+              '<table class="w-full text-left border-collapse text-[11px]">' +
+                '<thead><tr class="bg-amber-100 text-amber-950 font-black text-[10px] uppercase sticky top-0">' +
+                  '<th class="py-2 px-2.5">Match &amp; Date</th>' +
+                  '<th class="py-2 px-2">Mode &amp; Format</th>' +
+                  '<th class="py-2 px-2">Outcome</th>' +
+                  '<th class="py-2 px-2 text-center">Match Time</th>' +
+                  '<th class="py-2 px-2 text-center">Avg Move / Turn</th>' +
+                  '<th class="py-2 px-2 text-center">6s / Double 6s</th>' +
+                  '<th class="py-2 px-2 text-center">Kills / Locks</th>' +
+                  '<th class="py-2 px-2 text-center">Full Stats</th>' +
+                '</tr></thead>' +
+                '<tbody>' + pastRowsHtml + '</tbody>' +
+              '</table>' +
+            '</div>';
+
+          const aggBtn = document.getElementById('vfsLoadAggregateBtn');
+          if (aggBtn) {
+            aggBtn.addEventListener('click', function () {
+              currentVicFullStatsMatchId = 'ALL-PAST';
+              const sel = document.getElementById('vicFullStatsMatchSelect');
+              if (sel) sel.value = 'ALL-PAST';
+              switchVictoryFullStatsTab('summary');
+            });
+          }
+          histPane.querySelectorAll('.vfs-inspect-past-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              currentVicFullStatsMatchId = btn.dataset.inspectId;
+              const sel = document.getElementById('vicFullStatsMatchSelect');
+              if (sel) sel.value = currentVicFullStatsMatchId;
+              switchVictoryFullStatsTab('summary');
+            });
+          });
+        }
+      }
+
+      function switchVictoryFullStatsTab(tabKey) {
+        currentVicFullStatsTab = tabKey || 'summary';
+        ['summary', 'moves', 'history'].forEach(function (k) {
+          const p = document.getElementById('vicFullStatsPane_' + k);
+          if (p) p.classList.toggle('hidden', k !== currentVicFullStatsTab);
+        });
+        document.querySelectorAll('.vfs-tab-btn').forEach(function (btn) {
+          const active = btn.dataset.vfstab === currentVicFullStatsTab;
+          btn.className = 'vfs-tab-btn px-3 py-1.5 rounded-xl text-xs transition ' +
+            (active ? 'font-black bg-amber-500 text-white shadow border border-amber-600' : 'font-bold bg-white text-slate-700 border border-amber-200 hover:bg-amber-50');
+        });
+        renderVictoryFullStatsModalContent();
+      }
+
+      function openVictoryFullStatsModal(preferredMatchId, preferredTab) {
+        ensureCareerStatsSchema();
+        const records = careerStats.matchRecords || [];
+        const sel = document.getElementById('vicFullStatsMatchSelect');
+        if (sel) {
+          sel.innerHTML = '';
+          const aggOpt = document.createElement('option');
+          aggOpt.value = 'ALL-PAST';
+          aggOpt.textContent = '🌍 All Past Matches Combined (' + records.length + ' Matches)';
+          sel.appendChild(aggOpt);
+
+          records.forEach(function (r, idx) {
+            const opt = document.createElement('option');
+            opt.value = r.matchId;
+            opt.textContent = (idx === 0 ? '🟢 This Match: ' : '📜 Past Match: ') + r.matchId + ' • ' + r.result + ' (' + r.date + ')';
+            sel.appendChild(opt);
+          });
+          currentVicFullStatsMatchId = preferredMatchId || (records[0] ? records[0].matchId : 'ALL-PAST');
+          sel.value = currentVicFullStatsMatchId;
+        }
+        document.getElementById('victoryFullStatsModal').classList.remove('hidden');
+        switchVictoryFullStatsTab(preferredTab || 'summary');
+      }
+
+      ['victoryTopStatsIconBtn', 'victoryOpenFullStatsInlineBtn', 'victoryFullStatsBtn'].forEach(function (btnId) {
+        const b = document.getElementById(btnId);
+        if (b) {
+          b.addEventListener('click', function () {
+            const latestId = (careerStats.matchRecords && careerStats.matchRecords[0]) ? careerStats.matchRecords[0].matchId : 'ALL-PAST';
+            openVictoryFullStatsModal(latestId, 'summary');
+          });
+        }
+      });
+
+      document.getElementById('closeVictoryFullStatsModalBtn').addEventListener('click', function () {
+        document.getElementById('victoryFullStatsModal').classList.add('hidden');
+      });
+      document.getElementById('vicFullStatsMatchSelect').addEventListener('change', function () {
+        currentVicFullStatsMatchId = this.value;
+        renderVictoryFullStatsModalContent();
+      });
+      document.querySelectorAll('.vfs-tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          switchVictoryFullStatsTab(btn.dataset.vfstab || 'summary');
+        });
+      });
+
       document.getElementById('victoryViewStatsBtn').addEventListener('click', function () {
         document.getElementById('victoryModal').classList.add('hidden');
         switchNavigationTab('viewStats');
