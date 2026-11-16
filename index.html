@@ -1771,6 +1771,13 @@
 <p class="text-[11px] text-slate-600 mt-0.5">Default ON (All Beads Inside Home): Converts from 2 Dice to 1 Die ONLY when all of a player's beads are inside their Home area (if even 1 bead is outside on the board or in hand, they stay on 2 Dice). Pick any non-conflicting variant from the dropdown, or turn OFF to stay on 2 Dice always.</p>
 </div>
 </div>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMidPathKillOnCombinedMove" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⚡⚔️ Auto-Kill Mid-Path Enemy on Combined 2-Dice Move (اکٹھا نمبر چلنے پر درمیان میں آنے والی دشمن گوٹی کا خودکار شکار — Default: ON)</div>
+<p class="text-[11px] text-slate-600">Default ON: If you roll 2 dice (e.g. 5 &amp; 3) and move a single bead by their combined total (8), any enemy bead sitting on the intermediate square (+3 or +5) that could be killed by either die is automatically killed while your bead completes its full 8-step move!</p>
+</div>
+</label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMandatoryCapture" type="checkbox"/>
 <div>
@@ -2777,11 +2784,11 @@
 <!-- Category Filter Bar, Status Filter & Search -->
 <div class="flex flex-col gap-2.5 bg-amber-50/80 p-3 rounded-2xl border border-amber-200">
 <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5" id="guideCategoryTabs">
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Categories (44)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Categories (45)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="core" type="button">🏔️ 1. Core Heritage (5)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 2. Dice &amp; Spawns (10)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="home_loop" type="button">🩸 3. Blood Gate &amp; Home (7)</button>
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ 4. Combat &amp; Jora (3)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ 4. Combat &amp; Jora (4)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="team_system" type="button">🤝 5. 2v2 &amp; Systems (4)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="hujra" type="button">🔥 6. Hujra House Rules (15)</button>
 </div>
@@ -3626,6 +3633,7 @@
         twoKillsForHome: false,
         oneDieWhenOneBeadLeft: true,
         oneDieConversionMode: 'all_in_home',
+        midPathKillOnCombinedMove: true,
         mandatoryCapture: false,
         threeTimeoutsBotTakeover: true,
         reverseKillRule: false,
@@ -3955,6 +3963,13 @@
           }
           if (!['all_in_home', 'last_bead_in_home', 'last_bead_out_no_yard', 'last_bead_anywhere', 'final_step_only'].includes(rulesConfig.oneDieConversionMode)) {
             rulesConfig.oneDieConversionMode = 'all_in_home';
+          }
+          if (rulesConfig.midPathKillOnCombinedMove === undefined) {
+            rulesConfig.midPathKillOnCombinedMove = true;
+          }
+          if (localStorage.getItem('bannu_ludo_mid_kill_default_v1') !== 'migrated') {
+            rulesConfig.midPathKillOnCombinedMove = true;
+            localStorage.setItem('bannu_ludo_mid_kill_default_v1', 'migrated');
           }
           if (localStorage.getItem('bannu_ludo_kill_stacked_v1') !== 'migrated') {
             rulesConfig.killAllStackedEnemies = true;
@@ -5509,6 +5524,56 @@
         });
       }
 
+      function getMidPathCaptureCandidatesForCombined(token, compValues, customPlayers) {
+        if (rulesConfig.midPathKillOnCombinedMove === false) return [];
+        if (!token || token.state !== 'board' || !Array.isArray(compValues) || compValues.length < 2) return [];
+        const pList = customPlayers || gameState.players;
+        const owner = pList[token.owner];
+        if (!owner) return [];
+        const reqKills = getRequiredKillsForHome();
+        const eligibleHome = reqKills <= 0 || ((owner.kills || 0) >= reqKills);
+        const posInLap = token.steps % 52;
+        const stepsToHomeGate = 50 - posInLap;
+
+        const uniqueVals = Array.from(new Set(compValues));
+        let bestMidCandidates = [];
+        let bestMidScore = -999999;
+
+        uniqueVals.forEach(function (dVal) {
+          if (!dVal || dVal <= 0) return;
+          if (rulesConfig.strictSpawnOnlySixesRule && dVal === 6) return;
+          if (stepsToHomeGate >= 0 && dVal > stepsToHomeGate && eligibleHome) {
+            return;
+          }
+          if (rulesConfig.pairBlockadeRule) {
+            for (let s = 1; s < dVal; s++) {
+              const stepTrackIdx = (START_TRACK_INDEX[token.owner] + token.steps + s) % 52;
+              if (isTrackBlockedByJoraOnPlayers(token.owner, stepTrackIdx, pList)) {
+                return;
+              }
+            }
+          }
+          const midSteps = token.steps + dVal;
+          if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', midSteps, 0, pList)) {
+            return;
+          }
+          const midTrackIdx = (START_TRACK_INDEX[token.owner] + midSteps) % 52;
+          const cands = getCaptureCandidatesOnPlayers(token.owner, midTrackIdx, pList);
+          if (cands.length > 0) {
+            const bestV = chooseBestCaptureVictim(token.owner, cands, rulesConfig.killAllStackedEnemies, pList);
+            const score = bestV ? ((bestV.steps || 0) + cands.length * 100) : cands.length * 100;
+            if (score > bestMidScore) {
+              bestMidScore = score;
+              bestMidCandidates = cands.map(function (c) {
+                return Object.assign({}, c, { midDieValue: dVal, midTrackIdx: midTrackIdx });
+              });
+            }
+          }
+        });
+
+        return bestMidCandidates;
+      }
+
       function getDestinationGridCoordForSim(ownerIdx, sim) {
         if (sim.isSpawn) return MAIN_TRACK[START_TRACK_INDEX[ownerIdx]];
         if (sim.newState === 'completed') return HOME_PATHS[ownerIdx][5];
@@ -5748,14 +5813,22 @@
                 const d1 = unusedDice[j];
                 if (rulesConfig.strictSpawnOnlySixesRule && (d0.value === 6 || d1.value === 6)) continue;
                 const sumDelta = d0.value + d1.value;
-                if (seenCombinedSums.has(sumDelta)) continue;
-                seenCombinedSums.add(sumDelta);
-                const simCombined = simulateTokenAdvance(tk, sumDelta, undefined, tokens, false);
+                const pairKey = sumDelta + '_' + Math.min(d0.value, d1.value) + '_' + Math.max(d0.value, d1.value);
+                if (seenCombinedSums.has(pairKey)) continue;
+                seenCombinedSums.add(pairKey);
+                const midCands = tk.state === 'board' ? getMidPathCaptureCandidatesForCombined(tk, [d0.value, d1.value], gameState.players) : [];
+                const addedMidKills = rulesConfig.killAllStackedEnemies ? midCands.length : (midCands.length > 0 ? 1 : 0);
+                const unlockedByMidKill = !canOwnerEnterHomeStretch(targetOwnerIdx) && midCands.length > 0 && ((owner.kills + addedMidKills) >= getRequiredKillsForHome());
+                const effHomeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || unlockedByMidKill;
+                const simCombined = simulateTokenAdvance(tk, sumDelta, effHomeEligible, tokens, false);
                 if (simCombined.valid) {
+                  if (unlockedByMidKill) simCombined.unlockedHomeByMidKill = true;
                   candidateCombinedMoves.push({
                     tokenId: tk.id,
                     ownerIdx: targetOwnerIdx,
                     diceIds: [d0.id, d1.id],
+                    componentValues: [d0.value, d1.value],
+                    midCaptureCandidates: midCands,
                     delta: sumDelta,
                     isCombined: true,
                     allowsSecondDie: true,
@@ -5767,7 +5840,7 @@
                 if (
                   tk.state === 'board' &&
                   isOptionalLoopAfterKillAllowed() &&
-                  canOwnerEnterHomeStretch(targetOwnerIdx)
+                  effHomeEligible
                 ) {
                   const posInLap = tk.steps % 52;
                   const stepsToGate = 50 - posInLap;
@@ -5778,6 +5851,8 @@
                         tokenId: tk.id,
                         ownerIdx: targetOwnerIdx,
                         diceIds: [d0.id, d1.id],
+                        componentValues: [d0.value, d1.value],
+                        midCaptureCandidates: midCands,
                         delta: sumDelta,
                         isCombined: true,
                         isOptionalLoop: true,
@@ -5809,7 +5884,9 @@
 
         const allLegalMoves = filteredSingles.concat(candidateCombinedMoves);
         const captureMoves = allLegalMoves.filter(function (mv) {
-          if (!mv.sim || mv.sim.newState !== 'board') return false;
+          if (!mv.sim) return false;
+          if (mv.midCaptureCandidates && mv.midCaptureCandidates.length > 0) return true;
+          if (mv.sim.newState !== 'board') return false;
           const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
           return getCaptureCandidatesAtTrackIndex(mv.ownerIdx, destTrack).length > 0;
         });
@@ -5831,16 +5908,19 @@
 
       // Describe the tactical outcome of a move for Single-Click Outcome Preview
       function getMoveOutcomePreviewTag(move) {
+        const hasMidKill = Boolean(move.isCombined && move.midCaptureCandidates && move.midCaptureCandidates.length > 0);
         if (move.isReverseKill || (move.sim && move.sim.isReverseKill)) return { tag: '🔄⚔️ BACKSTAB (-' + move.delta + ')', color: '#e11d48' };
         if (move.sim && move.sim.isBounceHome) return { tag: '🔙 BOUNCE (Step ' + move.sim.newHomeStep + ')', color: '#ea580c' };
         if (move.isSplitMove) return { tag: '🔄 SPLIT +' + move.delta, color: '#0284c7' };
         if (move.sim.isSpawn) return { tag: '⚡ SPAWN (+' + move.delta + ')', color: '#d97706' };
-        if (move.sim.newState === 'completed') return { tag: '🏠 COMPLETE! (+' + move.delta + ')', color: '#059669' };
-        if (move.sim.newState === 'home_stretch') return { tag: '🏠 HOME PATH (+' + move.delta + ')', color: '#059669' };
-        if (move.sim.loopedPastHome) return { tag: '🔄 LOOP (+' + move.delta + ')', color: '#7c3aed' };
+        if (move.sim.newState === 'completed') return { tag: (hasMidKill ? '⚔️🏠 MID-KILL & HOME! (+' : '🏠 COMPLETE! (+') + move.delta + ')', color: hasMidKill ? '#e11d48' : '#059669' };
+        if (move.sim.newState === 'home_stretch') return { tag: (hasMidKill ? '⚔️🏠 MID-KILL & HOME! (+' : '🏠 HOME PATH (+') + move.delta + ')', color: hasMidKill ? '#e11d48' : '#059669' };
+        if (move.sim.loopedPastHome) return { tag: (hasMidKill ? '⚔️🔄 MID-KILL & LOOP (+' : '🔄 LOOP (+') + move.delta + ')', color: hasMidKill ? '#e11d48' : '#7c3aed' };
         const destTrack = (START_TRACK_INDEX[move.ownerIdx] + move.sim.newSteps) % 52;
         const enemies = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
+        if (enemies.length > 0 && hasMidKill) return { tag: '⚔️💥 DOUBLE KILL! (+' + move.delta + ')', color: '#e11d48' };
         if (enemies.length > 0) return { tag: '⚔️ KILL! (+' + move.delta + ')', color: '#e11d48' };
+        if (hasMidKill) return { tag: '⚡⚔️ MID-KILL! (+' + move.delta + ')', color: '#e11d48' };
         if (SAFE_TRACK_INDICES.has(destTrack)) return { tag: '★ SAFE (+' + move.delta + ')', color: '#059669' };
         if (rulesConfig.teamMode) {
           const owner = gameState.players[move.ownerIdx];
@@ -5918,13 +5998,22 @@
         }
         if (uniqueTokenKeys.length === 1) {
           let chosenMove = legal[0];
+          const combinedCapture = legal.find(function (m) {
+            if (!m.isCombined) return false;
+            if (m.midCaptureCandidates && m.midCaptureCandidates.length > 0) return true;
+            if (m.sim.newState !== 'board') return false;
+            const dTrack = (START_TRACK_INDEX[m.ownerIdx] + m.sim.newSteps) % 52;
+            return getCaptureCandidatesAtTrackIndex(m.ownerIdx, dTrack).length > 0;
+          });
           const captureSingle = legal.find(function (m) {
             if (m.isCombined || m.sim.newState !== 'board') return false;
             const dTrack = (START_TRACK_INDEX[m.ownerIdx] + m.sim.newSteps) % 52;
             return getCaptureCandidatesAtTrackIndex(m.ownerIdx, dTrack).length > 0;
           });
           const combinedMove = legal.find(function (m) { return m.isCombined; });
-          if (captureSingle) {
+          if (combinedCapture) {
+            chosenMove = combinedCapture;
+          } else if (captureSingle) {
             chosenMove = captureSingle;
           } else if (combinedMove) {
             chosenMove = combinedMove;
@@ -5991,7 +6080,7 @@
           return bCoords;
         }
         const coords = [];
-        const eligibleHome = canOwnerEnterHomeStretch(token.owner) && !simResult.optionalOuterLoop;
+        const eligibleHome = (canOwnerEnterHomeStretch(token.owner) || Boolean(simResult && simResult.unlockedHomeByMidKill)) && !simResult.optionalOuterLoop;
         let curState = token.state;
         let curSteps = token.steps;
         let curHomeStep = token.homeStep;
@@ -6210,6 +6299,26 @@
           addGameLog('🎉 ' + owner.name + ' completed Bead #' + (token.id + 1) + ' into Home! (+Bonus Re-Roll Earned!)', 'gold');
         } else {
           addGameLog(owner.name + ' moved Bead #' + (token.id + 1) + ' forward by ' + move.delta + ' [' + (fullMoveMs / 1000).toFixed(2) + 's].', 'info');
+        }
+
+        if (move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && prevTokenState === 'board') {
+          const compVals = Array.isArray(move.componentValues) && move.componentValues.length >= 2
+            ? move.componentValues
+            : gameState.dicePool.filter(function (d) { return move.diceIds && move.diceIds.includes(d.id); }).map(function (d) { return d.value; });
+          const preMoveToken = { owner: token.owner, id: token.id, state: prevTokenState, steps: prevTokenSteps, homeStep: 0 };
+          const midEnemies = getMidPathCaptureCandidatesForCombined(preMoveToken, compVals, gameState.players);
+          if (midEnemies.length > 0) {
+            const bestMidVictim = chooseBestCaptureVictim(move.ownerIdx, midEnemies, rulesConfig.killAllStackedEnemies, gameState.players) || midEnemies[0];
+            const midVictimsToKill = rulesConfig.killAllStackedEnemies
+              ? midEnemies.filter(function (e) { return e.ownerIdx === bestMidVictim.ownerIdx; })
+              : [bestMidVictim];
+            midVictimsToKill.forEach(function (enemy) {
+              performSingleCapture(move.ownerIdx, token, enemy);
+            });
+            const midDieUsed = bestMidVictim.midDieValue || compVals[0];
+            addGameLog('⚡⚔️ Mid-Path Auto-Kill! ' + owner.name + ' auto-killed ' + bestMidVictim.playerName + ' at +' + midDieUsed + ' while moving the full +' + move.delta + '!', 'kill');
+            showToast('⚡⚔️ Mid-Jump Kill at +' + midDieUsed + '! Moved full +' + move.delta + '!');
+          }
         }
 
         if (token.state === 'board') {
@@ -8189,6 +8298,13 @@
         if (move.sim.isBounceHome) {
           score -= 260;
         }
+        if (move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && tk.state === 'board' && Array.isArray(move.componentValues)) {
+          const midVictims = getMidPathCaptureCandidatesForCombined(tk, move.componentValues, pList);
+          if (midVictims.length > 0) {
+            score += (ownerNeedsKill ? 1200 : 560) * killHungerMult + midVictims.length * 260;
+          }
+        }
+
         if (move.sim.newState === 'board') {
           const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
           const newLapPos = move.sim.newSteps % 52;
@@ -8659,11 +8775,14 @@
                 if (seenSums.has(sumDelta)) continue;
                 seenSums.add(sumDelta);
                 const simC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, false, eligibleHome);
+                const midCandsSim = tk.state === 'board' ? getMidPathCaptureCandidatesForCombined(tk, [d0.value, d1.value], simPlayers) : [];
                 if (simC.valid) {
                   candidateCombined.push({
                     tokenId: tk.id,
                     ownerIdx: targetOwnerIdx,
                     diceIds: [d0.id, d1.id],
+                    componentValues: [d0.value, d1.value],
+                    midCaptureCandidates: midCandsSim,
                     delta: sumDelta,
                     isCombined: true,
                     allowsSecondDie: true,
@@ -8711,7 +8830,9 @@
 
         if (rulesConfig.mandatoryCapture && candidateMoves.length > 0) {
           const capOnly = candidateMoves.filter(function (mv) {
-            if (!mv.sim || mv.sim.newState !== 'board') return false;
+            if (!mv.sim) return false;
+            if (mv.midCaptureCandidates && mv.midCaptureCandidates.length > 0) return true;
+            if (mv.sim.newState !== 'board') return false;
             const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
             return getCaptureCandidatesOnPlayers(mv.ownerIdx, destTrack, simPlayers).length > 0;
           });
@@ -8746,6 +8867,36 @@
         }
 
         let killedOnThisMove = 0;
+        if (mv.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && prevState === 'board' && Array.isArray(mv.componentValues)) {
+          const preTk = { owner: tk.owner, id: tk.id, state: prevState, steps: mv.sim.newSteps - mv.delta, homeStep: 0 };
+          const midEnemiesSim = getMidPathCaptureCandidatesForCombined(preTk, mv.componentValues, simPlayers);
+          if (midEnemiesSim.length > 0) {
+            const bestMidV = chooseBestCaptureVictim(mv.ownerIdx, midEnemiesSim, rulesConfig.killAllStackedEnemies, simPlayers) || midEnemiesSim[0];
+            const midToKill = rulesConfig.killAllStackedEnemies
+              ? midEnemiesSim.filter(function (e) { return e.ownerIdx === bestMidV.ownerIdx; })
+              : [bestMidV];
+            const vPlMid = simPlayers[bestMidV.ownerIdx];
+            midToKill.forEach(function (v) {
+              const vTk = vPlMid.tokens[v.tokenId];
+              const vLap = vTk ? (vTk.steps % 52) : 12;
+              if (turnEvents) {
+                turnEvents.killsEarned += 1;
+                turnEvents.victimStepsSum += vLap;
+                if (vLap >= 36) turnEvents.urgentThreatKills += 1;
+              }
+              vTk.state = 'yard';
+              vTk.steps = 0;
+              vTk.homeStep = 0;
+              vTk.lockedThisTurn = false;
+              owner.kills += 1;
+              killedOnThisMove += 1;
+            });
+            if (rulesConfig.bonusRollOnKill) {
+              earnedBonus = true;
+              if (turnEvents) turnEvents.bonusRollEarned = true;
+            }
+          }
+        }
         if (tk.state === 'board') {
           const destTrack = getOuterTrackIndex(tk);
           const enemies = getCaptureCandidatesOnPlayers(mv.ownerIdx, destTrack, simPlayers);
@@ -11160,6 +11311,8 @@
           sel1DieMode.disabled = !rulesConfig.oneDieWhenOneBeadLeft;
           sel1DieMode.classList.toggle('opacity-50', !rulesConfig.oneDieWhenOneBeadLeft);
         }
+        const chkMidKill = document.getElementById('chkMidPathKillOnCombinedMove');
+        if (chkMidKill) chkMidKill.checked = rulesConfig.midPathKillOnCombinedMove !== false;
         const chkMandCap = document.getElementById('chkMandatoryCapture');
         if (chkMandCap) chkMandCap.checked = Boolean(rulesConfig.mandatoryCapture);
         const chk3TimeoutBot = document.getElementById('chkThreeTimeoutsBotTakeover');
@@ -11355,6 +11508,7 @@
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.oneDieConversionMode = 'all_in_home';
+        rulesConfig.midPathKillOnCombinedMove = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         rulesConfig.reverseKillRule = false;
@@ -11411,6 +11565,7 @@
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.oneDieConversionMode = 'all_in_home';
+        rulesConfig.midPathKillOnCombinedMove = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         rulesConfig.reverseKillRule = false;
@@ -15964,7 +16119,23 @@
           exampleUr: 'مثال: آپ کی صرف ایک گوٹی ہے جسے پکا ہونے کے لیے 6 چاہیے اور آپ کا 5+4 (کل 9) آ گیا۔ چونکہ 5 چلنے کے بعد 4 چلنے کے لیے کوئی دوسری گوٹی نہیں، اس لیے یہ چال نہیں ہو سکے گی۔'
         },
 
-        // ==================== CATEGORY 4: COMBAT, CAPTURES & JORA BLOCKADES (3) ====================
+        // ==================== CATEGORY 4: COMBAT, CAPTURES & JORA BLOCKADES (4) ====================
+        {
+          id: 'mid_path_kill_on_combined_move',
+          cat: 'combat',
+          ruleKey: 'midPathKillOnCombinedMove',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: 'Auto-Kill Mid-Path Enemy on Combined 2-Dice Move',
+          titleUr: 'اکٹھا نمبر چلنے پر درمیان میں آنے والی دشمن گوٹی کا خودکار شکار',
+          enDesc: 'When you roll 2 dice (for example 5 and 3) and move a single bead by their combined total (8), if there is an enemy bead sitting on the intermediate square (+3 or +5) that could be killed by either die, that enemy bead is automatically killed while your bead completes its full 8-step move!',
+          urDesc: 'جب آپ کے دو دانوں پر مثلاً 5 اور 3 آئے اور آپ ایک ہی گوٹی کو اکٹھا 8 (5+3) چلائیں، تو اگر راستے کے درمیانی خانے (+3 یا +5) پر دشمن کی ایسی گوٹی موجود ہو جو 3 یا 5 سے مر سکتی تھی، تو وہ دشمن گوٹی خودکار طور پر مر جائے گی اور آپ کی گوٹی پورا 8 خانے آگے چلی جائے گی۔',
+          onEffectEn: 'ENABLED (Default ON): Moving a bead by the combined sum of both dice automatically kills any captureable enemy at the first-die or second-die midpoint and advances the full combined total.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): دونوں ڈائس کا مجموعہ اکٹھا چلنے پر درمیان میں (پہلے یا دوسرے ڈائس کے فاصلے پر) بیٹھی دشمن گوٹی خودکار طور پر شکار ہو جائے گی اور آپ کی گوٹی پورا مجموعہ طے کرے گی۔',
+          offEffectEn: 'DISABLED (OFF): Combined moves jump directly to the final sum square without capturing enemies on the intermediate single-die squares.',
+          offEffectUr: 'آف (OFF): اکٹھا نمبر چلنے پر گوٹی درمیان والی دشمن گوٹی کو مارے بغیر سیدھی آخری خانے پر جائے گی۔',
+          exampleEn: 'You roll 5 and 3, and Green is sitting 3 steps ahead of your bead. You tap +8 (or auto-move with 1 bead): your bead automatically kills Green at +3 AND continues +5 to land 8 steps ahead (+Bonus Kill Re-Roll earned)!',
+          exampleUr: 'مثال: آپ کا 5 اور 3 آیا اور آپ کی گوٹی سے 3 خانے آگے ہری گوٹی بیٹھی ہے۔ آپ نے گوٹی کو اکٹھا 8 چلایا تو ہری گوٹی 3 پر خودکار طور پر مر جائے گی اور آپ کی گوٹی پورے 8 خانے آگے پہنچ جائے گی!'
+        },
         {
           id: 'kill_all_stacked_enemies',
           cat: 'combat',
@@ -17284,7 +17455,7 @@
         'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
         'chkFirstBeadOnBoard', 'initialBeadsOnBoardSelect', 'chkPairBlockadeRule',
         'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft', 'oneDieConversionModeSelect',
-        'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
+        'chkMidPathKillOnCombinedMove', 'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
         'chkReverseKill', 'chkFriendlyFire', 'chkKamikazeJora', 'chkSnakeEyesPenalty',
         'chkMaxStackLimit', 'chkHeavyJail', 'chkPositionHijack', 'chkSpawnInvincibility',
         'chkPhookPenalty', 'chkBouncingHome', 'chkAntiCampingLimit', 'chkJoraBreaker',
@@ -17534,6 +17705,8 @@
         rulesConfig.oneDieWhenOneBeadLeft = document.getElementById('chkOneDieWhenOneBeadLeft').checked;
         const sel1DieMode = document.getElementById('oneDieConversionModeSelect');
         if (sel1DieMode) rulesConfig.oneDieConversionMode = sel1DieMode.value || 'all_in_home';
+        const chkMidKill = document.getElementById('chkMidPathKillOnCombinedMove');
+        if (chkMidKill) rulesConfig.midPathKillOnCombinedMove = chkMidKill.checked;
         rulesConfig.mandatoryCapture = document.getElementById('chkMandatoryCapture').checked;
         rulesConfig.threeTimeoutsBotTakeover = document.getElementById('chkThreeTimeoutsBotTakeover').checked;
         const chkRevKill = document.getElementById('chkReverseKill');
