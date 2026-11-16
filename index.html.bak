@@ -2885,94 +2885,95 @@
 </div>
 </div>
 <!-- ==================== MODAL 6: FULL-SCREEN CINEMA GAME REPLAY STUDIO ==================== -->
-<div class="hidden fixed inset-0 z-50 flex flex-col justify-between p-2 sm:p-3 select-none" id="replayStudioModal">
+<div class="hidden fixed inset-0 z-50 flex flex-col justify-between p-1.5 sm:p-3 select-none" id="replayStudioModal">
 <!-- Floating Mini Controller HUD for Distraction-Free Immersive Replay Mode -->
-<div class="hidden fixed top-2.5 right-2.5 z-50 items-center gap-1.5 bg-slate-950/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-2xl border-2 border-amber-400" id="replayImmersiveFloatingHud">
-<button class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-black text-xs" id="replayImmersivePrevBtn" title="Previous Step" type="button">◀️</button>
-<button class="px-3 py-1 rounded-full emerald-play-btn font-black text-xs flex items-center gap-1" id="replayImmersivePlayPauseBtn" type="button">
+<div class="hidden fixed top-2 right-2 z-50 flex-wrap items-center gap-1 bg-slate-950/95 backdrop-blur-md px-2.5 py-1.5 rounded-2xl shadow-2xl border-2 border-amber-400 max-w-[96vw]" id="replayImmersiveFloatingHud">
+<button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-black text-xs" id="replayImmersivePrevBtn" title="Previous Step" type="button">◀️</button>
+<button class="px-2.5 py-1 rounded-xl emerald-play-btn font-black text-xs flex items-center gap-1" id="replayImmersivePlayPauseBtn" type="button">
 <span id="replayImmersivePlayIcon">▶️</span><span id="replayImmersivePlayLabel">Play</span>
 </button>
-<button class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-300 font-black text-xs" id="replayImmersiveNextBtn" title="Next Step" type="button">▶️</button>
-<span class="px-2 py-0.5 rounded-full bg-slate-900 text-amber-200 font-mono font-bold text-[11px] border border-amber-400/40" id="replayImmersiveStepBadge">0/0</span>
-<button class="px-3 py-1 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1" id="replayExitImmersiveBtn" type="button">
-<span>👁️</span><span>Exit Immersive</span>
+<button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-black text-xs" id="replayImmersiveNextBtn" title="Next Step" type="button">▶️</button>
+<span class="px-2 py-0.5 rounded-lg bg-slate-900 text-amber-200 font-mono font-bold text-[10px] border border-amber-400/40" id="replayImmersiveStepBadge">0/0</span>
+<button class="px-2.5 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1" id="replayExitImmersiveBtn" type="button">
+<span>👁️</span><span>Exit</span>
 </button>
 </div>
-<!-- Top Header Bar: Match Switcher, Immersive Toggle, Screenshot, Save/Load, Fullscreen & Exit -->
-<div class="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 bg-slate-900/95 border border-amber-400/60 rounded-2xl px-3 py-2 shadow-xl flex-shrink-0" id="replayTopBar">
-<div class="flex items-center gap-2 min-w-0 flex-1">
-<span class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-rose-600 flex items-center justify-center text-base shadow flex-shrink-0 border border-amber-200">🎬</span>
-<div class="min-w-0 flex-1 flex items-center gap-2">
-<select aria-label="Select Match Replay" class="h-8 bg-slate-800 border border-amber-400/60 text-amber-200 text-xs font-extrabold rounded-xl px-2.5 max-w-[165px] sm:max-w-xs truncate cursor-pointer focus:outline-none" id="replayMatchSelect"></select>
-<span class="hidden md:inline-block px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/40 truncate" id="replayMetaModeBadge">Bannu 2-Dice</span>
+<!-- Top Header Bar: 2 Clean Rows on Mobile so Zero Icons Overlap or Overflow -->
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-1.5 bg-slate-900/95 border border-amber-400/60 rounded-2xl px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-xl flex-shrink-0" id="replayTopBar">
+<div class="flex items-center justify-between gap-1.5 w-full">
+<div class="flex items-center gap-1.5 min-w-0 flex-1">
+<span class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-amber-400 to-rose-600 flex items-center justify-center text-sm sm:text-base shadow flex-shrink-0 border border-amber-200">🎬</span>
+<select aria-label="Select Match Replay" class="h-7 sm:h-8 bg-slate-800 border border-amber-400/60 text-amber-200 text-[11px] sm:text-xs font-extrabold rounded-xl px-2 min-w-0 flex-1 max-w-full sm:max-w-xs truncate cursor-pointer focus:outline-none" id="replayMatchSelect"></select>
+<span class="hidden md:inline-block px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/40 truncate flex-shrink-0" id="replayMetaModeBadge">Bannu 2-Dice</span>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="h-7 sm:h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 text-[11px] font-extrabold flex items-center gap-1 lg:hidden" id="replayToggleLogDrawerBtn" title="Toggle Move-by-Move Jump List" type="button">📜 <span>Log</span></button>
+<button class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 text-xs font-bold flex items-center justify-center" id="replayFullscreenBtn" title="Toggle Fullscreen" type="button">⛶</button>
+<button class="h-7 sm:h-8 px-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow flex items-center gap-1" id="closeReplayStudioBtn" title="Close Replay Studio" type="button">✕ <span class="hidden sm:inline">Exit</span></button>
 </div>
 </div>
-<div class="flex items-center gap-1.5 flex-shrink-0">
-<button class="h-8 px-2.5 sm:px-3 rounded-xl gold-gradient-btn font-black text-xs shadow flex items-center gap-1" id="replayImmersiveToggleBtn" title="Full-Screen Immersive Board-Only View (No Distractions)" type="button">
-<span>👁️</span><span class="hidden sm:inline">Immersive</span>
+<div class="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar w-full pt-0.5 border-t border-slate-800">
+<div class="flex items-center gap-1 flex-shrink-0">
+<span class="px-2 py-0.5 rounded-lg bg-slate-950 text-amber-300 border border-amber-400/40 text-[10px] font-black" id="replayFloatingStatusPill">⏸️ 1x</span>
+<button class="h-7 px-2 rounded-lg gold-gradient-btn font-black text-[10px] sm:text-xs shadow flex items-center gap-1" id="replayImmersiveToggleBtn" title="Full-Screen Immersive Board-Only View" type="button">
+<span>👁️</span><span>Full</span>
 </button>
-<button class="h-8 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow flex items-center gap-1" id="replayScreenshotBtn" title="Download HD Replay Screenshot (.PNG)" type="button">
+<button class="h-7 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-400/50 text-[10px] font-black" id="replayToggleTrailBtn" title="Toggle Move Trail" type="button">🧭 Trail: ON</button>
+<button class="h-7 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-400/50 text-[10px] font-black" id="replayRotateBoardBtn" title="Rotate Board View 90°" type="button">🔄 0°</button>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button class="h-7 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] sm:text-xs shadow flex items-center gap-1" id="replayScreenshotBtn" title="Download HD Replay Screenshot (.PNG)" type="button">
 <span>📸</span><span class="hidden sm:inline">Shot</span>
 </button>
-<div class="flex items-center bg-slate-800 border border-rose-400/60 rounded-xl p-0.5 gap-0.5">
-<select aria-label="Video Export Resolution" class="h-7 bg-slate-900 text-amber-200 text-[10px] sm:text-xs font-extrabold px-1.5 rounded-lg cursor-pointer focus:outline-none" id="replayVideoResSelect" title="Select Video Export Resolution">
-<option value="small">🎥 Small (480p)</option>
-<option selected="" value="mid">🎥 Mid (720p)</option>
-<option value="high">🎥 High (1080p)</option>
+<div class="flex items-center bg-slate-800 border border-rose-400/60 rounded-lg p-0.5 gap-0.5">
+<select aria-label="Video Export Resolution" class="h-6 bg-slate-900 text-amber-200 text-[10px] font-extrabold px-1 rounded cursor-pointer focus:outline-none" id="replayVideoResSelect" title="Select Video Export Resolution">
+<option value="small">480p</option>
+<option selected="" value="mid">720p</option>
+<option value="high">1080p</option>
 </select>
-<button class="h-7 px-2 sm:px-2.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] sm:text-xs shadow flex items-center gap-1" id="replayExportVideoBtn" title="Export Full Replay as Video File" type="button">
-<span id="replayExportVideoIcon">🎥</span><span class="hidden md:inline" id="replayExportVideoLabel">Video</span>
+<button class="h-6 px-1.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] shadow flex items-center gap-0.5" id="replayExportVideoBtn" title="Export Full Replay as Video File" type="button">
+<span id="replayExportVideoIcon">🎥</span><span id="replayExportVideoLabel">Video</span>
 </button>
 </div>
-<button class="h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 font-bold text-xs flex items-center gap-1" id="replayExportJsonBtn" title="Download Replay File (.json)" type="button">
-<span>💾</span><span class="hidden lg:inline">Save</span>
+<button class="h-7 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 font-bold text-[10px] flex items-center gap-1" id="replayExportJsonBtn" title="Download Replay File (.json)" type="button">
+<span>💾</span><span class="hidden md:inline">Save</span>
 </button>
-<label class="h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-400/40 font-bold text-xs flex items-center gap-1 cursor-pointer" title="Import Replay File (.json)">
-<span>📂</span><span class="hidden lg:inline">Load</span>
+<label class="h-7 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-400/40 font-bold text-[10px] flex items-center gap-1 cursor-pointer" title="Import Replay File (.json)">
+<span>📂</span><span class="hidden md:inline">Load</span>
 <input accept=".json,application/json" class="hidden" id="replayImportJsonInput" type="file"/>
 </label>
-<button class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 text-xs font-bold flex items-center justify-center" id="replayFullscreenBtn" title="Toggle Fullscreen" type="button">⛶</button>
-<button class="h-8 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow flex items-center gap-1" id="closeReplayStudioBtn" title="Close Replay Studio" type="button">✕ <span class="hidden sm:inline">Exit</span></button>
+<button class="hidden" id="replayCanvasImmersiveBtn" type="button"></button>
 </div>
 </div>
-<!-- Main Studio Workspace: 3-Column Cinema Layout on Desktop, Clean Stacked Layout on Mobile -->
-<div class="flex-1 min-h-0 w-full max-w-7xl mx-auto my-1.5 relative flex flex-col overflow-hidden" id="replayStudioWorkspace">
-<!-- Left Wing (Desktop Sidebar / Mobile Sub-Header): Event Card, 3D Dice & 4 Player Score Cards -->
-<div class="flex flex-col gap-1.5 flex-shrink-0" id="replayLeftWing">
-<div class="w-full bg-slate-900/95 border border-amber-400/50 rounded-2xl px-3 py-2 flex items-center justify-between gap-2 shadow-md">
-<div class="flex items-center gap-2 min-w-0 flex-1">
-<span class="px-2 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-[10px] flex-shrink-0" id="replayEventTypeBadge">START</span>
+</div>
+<!-- Main Studio Workspace -->
+<div class="flex-1 min-h-0 w-full max-w-7xl mx-auto my-0.5 relative flex flex-col justify-between overflow-hidden gap-1" id="replayStudioWorkspace">
+<!-- Left Wing: Event Card & 4 Player Score Cards -->
+<div class="flex flex-col gap-1 flex-shrink-0" id="replayLeftWing">
+<div class="w-full bg-slate-900/95 border border-amber-400/50 rounded-xl px-2.5 py-1.5 flex items-center justify-between gap-2 shadow-md">
+<div class="flex items-center gap-1.5 min-w-0 flex-1">
+<span class="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-black text-[9px] flex-shrink-0" id="replayEventTypeBadge">START</span>
 <div class="min-w-0 flex-1">
-<div class="text-xs font-black text-white truncate" id="replayEventTitle">Match Replay Ready</div>
-<div class="text-[10px] font-semibold text-slate-300 truncate" id="replayEventSubtitle">Step 0 / 0 • Tap Play or scrub timeline</div>
+<div class="text-[11px] sm:text-xs font-black text-white truncate" id="replayEventTitle">Match Replay Ready</div>
+<div class="text-[9px] sm:text-[10px] font-semibold text-slate-300 truncate" id="replayEventSubtitle">Step 0 / 0 • Tap Play or scrub timeline</div>
 </div>
 </div>
-<div class="flex items-center gap-1.5 flex-shrink-0">
-<div class="flex items-center gap-1 bg-slate-800 border border-amber-400/50 rounded-xl px-2 py-1" id="replayDiceReadout">
+<div class="flex items-center gap-1 flex-shrink-0">
+<div class="flex items-center gap-1 bg-slate-800 border border-amber-400/50 rounded-lg px-2 py-0.5" id="replayDiceReadout">
 <span class="text-xs">🎲</span>
-<span class="font-mono font-black text-xs text-amber-300" id="replayDiceText">-</span>
-</div>
-<button class="h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 text-xs font-extrabold flex items-center gap-1" id="replayToggleLogDrawerBtn" title="Toggle Move-by-Move Jump List" type="button">📜 <span>Log</span></button>
+<span class="font-mono font-black text-[11px] text-amber-300" id="replayDiceText">-</span>
 </div>
 </div>
-<div class="grid grid-cols-4 gap-1.5" id="replayPlayersStrip"></div>
 </div>
-<!-- Center Board Stage -->
-<div class="flex-1 min-h-0 w-full flex items-center justify-center overflow-hidden py-0.5" id="replayCenterStage">
-<div class="relative p-1.5 sm:p-2 rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-700 shadow-2xl border-2 border-amber-300 flex items-center justify-center" id="replayBoardFrame">
+<div class="grid grid-cols-4 gap-1" id="replayPlayersStrip"></div>
+</div>
+<!-- Center Board Stage (100% Unobstructed Canvas) -->
+<div class="flex-1 min-h-0 w-full flex items-center justify-center overflow-hidden" id="replayCenterStage">
+<div class="relative p-1 sm:p-2 rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-700 shadow-2xl border-2 border-amber-300 flex items-center justify-center" id="replayBoardFrame">
 <canvas class="w-full h-full rounded-xl bg-white block" height="750" id="replayCanvas" width="750"></canvas>
-<!-- Floating On-Board Quick Overlay Toggles -->
-<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 pointer-events-auto">
-<span class="px-2.5 py-1 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 text-[10px] font-black shadow" id="replayFloatingStatusPill">⏸️ PAUSED • 1x</span>
-</div>
-<div class="absolute top-2.5 right-2.5 flex items-center gap-1.5 pointer-events-auto">
-<button class="px-2.5 py-1 rounded-full bg-slate-950/90 hover:bg-slate-900 text-amber-300 border border-amber-400/60 text-[10px] font-black shadow" id="replayCanvasImmersiveBtn" title="Immersive Full-Screen Board View" type="button">👁️ Full View</button>
-<button class="px-2.5 py-1 rounded-full bg-slate-950/90 hover:bg-slate-900 text-emerald-300 border border-emerald-400/50 text-[10px] font-black shadow" id="replayToggleTrailBtn" title="Toggle Move Trail &amp; Step Numbers" type="button">🧭 Trail: ON</button>
-<button class="px-2.5 py-1 rounded-full bg-slate-950/90 hover:bg-slate-900 text-sky-300 border border-sky-400/50 text-[10px] font-black shadow" id="replayRotateBoardBtn" title="Rotate Board View 90°" type="button">🔄 0°</button>
 </div>
 </div>
-</div>
-<!-- Right Wing (Always visible on Desktop, Slide-Over Sheet on Mobile): Step-by-Step Interactive Jump Log -->
+<!-- Right Wing: Step-by-Step Interactive Jump Log -->
 <div class="hidden absolute inset-y-0 right-0 z-30 w-72 sm:w-80 bg-slate-900/98 backdrop-blur-md border-l-2 border-amber-400 rounded-l-2xl p-3 flex-col justify-between shadow-2xl" id="replayMoveListDrawer">
 <div class="flex items-center justify-between pb-2 border-b border-slate-700">
 <span class="text-xs font-black text-amber-300">📜 Step-by-Step Replay Log</span>
@@ -2982,54 +2983,48 @@
 <div class="text-[10px] text-slate-400 text-center font-semibold">Tap any step to jump directly to that board state</div>
 </div>
 </div>
-<!-- Bottom Scrubber & Full Transport Controls Dock -->
-<div class="w-full max-w-7xl mx-auto bg-slate-900/95 border border-amber-400/60 rounded-2xl px-3 py-2 shadow-2xl space-y-2 flex-shrink-0" id="replayBottomDock">
-<!-- Scrubber & Key Event Jump Chips -->
-<div class="flex flex-col gap-1.5">
-<div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar text-xs">
-<div class="flex items-center gap-1.5 flex-shrink-0">
+<!-- Bottom Scrubber & Full Transport Controls Dock (Clean Non-Overlapping Mobile Rows) -->
+<div class="w-full max-w-7xl mx-auto bg-slate-900/95 border border-amber-400/60 rounded-2xl px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-2xl space-y-1.5 flex-shrink-0" id="replayBottomDock">
+<div class="flex items-center justify-between gap-1 text-[10px] sm:text-xs">
+<div class="flex items-center gap-1 flex-shrink-0">
 <span class="font-mono font-black text-amber-300" id="replayStepCounterLabel">Step 0 / 0</span>
 <span class="text-slate-500">•</span>
 <span class="font-mono font-bold text-slate-300" id="replayTimeElapsedLabel">00:00</span>
 </div>
-<div class="flex items-center gap-1.5 flex-shrink-0">
-<button class="h-7 px-2.5 rounded-lg bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-500/40 font-bold text-[11px]" id="replayPrevKillBtn" title="Jump to Previous Kill" type="button">⏪⚔️ Kill</button>
-<button class="h-7 px-2.5 rounded-lg bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-500/40 font-bold text-[11px]" id="replayNextKillBtn" title="Jump to Next Kill" type="button">⚔️ Kill ⏩</button>
-<button class="h-7 px-2.5 rounded-lg bg-amber-950/90 hover:bg-amber-900 text-amber-200 border border-amber-500/40 font-bold text-[11px]" id="replayNextSixBtn" title="Jump to Next 6 / Double 6" type="button">🔥 Next 6</button>
-<button class="h-7 px-2.5 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/40 font-bold text-[11px]" id="replayNextHomeBtn" title="Jump to Next Home Entry" type="button">🏠 Home</button>
+<div class="flex items-center gap-1 overflow-x-auto no-scrollbar">
+<button class="h-6 px-2 rounded-lg bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-500/40 font-bold text-[10px]" id="replayPrevKillBtn" title="Jump to Previous Kill" type="button">⏪⚔️</button>
+<button class="h-6 px-2 rounded-lg bg-rose-950/90 hover:bg-rose-900 text-rose-200 border border-rose-500/40 font-bold text-[10px]" id="replayNextKillBtn" title="Jump to Next Kill" type="button">⚔️⏩</button>
+<button class="h-6 px-2 rounded-lg bg-amber-950/90 hover:bg-amber-900 text-amber-200 border border-amber-500/40 font-bold text-[10px]" id="replayNextSixBtn" title="Jump to Next 6 / Double 6" type="button">🔥6</button>
+<button class="h-6 px-2 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/40 font-bold text-[10px]" id="replayNextHomeBtn" title="Jump to Next Home Entry" type="button">🏠Home</button>
 </div>
 </div>
-<input aria-label="Replay Timeline Scrubber" class="w-full cursor-pointer" id="replayTimelineSlider" max="0" min="0" step="1" type="range" value="0"/>
-</div>
-<!-- Transport Buttons: Stop, First, -5, Prev, Play/Pause, Next, +5, Last, Speed, Loop, Sound -->
-<div class="flex items-center justify-between gap-1.5 overflow-x-auto no-scrollbar">
-<div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-<button class="h-9 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 font-extrabold text-xs" id="replayStopBtn" title="Stop &amp; Reset to Start" type="button">⏹️ <span class="hidden sm:inline">Stop</span></button>
-<button class="h-9 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs" id="replayFirstStepBtn" title="Jump to First Frame (Home)" type="button">⏮️</button>
-<button class="h-9 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs" id="replayBack5Btn" title="Back 5 Steps" type="button">-5</button>
-<button class="h-9 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-black text-xs" id="replayPrevStepBtn" title="Step Backward (-1)" type="button">◀️ <span class="hidden sm:inline">Step</span></button>
-</div>
-<button class="h-9 px-5 sm:px-7 rounded-xl emerald-play-btn font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 flex-shrink-0 shadow-lg" id="replayPlayPauseBtn" type="button">
+<input aria-label="Replay Timeline Scrubber" class="w-full cursor-pointer block" id="replayTimelineSlider" max="0" min="0" step="1" type="range" value="0"/>
+<div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-1">
+<div class="flex items-center justify-between sm:justify-start gap-1 w-full sm:w-auto">
+<button class="h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 font-extrabold text-[11px]" id="replayStopBtn" title="Stop &amp; Reset to Start" type="button">⏹️</button>
+<button class="h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px]" id="replayFirstStepBtn" title="Jump to First Frame" type="button">⏮️</button>
+<button class="h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px]" id="replayBack5Btn" title="Back 5 Steps" type="button">-5</button>
+<button class="h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-black text-[11px]" id="replayPrevStepBtn" title="Step Backward (-1)" type="button">◀️</button>
+<button class="h-8 px-4 sm:px-6 rounded-xl emerald-play-btn font-black text-xs flex items-center justify-center gap-1 flex-1 sm:flex-initial shadow-lg" id="replayPlayPauseBtn" type="button">
 <span id="replayPlayPauseIcon">▶️</span>
 <span id="replayPlayPauseLabel">Play</span>
 </button>
-<div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-<button class="h-9 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-black text-xs" id="replayNextStepBtn" title="Step Forward (+1)" type="button"><span class="hidden sm:inline">Step </span>▶️</button>
-<button class="h-9 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs" id="replayFwd5Btn" title="Forward 5 Steps" type="button">+5</button>
-<button class="h-9 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs" id="replayLastStepBtn" title="Jump to Final Frame (End)" type="button">⏭️</button>
+<button class="h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-black text-[11px]" id="replayNextStepBtn" title="Step Forward (+1)" type="button">▶️</button>
+<button class="h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px]" id="replayFwd5Btn" title="Forward 5 Steps" type="button">+5</button>
+<button class="h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-[11px]" id="replayLastStepBtn" title="Jump to Final Frame" type="button">⏭️</button>
 </div>
-<div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-<select aria-label="Replay Playback Speed" class="h-9 bg-slate-800 border border-amber-400/60 text-amber-300 rounded-xl px-2.5 text-xs font-black cursor-pointer" id="replaySpeedSelect" title="Playback Speed">
+<div class="flex items-center justify-end gap-1 w-full sm:w-auto pt-0.5 sm:pt-0">
+<select aria-label="Replay Playback Speed" class="h-7 sm:h-8 bg-slate-800 border border-amber-400/60 text-amber-300 rounded-xl px-2 text-[11px] font-black cursor-pointer flex-1 sm:flex-initial" id="replaySpeedSelect" title="Playback Speed">
 <option value="0.25">🐢 0.25x</option>
 <option value="0.5">🐢 0.5x</option>
-<option selected="" value="1">⚡ 1x</option>
+<option selected="" value="1">⚡ 1x Speed</option>
 <option value="1.5">⚡ 1.5x</option>
 <option value="2">🚀 2x</option>
 <option value="4">🚀 4x</option>
 <option value="8">⚡ 8x</option>
 </select>
-<button class="h-9 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-xs" id="replayLoopToggleBtn" title="Toggle Auto-Loop Replay" type="button">🔁 Off</button>
-<button class="h-9 w-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-bold text-xs flex items-center justify-center" id="replaySoundToggleBtn" title="Toggle Replay Sound Effects" type="button">🔊</button>
+<button class="h-7 sm:h-8 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-[11px]" id="replayLoopToggleBtn" title="Toggle Auto-Loop Replay" type="button">🔁 Off</button>
+<button class="h-7 sm:h-8 w-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 font-bold text-xs flex items-center justify-center" id="replaySoundToggleBtn" title="Toggle Replay Sound Effects" type="button">🔊</button>
 </div>
 </div>
 </div>
