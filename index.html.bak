@@ -1755,13 +1755,22 @@
 <p class="text-[11px] text-slate-600">Upgrades the blood-gate requirement from 1 kill to 2 kills before a player's home gate opens.</p>
 </div>
 </label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOneDieWhenOneBeadLeft" type="checkbox"/>
-<div>
-<div class="font-bold text-xs text-slate-900">1️⃣ Convert to 1 Die Only When All Beads Are Inside Home (تمام گوٹیاں گھر کے اندر آنے پر ہی 1 ڈائس استعمال کرنا — Default: ON)</div>
-<p class="text-[11px] text-slate-600">Default ON: A player converts from 2 Dice to 1 Die ONLY when all of their beads are inside their Home area (inside the Home stretch or completed). If there is even 1 bead outside on the board or in hand/yard, they stay on 2 Dice. When turned OFF, they remain on 2 Dice even when all beads are inside Home.</p>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkOneDieWhenOneBeadLeft" type="checkbox"/>
+<div class="flex-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkOneDieWhenOneBeadLeft">1️⃣ Endgame 1-Die Conversion Rule (گھر میں 1 ڈائس کی تبدیلی کا اصول — Default: ON)</label>
+<select aria-label="1-Die Conversion Variant" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="oneDieConversionModeSelect">
+<option selected="" value="all_in_home">🏠 All Beads Inside Home (Default)</option>
+<option value="last_bead_in_home">🎯 Final 1 Bead Inside Home Only</option>
+<option value="last_bead_out_no_yard">🏃 Final 1 Bead on Ground (Yard Empty)</option>
+<option value="last_bead_anywhere">1️⃣ Final 1 Bead Anywhere (Board/Yard)</option>
+<option value="final_step_only">🏁 Only at Final Step Needing 1</option>
+</select>
 </div>
-</label>
+<p class="text-[11px] text-slate-600 mt-0.5">Default ON (All Beads Inside Home): Converts from 2 Dice to 1 Die ONLY when all of a player's beads are inside their Home area (if even 1 bead is outside on the board or in hand, they stay on 2 Dice). Pick any non-conflicting variant from the dropdown, or turn OFF to stay on 2 Dice always.</p>
+</div>
+</div>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMandatoryCapture" type="checkbox"/>
 <div>
@@ -3602,6 +3611,7 @@
         killAllStackedEnemies: true,
         twoKillsForHome: false,
         oneDieWhenOneBeadLeft: true,
+        oneDieConversionMode: 'all_in_home',
         mandatoryCapture: false,
         threeTimeoutsBotTakeover: true,
         reverseKillRule: false,
@@ -3928,6 +3938,9 @@
           if (localStorage.getItem('bannu_ludo_onedie_default_v3') !== 'migrated') {
             rulesConfig.oneDieWhenOneBeadLeft = true;
             localStorage.setItem('bannu_ludo_onedie_default_v3', 'migrated');
+          }
+          if (!['all_in_home', 'last_bead_in_home', 'last_bead_out_no_yard', 'last_bead_anywhere', 'final_step_only'].includes(rulesConfig.oneDieConversionMode)) {
+            rulesConfig.oneDieConversionMode = 'all_in_home';
           }
           if (localStorage.getItem('bannu_ludo_kill_stacked_v1') !== 'migrated') {
             rulesConfig.killAllStackedEnemies = true;
@@ -5066,6 +5079,35 @@
         return remaining.every(function (tk) { return tk.state === 'home_stretch'; });
       }
 
+      function doesOwnerQualifyForOneDieConversion(ownerIdx, customTokensList) {
+        if (!rulesConfig.oneDieWhenOneBeadLeft) return false;
+        let tokens = customTokensList;
+        if (!tokens) {
+          const p = gameState.players[ownerIdx];
+          if (!p || !p.active) return false;
+          tokens = p.tokens;
+        }
+        const remaining = tokens.filter(function (tk) { return tk.state !== 'completed'; });
+        if (remaining.length === 0) return false;
+        const mode = rulesConfig.oneDieConversionMode || 'all_in_home';
+        if (mode === 'all_in_home') {
+          return remaining.every(function (tk) { return tk.state === 'home_stretch'; });
+        }
+        if (mode === 'last_bead_in_home') {
+          return remaining.length === 1 && remaining[0].state === 'home_stretch';
+        }
+        if (mode === 'last_bead_out_no_yard') {
+          return remaining.length === 1 && (remaining[0].state === 'board' || remaining[0].state === 'home_stretch');
+        }
+        if (mode === 'last_bead_anywhere') {
+          return remaining.length === 1;
+        }
+        if (mode === 'final_step_only') {
+          return remaining.every(function (tk) { return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1; });
+        }
+        return remaining.every(function (tk) { return tk.state === 'home_stretch'; });
+      }
+
       function getEffectiveDiceCountForOwner(actorIdx, targetOwnerIdx) {
         if (rulesConfig.diceCount === 1) return 1;
         const actor = gameState.players[actorIdx];
@@ -5076,7 +5118,7 @@
           actor && !actor.assistUnlocked
         );
         if (needsAssistSixRoll) return 1;
-        if (rulesConfig.oneDieWhenOneBeadLeft && isAllBeadsInsideHome(targetOwnerIdx)) return 1;
+        if (doesOwnerQualifyForOneDieConversion(targetOwnerIdx)) return 1;
         return 2;
       }
 
@@ -7804,9 +7846,7 @@
           if (!pl || !pl.active || pl.id === ownerIdx || pl.finishRank > 0) return;
           if (rulesConfig.teamMode && pl.team === ownerMeta.team) return;
 
-          const enemyRemaining = pl.tokens.filter(function (t) { return t.state !== 'completed'; });
-          const enemyAllInHome = enemyRemaining.length > 0 && enemyRemaining.every(function (t) { return t.state === 'home_stretch'; });
-          const enemyEffectiveDice = (rulesConfig.diceCount === 1 || (rulesConfig.oneDieWhenOneBeadLeft && enemyAllInHome)) ? 1 : 2;
+          const enemyEffectiveDice = (rulesConfig.diceCount === 1 || doesOwnerQualifyForOneDieConversion(pl.id, pl.tokens)) ? 1 : 2;
           const enemyMaxReach = enemyEffectiveDice === 2 ? 12 : 6;
           const enemyNeedsBloodKill = (reqKills > 0 && (pl.kills || 0) < reqKills);
           const mandatoryCapBoost = rulesConfig.mandatoryCapture ? 1.45 : 1.0;
@@ -8813,7 +8853,7 @@
           boardScore += 920 * wipeoutDefenseMult;
         }
 
-        if (rulesConfig.strictHomeRemainder && rulesConfig.diceCount === 2) {
+        if (rulesConfig.strictHomeRemainder && rulesConfig.diceCount === 2 && !doesOwnerQualifyForOneDieConversion(ownerIdx, owner.tokens)) {
           if (groundBeads.length === 0 && homeStretchBeads.length === 1 && yardBeads.length > 0) {
             const needed = 6 - homeStretchBeads[0].homeStep;
             if (needed === 1) {
@@ -11100,6 +11140,12 @@
         if (chk2Kills) chk2Kills.checked = Boolean(rulesConfig.twoKillsForHome);
         const chk1DieLast = document.getElementById('chkOneDieWhenOneBeadLeft');
         if (chk1DieLast) chk1DieLast.checked = Boolean(rulesConfig.oneDieWhenOneBeadLeft);
+        const sel1DieMode = document.getElementById('oneDieConversionModeSelect');
+        if (sel1DieMode) {
+          sel1DieMode.value = rulesConfig.oneDieConversionMode || 'all_in_home';
+          sel1DieMode.disabled = !rulesConfig.oneDieWhenOneBeadLeft;
+          sel1DieMode.classList.toggle('opacity-50', !rulesConfig.oneDieWhenOneBeadLeft);
+        }
         const chkMandCap = document.getElementById('chkMandatoryCapture');
         if (chkMandCap) chkMandCap.checked = Boolean(rulesConfig.mandatoryCapture);
         const chk3TimeoutBot = document.getElementById('chkThreeTimeoutsBotTakeover');
@@ -11294,6 +11340,7 @@
         rulesConfig.killAllStackedEnemies = true;
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
+        rulesConfig.oneDieConversionMode = 'all_in_home';
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         rulesConfig.reverseKillRule = false;
@@ -11349,6 +11396,7 @@
         rulesConfig.killAllStackedEnemies = true;
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
+        rulesConfig.oneDieConversionMode = 'all_in_home';
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         rulesConfig.reverseKillRule = false;
@@ -15489,17 +15537,17 @@
           id: 'one_die_last_bead',
           cat: 'dice',
           ruleKey: 'oneDieWhenOneBeadLeft',
-          defaultBadge: 'Default: ON (پہلے سے آن)',
-          titleEn: '2. Convert to 1 Die Only When All Beads Are Inside Home',
-          titleUr: 'تمام گوٹیاں اپنے گھر کے اندر آنے پر ہی 1 ڈائس استعمال کرنا',
-          enDesc: 'By default in Bannu 2-Dice Ludo, a player converts from 2 Dice to 1 Die ONLY when all of their beads are inside their Home area (inside the colored Home stretch or completed). If there is even a single bead outside on the board track or in hand (yard), the player continues rolling 2 Dice!',
-          urDesc: 'بنوں 2 ڈائس لڈو میں کھلاڑی 2 کی بجائے 1 ڈائس پر صرف اس وقت آتا ہے جب اس کی تمام گوٹیاں اپنے گھر کے اندر (رنگین ہوم لائن میں یا پکی ہو کر) پہنچ چکی ہوں۔ اگر اس کی ایک بھی گوٹی باہر میدان میں یا ہاتھ (کھڈے) میں موجود ہو تو وہ 2 ڈائس ہی پھینکے گا۔',
-          onEffectEn: 'ENABLED (Default ON): Converts to 1 Die ONLY when all of your beads are inside your Home area (0 beads on outer track and 0 in hand/yard). If even 1 bead is outside or in hand, you roll 2 Dice.',
-          onEffectUr: 'آن (ON — ڈیفالٹ): صرف تب 1 ڈائس ہو گا جب آپ کی تمام گوٹیاں گھر کی لائن کے اندر آ جائیں۔ اگر ایک بھی گوٹی باہر یا ہاتھ میں ہے تو 2 ڈائس ہی رہیں گے۔',
-          offEffectEn: 'DISABLED (OFF): Does not convert to 1 Die when all beads are inside Home — you continue rolling 2 Dice even inside the Home stretch.',
-          offEffectUr: 'آف (OFF): تمام گوٹیاں گھر کے اندر آنے پر بھی 1 ڈائس نہیں ہو گا بلکہ اندر بھی 2 ڈائس ہی چلیں گے۔',
-          exampleEn: 'In a 4-bead match: 3 beads are completed/inside Home, and Bead #4 is still outside on step 20 (or in hand). Because 1 bead is still outside Home, you roll 2 Dice! Once Bead #4 also enters the Home stretch (so all 4 beads are inside Home), your roll converts to 1 Die (when ON).',
-          exampleUr: 'مثال: 4 گوٹیوں والے میچ میں 3 گوٹیاں گھر کے اندر ہیں اور چوتھی گوٹی باہر خانہ 20 پر (یا ہاتھ میں) ہے؛ چونکہ ایک گوٹی باہر ہے اس لیے آپ 2 ڈائس ہی پھینکیں گے۔ جیسے ہی چوتھی گوٹی بھی گھر کی لائن میں داخل ہو گی، آپ کی باری 1 ڈائس پر منتقل ہو جائے گی۔'
+          defaultBadge: 'Default: ON — All Beads Inside Home',
+          titleEn: '2. Endgame 1-Die Conversion Rule & Variants (5 Non-Conflicting Modes)',
+          titleUr: 'گھر میں 1 ڈائس کی تبدیلی کا اصول اور اس کی 5 اقسام',
+          enDesc: 'Controls when a player in 2-Dice mode converts to rolling 1 Die. By default (🏠 All Beads Inside Home), you convert to 1 Die ONLY when all of your beads are inside your Home area (Home stretch or completed)—if even 1 bead is outside on the board or in hand, you stay on 2 Dice! In Advanced Rules, you can also select from 5 non-conflicting variants: (1) All Beads Inside Home [Default], (2) Final 1 Bead Inside Home Only (keeps 2 Dice if 2+ beads are in Home stretch), (3) Final 1 Bead on Ground with Yard Empty (keeps 2 Dice if last bead is in hand), (4) Final 1 Bead Anywhere, or (5) Only at Final Step Needing 1.',
+          urDesc: 'یہ اصول طے کرتا ہے کہ 2 ڈائس گیم میں کھلاڑی کب 1 ڈائس پر منتقل ہو گا۔ ڈیفالٹ اصول (🏠 تمام گوٹیاں گھر کے اندر) کے مطابق کھلاڑی صرف تب 1 ڈائس استعمال کرتا ہے جب اس کی تمام گوٹیاں اپنے گھر کے اندر (رنگین ہوم لائن میں یا پکی ہو کر) آ چکی ہوں—اگر ایک بھی گوٹی باہر میدان یا ہاتھ (کھڈے) میں ہو تو 2 ڈائس ہی چلیں گے۔ آپ سیٹنگز کے ڈراپ ڈاؤن سے 5 مختلف اقسام میں سے کوئی بھی ایک منتخب کر سکتے ہیں جو آپس میں نہیں ٹکراتیں۔',
+          onEffectEn: 'ENABLED (Default ON): Converts from 2 Dice to 1 Die according to your selected non-conflicting variant (Default: ONLY when all beads are inside Home; 2 Dice if any bead is outside or in hand).',
+          onEffectUr: 'آن (ON — ڈیفالٹ): منتخب کردہ قسم کے مطابق 1 ڈائس ہو گا (ڈیفالٹ: صرف جب تمام گوٹیاں گھر کے اندر آ جائیں؛ اگر ایک بھی باہر یا ہاتھ میں ہو تو 2 ڈائس)۔',
+          offEffectEn: 'DISABLED (OFF): Never converts to 1 Die — the player continues rolling 2 Dice throughout the entire match, even when all beads are inside Home.',
+          offEffectUr: 'آف (OFF): کبھی بھی 1 ڈائس پر منتقلی نہیں ہو گی — تمام گوٹیاں گھر کے اندر آنے پر بھی 2 ڈائس ہی چلیں گے۔',
+          exampleEn: 'Default Variant (All Beads Inside Home): 3 beads are inside Home and Bead #4 is on outer step 20 (or in hand) → rolls 2 Dice. Once Bead #4 enters the Home stretch → converts to 1 Die! Variant 2 (Final 1 Bead Inside Home): 2 beads are completed and 2 are in Home stretch → rolls 2 Dice until 3 are completed and only 1 remains in Home stretch.',
+          exampleUr: 'مثال: ڈیفالٹ موڈ میں اگر 3 گوٹیاں گھر میں ہیں اور چوتھی باہر یا ہاتھ میں ہے تو 2 ڈائس چلیں گے، اور چوتھی گوٹی کے گھر کی لائن میں آتے ہی 1 ڈائس ہو جائے گا۔ دوسری قسم (صرف آخری گوٹی گھر میں) میں اگر 2 گوٹیاں گھر کی لائن میں ہوں تو دونوں کو چلانے کے لیے 2 ڈائس ملیں گے اور صرف آخری 1 گوٹی رہنے پر 1 ڈائس ہو گا۔'
         },
         {
           id: 'close_game_mode',
@@ -16199,6 +16247,22 @@
           return {
             isOn: is2D,
             label: is2D ? 'Active: 2 Dice (دو دانے)' : 'Active: 1 Die (ایک دانہ)',
+            canToggle: true
+          };
+        }
+        if (item.ruleKey === 'oneDieWhenOneBeadLeft') {
+          const isOn = Boolean(rulesConfig.oneDieWhenOneBeadLeft);
+          const modeNames = {
+            all_in_home: 'All in Home',
+            last_bead_in_home: 'Final 1 in Home',
+            last_bead_out_no_yard: 'Final 1 on Ground',
+            last_bead_anywhere: 'Final 1 Anywhere',
+            final_step_only: 'Final Step 1 Only'
+          };
+          const mLbl = modeNames[rulesConfig.oneDieConversionMode || 'all_in_home'] || 'All in Home';
+          return {
+            isOn: isOn,
+            label: isOn ? ('🟢 ON (' + mLbl + ')') : '⚪ OFF (Always 2 Dice)',
             canToggle: true
           };
         }
@@ -17025,7 +17089,7 @@
         'chkTeamAssistSix', 'chkThreeConsecutiveSixes', 'chkSingleSixBonusTwoDice',
         'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
         'chkFirstBeadOnBoard', 'initialBeadsOnBoardSelect', 'chkPairBlockadeRule',
-        'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft',
+        'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft', 'oneDieConversionModeSelect',
         'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
         'chkReverseKill', 'chkFriendlyFire', 'chkKamikazeJora', 'chkSnakeEyesPenalty',
         'chkMaxStackLimit', 'chkHeavyJail', 'chkPositionHijack', 'chkSpawnInvincibility',
@@ -17274,6 +17338,8 @@
         rulesConfig.killAllStackedEnemies = document.getElementById('chkKillAllStackedEnemies').checked;
         rulesConfig.twoKillsForHome = document.getElementById('chkTwoKillsForHome').checked;
         rulesConfig.oneDieWhenOneBeadLeft = document.getElementById('chkOneDieWhenOneBeadLeft').checked;
+        const sel1DieMode = document.getElementById('oneDieConversionModeSelect');
+        if (sel1DieMode) rulesConfig.oneDieConversionMode = sel1DieMode.value || 'all_in_home';
         rulesConfig.mandatoryCapture = document.getElementById('chkMandatoryCapture').checked;
         rulesConfig.threeTimeoutsBotTakeover = document.getElementById('chkThreeTimeoutsBotTakeover').checked;
         const chkRevKill = document.getElementById('chkReverseKill');
