@@ -112,11 +112,15 @@ if (workbox) {
     },
     {
         "url": "snakes.html",
+        "revision": "decf5c85c5635829bc3d5ce43c5f8365"
+    },
+    {
+        "url": "snakes.html.bak",
         "revision": "19433515fe5282fab7534f99eb73251f"
     },
     {
         "url": "sw.js",
-        "revision": "8406810e4b639de85416c051fd8b747b"
+        "revision": "fc4765a9467c09727069f3ff4793c387"
     },
     {
         "url": "transcript of the vioces.txt",

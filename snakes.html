@@ -59,18 +59,18 @@
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <style>
 :root {
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-size-base: 14px;
   --header-bg: #ffffff;
   --header-text: #0f172a;
-  --sidebar-bg: #f8fafc;
+  --sidebar-bg: #ffffff;
   --sidebar-text: #1e293b;
   --main-bg: #f1f5f9;
   --main-text: #0f172a;
   --footer-bg: #ffffff;
   --footer-text: #334155;
   --accent-primary: #059669;
-  --arena-bars-offset: 14px;
+  --arena-bars-offset: 132px;
 }
 *, *::before, *::after {
   box-sizing: border-box;
@@ -87,6 +87,7 @@ html, body {
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  overscroll-behavior: none;
 }
 .theme-header {
   background-color: var(--header-bg) !important;
@@ -105,25 +106,27 @@ html, body {
   color: var(--footer-text) !important;
 }
 
-/* Custom sleek thin scrollbar ONLY for internal data tables or modals, never on body or arena */
+/* Smooth hardware-accelerated scrolling for Hub & Modals */
 .hub-scroll {
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   scrollbar-width: thin;
-  scrollbar-color: rgba(16, 185, 129, 0.4) transparent;
+  scrollbar-color: rgba(5, 150, 105, 0.35) transparent;
 }
 .hub-scroll::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 .hub-scroll::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.4);
+  background: rgba(5, 150, 105, 0.35);
   border-radius: 9999px;
 }
 
-/* Fullscreen Bright & Inviting Game Board Sizing — Maximizes Game Area with Collapsible Bars */
+/* Studio-Grade Responsive Arena Layout (60FPS Mobile/Tablet/Desktop) */
 #gameplayArenaShell {
-  background: radial-gradient(circle at 50% 35%, #fffef7 0%, #ecfdf5 55%, #e2e8f0 100%) !important;
+  background: linear-gradient(160deg, #f8fafc 0%, #ecfdf5 50%, #e2e8f0 100%) !important;
   color: #0f172a !important;
 }
 .arena-stage {
@@ -133,7 +136,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3px;
+  padding: 4px 6px;
   position: relative;
   overflow: hidden;
 }
@@ -142,28 +145,29 @@ html, body {
   grid-template-columns: repeat(10, minmax(0, 1fr));
   grid-template-rows: repeat(10, minmax(0, 1fr));
   aspect-ratio: 1 / 1;
-  width: min(97.5vw, calc(100dvh - var(--arena-bars-offset, 14px)));
-  height: min(97.5vw, calc(100dvh - var(--arena-bars-offset, 14px)));
+  width: min(96.5vw, calc(100dvh - var(--arena-bars-offset, 132px)));
+  height: min(96.5vw, calc(100dvh - var(--arena-bars-offset, 132px)));
   max-width: 100%;
   max-height: 100%;
   position: relative;
-  border: 3.5px solid #059669;
+  border: 3px solid #047857;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14), 0 0 0 3px #fef3c7;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14), 0 0 0 2px #d1fae5;
   background: #ffffff;
-  transition: width 0.22s ease, height 0.22s ease;
+  contain: layout paint;
+  will-change: transform;
 }
 .board-cell {
   position: relative;
-  border: 1px solid rgba(16, 185, 129, 0.18);
+  border: 0.5px solid rgba(5, 150, 105, 0.16);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2px 3px;
+  padding: 2px 2.5px;
   user-select: none;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
   overflow: hidden;
+  contain: layout style;
 }
 .board-cell.cell-even {
   background-color: #fffbeb;
@@ -173,69 +177,67 @@ html, body {
 }
 .board-cell.cell-safe {
   background-color: #d1fae5 !important;
-  box-shadow: inset 0 0 0 2px #059669;
+  box-shadow: inset 0 0 0 1.5px #059669;
 }
 .board-cell.cell-king-snake {
   background-color: #ffe4e6 !important;
-  box-shadow: inset 0 0 0 2px #e11d48;
+  box-shadow: inset 0 0 0 1.5px #e11d48;
 }
 .board-cell.cell-goal {
   background: linear-gradient(135deg, #f59e0b, #b45309) !important;
   color: #ffffff !important;
 }
-/* Tactical Radar Highlights */
+
+/* Lightweight High-Contrast Tactical Radar Highlights */
 .board-cell.radar-good {
-  box-shadow: inset 0 0 0 3px #10b981, 0 0 12px rgba(16, 185, 129, 0.55) !important;
+  box-shadow: inset 0 0 0 2.5px #10b981 !important;
+  background-color: rgba(16, 185, 129, 0.12) !important;
   z-index: 5;
 }
 .board-cell.radar-danger {
-  box-shadow: inset 0 0 0 3px #ef4444, 0 0 12px rgba(239, 68, 68, 0.55) !important;
+  box-shadow: inset 0 0 0 2.5px #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.12) !important;
   z-index: 5;
 }
 .board-cell.radar-cut {
-  box-shadow: inset 0 0 0 3px #f59e0b, 0 0 12px rgba(245, 158, 11, 0.65) !important;
+  box-shadow: inset 0 0 0 2.5px #f59e0b !important;
+  background-color: rgba(245, 158, 11, 0.16) !important;
   z-index: 5;
 }
 .board-cell.radar-step {
-  box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.45);
+  box-shadow: inset 0 0 0 1.5px rgba(59, 130, 246, 0.38);
 }
 
 /* Step-by-Step Visual Clue Trail & Manual Snake Editor Highlights */
 .board-cell.cell-step-trail {
-  box-shadow: inset 0 0 0 2.5px var(--step-trail-color, #10b981), 0 0 10px rgba(16, 185, 129, 0.35) !important;
-  background-color: rgba(16, 185, 129, 0.16) !important;
+  box-shadow: inset 0 0 0 2px var(--step-trail-color, #10b981) !important;
+  background-color: rgba(16, 185, 129, 0.18) !important;
   z-index: 14;
 }
 .board-cell.cell-step-current {
-  box-shadow: inset 0 0 0 3.5px var(--step-trail-color, #f59e0b), 0 0 18px rgba(245, 158, 11, 0.75) !important;
-  background-color: rgba(254, 243, 199, 0.95) !important;
-  transform: scale(1.03);
+  box-shadow: inset 0 0 0 3px var(--step-trail-color, #f59e0b) !important;
+  background-color: #fef3c7 !important;
   z-index: 18;
 }
 .board-cell.cell-transition-from {
-  box-shadow: inset 0 0 0 3.5px #f43f5e, 0 0 18px rgba(244, 63, 94, 0.8) !important;
+  box-shadow: inset 0 0 0 3px #f43f5e !important;
   z-index: 18;
 }
 .board-cell.cell-transition-to {
-  box-shadow: inset 0 0 0 3.5px #10b981, 0 0 18px rgba(16, 185, 129, 0.8) !important;
+  box-shadow: inset 0 0 0 3px #10b981 !important;
   z-index: 18;
 }
 .board-cell.cell-edit-pending-head {
-  box-shadow: inset 0 0 0 4px #e11d48, 0 0 20px rgba(225, 29, 72, 0.85) !important;
+  box-shadow: inset 0 0 0 3px #e11d48 !important;
   background-color: #ffe4e6 !important;
-  animation: editCellPulse 0.75s infinite alternate ease-in-out;
   z-index: 22;
 }
 .board-cell.cell-edit-mode-cursor {
   cursor: crosshair !important;
 }
 .board-cell.cell-edit-mode-cursor:hover {
-  box-shadow: inset 0 0 0 3px #6366f1 !important;
+  box-shadow: inset 0 0 0 2.5px #6366f1 !important;
   z-index: 19;
-}
-@keyframes editCellPulse {
-  0% { transform: scale(0.98); }
-  100% { transform: scale(1.04); }
 }
 .step-clue-badge {
   position: absolute;
@@ -244,22 +246,17 @@ html, body {
   transform: translate(-50%, -50%);
   padding: 1px 4px;
   border-radius: 9999px;
-  font-size: clamp(7px, 1.05vmin, 10px);
+  font-size: clamp(7px, 1vmin, 10px);
   font-weight: 900;
   color: #ffffff;
   background: var(--step-trail-color, #059669);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), 0 0 0 1.5px #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   pointer-events: none;
   z-index: 24;
   white-space: nowrap;
-  animation: stepBadgePop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes stepBadgePop {
-  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.2; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
-/* Beautiful 3D Sculpted Hujra Beads with Floating Name Tags */
+/* Sculpted 3D Hujra Beads */
 .hujra-bead-wrap {
   position: relative;
   display: inline-flex;
@@ -267,88 +264,55 @@ html, body {
   align-items: center;
   justify-content: center;
   z-index: 30;
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .token-pin {
   position: relative;
-  width: clamp(16px, 2.6vmin, 26px);
-  height: clamp(16px, 2.6vmin, 26px);
+  width: clamp(14px, 2.5vmin, 25px);
+  height: clamp(14px, 2.5vmin, 25px);
   border-radius: 9999px;
   border: 2px solid #ffffff;
-  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.65) 0%, var(--bead-color, #059669) 38%, #0f172a 100%);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.55), inset 0 2px 3px rgba(255,255,255,0.65), inset 0 -2px 4px rgba(0,0,0,0.45);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.6) 0%, var(--bead-color, #059669) 42%, #0f172a 100%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(7px, 1.1vmin, 10px);
+  font-size: clamp(7px, 1.05vmin, 10px);
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.85);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
   z-index: 30;
-}
-.token-pin::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 9999px;
-  border: 1px dashed rgba(255, 255, 255, 0.65);
-  pointer-events: none;
-}
-.token-pin::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 3px;
-  width: 34%;
-  height: 26%;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.65);
-  transform: rotate(-25deg);
-  pointer-events: none;
 }
 .bead-name-tag {
   margin-top: -2px;
-  padding: 0.5px 4px;
+  padding: 0 3px;
   border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   color: #f8fafc;
-  font-size: clamp(6px, 0.92vmin, 8.5px);
+  font-size: clamp(5.5px, 0.85vmin, 8px);
   font-weight: 800;
   line-height: 1.15;
-  letter-spacing: 0.01em;
   white-space: nowrap;
-  max-width: clamp(38px, 6.8vmin, 64px);
+  max-width: clamp(32px, 6.2vmin, 60px);
   overflow: hidden;
   text-overflow: ellipsis;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   z-index: 32;
   pointer-events: none;
 }
 .token-active-glow {
-  box-shadow: 0 0 0 2.5px #fbbf24, 0 0 12px rgba(16, 185, 129, 0.85), 0 4px 10px rgba(0,0,0,0.6);
-  transform: scale(1.1);
+  box-shadow: 0 0 0 2px #fbbf24, 0 2px 6px rgba(15, 23, 42, 0.5);
+  transform: scale(1.08);
 }
 .bead-hopping {
-  animation: beadStepHop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate !important;
-  box-shadow: 0 0 0 3px #facc15, 0 8px 18px rgba(0,0,0,0.65) !important;
+  transform: translateY(-4px) scale(1.2) !important;
+  box-shadow: 0 0 0 2.5px #facc15, 0 5px 10px rgba(0,0,0,0.45) !important;
   z-index: 40 !important;
-}
-@keyframes beadStepHop {
-  0% { transform: translateY(0) scale(1.08); }
-  100% { transform: translateY(-7px) scale(1.28); }
 }
 .token-selectable-pulse {
   cursor: pointer !important;
   pointer-events: auto !important;
-  box-shadow: 0 0 0 3px #facc15, 0 0 14px rgba(250, 204, 21, 0.95) !important;
-  animation: beadSelectPulse 0.85s infinite alternate ease-in-out;
+  box-shadow: 0 0 0 3px #facc15 !important;
+  transform: scale(1.18);
   z-index: 38 !important;
-}
-@keyframes beadSelectPulse {
-  0% { transform: scale(1.08); }
-  100% { transform: scale(1.32); }
 }
 
 /* Center Board Interactive Dice Medallion — Hidden visually while board click rolls dice */
@@ -358,121 +322,66 @@ html, body {
   opacity: 0 !important;
   pointer-events: none !important;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -1;
   width: 0;
   height: 0;
   overflow: hidden;
 }
-.center-dice-hub:hover {
-  transform: translate(-50%, -50%) scale(1.08);
-  box-shadow: 0 14px 34px rgba(16, 185, 129, 0.45), 0 0 0 6px rgba(16, 185, 129, 0.28);
-}
-.center-dice-hub:active {
-  transform: translate(-50%, -50%) scale(0.93);
-}
-.center-dice-mini {
-  width: clamp(30px, 5.2vmin, 42px);
-  height: clamp(30px, 5.2vmin, 42px);
-  border-radius: 9px;
-  background: linear-gradient(145deg, #ffffff, #e2e8f0);
-  border: 1.5px solid #cbd5e1;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 2px #ffffff;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  padding: 4px;
-  gap: 2px;
-}
-.center-pip {
-  width: clamp(4px, 0.8vmin, 6px);
-  height: clamp(4px, 0.8vmin, 6px);
-  border-radius: 9999px;
-  background-color: #0f172a;
-  margin: auto;
-  opacity: 0;
-  transition: opacity 0.1s ease;
-}
-.center-pip.pip-six {
-  background-color: #dc2626;
-}
-.center-pip.active {
-  opacity: 1;
-}
 
 /* Immersive Distraction-Free Full Gameplay Mode */
 #gameplayArenaShell.immersive-active #arenaTopHudBar,
-#gameplayArenaShell.immersive-active #arenaBottomDeckBar {
+#gameplayArenaShell.immersive-active #arenaBottomDeckBar,
+#gameplayArenaShell.immersive-active #topCollapsedHandleBar,
+#gameplayArenaShell.immersive-active #bottomCollapsedHandleBar {
   display: none !important;
 }
 #gameplayArenaShell.immersive-active .arena-stage {
-  padding: 2px !important;
+  padding: 4px !important;
   height: 100dvh !important;
   width: 100vw !important;
 }
 #gameplayArenaShell.immersive-active .board-grid {
-  width: min(98.5vw, 98.5dvh) !important;
-  height: min(98.5vw, 98.5dvh) !important;
-  border-width: 3px !important;
+  width: min(98vw, 98dvh) !important;
+  height: min(98vw, 98dvh) !important;
 }
 
 /* 3D Feel Dice Cube */
 .dice-cube {
-  width: 42px;
-  height: 42px;
-  border-radius: 11px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: linear-gradient(145deg, #ffffff, #f1f5f9);
-  border: 2px solid #10b981;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.22), inset 0 2px 4px #ffffff;
+  border: 2px solid #059669;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2), inset 0 1px 2px #ffffff;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   padding: 5px;
   gap: 2px;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.12s ease;
   position: relative;
-}
-@media (min-width: 640px) {
-  .dice-cube {
-    width: 46px;
-    height: 46px;
-    padding: 6px;
-  }
-}
-.dice-cube:hover:not(:disabled) {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 10px 22px rgba(16, 185, 129, 0.35), inset 0 2px 4px #ffffff;
+  flex-shrink: 0;
 }
 .dice-cube:active:not(:disabled) {
   transform: scale(0.92);
 }
 .dice-rolling {
-  animation: diceShake 0.38s infinite ease-in-out;
+  animation: diceShake 0.28s infinite ease-in-out;
 }
 @keyframes diceShake {
   0% { transform: rotate(0deg) scale(1); }
-  25% { transform: rotate(-20deg) scale(1.1); }
-  50% { transform: rotate(20deg) scale(0.94); }
-  75% { transform: rotate(-14deg) scale(1.06); }
+  25% { transform: rotate(-14deg) scale(1.06); }
+  50% { transform: rotate(14deg) scale(0.95); }
+  75% { transform: rotate(-10deg) scale(1.03); }
   100% { transform: rotate(0deg) scale(1); }
 }
 .pip {
-  width: 8px;
-  height: 8px;
+  width: 7.5px;
+  height: 7.5px;
   border-radius: 9999px;
   background-color: #0f172a;
   margin: auto;
   opacity: 0;
-  transition: opacity 0.1s ease;
-}
-@media (min-width: 640px) {
-  .pip {
-    width: 9px;
-    height: 9px;
-  }
 }
 .pip.pip-six {
   background-color: #dc2626;
@@ -481,16 +390,7 @@ html, body {
   opacity: 1;
 }
 
-/* Hero Play Button Pulse */
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6), 0 12px 30px -5px rgba(16, 185, 129, 0.5); }
-  50% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0), 0 16px 38px -5px rgba(16, 185, 129, 0.75); }
-}
-.btn-play-hero {
-  animation: pulseGlow 2.4s infinite;
-}
-
-/* DataTables Customization */
+/* DataTables & Select2 Clean Styling */
 .dataTables_wrapper .dt-buttons {
   display: inline-flex;
   flex-wrap: wrap;
@@ -504,22 +404,17 @@ html, body {
   padding: 5px 10px !important;
   font-size: 12px !important;
   color: #334155 !important;
-  min-width: 36px;
-  min-height: 36px;
+  min-width: 34px;
+  min-height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
-}
-.dataTables_wrapper .dt-button:hover {
-  background: #0f172a !important;
-  color: #ffffff !important;
 }
 .dataTables_wrapper .dataTables_filter input {
   border: 1px solid #cbd5e1 !important;
   border-radius: 8px !important;
   padding: 5px 10px !important;
-  min-height: 36px;
+  min-height: 34px;
   outline: none;
   color: #0f172a !important;
   background: #ffffff !important;
@@ -527,198 +422,94 @@ html, body {
 table.dataTable tbody tr {
   color: #0f172a;
 }
-table.dataTable tbody tr:hover {
-  background-color: #e0f2fe !important;
-}
 .select2-container .select2-selection--single {
-  height: 42px !important;
-  border-radius: 0.5rem !important;
+  height: 40px !important;
+  border-radius: 0.65rem !important;
   border: 1px solid #cbd5e1 !important;
   display: flex !important;
   align-items: center !important;
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-  height: 40px !important;
+  height: 38px !important;
 }
 
-/* Mobile Device Responsive Refinements (< 640px) */
+/* Tablet & Mobile Responsive Optimizations */
+@media (max-width: 1024px) {
+  .board-grid {
+    width: min(96vw, calc(100dvh - var(--arena-bars-offset, 148px)));
+    height: min(96vw, calc(100dvh - var(--arena-bars-offset, 148px)));
+  }
+}
+
 @media (max-width: 640px) {
   :root {
-    --font-size-base: 12.5px;
+    --font-size-base: 13px;
   }
-  header.theme-header {
-    height: 40px !important;
-    padding: 0 8px !important;
+  .arena-stage {
+    padding: 2px 4px;
   }
-  header.theme-header .w-8 {
-    width: 26px !important;
-    height: 26px !important;
-    border-radius: 8px !important;
-  }
-  header.theme-header button {
-    min-width: 28px !important;
-    min-height: 28px !important;
-    padding: 3px 7px !important;
-    font-size: 10.5px !important;
-    border-radius: 8px !important;
-  }
-  #unifiedNavigation {
-    padding: 3px 4px !important;
-  }
-  #unifiedNavigation .nav-btn {
-    min-height: 34px !important;
-    padding: 3px 2px !important;
-    font-size: 9px !important;
-    gap: 1.5px !important;
-    border-radius: 8px !important;
-  }
-  #unifiedNavigation .nav-btn i {
-    font-size: 11px !important;
-  }
-  #unifiedNavigation .nav-btn span {
-    max-width: 54px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  #view-home > div:first-child {
-    padding: 14px 12px !important;
-    border-radius: 18px !important;
-  }
-  #view-home h1 {
-    font-size: 1.35rem !important;
-    line-height: 1.2 !important;
-  }
-  #view-home p {
-    font-size: 11px !important;
-    line-height: 1.35 !important;
-  }
-  .btn-play-hero,
-  #resumeSavedMatchBtn,
-  #homeImmersivePlayBtn,
-  #view-home button[onclick*="setup"] {
-    min-height: 36px !important;
-    padding: 6px 12px !important;
-    font-size: 11.5px !important;
-    border-radius: 11px !important;
-  }
-  #view-home .lg\:col-span-5 button {
-    padding: 8px 10px !important;
-    border-radius: 12px !important;
-  }
-  #view-home .lg\:col-span-5 button .w-9 {
-    width: 28px !important;
-    height: 28px !important;
-    margin-bottom: 4px !important;
-  }
-  #view-setup > div,
-  #view-multiplayer > div,
-  #view-rules > div,
-  #view-players > div,
-  #view-settings .bg-white {
-    padding: 12px !important;
-    border-radius: 18px !important;
-  }
-  button, input, select {
-    min-height: 32px;
-  }
-  .select2-container .select2-selection--single {
-    height: 34px !important;
-    font-size: 11.5px !important;
-  }
-  .select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 32px !important;
-  }
-  /* Compact Board Cells, Badges & Tokens on Mobile */
   .board-grid {
+    width: min(97.5vw, calc(100dvh - var(--arena-bars-offset, 152px)));
+    height: min(97.5vw, calc(100dvh - var(--arena-bars-offset, 152px)));
     border-width: 2.5px !important;
-    border-radius: 11px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
   }
   .board-cell {
     padding: 1px 1.5px !important;
   }
-  .board-cell > div:first-child span:first-child {
-    font-size: 7.5px !important;
-    padding: 0 2px !important;
-    line-height: 1.1 !important;
+  .cell-num-lbl {
+    font-size: 8px !important;
+    line-height: 1 !important;
+    padding: 0 1.5px !important;
   }
-  .board-cell > div:first-child span:nth-child(2) {
+  .cell-badge-lbl {
     font-size: 6.5px !important;
-    padding: 0 2px !important;
-    line-height: 1.1 !important;
+    line-height: 1 !important;
+    padding: 0 1.5px !important;
   }
   .token-pin {
-    width: clamp(12px, 3.2vmin, 18px) !important;
-    height: clamp(12px, 3.2vmin, 18px) !important;
+    width: clamp(12px, 3.3vmin, 17px) !important;
+    height: clamp(12px, 3.3vmin, 17px) !important;
     font-size: 6.5px !important;
     border-width: 1.5px !important;
   }
   .bead-name-tag {
-    font-size: 5.5px !important;
-    padding: 0 2px !important;
-    max-width: 28px !important;
-    margin-top: -1px !important;
+    display: none !important;
   }
   .step-clue-badge {
     font-size: 6.5px !important;
     padding: 0.5px 2.5px !important;
   }
-  /* Compact Arena Bars & Dice on Mobile */
-  #topCollapsedHandleBar,
-  #bottomCollapsedHandleBar,
-  #immersiveFloatingBar {
-    padding: 2px 7px !important;
-    gap: 4px !important;
-  }
-  #topCollapsedHandleBar button,
-  #bottomCollapsedHandleBar button,
-  #immersiveFloatingBar button {
-    font-size: 9.5px !important;
-    padding: 2px 6px !important;
-    min-height: 22px !important;
-  }
-  #arenaTopHudBar {
-    height: 34px !important;
-    padding: 2px 6px !important;
-  }
-  #arenaTopHudBar button {
-    height: 24px !important;
-    min-height: 24px !important;
-    padding: 0 6px !important;
-    font-size: 9.5px !important;
-  }
-  #arenaBottomDeckBar {
-    padding: 4px 6px !important;
-  }
   .dice-cube {
-    width: 34px !important;
-    height: 34px !important;
+    width: 40px !important;
+    height: 40px !important;
     padding: 4px !important;
-    border-radius: 8px !important;
+    border-radius: 10px !important;
   }
   .pip {
-    width: 6px !important;
-    height: 6px !important;
+    width: 6.5px !important;
+    height: 6.5px !important;
   }
-  #primaryRollBtn {
-    height: 26px !important;
-    min-height: 26px !important;
-    padding: 0 8px !important;
-    font-size: 10px !important;
-    border-radius: 8px !important;
+  #unifiedNavigation {
+    padding: 4px 6px !important;
+    box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.06);
   }
-  #floatingCalloutInner {
-    padding: 5px 12px !important;
-    font-size: 11px !important;
-    border-radius: 12px !important;
+  #unifiedNavigation .nav-btn {
+    min-height: 42px !important;
+    padding: 4px 2px !important;
+    font-size: 9.5px !important;
+    gap: 2px !important;
+    border-radius: 10px !important;
   }
-  #arenaPauseModal > div {
-    padding: 14px !important;
-    border-radius: 20px !important;
+  #unifiedNavigation .nav-btn i {
+    font-size: 13px !important;
   }
-  #arenaPauseModal button {
-    min-height: 34px !important;
-    font-size: 11px !important;
+  #unifiedNavigation .nav-btn span {
+    max-width: 58px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -817,9 +608,9 @@ table.dataTable tbody tr:hover {
      ========================================================================= -->
 <div class="h-dvh w-screen flex flex-col overflow-hidden no-print" id="gameHubShell">
 <!-- Sleek Bright Top Game Bar -->
-<header class="theme-header h-12 shrink-0 border-b border-slate-200 px-3 sm:px-5 flex items-center justify-between gap-2 z-30 shadow-sm">
-<div class="flex items-center gap-2.5 cursor-pointer" onclick="GameEngine.launchArena()">
-<div class="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold shadow-sm" title="Return to Game Board">
+<header class="theme-header h-13 sm:h-14 shrink-0 border-b border-slate-200 px-2.5 sm:px-5 flex items-center justify-between gap-2 z-30 shadow-sm">
+<div class="flex items-center gap-2 min-w-0 cursor-pointer" onclick="GameEngine.launchArena()">
+<div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center font-bold shadow-sm" title="Return to Game Board">
 <svg class="w-5 h-5 overflow-visible" fill="none" viewbox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 52 C6 44, 18 36, 28 40 C40 44, 52 36, 46 26 C42 19, 24 22, 28 13" stroke="#ecfdf5" stroke-linecap="round" stroke-width="6.5"></path>
 <path d="M12 52 C6 44, 18 36, 28 40 C40 44, 52 36, 46 26 C42 19, 24 22, 28 13" stroke="#10b981" stroke-dasharray="3 4" stroke-linecap="round" stroke-width="3"></path>
@@ -827,46 +618,46 @@ table.dataTable tbody tr:hover {
 <polygon fill="#ecfdf5" points="29,5 21,14 29,19 37,14"></polygon>
 <circle cx="26" cy="12" fill="#dc2626" r="1.6"></circle>
 <circle cx="32" cy="12" fill="#dc2626" r="1.6"></circle>
-<path d="M29 5 L29 1 M29 1 L26 -2 M29 1 L32 -2" stroke="#f43f5e" stroke-linecap="round" stroke-width="1.8"></path>
 </svg>
 </div>
-<div>
-<div class="flex items-center gap-2">
-<span class="font-extrabold text-sm sm:text-base tracking-tight text-slate-900">Khyber Saanp Seedhi</span>
-<span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">v4.0 Pro Edition</span>
-</div>
-</div>
-</div>
+<div class="min-w-0">
 <div class="flex items-center gap-1.5">
-<button class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-sm flex items-center gap-1.5 transition" onclick="GameEngine.launchArena()" type="button">
+<span class="font-extrabold text-xs sm:text-base tracking-tight text-slate-900 truncate">Khyber Saanp Seedhi</span>
+<span class="hidden md:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">v4.0 Pro</span>
+</div>
+<div class="text-[10px] text-slate-500 font-medium truncate sm:hidden">Pashtun KPK Hujra Edition</div>
+</div>
+</div>
+<div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+<button class="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] sm:text-xs shadow-sm flex items-center gap-1.5 transition" onclick="GameEngine.launchArena()" type="button">
 <i class="fa-solid fa-chess-board"></i>
-<span>Back to Game Board</span>
+<span class="hidden xs:inline sm:inline">Play Board</span>
 </button>
 <!-- P2P Status Indicator -->
-<button class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs transition" onclick="AppRouter.navigate('/multiplayer')" title="P2P Lobby Status" type="button">
+<button class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs transition" onclick="AppRouter.navigate('/multiplayer')" title="P2P Lobby Status" type="button">
 <span class="w-2 h-2 rounded-full bg-amber-500" id="sidebarP2PDot"></span>
 <span class="font-semibold text-slate-700" id="sidebarP2PText">Local / AI Ready</span>
 </button>
 <!-- Music Synth Toggle -->
-<button class="min-w-[34px] min-h-[34px] rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-xs transition" id="musicToggleBtn" onclick="GameAudio.toggleMusic()" title="Toggle Hujra Rabab Ambience" type="button">
+<button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-xs transition" id="musicToggleBtn" onclick="GameAudio.toggleMusic()" title="Toggle Hujra Rabab Ambience" type="button">
 <i class="fa-solid fa-music text-slate-600" id="musicToggleIcon"></i>
 </button>
 <!-- Sound Effects Toggle -->
-<button class="min-w-[34px] min-h-[34px] rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-xs transition" id="audioToggleBtn" onclick="GameAudio.toggleMute()" title="Toggle Sound Effects" type="button">
+<button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-xs transition" id="audioToggleBtn" onclick="GameAudio.toggleMute()" title="Toggle Sound Effects" type="button">
 <i class="fa-solid fa-volume-high text-emerald-600" id="audioToggleIcon"></i>
 </button>
 <!-- Fullscreen Toggle -->
-<button class="min-w-[34px] min-h-[34px] rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-xs text-slate-700 transition" onclick="AppUI.toggleBrowserFullscreen()" title="Toggle Fullscreen" type="button">
+<button class="hidden sm:flex w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 items-center justify-center text-xs text-slate-700 transition" onclick="AppUI.toggleBrowserFullscreen()" title="Toggle Fullscreen" type="button">
 <i class="fa-solid fa-expand" id="fullscreenIcon"></i>
 </button>
 <!-- Player Profile Pill -->
-<button class="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition" onclick="ProfileManager.openProfileEditModal()" title="Edit Player Profile" type="button">
-<span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-extrabold text-[11px] flex items-center justify-center shadow" id="headerProfileAvatar">M</span>
+<button class="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition" onclick="ProfileManager.openProfileEditModal()" title="Edit Player Profile" type="button">
+<span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-emerald-600 text-white font-extrabold text-[11px] flex items-center justify-center shadow-sm" id="headerProfileAvatar">M</span>
 <div class="text-left hidden sm:block">
 <div class="text-xs font-bold leading-tight text-slate-900" id="headerUserName">Malik Sher</div>
 <div class="text-[10px] text-emerald-700 font-semibold leading-tight" id="headerUserRole">Bannu • Lv.1</div>
 </div>
-<i class="fa-solid fa-pen-to-square text-[10px] text-slate-500 ml-0.5"></i>
+<i class="fa-solid fa-pen-to-square text-[10px] text-slate-500"></i>
 </button>
 </div>
 </header>
@@ -1648,81 +1439,75 @@ table.dataTable tbody tr:hover {
 <span>HUD</span>
 </button>
 </div>
-<!-- COLLAPSED TOP BAR FLOATING HANDLE PILL (Visible by default when Top Bar is collapsed) -->
-<div class="fixed top-1.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 hover:bg-white border border-emerald-500/40 shadow-md backdrop-blur-md transition" id="topCollapsedHandleBar">
+<!-- COLLAPSED TOP BAR FLOATING HANDLE PILL -->
+<div class="hidden fixed top-1.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 border border-emerald-500/40 shadow-md transition" id="topCollapsedHandleBar">
 <button class="px-2 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center gap-1 transition" onclick="GameEngine.exitArenaToHub()" title="Open Game Hub &amp; Menu" type="button">
 <i class="fa-solid fa-house text-emerald-600"></i>
-<span class="hidden sm:inline">Hub</span>
+<span>Hub</span>
 </button>
-<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" id="collapsedTopTurnDot"></span>
-<span class="text-[11px] font-extrabold text-slate-800 truncate max-w-[140px]" id="collapsedTopTurnText">Malik's Turn</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500" id="collapsedTopTurnDot"></span>
+<span class="text-[11px] font-extrabold text-slate-800 truncate max-w-[130px]" id="collapsedTopTurnText">Malik's Turn</span>
 <button class="px-2 py-0.5 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 font-extrabold text-[10px] flex items-center gap-1 transition" onclick="GameEngine.toggleBoardSnakeEditor()" title="Place Snakes &amp; Bites on Board" type="button">
 <i class="fa-solid fa-staff-snake"></i>
-<span class="hidden sm:inline">Snakes</span>
 </button>
 <button class="px-2 py-0.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] flex items-center gap-1 transition" id="expandTopBarBtn" onclick="GameEngine.toggleTopBar(false)" title="Expand Top Bar" type="button">
 <i class="fa-solid fa-chevron-down text-[9px]"></i>
-<span>Top Bar</span>
+<span>HUD</span>
 </button>
 </div>
-<!-- TOP COMPACT HUD BAR (Sleek Bright Glass, Collapsible, Default Collapsed) -->
-<div class="hidden h-10 shrink-0 bg-white/95 backdrop-blur-md border-b border-emerald-500/30 px-2 sm:px-3.5 py-1 flex items-center justify-between gap-1.5 z-30 shadow-sm text-slate-800" id="arenaTopHudBar">
-<!-- Left: Hub + Menu + Active Rule Pill -->
-<div class="flex items-center gap-1.5">
-<button class="h-7 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[11px] font-bold text-slate-800 flex items-center gap-1 transition" onclick="GameEngine.exitArenaToHub()" title="Open Game Hub" type="button">
+<!-- TOP COMPACT HUD BAR (Responsive Mobile/Tablet/Desktop App Bar) -->
+<div class="shrink-0 bg-white border-b border-slate-200/90 px-2 sm:px-4 py-1.5 flex items-center justify-between gap-1.5 z-30 shadow-sm text-slate-800" id="arenaTopHudBar">
+<!-- Left: Hub + Pause Menu + Active Mode Pill -->
+<div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+<button class="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200/80 text-xs font-extrabold text-slate-800 flex items-center gap-1.5 transition" onclick="GameEngine.exitArenaToHub()" title="Open Game Hub" type="button">
 <i class="fa-solid fa-house text-emerald-600"></i>
 <span class="hidden sm:inline">Hub</span>
 </button>
-<button class="h-7 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[11px] font-bold text-slate-800 flex items-center gap-1 transition" onclick="GameEngine.togglePauseDrawer(true)" title="Pause &amp; Quick Settings (ESC)" type="button">
-<i class="fa-solid fa-bars text-emerald-600"></i>
-<span class="hidden sm:inline">Menu</span>
+<button class="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200/80 text-xs font-extrabold text-slate-800 flex items-center gap-1.5 transition" onclick="GameEngine.togglePauseDrawer(true)" title="Pause &amp; Match Settings" type="button">
+<i class="fa-solid fa-sliders text-emerald-600"></i>
+<span class="hidden sm:inline">Options</span>
 </button>
-<div class="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[10px]">
-<span class="font-extrabold text-emerald-700" id="matchModePill">Vs KPK Ustad Bot</span>
+<div class="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px]">
+<span class="font-extrabold text-emerald-800" id="matchModePill">Vs KPK Ustad Bot</span>
 <span class="text-slate-400">•</span>
 <span class="text-slate-600 font-semibold truncate max-w-[140px]" id="activeRuleBadge">Peshawar Qissa Khwani</span>
 </div>
 </div>
 <!-- Center: Live Turn Banner + Commentary Pill -->
-<div class="flex-1 max-w-lg mx-auto flex items-center justify-center gap-1.5 overflow-hidden px-1">
-<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50/90 border border-amber-300/80 text-[11px] truncate">
-<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-<span class="font-extrabold text-slate-900 shrink-0" id="turnBannerText">Player 1's Turn</span>
-<span class="text-slate-400 hidden sm:inline">|</span>
-<span class="text-amber-800 font-semibold truncate hidden sm:inline" id="pashtoCommentaryBox">Roll 6 (Chakka) to enter from Camp!</span>
+<div class="flex-1 min-w-0 max-w-xl mx-auto flex items-center justify-center px-1">
+<div class="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50/90 border border-amber-200 text-[11px] sm:text-xs truncate">
+<span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+<span class="font-extrabold text-slate-900 truncate" id="turnBannerText">Player 1's Turn</span>
+<span class="text-slate-300 hidden md:inline">|</span>
+<span class="text-amber-900 font-semibold truncate hidden md:inline" id="pashtoCommentaryBox">Roll 6 (Chakka) to enter from Camp!</span>
 </div>
 </div>
-<!-- Right: Compact Controls + Collapse Top Bar Button -->
-<div class="flex items-center gap-1">
-<button class="h-7 px-2 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-[10px] font-bold flex items-center gap-1 transition" id="hudAutoRollBtn" onclick="GameEngine.toggleIdleAutoRollFromHud()" title="Toggle Auto-Roll on Idle" type="button">
+<!-- Right: Quick Tactical Controls -->
+<div class="flex items-center gap-1 shrink-0">
+<button class="hidden sm:flex h-8 px-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold items-center gap-1 transition" id="hudAutoRollBtn" onclick="GameEngine.toggleIdleAutoRollFromHud()" title="Toggle Auto-Roll on Idle" type="button">
 <i class="fa-solid fa-clock-rotate-left"></i>
-<span class="hidden lg:inline">Idle Roll:</span>
 <span id="hudAutoRollCountdown">10s</span>
 </button>
-<button class="h-7 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-[10px] font-bold flex items-center gap-1 transition" id="hudBotPlayBtn" onclick="GameEngine.toggleHumanAutoPlay()" title="Toggle Auto-Roll Dice" type="button">
+<button class="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-[11px] font-bold flex items-center gap-1 transition" id="hudBotPlayBtn" onclick="GameEngine.toggleHumanAutoPlay()" title="Toggle Auto-Roll Dice" type="button">
 <i class="fa-solid fa-robot"></i>
-<span class="hidden md:inline" id="hudBotPlayLabel">Auto-Play: OFF</span>
+<span class="hidden md:inline" id="hudBotPlayLabel">Auto: OFF</span>
 </button>
-<button class="h-7 px-2 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-[10px] font-extrabold flex items-center gap-1 transition" id="hudSnakeEditorBtn" onclick="GameEngine.toggleBoardSnakeEditor()" title="Manually Place or Edit Snakes &amp; Bites on the Board" type="button">
+<button class="h-8 px-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-[11px] font-extrabold flex items-center gap-1 transition" id="hudSnakeEditorBtn" onclick="GameEngine.toggleBoardSnakeEditor()" title="Manually Place or Edit Snakes &amp; Bites on the Board" type="button">
 <i class="fa-solid fa-staff-snake"></i>
-<span class="hidden md:inline">Snakes &amp; Bites</span>
+<span class="hidden lg:inline">Snakes</span>
 </button>
-<button class="h-7 px-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 text-[10px] font-extrabold transition" id="hudSpeedBtn" onclick="GameEngine.cycleGameSpeed()" title="Cycle Animation Speed" type="button">
+<button class="hidden sm:inline-flex h-8 px-2 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-extrabold items-center justify-center transition" id="hudSpeedBtn" onclick="GameEngine.cycleGameSpeed()" title="Cycle Animation Speed" type="button">
         1.6x
       </button>
-<button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 flex items-center justify-center text-[11px] transition" onclick="GameEngine.toggleLogDrawer()" title="Match Feed &amp; Radar Log" type="button">
+<button class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 flex items-center justify-center text-xs transition" onclick="GameEngine.toggleLogDrawer()" title="Match Feed &amp; Radar Log" type="button">
 <i class="fa-solid fa-list-ul"></i>
 </button>
-<button class="hidden xl:flex h-7 px-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-700 text-[10px] font-bold items-center gap-1 transition" id="hudImmersiveBtn" onclick="GameEngine.toggleImmersiveMode(true)" title="Immersive Fullscreen" type="button">
+<button class="hidden xl:flex h-8 px-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-[11px] font-bold items-center gap-1 transition" id="hudImmersiveBtn" onclick="GameEngine.toggleImmersiveMode(true)" title="Immersive Fullscreen" type="button">
 <i class="fa-solid fa-eye-slash"></i>
-<span class="hidden xl:inline">Immersive</span>
+<span>Focus</span>
 </button>
-<button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 flex items-center justify-center text-[11px] transition" onclick="AppUI.toggleBrowserFullscreen()" title="Toggle Fullscreen" type="button">
-<i class="fa-solid fa-expand"></i>
-</button>
-<button class="h-7 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-extrabold flex items-center gap-1 transition" id="collapseTopBarBtn" onclick="GameEngine.toggleTopBar(true)" title="Collapse Top Bar (Remembered)" type="button">
-<i class="fa-solid fa-chevron-up text-[9px]"></i>
-<span class="hidden sm:inline">Hide</span>
+<button class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 flex items-center justify-center text-xs transition" id="collapseTopBarBtn" onclick="GameEngine.toggleTopBar(true)" title="Collapse Top Bar" type="button">
+<i class="fa-solid fa-chevron-up text-[10px]"></i>
 </button>
 </div>
 </div>
@@ -1819,33 +1604,37 @@ table.dataTable tbody tr:hover {
 </button>
 </div>
 </div>
-<!-- COLLAPSED BOTTOM BAR FLOATING HANDLE & MINI ROLL PILL (Visible by default when Bottom Bar is collapsed) -->
-<div class="fixed bottom-1.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-white/95 hover:bg-white border border-emerald-500/40 shadow-lg backdrop-blur-md transition" id="bottomCollapsedHandleBar">
-<button class="px-3 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-[11px] shadow flex items-center gap-1.5 active:scale-95 transition" onclick="GameEngine.triggerRoll()" title="Roll Dice (Or click anywhere on the board)" type="button">
+<!-- COLLAPSED BOTTOM BAR FLOATING HANDLE & MINI ROLL PILL -->
+<div class="hidden fixed bottom-1.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-white/95 border border-emerald-500/40 shadow-lg transition" id="bottomCollapsedHandleBar">
+<button class="px-3.5 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs shadow flex items-center gap-1.5 active:scale-95 transition" onclick="GameEngine.triggerRoll()" title="Roll Dice" type="button">
 <i class="fa-solid fa-dice-d6"></i>
 <span id="collapsedBottomRollText">ROLL DICE</span>
 </button>
-<button class="px-2 py-0.5 rounded-full bg-slate-100 hover:bg-emerald-50 border border-slate-300 text-slate-700 font-bold text-[10px] transition" id="collapsedBottomAutoBtn" onclick="GameEngine.toggleHumanAutoPlay()" title="Toggle Auto-Roll Dice" type="button">
+<button class="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-300 text-slate-700 font-bold text-[10px] transition" id="collapsedBottomAutoBtn" onclick="GameEngine.toggleHumanAutoPlay()" title="Toggle Auto-Roll Dice" type="button">
       Auto: OFF
     </button>
-<button class="px-2.5 py-0.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] flex items-center gap-1 transition" id="expandBottomBarBtn" onclick="GameEngine.toggleBottomBar(false)" title="Expand Bottom Player &amp; Dice Bar" type="button">
+<button class="px-2.5 py-1 rounded-full bg-emerald-600 text-white font-extrabold text-[10px] flex items-center gap-1 transition" id="expandBottomBarBtn" onclick="GameEngine.toggleBottomBar(false)" title="Expand Bottom Player &amp; Dice Bar" type="button">
 <i class="fa-solid fa-chevron-up text-[9px]"></i>
-<span>Bottom Bar</span>
+<span>Deck</span>
 </button>
 </div>
-<!-- BOTTOM COMPACT PLAYER ROSTER & DICE CONTROL DECK (Sleek Bright Glass, Collapsible, Default Collapsed) -->
-<div class="hidden shrink-0 bg-white/95 backdrop-blur-md border-t border-emerald-500/30 px-2 sm:px-4 py-1.5 z-30 shadow-sm text-slate-800" id="arenaBottomDeckBar">
-<div class="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
+<!-- BOTTOM PLAYER ROSTER & THUMB-FRIENDLY DICE CONTROL DECK -->
+<div class="shrink-0 bg-white border-t border-slate-200/90 px-2 sm:px-4 py-1.5 sm:py-2 z-30 shadow-sm text-slate-800" id="arenaBottomDeckBar">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-1.5 sm:gap-2.5">
 <!-- Active Players Compact Cards Strip -->
 <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-1.5 min-w-0" id="activePlayersCards"></div>
-<!-- Center/Right Dice & Quick Actions Deck -->
-<div class="flex items-center gap-2 shrink-0 pl-2 border-l border-slate-200">
+<!-- Thumb-Zone Dice & Quick Actions Deck -->
+<div class="flex items-center justify-between md:justify-end gap-2 shrink-0 pt-1 md:pt-0 md:pl-3 border-t md:border-t-0 md:border-l border-slate-200/80">
 <!-- Tactical Radar & Streak Mini Info -->
-<div class="hidden xl:flex flex-col items-end text-right text-[10px] leading-tight">
-<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold" id="streakBadge">6-Streak: 0/3</span>
-<span class="text-slate-500 mt-0.5 max-w-[155px] truncate" id="radarHintText">Safe Zones: 1, 14, 27, 50, 75, 92</span>
+<div class="flex flex-col items-start md:items-end text-left md:text-right text-[10px] leading-tight min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-extrabold" id="streakBadge">6-Streak: 0/3</span>
+<span class="text-[10px] font-bold text-emerald-700 truncate" id="lastRollLabel">Tap Board / Roll</span>
 </div>
-<!-- Interactive 3D Dice Cube -->
+<span class="text-slate-500 mt-0.5 max-w-[180px] sm:max-w-[200px] truncate" id="radarHintText">Safe: 1, 14, 27, 50, 75, 92</span>
+</div>
+<!-- Interactive 3D Dice Cube + Roll Button -->
+<div class="flex items-center gap-2 shrink-0">
 <div class="relative flex flex-col items-center">
 <button aria-label="Roll Dice" class="dice-cube focus:ring-2 focus:ring-emerald-500/40" id="diceRollButton" onclick="GameEngine.triggerRoll()" type="button">
 <span class="pip" id="pip-0"></span>
@@ -1858,33 +1647,26 @@ table.dataTable tbody tr:hover {
 <span class="pip" id="pip-7"></span>
 <span class="pip" id="pip-8"></span>
 </button>
-<div class="w-11 h-1 bg-slate-200 rounded-full overflow-hidden mt-0.5">
+<div class="w-10 h-1 bg-slate-200 rounded-full overflow-hidden mt-0.5">
 <div class="h-full bg-emerald-500 transition-all duration-300" id="idleProgressBar" style="width: 100%"></div>
 </div>
 </div>
-<!-- Primary Roll Button & Quick Utility Icons -->
-<div class="flex flex-col gap-0.5">
-<button class="h-8 px-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-black rounded-xl shadow transition flex items-center justify-center gap-1 text-xs" id="primaryRollBtn" onclick="GameEngine.triggerRoll()" type="button">
+<button class="h-10 px-4 sm:px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-black rounded-xl shadow-md transition flex items-center justify-center gap-1.5 text-xs sm:text-sm" id="primaryRollBtn" onclick="GameEngine.triggerRoll()" type="button">
 <i class="fa-solid fa-dice-d6"></i>
 <span>ROLL</span>
 </button>
-<div class="flex items-center justify-between gap-1">
-<span class="text-[9px] font-bold text-slate-500 truncate" id="lastRollLabel">Space / Tap</span>
 <div class="flex items-center gap-1">
-<button class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 border border-slate-300 text-[9px] text-slate-700 font-bold" id="undoMoveBtn" onclick="GameEngine.undoLastMove()" title="Undo Last Move" type="button">
+<button class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs text-slate-700 font-bold flex items-center justify-center" id="undoMoveBtn" onclick="GameEngine.undoLastMove()" title="Undo Last Move" type="button">
 <i class="fa-solid fa-rotate-left"></i>
 </button>
-<button class="px-1.5 py-0.5 rounded bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[9px] text-amber-800 font-bold" onclick="GameEngine.sendQuickTaunt()" title="Send Pashto Hujra Taunt" type="button">
+<button class="w-8 h-8 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-xs text-amber-800 font-bold flex items-center justify-center" onclick="GameEngine.sendQuickTaunt()" title="Send Pashto Hujra Taunt" type="button">
 <i class="fa-solid fa-comment-dots"></i>
 </button>
-</div>
-</div>
-</div>
-<!-- Collapse Bottom Bar Button -->
-<button class="h-8 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-extrabold flex items-center gap-1 transition" id="collapseBottomBarBtn" onclick="GameEngine.toggleBottomBar(true)" title="Collapse Bottom Bar (Remembered)" type="button">
-<i class="fa-solid fa-chevron-down text-[9px]"></i>
-<span class="hidden sm:inline">Hide</span>
+<button class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 text-xs font-extrabold flex items-center justify-center transition" id="collapseBottomBarBtn" onclick="GameEngine.toggleBottomBar(true)" title="Collapse Bottom Bar" type="button">
+<i class="fa-solid fa-chevron-down text-[10px]"></i>
 </button>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2780,6 +2562,11 @@ const GameEngine = {
   activeMovingBeadKey: null,
   activeTransitionClue: null,
   stepTrailCleanupTimer: null,
+  _cellRefs: null,
+  _cellLayoutKey: '',
+  _staticSvgCacheKey: '',
+  _staticSvgCacheHtml: '',
+  _prevDynamicSquares: null,
   settings: {
     alwaysAutoRoll: false,
     idleAutoRoll: true,
@@ -2795,8 +2582,8 @@ const GameEngine = {
     speedMultiplier: 1.6,
     snakeScale: 0.55,
     snakeOpacity: 0.62,
-    topBarCollapsed: true,
-    bottomBarCollapsed: true
+    topBarCollapsed: false,
+    bottomBarCollapsed: false
   },
   players: [],
   seatAssignments: [null, null, null, null],
@@ -2844,18 +2631,18 @@ const GameEngine = {
           this.settings.beadsPerPlayer = Number(this.settings.beadsPerPlayer);
         }
       }
-      const rawBars = localStorage.getItem('khyber_bars_collapse_state_v5');
+      const rawBars = localStorage.getItem('khyber_bars_collapse_state_v6');
       if (rawBars) {
         const parsedBars = JSON.parse(rawBars);
-        this.settings.topBarCollapsed = parsedBars.topBarCollapsed !== undefined ? !!parsedBars.topBarCollapsed : true;
-        this.settings.bottomBarCollapsed = parsedBars.bottomBarCollapsed !== undefined ? !!parsedBars.bottomBarCollapsed : true;
+        this.settings.topBarCollapsed = parsedBars.topBarCollapsed !== undefined ? !!parsedBars.topBarCollapsed : false;
+        this.settings.bottomBarCollapsed = parsedBars.bottomBarCollapsed !== undefined ? !!parsedBars.bottomBarCollapsed : false;
       } else {
-        this.settings.topBarCollapsed = true;
-        this.settings.bottomBarCollapsed = true;
+        this.settings.topBarCollapsed = false;
+        this.settings.bottomBarCollapsed = false;
       }
     } catch (e) {
-      this.settings.topBarCollapsed = true;
-      this.settings.bottomBarCollapsed = true;
+      this.settings.topBarCollapsed = false;
+      this.settings.bottomBarCollapsed = false;
     }
     this.syncSettingsToUI();
   },
@@ -2863,7 +2650,7 @@ const GameEngine = {
   saveSettings() {
     try {
       localStorage.setItem('khyber_game_settings_v4', JSON.stringify(this.settings));
-      localStorage.setItem('khyber_bars_collapse_state_v5', JSON.stringify({
+      localStorage.setItem('khyber_bars_collapse_state_v6', JSON.stringify({
         topBarCollapsed: !!this.settings.topBarCollapsed,
         bottomBarCollapsed: !!this.settings.bottomBarCollapsed
       }));
@@ -2903,10 +2690,11 @@ const GameEngine = {
     const chkBot = document.getElementById('pauseChkBottomCollapsed');
     if (chkBot) chkBot.checked = !!this.settings.bottomBarCollapsed;
 
-    let offsetPx = 12;
-    if (!topCol && !botCol) offsetPx = 104;
-    else if (!topCol && botCol) offsetPx = 50;
-    else if (topCol && !botCol) offsetPx = 66;
+    const isMobileViewport = window.innerWidth < 768;
+    let offsetPx = 16;
+    if (!topCol && !botCol) offsetPx = isMobileViewport ? 164 : 124;
+    else if (!topCol && botCol) offsetPx = 56;
+    else if (topCol && !botCol) offsetPx = isMobileViewport ? 118 : 78;
     document.documentElement.style.setProperty('--arena-bars-offset', `${offsetPx}px`);
   },
 
@@ -3529,24 +3317,20 @@ const GameEngine = {
     this.idleRemainingMs = this.settings.idleTimeoutSec * 1000;
 
     this.idleTicker = setInterval(() => {
-      const bar = document.getElementById('idleProgressBar');
-      const countEl = document.getElementById('hudAutoRollCountdown');
-
       if (!this.inArena || this.isPaused || (this.isAnimating && !this.awaitingBeadChoice) || this.matchFinished || !this.settings.idleAutoRoll) {
-        if (bar) bar.style.width = '100%';
-        if (countEl && this.settings.idleAutoRoll) countEl.textContent = `${this.settings.idleTimeoutSec}s`;
         return;
       }
 
       const currentPlayer = this.players[this.currentTurnIdx];
       if (!currentPlayer || currentPlayer.isAI) {
-        if (bar) bar.style.width = '100%';
         return;
       }
 
-      this.idleRemainingMs = Math.max(0, this.idleRemainingMs - 250);
+      this.idleRemainingMs = Math.max(0, this.idleRemainingMs - 500);
       const totalMs = this.settings.idleTimeoutSec * 1000;
       const pct = Math.round((this.idleRemainingMs / totalMs) * 100);
+      const bar = document.getElementById('idleProgressBar');
+      const countEl = document.getElementById('hudAutoRollCountdown');
       if (bar) bar.style.width = `${pct}%`;
       if (countEl) countEl.textContent = `${Math.ceil(this.idleRemainingMs / 1000)}s`;
 
@@ -3565,7 +3349,7 @@ const GameEngine = {
           this.triggerRoll(null, false, true);
         }
       }
-    }, 250);
+    }, 500);
   },
 
   resetIdleTimer() {
@@ -4088,21 +3872,23 @@ const GameEngine = {
     }
   },
 
-  renderBoard() {
+  _ensureBoardCellsBuilt(ladders, snakes) {
     const wrapper = document.getElementById('boardCellsWrapper');
-    if (!wrapper) return;
-    let html = '';
-
-    const ladders = (this.activePreset && this.activePreset.ladders) || {};
-    const snakes = (this.activePreset && this.activePreset.snakes) || {};
-    const radarMap = this.computeRadarMap();
-    const beadCount = this.settings.beadsPerPlayer || 1;
-
-    const stepTrailMap = {};
-    (this.activeStepTrail || []).forEach(item => {
-      stepTrailMap[item.sq] = item;
+    if (!wrapper) return false;
+    const layoutKey = JSON.stringify({
+      l: ladders,
+      s: snakes,
+      edit: this.boardEditMode,
+      pend: this.pendingEditStartSq
     });
+    if (this._cellRefs && this._cellLayoutKey === layoutKey && wrapper.children.length === 100) {
+      return true;
+    }
+    this._cellLayoutKey = layoutKey;
+    this._cellRefs = {};
+    this._prevDynamicSquares = new Set();
 
+    let html = '';
     for (let r = 0; r < 10; r++) {
       const rowFromBottom = 9 - r;
       for (let c = 0; c < 10; c++) {
@@ -4115,85 +3901,138 @@ const GameEngine = {
         const isKingSnake = sq === 99 && snakes[99];
         const parityClass = (r + c) % 2 === 0 ? 'cell-even' : 'cell-odd';
         const specialClass = isGoal ? 'cell-goal' : isKingSnake ? 'cell-king-snake' : isSafe ? 'cell-safe' : '';
-        const radarClass = radarMap[sq] || '';
-
-        const trailInfo = stepTrailMap[sq];
-        let stepClass = '';
-        let stepStyle = '';
-        let stepBadgeHtml = '';
-        if (trailInfo) {
-          stepClass = trailInfo.isCurrent ? 'cell-step-current' : 'cell-step-trail';
-          stepStyle = `--step-trail-color:${trailInfo.color || '#10b981'};`;
-          if (trailInfo.badgeText) {
-            stepBadgeHtml = `<span class="step-clue-badge" style="--step-trail-color:${trailInfo.color || '#059669'}">${AppUI.escapeHtml(trailInfo.badgeText)}</span>`;
-          }
-        }
-
-        if (this.activeTransitionClue) {
-          if (this.activeTransitionClue.fromSq === sq) stepClass += ' cell-transition-from';
-          if (this.activeTransitionClue.toSq === sq) stepClass += ' cell-transition-to';
-        }
-
         const editPendingClass = (this.boardEditMode && this.pendingEditStartSq === sq) ? 'cell-edit-pending-head' : '';
         const editCursorClass = this.boardEditMode ? 'cell-edit-mode-cursor' : '';
-
-        const beadTokensOnSquare = [];
-        this.players.forEach(p => {
-          (p.beads || []).forEach(b => {
-            if (b.pos === sq) {
-              const isTurn = p.index === this.currentTurnIdx && !this.matchFinished;
-              const isSelectable = isTurn && this.awaitingBeadChoice && this.pendingEligibleBeadIds.includes(b.id);
-              const isHopping = this.activeMovingBeadKey === `${p.index}_${b.id}`;
-              beadTokensOnSquare.push({ player: p, bead: b, isTurn, isSelectable, isHopping });
-            }
-          });
-        });
-
-        const tokensHtml = beadTokensOnSquare.map(({ player: p, bead: b, isTurn, isSelectable, isHopping }) => {
-          const clickAttr = isSelectable ? `onclick="GameEngine.selectBeadToMove(${b.id}, event)"` : '';
-          const properTag = b.tagName || this.formatPlayerTagName(p.name, p.short);
-          const centerSymbol = b.pos === 100 ? '👑' : (beadCount > 1 ? b.num : (p.isAI ? '🤖' : '★'));
-          return `
-            <div ${clickAttr} class="hujra-bead-wrap ${isSelectable ? 'cursor-pointer' : ''}" title="${AppUI.escapeHtml(p.name)} — Bead ${b.label} (Sq ${b.pos})">
-              <span class="token-pin ${isTurn ? 'token-active-glow' : ''} ${isSelectable ? 'token-selectable-pulse' : ''} ${isHopping ? 'bead-hopping' : ''}" style="--bead-color:${p.color};background-color:${p.color}">
-                ${centerSymbol}
-              </span>
-              <span class="bead-name-tag" style="border-color:${p.color}">${AppUI.escapeHtml(properTag)}</span>
-            </div>
-          `;
-        }).join('');
+        const baseClass = `board-cell ${parityClass} ${specialClass} ${editPendingClass} ${editCursorClass}`.trim();
 
         let badgeHtml = '';
         if (this.boardEditMode && this.pendingEditStartSq === sq) {
-          badgeHtml = `<span class="px-1 rounded bg-rose-600 text-white text-[8px] font-black animate-pulse">HEAD</span>`;
+          badgeHtml = `<span class="cell-badge-lbl px-1 rounded bg-rose-600 text-white text-[8px] font-black">HEAD</span>`;
         } else if (isGoal) {
-          badgeHtml = '<i class="fa-solid fa-crown text-[10px] text-white"></i>';
+          badgeHtml = '<i class="fa-solid fa-crown text-[9px] sm:text-[10px] text-white"></i>';
         } else if (ladders[sq]) {
-          badgeHtml = `<span class="px-1 rounded bg-emerald-100/90 text-[8px] sm:text-[9px] font-extrabold text-emerald-800 border border-emerald-400/50">↑${ladders[sq]}</span>`;
+          badgeHtml = `<span class="cell-badge-lbl px-1 rounded bg-emerald-100 text-[7.5px] sm:text-[9px] font-extrabold text-emerald-800 border border-emerald-400/50">↑${ladders[sq]}</span>`;
         } else if (snakes[sq]) {
-          badgeHtml = `
-            <span class="inline-flex items-center gap-0.5 px-1 rounded bg-rose-100/90 border border-rose-400/50 text-[8px] sm:text-[9px] font-extrabold text-rose-800" title="Snake Bite at ${sq} → Drops to ${snakes[sq]}">
-              <span>🐍↓${snakes[sq]}</span>
-            </span>`;
+          badgeHtml = `<span class="cell-badge-lbl inline-flex items-center px-1 rounded bg-rose-100 border border-rose-400/50 text-[7.5px] sm:text-[9px] font-extrabold text-rose-800">↓${snakes[sq]}</span>`;
         } else if (isSafe) {
-          badgeHtml = '<i class="fa-solid fa-shield-heart text-[8px] sm:text-[9px] text-emerald-700" title="Hujra Safe Square"></i>';
+          badgeHtml = '<i class="fa-solid fa-shield-heart text-[7.5px] sm:text-[9px] text-emerald-700"></i>';
         }
 
         html += `
-          <div class="board-cell ${parityClass} ${specialClass} ${radarClass} ${stepClass} ${editPendingClass} ${editCursorClass}" style="${stepStyle}" data-square="${sq}">
+          <div class="${baseClass}" data-base-class="${baseClass}" data-square="${sq}">
             <div class="relative z-20 pointer-events-none flex items-center justify-between w-full leading-none">
-              <span class="px-1 py-0.5 rounded bg-white/75 backdrop-blur-[1px] text-[9px] sm:text-[10.5px] font-extrabold ${isGoal ? '!bg-amber-900/60 text-white' : 'text-slate-800'}">${sq}</span>
+              <span class="cell-num-lbl px-1 py-0.5 rounded bg-white/80 text-[8.5px] sm:text-[10.5px] font-extrabold ${isGoal ? '!bg-amber-900/60 text-white' : 'text-slate-800'}">${sq}</span>
               ${badgeHtml}
             </div>
-            ${stepBadgeHtml}
-            <div class="relative z-30 flex flex-wrap items-center justify-center gap-1 min-h-[18px] pb-0.5">
-              ${tokensHtml}
-            </div>
+            <div class="cell-step-slot pointer-events-none"></div>
+            <div class="cell-tokens-slot relative z-30 flex flex-wrap items-center justify-center gap-0.5 min-h-[14px] sm:min-h-[18px] pb-0.5"></div>
           </div>
         `;
       }
     }
     wrapper.innerHTML = html;
+    wrapper.querySelectorAll('.board-cell').forEach(el => {
+      const sq = Number(el.getAttribute('data-square'));
+      this._cellRefs[sq] = {
+        el,
+        baseClass: el.getAttribute('data-base-class'),
+        stepSlot: el.querySelector('.cell-step-slot'),
+        tokensSlot: el.querySelector('.cell-tokens-slot')
+      };
+    });
+    return true;
+  },
+
+  renderBoard() {
+    const ladders = (this.activePreset && this.activePreset.ladders) || {};
+    const snakes = (this.activePreset && this.activePreset.snakes) || {};
+    if (!this._ensureBoardCellsBuilt(ladders, snakes)) return;
+
+    const radarMap = this.computeRadarMap();
+    const beadCount = this.settings.beadsPerPlayer || 1;
+    const stepTrailMap = {};
+    (this.activeStepTrail || []).forEach(item => {
+      stepTrailMap[item.sq] = item;
+    });
+
+    const tokensBySquare = {};
+    this.players.forEach(p => {
+      (p.beads || []).forEach(b => {
+        if (b.pos >= 1 && b.pos <= 100) {
+          if (!tokensBySquare[b.pos]) tokensBySquare[b.pos] = [];
+          const isTurn = p.index === this.currentTurnIdx && !this.matchFinished;
+          const isSelectable = isTurn && this.awaitingBeadChoice && this.pendingEligibleBeadIds.includes(b.id);
+          const isHopping = this.activeMovingBeadKey === `${p.index}_${b.id}`;
+          tokensBySquare[b.pos].push({ player: p, bead: b, isTurn, isSelectable, isHopping });
+        }
+      });
+    });
+
+    const nextDynamicSquares = new Set([
+      ...Object.keys(radarMap).map(Number),
+      ...Object.keys(stepTrailMap).map(Number),
+      ...Object.keys(tokensBySquare).map(Number)
+    ]);
+    if (this.activeTransitionClue) {
+      if (this.activeTransitionClue.fromSq) nextDynamicSquares.add(this.activeTransitionClue.fromSq);
+      if (this.activeTransitionClue.toSq) nextDynamicSquares.add(this.activeTransitionClue.toSq);
+    }
+
+    const squaresToTouch = new Set([...(this._prevDynamicSquares || []), ...nextDynamicSquares]);
+    this._prevDynamicSquares = nextDynamicSquares;
+
+    squaresToTouch.forEach(sq => {
+      const ref = this._cellRefs[sq];
+      if (!ref) return;
+
+      const radarClass = radarMap[sq] || '';
+      const trailInfo = stepTrailMap[sq];
+      let extraClass = radarClass;
+      let stepStyle = '';
+      let stepBadgeHtml = '';
+
+      if (trailInfo) {
+        extraClass += ' ' + (trailInfo.isCurrent ? 'cell-step-current' : 'cell-step-trail');
+        stepStyle = `--step-trail-color:${trailInfo.color || '#10b981'};`;
+        if (trailInfo.badgeText) {
+          stepBadgeHtml = `<span class="step-clue-badge" style="--step-trail-color:${trailInfo.color || '#059669'}">${AppUI.escapeHtml(trailInfo.badgeText)}</span>`;
+        }
+      }
+      if (this.activeTransitionClue) {
+        if (this.activeTransitionClue.fromSq === sq) extraClass += ' cell-transition-from';
+        if (this.activeTransitionClue.toSq === sq) extraClass += ' cell-transition-to';
+      }
+
+      const fullClass = extraClass ? `${ref.baseClass} ${extraClass.trim()}` : ref.baseClass;
+      if (ref.el.className !== fullClass) ref.el.className = fullClass;
+      if (ref.el.getAttribute('style') !== stepStyle) {
+        if (stepStyle) ref.el.setAttribute('style', stepStyle);
+        else ref.el.removeAttribute('style');
+      }
+      if (ref.stepSlot.innerHTML !== stepBadgeHtml) {
+        ref.stepSlot.innerHTML = stepBadgeHtml;
+      }
+
+      const beadTokensOnSquare = tokensBySquare[sq] || [];
+      const tokensHtml = beadTokensOnSquare.length === 0 ? '' : beadTokensOnSquare.map(({ player: p, bead: b, isTurn, isSelectable, isHopping }) => {
+        const clickAttr = isSelectable ? `onclick="GameEngine.selectBeadToMove(${b.id}, event)"` : '';
+        const properTag = b.tagName || this.formatPlayerTagName(p.name, p.short);
+        const centerSymbol = b.pos === 100 ? '👑' : (beadCount > 1 ? b.num : (p.isAI ? '🤖' : '★'));
+        return `
+          <div ${clickAttr} class="hujra-bead-wrap ${isSelectable ? 'cursor-pointer' : ''}" title="${AppUI.escapeHtml(p.name)} — Bead ${b.label} (Sq ${b.pos})">
+            <span class="token-pin ${isTurn ? 'token-active-glow' : ''} ${isSelectable ? 'token-selectable-pulse' : ''} ${isHopping ? 'bead-hopping' : ''}" style="--bead-color:${p.color};background-color:${p.color}">
+              ${centerSymbol}
+            </span>
+            <span class="bead-name-tag" style="border-color:${p.color}">${AppUI.escapeHtml(properTag)}</span>
+          </div>
+        `;
+      }).join('');
+
+      if (ref.tokensSlot.innerHTML !== tokensHtml) {
+        ref.tokensSlot.innerHTML = tokensHtml;
+      }
+    });
+
     this.renderSvgSnakesAndLadders(ladders, snakes);
     this.updateRadarHint();
   },
@@ -4226,7 +4065,7 @@ const GameEngine = {
     const waveAmp = Math.min(22, Math.max(9, dist * 0.055)) * (0.65 + scaleFactor * 0.35);
     const sign = head % 2 === 0 ? 1 : -1;
     const maxHalfWidth = (isKing ? 11.5 : 8.8) * scaleFactor;
-    const steps = 32;
+    const steps = 24;
 
     const spine = [];
     for (let i = 0; i <= steps; i++) {
@@ -4288,9 +4127,7 @@ const GameEngine = {
       const d3y = pt.sy - pt.ty * rl;
       const d4x = pt.sx - pt.pnx * rw;
       const d4y = pt.sy - pt.pny * rw;
-      scalesSvg += `
-        <polygon points="${d1x.toFixed(1)},${d1y.toFixed(1)} ${d2x.toFixed(1)},${d2y.toFixed(1)} ${d3x.toFixed(1)},${d3y.toFixed(1)} ${d4x.toFixed(1)},${d4y.toFixed(1)}" fill="${pal.pattern}" opacity="0.58" stroke="${pal.belly}" stroke-width="0.65"/>
-      `;
+      scalesSvg += `<polygon points="${d1x.toFixed(1)},${d1y.toFixed(1)} ${d2x.toFixed(1)},${d2y.toFixed(1)} ${d3x.toFixed(1)},${d3y.toFixed(1)} ${d4x.toFixed(1)},${d4y.toFixed(1)}" fill="${pal.pattern}" opacity="0.55"/>`;
     }
 
     const hPt = spine[0];
@@ -4318,9 +4155,9 @@ const GameEngine = {
     `;
 
     return `
-      <g filter="url(#snakeDropShadow)" opacity="${opacityVal}">
-        <path d="${bodyPolygonPath}" fill="url(#grad_${pal.id})" stroke="${pal.outline}" stroke-width="1.4" stroke-linejoin="round"/>
-        <path d="${spinePath}" fill="none" stroke="${pal.belly}" stroke-width="1.5" stroke-dasharray="4 6" stroke-linecap="round" opacity="0.5"/>
+      <g opacity="${opacityVal}">
+        <path d="${bodyPolygonPath}" fill="url(#grad_${pal.id})" stroke="${pal.outline}" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="${spinePath}" fill="none" stroke="${pal.belly}" stroke-width="1.4" stroke-dasharray="4 6" stroke-linecap="round" opacity="0.5"/>
         ${scalesSvg}
         ${tailMarkerSvg}
         ${headSvg}
@@ -4331,107 +4168,112 @@ const GameEngine = {
   renderSvgSnakesAndLadders(ladders, snakes) {
     const svg = document.getElementById('boardSvgOverlay');
     if (!svg) return;
-    let svgContent = `
-      <defs>
-        <filter id="snakeDropShadow" x="-15%" y="-15%" width="130%" height="130%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#020617" flood-opacity="0.28"/>
-        </filter>
-        <linearGradient id="grad_kalamarKing" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#0f172a"/>
-          <stop offset="50%" stop-color="#881337"/>
-          <stop offset="100%" stop-color="#e11d48"/>
-        </linearGradient>
-        <linearGradient id="grad_viperEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#064e3b"/>
-          <stop offset="55%" stop-color="#059669"/>
-          <stop offset="100%" stop-color="#34d399"/>
-        </linearGradient>
-        <linearGradient id="grad_viperCrimson" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#881337"/>
-          <stop offset="55%" stop-color="#e11d48"/>
-          <stop offset="100%" stop-color="#fb7185"/>
-        </linearGradient>
-        <linearGradient id="grad_cobraGold" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#78350f"/>
-          <stop offset="55%" stop-color="#d97706"/>
-          <stop offset="100%" stop-color="#fbbf24"/>
-        </linearGradient>
-        <linearGradient id="grad_viperRoyal" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#4c1d95"/>
-          <stop offset="55%" stop-color="#7c3aed"/>
-          <stop offset="100%" stop-color="#a78bfa"/>
-        </linearGradient>
-        <linearGradient id="grad_viperCopper" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#7c2d12"/>
-          <stop offset="55%" stop-color="#ea580c"/>
-          <stop offset="100%" stop-color="#fb923c"/>
-        </linearGradient>
-      </defs>
-    `;
 
-    Object.entries(ladders).forEach(([startStr, endVal]) => {
-      const start = Number(startStr);
-      const end = Number(endVal);
-      if (start < 1 || start > 100 || end < 1 || end > 100) return;
-      const p1 = this.getSquareCoordinates(start);
-      const p2 = this.getSquareCoordinates(end);
-
-      const dx = p2.cx - p1.cx;
-      const dy = p2.cy - p1.cy;
-      const len = Math.hypot(dx, dy) || 1;
-      const nx = (-dy / len) * 9.5;
-      const ny = (dx / len) * 9.5;
-
-      svgContent += `
-        <g opacity="0.66">
-          <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="4.2" stroke-linecap="round"/>
-          <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="4.2" stroke-linecap="round"/>
+    const staticKey = JSON.stringify({ l: ladders, s: snakes, sc: this.settings.snakeScale, op: this.settings.snakeOpacity });
+    if (this._staticSvgCacheKey !== staticKey || !svg.querySelector('#svgDynamicTrailLayer')) {
+      this._staticSvgCacheKey = staticKey;
+      let svgContent = `
+        <defs>
+          <linearGradient id="grad_kalamarKing" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0f172a"/>
+            <stop offset="50%" stop-color="#881337"/>
+            <stop offset="100%" stop-color="#e11d48"/>
+          </linearGradient>
+          <linearGradient id="grad_viperEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#064e3b"/>
+            <stop offset="55%" stop-color="#059669"/>
+            <stop offset="100%" stop-color="#34d399"/>
+          </linearGradient>
+          <linearGradient id="grad_viperCrimson" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#881337"/>
+            <stop offset="55%" stop-color="#e11d48"/>
+            <stop offset="100%" stop-color="#fb7185"/>
+          </linearGradient>
+          <linearGradient id="grad_cobraGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#78350f"/>
+            <stop offset="55%" stop-color="#d97706"/>
+            <stop offset="100%" stop-color="#fbbf24"/>
+          </linearGradient>
+          <linearGradient id="grad_viperRoyal" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4c1d95"/>
+            <stop offset="55%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+          <linearGradient id="grad_viperCopper" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7c2d12"/>
+            <stop offset="55%" stop-color="#ea580c"/>
+            <stop offset="100%" stop-color="#fb923c"/>
+          </linearGradient>
+        </defs>
       `;
 
-      const steps = Math.max(4, Math.floor(len / 44));
-      for (let i = 1; i < steps; i++) {
-        const t = i / steps;
-        const rx = p1.cx + dx * t;
-        const ry = p1.cy + dy * t;
+      Object.entries(ladders).forEach(([startStr, endVal]) => {
+        const start = Number(startStr);
+        const end = Number(endVal);
+        if (start < 1 || start > 100 || end < 1 || end > 100) return;
+        const p1 = this.getSquareCoordinates(start);
+        const p2 = this.getSquareCoordinates(end);
+
+        const dx = p2.cx - p1.cx;
+        const dy = p2.cy - p1.cy;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = (-dy / len) * 9.5;
+        const ny = (dx / len) * 9.5;
+
         svgContent += `
-          <line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+          <g opacity="0.66">
+            <line x1="${p1.cx - nx}" y1="${p1.cy - ny}" x2="${p2.cx - nx}" y2="${p2.cy - ny}" stroke="#059669" stroke-width="4.2" stroke-linecap="round"/>
+            <line x1="${p1.cx + nx}" y1="${p1.cy + ny}" x2="${p2.cx + nx}" y2="${p2.cy + ny}" stroke="#059669" stroke-width="4.2" stroke-linecap="round"/>
         `;
-      }
-      svgContent += `</g>`;
-    });
 
-    Object.entries(snakes).forEach(([headStr, tailVal], idx) => {
-      const head = Number(headStr);
-      const tail = Number(tailVal);
-      if (head < 1 || head > 100 || tail < 1 || tail > 100) return;
-      const p1 = this.getSquareCoordinates(head);
-      const p2 = this.getSquareCoordinates(tail);
-      svgContent += this.buildRealisticSnakeSvg(head, tail, p1, p2, idx);
-    });
+        const steps = Math.max(4, Math.floor(len / 44));
+        for (let i = 1; i < steps; i++) {
+          const t = i / steps;
+          const rx = p1.cx + dx * t;
+          const ry = p1.cy + dy * t;
+          svgContent += `<line x1="${rx - nx}" y1="${ry - ny}" x2="${rx + nx}" y2="${ry + ny}" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>`;
+        }
+        svgContent += `</g>`;
+      });
 
+      Object.entries(snakes).forEach(([headStr, tailVal], idx) => {
+        const head = Number(headStr);
+        const tail = Number(tailVal);
+        if (head < 1 || head > 100 || tail < 1 || tail > 100) return;
+        const p1 = this.getSquareCoordinates(head);
+        const p2 = this.getSquareCoordinates(tail);
+        svgContent += this.buildRealisticSnakeSvg(head, tail, p1, p2, idx);
+      });
+
+      svgContent += `<g id="svgDynamicTrailLayer"></g>`;
+      svg.innerHTML = svgContent;
+    }
+
+    const dynLayer = svg.querySelector('#svgDynamicTrailLayer');
+    if (!dynLayer) return;
+    let dynSvg = '';
     if (this.activeStepTrail && this.activeStepTrail.length > 1) {
       const trailPts = this.activeStepTrail.map(it => {
         const c = this.getSquareCoordinates(it.sq);
         return `${c.cx},${c.cy}`;
       }).join(' L ');
       const trailColor = this.activeStepTrail[0].color || '#10b981';
-      svgContent += `
-        <path d="M ${trailPts}" fill="none" stroke="${trailColor}" stroke-width="5.5" stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
-      `;
+      dynSvg += `<path d="M ${trailPts}" fill="none" stroke="${trailColor}" stroke-width="5.5" stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>`;
     }
 
     if (this.activeTransitionClue) {
       const c1 = this.getSquareCoordinates(this.activeTransitionClue.fromSq);
       const c2 = this.getSquareCoordinates(this.activeTransitionClue.toSq);
       const col = this.activeTransitionClue.color || '#f43f5e';
-      svgContent += `
-        <line x1="${c1.cx}" y1="${c1.cy}" x2="${c2.cx}" y2="${c2.cy}" stroke="${col}" stroke-width="8" stroke-dasharray="12 8" stroke-linecap="round" opacity="0.92"/>
-        <circle cx="${c1.cx}" cy="${c1.cy}" r="18" fill="none" stroke="${col}" stroke-width="4" opacity="0.9"/>
-        <circle cx="${c2.cx}" cy="${c2.cy}" r="22" fill="none" stroke="${col}" stroke-width="5" opacity="0.95"/>
+      dynSvg += `
+        <line x1="${c1.cx}" y1="${c1.cy}" x2="${c2.cx}" y2="${c2.cy}" stroke="${col}" stroke-width="7" stroke-dasharray="12 8" stroke-linecap="round" opacity="0.9"/>
+        <circle cx="${c1.cx}" cy="${c1.cy}" r="16" fill="none" stroke="${col}" stroke-width="3.5" opacity="0.9"/>
+        <circle cx="${c2.cx}" cy="${c2.cy}" r="20" fill="none" stroke="${col}" stroke-width="4" opacity="0.95"/>
       `;
     }
-
-    svg.innerHTML = svgContent;
+    if (dynLayer.innerHTML !== dynSvg) {
+      dynLayer.innerHTML = dynSvg;
+    }
   },
 
   renderPlayerCards() {
@@ -6455,6 +6297,7 @@ const AppUI = {
 
   initAllSelect2() {
     if (!window.jQuery || !$.fn || !$.fn.select2) return;
+    if (window.innerWidth < 768) return;
     $('select').each(function () {
       const $el = $(this);
       if (
@@ -6464,7 +6307,6 @@ const AppUI = {
         return;
       }
       if (!$el.hasClass('select2-hidden-accessible')) {
-        // Move inline onchange to a guarded reference so jQuery .trigger('change.select2') never causes recursive native onchange calls
         if (typeof this.onchange === 'function') {
           this._select2ChangeHandler = this.onchange;
           this.onchange = null;
@@ -6554,6 +6396,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   BackupVault.checkAutoBackupDue();
   AppRouter.navigate('/home');
   GameEngine.launchArena();
+  window.addEventListener('resize', () => {
+    GameEngine.applyCollapsibleBarsState();
+  }, { passive: true });
 });
 </script>
 <script src="./pwa-register.js" type="module"></script></body>
