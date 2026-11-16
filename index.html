@@ -1754,6 +1754,130 @@
 <p class="text-[11px] text-slate-600">If a human player lets the turn timer run out 3 turns in a row without touching the screen, the AI Bot automatically takes over their seat until they tap "Reclaim Seat".</p>
 </div>
 </label>
+<details class="md:col-span-2 rounded-2xl bg-amber-50/90 border-2 border-amber-400 p-3.5 shadow-sm transition" id="advancedHouseRulesAccordion">
+<summary class="cursor-pointer select-none flex flex-wrap items-center justify-between gap-2 font-black text-xs sm:text-sm text-amber-950 list-none">
+<div class="flex items-center gap-2">
+<span>🔥</span>
+<span>Advanced Hujra &amp; Tactical House Rules (اضافی حجرہ قوانین — 16 Optional Rules)</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-950 border border-amber-500 text-[10px] font-black" id="activeHouseRulesCountBadge">0 / 16 Active • Tap to Expand ▼</span>
+</summary>
+<p class="text-[11px] text-slate-600 mt-1.5">All 16 hardcore Hujra house rules below are <b>OFF by default</b>. Enabling any rule automatically resolves conflicts with related rules and updates the Grandmaster AI engine.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mt-3 pt-3 border-t border-amber-300/80">
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkReverseKill" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔄 Reverse Kill / Backstab Rule (الٹا شکار — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">If you roll a 1 or 2, you can move a bead backwards (-1 or -2) to capture an opponent bead sitting right behind you.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkFriendlyFire" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔥 Friendly Fire in 2v2 Mode (دوست کا شکار — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">In 2v2 Team Mode, landing on your teammate's bead on an unprotected square captures it and sends it back to the yard instead of stacking safely.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkKamikazeJora" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">💥 Kamikaze / Mutual Destruction on Jora (خودکش حملہ — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Landing on an opponent's Jora (2+ enemy beads on an unprotected square) destroys both your attacking bead and all defending enemy beads in that Jora.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSnakeEyesPenalty" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🐍 Snake Eyes Penalty / Double 1s Trap (ڈبل ون کا عذاب — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Rolling 1+1 in 2-dice mode automatically kills your most advanced on-ground bead and sends it back to the yard.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMaxStackLimit" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🚧 Max Stack Limit of 2 Beads per Square (رش / اوور کراؤڈنگ — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">At most 2 beads can occupy any single square (including safe stops). Any move that would place a 3rd bead on the same square is invalid.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkHeavyJail" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⛓️ Heavy Jail / Hardcore Respawn (سخت قید — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">A bead captured by an opponent is locked in Heavy Jail (⛓️) and requires a Double-6 (6+6 in 2-dice mode) or two consecutive 6s (in 1-die mode) to respawn.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkPositionHijack" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔀 Position Hijack / 6+1 Swap Rule (تبادلہ — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">When you roll 6+1 (or 1+6) in 2-dice mode and land on an opponent bead, your bead and the opponent bead swap board positions instead of sending the opponent to the yard.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSpawnInvincibility" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🛡️ Spawn Invincibility / First Turn Shield (عارضی پناہ — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">A bead that just spawned onto the board receives a temporary shield (🛡️) and cannot be killed by an opponent until it has moved on a subsequent turn.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkPhookPenalty" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🌬️ Phook / Blown Bead Penalty (پھونک / کچی گوٹی — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Allows you to ignore a capture, but if your bead could have killed an opponent and you missed/ignored the kill, that bead is "blown" (sent to yard) at the end of your turn! (Auto-disables Mandatory Capture).</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkBouncingHome" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔙 Bouncing Home / Overshoot Penalty (باؤنس بیک — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">If a bead overshoots the center Home goal (e.g. needs 2 but rolls 5), it steps to the center and bounces backwards down the Home stretch by the excess spaces!</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkAntiCampingLimit" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⛺ Anti-Camping Limit / Safe Square Eviction (کیمپنگ پابندی — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">A bead may only sit on a Safe/Star square for 3 consecutive turns. On the 4th turn without moving, its safe immunity drops (⛺) and enemies can capture it right on the safe stop!</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkJoraBreaker" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🧱 Jora Breaker / Double-6 Wall Crushing (دیوار توڑ — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Enhances Pair Blockade (Jora): an opponent can jump over or crush an impassable Jora blockade if they roll a strict Double-6 (6+6)!</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkTollGate" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🪙 The Toll Gate / Chungi at Step 50 (چنگی — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">A bead must stop on the Home Gate square (step 50) first and roll an exact 1 to unlock the gate and step inside the Home stretch. Subsequent moves inside Home work normally.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkQisasVengeance" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⚖️ Qisas / Blood Vengeance +10 Jump (قصاص — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">Tracks which enemy bead killed yours (marked ⚖️). Capturing that exact "Wanted" killer bead rewards you with an instant +10-step bonus jump for any of your beads!</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkStrictSpawnOnlySixes" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🚫 Strict Spawn-Only Sixes (چھکے کا ضیاع — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">A rolled 6 can ONLY be used to spawn a bead from the yard. If your yard is empty, any rolled 6 is nullified/wasted and cannot move a board bead forward.</p>
+</div>
+</label>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
+<input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkDiceSplitting" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">🔄 Dice Splitting on Even Roll in 1-Die Mode (تقسیم — Default: OFF)</div>
+<p class="text-[11px] text-slate-600">When rolling 1 Die (in 1-Die mode or 1-Die endgame), rolling an even 4 or 6 lets you split the die evenly across two different on-ground beads (2+2 or 3+3)!</p>
+</div>
+</label>
+</div>
+</details>
 <div class="flex items-start gap-2.5 p-3 rounded-2xl bg-indigo-50/90 border-2 border-indigo-400 whitespace-normal md:col-span-2">
 <input class="mt-1 w-4 h-4 accent-indigo-600 rounded cursor-pointer" id="chkMultiMouseLock" type="checkbox"/>
 <div class="flex-1">
@@ -2620,7 +2744,7 @@
 <!-- Category Filter Bar & Search -->
 <div class="flex flex-wrap items-center justify-between gap-2 bg-amber-50/80 p-2.5 rounded-2xl border border-amber-200">
 <div class="flex flex-wrap items-center gap-1.5" id="guideCategoryTabs">
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Rules (28)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Rules (43)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="core" type="button">🏔️ Core Bannu Rules</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 Dice &amp; Spawn Rules</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ Kill, Jora &amp; Home</button>
@@ -3437,6 +3561,22 @@
         oneDieWhenOneBeadLeft: true,
         mandatoryCapture: false,
         threeTimeoutsBotTakeover: true,
+        reverseKillRule: false,
+        friendlyFireRule: false,
+        kamikazeJoraRule: false,
+        snakeEyesPenaltyRule: false,
+        maxStackLimitRule: false,
+        heavyJailRule: false,
+        positionHijackRule: false,
+        spawnInvincibilityRule: false,
+        phookPenaltyRule: false,
+        bouncingHomeRule: false,
+        antiCampingLimitRule: false,
+        joraBreakerRule: false,
+        tollGateRule: false,
+        qisasVengeanceRule: false,
+        strictSpawnOnlySixesRule: false,
+        diceSplittingRule: false,
         multiMouseLock: false,
         autoRollOnTurn: savedAutoRollPref,
         showTooltips: savedShowTooltipsPref,
@@ -4683,6 +4823,11 @@
             steps: 0,
             homeStep: 0,
             lockedThisTurn: false,
+            inHeavyJail: false,
+            spawnShielded: false,
+            safeCampTurns: 0,
+            campingEvicted: false,
+            wantedByOwners: [],
             animCoords: null
           });
         }
@@ -4920,6 +5065,87 @@
         return val === 6 || (Boolean(rulesConfig.spawnOnOneAndSix) && val === 1);
       }
 
+      function canYardTokenSpawnWithCurrentRoll(token, dieVal, unusedDice, rolledDoubleSixBatch) {
+        if (!isSpawnDieValue(dieVal)) return false;
+        if (rulesConfig.heavyJailRule && token.inHeavyJail) {
+          if (dieVal !== 6) return false;
+          const sixCount = (unusedDice || []).filter(function (d) { return !d.used && d.value === 6; }).length;
+          if (rulesConfig.diceCount === 2) {
+            return Boolean(rolledDoubleSixBatch || sixCount >= 2);
+          } else {
+            return Boolean((gameState.consecutiveBonusSixRolls || 0) >= 2 || sixCount >= 2);
+          }
+        }
+        return true;
+      }
+
+      function wouldExceedMaxStackLimit(moverOwnerIdx, movingTokenId, newState, newSteps, newHomeStep, customPlayers) {
+        if (!rulesConfig.maxStackLimitRule) return false;
+        if (newState === 'completed' || newState === 'yard') return false;
+        const pList = customPlayers || gameState.players;
+        if (newState === 'home_stretch') {
+          const owner = pList[moverOwnerIdx];
+          if (!owner) return false;
+          const count = owner.tokens.filter(function (tk) {
+            return tk.id !== movingTokenId && tk.state === 'home_stretch' && tk.homeStep === newHomeStep;
+          }).length;
+          return count >= 2;
+        }
+        if (newState === 'board') {
+          const destTrack = (START_TRACK_INDEX[moverOwnerIdx] + newSteps) % 52;
+          let totalOnDest = 0;
+          pList.forEach(function (pl) {
+            if (!pl || !pl.active) return;
+            pl.tokens.forEach(function (tk) {
+              if (pl.id === moverOwnerIdx && tk.id === movingTokenId) return;
+              if (tk.state === 'board' && getOuterTrackIndex(tk) === destTrack) {
+                totalOnDest += 1;
+              }
+            });
+          });
+          if (totalOnDest < 2) return false;
+          const cands = getCaptureCandidatesOnPlayers(moverOwnerIdx, destTrack, pList);
+          if (cands.length > 0) {
+            if (rulesConfig.kamikazeJoraRule && cands.length >= 2) return false;
+            const removed = rulesConfig.killAllStackedEnemies ? cands.length : 1;
+            if (totalOnDest - removed < 2) return false;
+          }
+          return true;
+        }
+        return false;
+      }
+
+      function simulateReverseKillAdvance(token, delta, customPlayers) {
+        if (!rulesConfig.reverseKillRule) return { valid: false };
+        if (token.state !== 'board') return { valid: false };
+        if (token.lockedThisTurn && rulesConfig.closeGameMode) return { valid: false };
+        if (delta !== 1 && delta !== 2) return { valid: false };
+        if (token.steps < delta) return { valid: false };
+
+        const pList = customPlayers || gameState.players;
+        if (delta === 2 && rulesConfig.pairBlockadeRule) {
+          const midTrack = (START_TRACK_INDEX[token.owner] + token.steps - 1) % 52;
+          if (isTrackBlockedByJoraOnPlayers(token.owner, midTrack, pList)) {
+            return { valid: false, reason: 'Blocked by Jora wall behind you' };
+          }
+        }
+
+        const newSteps = token.steps - delta;
+        const destTrack = (START_TRACK_INDEX[token.owner] + newSteps) % 52;
+        const enemies = getCaptureCandidatesOnPlayers(token.owner, destTrack, pList);
+        if (enemies.length === 0) return { valid: false };
+        if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', newSteps, 0, pList)) {
+          return { valid: false };
+        }
+        return {
+          valid: true,
+          isReverseKill: true,
+          newState: 'board',
+          newSteps: newSteps,
+          newHomeStep: 0
+        };
+      }
+
       function getRequiredKillsForHome() {
         if (rulesConfig.twoKillsForHome) return 2;
         if (rulesConfig.killRequiredForHome) return 1;
@@ -4928,8 +5154,11 @@
 
       function isTrackSquareBlockedByOpponentJora(moverOwnerIdx, trackIdx) {
         if (!rulesConfig.pairBlockadeRule) return false;
+        if (rulesConfig.joraBreakerRule && (gameState.rolledDoubleSixThisBatch || (rulesConfig.diceCount === 1 && (gameState.consecutiveBonusSixRolls || 0) >= 2))) {
+          return false;
+        }
         const moverMeta = PLAYER_META[moverOwnerIdx];
-        if (rulesConfig.teamMode) {
+        if (rulesConfig.teamMode && !rulesConfig.friendlyFireRule) {
           let oppTeamCount = 0;
           gameState.players.forEach(function (pl) {
             if (!pl.active || pl.team === moverMeta.team) return;
@@ -5012,7 +5241,10 @@
           return { valid: false, reason: 'Already completed' };
         }
         if (token.state === 'yard') {
-          if (isSpawnDieValue(delta)) {
+          if (canYardTokenSpawnWithCurrentRoll(token, delta, gameState.dicePool, gameState.rolledDoubleSixThisBatch)) {
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', 0, 0, gameState.players)) {
+              return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on Start Square' };
+            }
             return {
               valid: true,
               isSpawn: true,
@@ -5021,11 +5253,18 @@
               newHomeStep: 0
             };
           }
+          if (rulesConfig.heavyJailRule && token.inHeavyJail) {
+            return { valid: false, reason: '⛓️ Heavy Jail: Requires Double-6 (6+6) to respawn!' };
+          }
           return { valid: false, reason: rulesConfig.spawnOnOneAndSix ? 'Needs a 1 or 6 to spawn from hand/yard' : 'Needs a 6 to spawn from hand/yard' };
         }
 
         if (token.lockedThisTurn && rulesConfig.closeGameMode) {
           return { valid: false, reason: 'Locked on capture square (Close Game rule)' };
+        }
+
+        if (rulesConfig.strictSpawnOnlySixesRule && delta === 6 && token.state !== 'yard') {
+          return { valid: false, reason: '🚫 Strict Spawn-Only Sixes: A 6 can only spawn a bead from the yard!' };
         }
 
         const eligibleHome = customEligibleHome !== undefined ? customEligibleHome : canOwnerEnterHomeStretch(token.owner);
@@ -5035,7 +5274,22 @@
           if (targetHome === 6) {
             return { valid: true, newState: 'completed', newSteps: token.steps, newHomeStep: 6 };
           } else if (targetHome < 6) {
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps, targetHome, gameState.players)) {
+              return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on that Home square' };
+            }
             return { valid: true, newState: 'home_stretch', newSteps: token.steps, newHomeStep: targetHome };
+          } else if (rulesConfig.bouncingHomeRule) {
+            const bouncedStep = Math.max(1, 12 - targetHome);
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps, bouncedStep, gameState.players)) {
+              return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on bounce square' };
+            }
+            return {
+              valid: true,
+              isBounceHome: true,
+              newState: 'home_stretch',
+              newSteps: token.steps,
+              newHomeStep: bouncedStep
+            };
           } else {
             return { valid: false, reason: 'Overshoots Home (needs exact ' + (6 - token.homeStep) + ')' };
           }
@@ -5058,6 +5312,9 @@
         if (stepsToHomeGate >= 0 && delta > stepsToHomeGate) {
           if (eligibleHome) {
             if (forceOuterLoop && isOptionalLoopAfterKillAllowed()) {
+              if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', token.steps + delta, 0, gameState.players)) {
+                return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on destination square' };
+              }
               return {
                 valid: true,
                 loopedPastHome: true,
@@ -5067,11 +5324,34 @@
                 newHomeStep: 0
               };
             }
+            if (rulesConfig.tollGateRule) {
+              if (stepsToHomeGate > 0) {
+                return { valid: false, reason: '🪙 Chungi Toll Gate: Must land on step 50 first before entering Home!' };
+              }
+              if (delta !== 1) {
+                return { valid: false, reason: '🪙 Chungi Toll Gate: Must roll exact 1 at step 50 to unlock Home Gate!' };
+              }
+            }
             const intoHome = delta - stepsToHomeGate;
             if (intoHome === 6) {
               return { valid: true, newState: 'completed', newSteps: token.steps + stepsToHomeGate, newHomeStep: 6 };
             } else if (intoHome < 6) {
+              if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps + stepsToHomeGate, intoHome, gameState.players)) {
+                return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on Home stretch square' };
+              }
               return { valid: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: intoHome };
+            } else if (rulesConfig.bouncingHomeRule) {
+              const bouncedStep = Math.max(1, 12 - intoHome);
+              if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps + stepsToHomeGate, bouncedStep, gameState.players)) {
+                return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on bounce square' };
+              }
+              return {
+                valid: true,
+                isBounceHome: true,
+                newState: 'home_stretch',
+                newSteps: token.steps + stepsToHomeGate,
+                newHomeStep: bouncedStep
+              };
             } else {
               return { valid: false, reason: 'Overshoots Home goal' };
             }
@@ -5084,6 +5364,9 @@
                   : 'No kill yet & other ground beads have not all gathered at Home Gate'
               };
             }
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', token.steps + delta, 0, gameState.players)) {
+              return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on destination square' };
+            }
             return {
               valid: true,
               loopedPastHome: true,
@@ -5092,6 +5375,10 @@
               newHomeStep: 0
             };
           }
+        }
+
+        if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', token.steps + delta, 0, gameState.players)) {
+          return { valid: false, reason: '🚧 Max Stack Limit (2 beads) on destination square' };
         }
 
         return {
@@ -5103,20 +5390,22 @@
       }
 
       function getCaptureCandidatesAtTrackIndex(moverOwnerIdx, trackIdx) {
-        if (rulesConfig.safeStopImmunity) {
-          if (SAFE_TRACK_INDICES.has(trackIdx)) return [];
-        } else {
-          if (START_TRACK_INDEX.includes(trackIdx)) return [];
-        }
+        const isNormallySafe = rulesConfig.safeStopImmunity
+          ? SAFE_TRACK_INDICES.has(trackIdx)
+          : START_TRACK_INDEX.includes(trackIdx);
+        if (isNormallySafe && !rulesConfig.antiCampingLimitRule) return [];
+
         const moverMeta = PLAYER_META[moverOwnerIdx];
         const candidates = [];
 
         gameState.players.forEach(function (pl) {
           if (!pl.active || pl.id === moverOwnerIdx) return;
-          if (rulesConfig.teamMode && pl.team === moverMeta.team) return;
+          if (rulesConfig.teamMode && !rulesConfig.friendlyFireRule && pl.team === moverMeta.team) return;
 
           pl.tokens.forEach(function (tk) {
             if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+              if (rulesConfig.spawnInvincibilityRule && tk.spawnShielded) return;
+              if (isNormallySafe && !(rulesConfig.antiCampingLimitRule && tk.campingEvicted)) return;
               candidates.push({ ownerIdx: pl.id, tokenId: tk.id, playerName: pl.name, colorName: PLAYER_META[pl.id].colorName });
             }
           });
@@ -5184,17 +5473,23 @@
           }
         }
 
-        const hasUnusedSix = unusedDice.some(function (d) { return isSpawnDieValue(d.value); });
+        const spawnableYardTokens = yardTokens.filter(function (yt) {
+          return unusedDice.some(function (d) {
+            return canYardTokenSpawnWithCurrentRoll(yt, d.value, unusedDice, gameState.rolledDoubleSixThisBatch) &&
+                   !wouldExceedMaxStackLimit(targetOwnerIdx, yt.id, 'board', 0, 0, gameState.players);
+          });
+        });
+        const hasUnusedSix = spawnableYardTokens.length > 0;
         const forceDoubleSixTwoSpawns = Boolean(
           rulesConfig.doubleSixSpawnsTwoBeads &&
           gameState.rolledDoubleSixThisBatch &&
-          yardTokens.length > 0 &&
+          spawnableYardTokens.length > 0 &&
           gameState.spawnedBeadsThisRoll < 2 &&
           unusedDice.some(function (d) { return d.value === 6; })
         );
-        if ((rulesConfig.mandatoryYardSpawn || forceDoubleSixTwoSpawns) && yardTokens.length > 0 && hasUnusedSix) {
+        if ((rulesConfig.mandatoryYardSpawn || forceDoubleSixTwoSpawns) && spawnableYardTokens.length > 0 && hasUnusedSix) {
           const spawnDie = unusedDice.find(function (d) { return d.value === 6; }) || unusedDice.find(function (d) { return isSpawnDieValue(d.value); });
-          return yardTokens.map(function (yt) {
+          return spawnableYardTokens.map(function (yt) {
             const sim = simulateTokenAdvance(yt, spawnDie.value, undefined, tokens, false);
             return {
               tokenId: yt.id,
@@ -5293,6 +5588,57 @@
               });
             }
 
+            if (rulesConfig.reverseKillRule && tk.state === 'board' && (die.value === 1 || die.value === 2)) {
+              const revSim = simulateReverseKillAdvance(tk, die.value, gameState.players);
+              if (revSim.valid) {
+                candidateSingleMoves.push({
+                  tokenId: tk.id,
+                  ownerIdx: targetOwnerIdx,
+                  diceIds: [die.id],
+                  delta: die.value,
+                  isReverseKill: true,
+                  allowsSecondDie: evaluateSecondDieAllowance(tk, die, revSim),
+                  destRC: getDestinationGridCoordForSim(targetOwnerIdx, revSim),
+                  label: 'Backstab -' + die.value,
+                  sim: revSim
+                });
+              }
+            }
+            if (die.lockedSplitTokenId !== undefined && tk.id === die.lockedSplitTokenId) {
+              if (candidateSingleMoves.length > 0 && candidateSingleMoves[candidateSingleMoves.length - 1].tokenId === tk.id && candidateSingleMoves[candidateSingleMoves.length - 1].diceIds[0] === die.id) {
+                candidateSingleMoves.pop();
+              }
+            }
+            if (
+              rulesConfig.diceSplittingRule &&
+              unusedDice.length === 1 &&
+              !die.isSplitHalf &&
+              (die.value === 4 || die.value === 6) &&
+              (tk.state === 'board' || tk.state === 'home_stretch') &&
+              groundTokens.length >= 2
+            ) {
+              const halfVal = die.value / 2;
+              const splitSim = simulateTokenAdvance(tk, halfVal, undefined, tokens, false);
+              const otherGroundCanUseHalf = groundTokens.some(function (otherTk) {
+                if (otherTk.id === tk.id) return false;
+                return simulateTokenAdvance(otherTk, halfVal, undefined, tokens, false).valid;
+              });
+              if (splitSim.valid && otherGroundCanUseHalf) {
+                candidateSingleMoves.push({
+                  tokenId: tk.id,
+                  ownerIdx: targetOwnerIdx,
+                  diceIds: [die.id],
+                  delta: halfVal,
+                  isSplitMove: true,
+                  splitOrigVal: die.value,
+                  allowsSecondDie: true,
+                  destRC: getDestinationGridCoordForSim(targetOwnerIdx, splitSim),
+                  label: 'Split +' + halfVal + ' (of ' + die.value + ')',
+                  sim: splitSim
+                });
+              }
+            }
+
             if (
               tk.state === 'board' &&
               isOptionalLoopAfterKillAllowed() &&
@@ -5325,6 +5671,7 @@
               for (let j = i + 1; j < unusedDice.length; j++) {
                 const d0 = unusedDice[i];
                 const d1 = unusedDice[j];
+                if (rulesConfig.strictSpawnOnlySixesRule && (d0.value === 6 || d1.value === 6)) continue;
                 const sumDelta = d0.value + d1.value;
                 if (seenCombinedSums.has(sumDelta)) continue;
                 seenCombinedSums.add(sumDelta);
@@ -5386,22 +5733,32 @@
         }
 
         const allLegalMoves = filteredSingles.concat(candidateCombinedMoves);
-        if (rulesConfig.mandatoryCapture && allLegalMoves.length > 0) {
-          const captureMoves = allLegalMoves.filter(function (mv) {
-            if (!mv.sim || mv.sim.newState !== 'board') return false;
-            const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
-            return getCaptureCandidatesAtTrackIndex(mv.ownerIdx, destTrack).length > 0;
+        const captureMoves = allLegalMoves.filter(function (mv) {
+          if (!mv.sim || mv.sim.newState !== 'board') return false;
+          const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
+          return getCaptureCandidatesAtTrackIndex(mv.ownerIdx, destTrack).length > 0;
+        });
+        if (rulesConfig.phookPenaltyRule && captureMoves.length > 0 && gameState.phase === 'MOVE') {
+          if (!Array.isArray(gameState.phookCandidateBeads)) gameState.phookCandidateBeads = [];
+          captureMoves.forEach(function (cm) {
+            const key = cm.ownerIdx + '_' + cm.tokenId;
+            if (!gameState.phookCandidateBeads.includes(key)) {
+              gameState.phookCandidateBeads.push(key);
+            }
           });
-          if (captureMoves.length > 0) {
-            captureMoves.forEach(function (cm) { cm.isMandatoryCapture = true; });
-            return captureMoves;
-          }
+        }
+        if (rulesConfig.mandatoryCapture && !rulesConfig.phookPenaltyRule && captureMoves.length > 0) {
+          captureMoves.forEach(function (cm) { cm.isMandatoryCapture = true; });
+          return captureMoves;
         }
         return allLegalMoves;
       }
 
       // Describe the tactical outcome of a move for Single-Click Outcome Preview
       function getMoveOutcomePreviewTag(move) {
+        if (move.isReverseKill || (move.sim && move.sim.isReverseKill)) return { tag: '🔄⚔️ BACKSTAB (-' + move.delta + ')', color: '#e11d48' };
+        if (move.sim && move.sim.isBounceHome) return { tag: '🔙 BOUNCE (Step ' + move.sim.newHomeStep + ')', color: '#ea580c' };
+        if (move.isSplitMove) return { tag: '🔄 SPLIT +' + move.delta, color: '#0284c7' };
         if (move.sim.isSpawn) return { tag: '⚡ SPAWN (+' + move.delta + ')', color: '#d97706' };
         if (move.sim.newState === 'completed') return { tag: '🏠 COMPLETE! (+' + move.delta + ')', color: '#059669' };
         if (move.sim.newState === 'home_stretch') return { tag: '🏠 HOME PATH (+' + move.delta + ')', color: '#059669' };
@@ -5517,6 +5874,47 @@
         if (simResult.isSpawn) {
           return [MAIN_TRACK[START_TRACK_INDEX[token.owner]]];
         }
+        if (simResult.isReverseKill) {
+          const revCoords = [];
+          let rSteps = token.steps;
+          const count = Math.abs(delta);
+          for (let s = 1; s <= count; s++) {
+            rSteps = Math.max(0, rSteps - 1);
+            const tIdx = (START_TRACK_INDEX[token.owner] + rSteps) % 52;
+            revCoords.push(MAIN_TRACK[tIdx]);
+          }
+          return revCoords;
+        }
+        if (simResult.isBounceHome) {
+          const bCoords = [];
+          let curSt = token.state;
+          let curSp = token.steps;
+          let curHm = token.homeStep;
+          let dir = 1;
+          for (let s = 1; s <= delta; s++) {
+            if (curSt === 'home_stretch') {
+              curHm += dir;
+              if (curHm >= 6) {
+                curHm = 6;
+                dir = -1;
+              }
+              if (curHm < 1) curHm = 1;
+              bCoords.push(HOME_PATHS[token.owner][Math.min(5, curHm - 1)]);
+            } else {
+              const posInLap = curSp % 52;
+              if (posInLap === 50) {
+                curSt = 'home_stretch';
+                curHm = 1;
+                bCoords.push(HOME_PATHS[token.owner][0]);
+              } else {
+                curSp += 1;
+                const tIdx = (START_TRACK_INDEX[token.owner] + curSp) % 52;
+                bCoords.push(MAIN_TRACK[tIdx]);
+              }
+            }
+          }
+          return bCoords;
+        }
         const coords = [];
         const eligibleHome = canOwnerEnterHomeStretch(token.owner) && !simResult.optionalOuterLoop;
         let curState = token.state;
@@ -5570,10 +5968,20 @@
           });
         }
 
-        move.diceIds.forEach(function (dId) {
-          const d = gameState.dicePool.find(function (x) { return x.id === dId; });
-          if (d) d.used = true;
-        });
+        if (move.isSplitMove && move.diceIds.length === 1) {
+          const d = gameState.dicePool.find(function (x) { return x.id === move.diceIds[0]; });
+          if (d) {
+            d.value = move.delta;
+            d.isSplitHalf = true;
+            d.lockedSplitTokenId = move.tokenId;
+            d.used = false;
+          }
+        } else {
+          move.diceIds.forEach(function (dId) {
+            const d = gameState.dicePool.find(function (x) { return x.id === dId; });
+            if (d) d.used = true;
+          });
+        }
 
         const pathCoords = computeMovePathCoords(token, move.delta, move.sim);
         gameState.lastMovedTrail = {
@@ -5612,10 +6020,25 @@
 
       function finalizeMoveExecution(actorIdx, owner, token, move) {
         gameState.phase = 'MOVE';
+        const prevTokenState = token.state;
+        const prevTokenSteps = token.steps;
         token.state = move.sim.newState;
         token.steps = move.sim.newSteps;
         token.homeStep = move.sim.newHomeStep;
+        token.safeCampTurns = 0;
+        token.campingEvicted = false;
+        if (move.sim.isSpawn) {
+          token.inHeavyJail = false;
+          token.spawnShielded = Boolean(rulesConfig.spawnInvincibilityRule);
+          token.spawnShieldTurn = (gameState.matchTelemetry ? gameState.matchTelemetry.totalTurns : 0);
+        } else if (token.steps > 0) {
+          const curTurnNo = (gameState.matchTelemetry ? gameState.matchTelemetry.totalTurns : 0);
+          if (token.spawnShieldTurn === undefined || curTurnNo > token.spawnShieldTurn) {
+            token.spawnShielded = false;
+          }
+        }
         if (token.state === 'completed') {
+          token.spawnShielded = false;
           playSound('home');
           gameState.earnedHomeBonusThisTurn = true;
         }
@@ -5717,7 +6140,38 @@
         if (token.state === 'board') {
           const landedTrackIdx = getOuterTrackIndex(token);
           const enemies = getCaptureCandidatesAtTrackIndex(move.ownerIdx, landedTrackIdx);
-          if (enemies.length === 1) {
+          const originTrackIdx = (prevTokenState === 'board')
+            ? ((START_TRACK_INDEX[token.owner] + prevTokenSteps) % 52)
+            : START_TRACK_INDEX[token.owner];
+
+          const isJoraBreakerActive = Boolean(rulesConfig.joraBreakerRule && (gameState.rolledDoubleSixThisBatch || (rulesConfig.diceCount === 1 && (gameState.consecutiveBonusSixRolls || 0) >= 2)));
+          if (enemies.length >= 2 && rulesConfig.kamikazeJoraRule && !isJoraBreakerActive) {
+            enemies.forEach(function (enemy) {
+              performSingleCapture(move.ownerIdx, token, enemy);
+            });
+            token.state = 'yard';
+            token.steps = 0;
+            token.homeStep = 0;
+            token.lockedThisTurn = false;
+            token.spawnShielded = false;
+            if (rulesConfig.heavyJailRule) token.inHeavyJail = true;
+            addGameLog('💥 Kamikaze Mutual Destruction! ' + owner.name + '\'s Bead #' + (token.id + 1) + ' detonated on the enemy Jora — all beads on that square sent to Yard!', 'kill');
+            showToast('💥 KAMIKAZE! Attacking bead & all Jora beads destroyed!', true);
+          } else if (enemies.length >= 1 && rulesConfig.positionHijackRule && gameState.rolledSixAndOneThisBatch) {
+            const hijackVictim = chooseBestCaptureVictim(move.ownerIdx, enemies, false) || enemies[0];
+            const vPlayer = gameState.players[hijackVictim.ownerIdx];
+            const vToken = vPlayer.tokens[hijackVictim.tokenId];
+            vToken.state = 'board';
+            vToken.steps = (originTrackIdx - START_TRACK_INDEX[vPlayer.id] + 52) % 52;
+            vToken.homeStep = 0;
+            vToken.lockedThisTurn = false;
+            owner.kills += 1;
+            if (rulesConfig.bonusRollOnKill) gameState.earnedKillBonusThisTurn = true;
+            playSound('kill');
+            triggerPlayerEmote(gameState.currentTurn, '🔀 تبادلہ! (Swapped!)');
+            addGameLog('🔀 Position Hijack (6+1)! ' + owner.name + ' swapped board positions with ' + vPlayer.name + '\'s Bead #' + (vToken.id + 1) + '!', 'gold');
+            showToast('🔀 Position Hijack (6+1)! Swapped positions with ' + vPlayer.name + '!', true);
+          } else if (enemies.length === 1) {
             performSingleCapture(move.ownerIdx, token, enemies[0]);
           } else if (enemies.length > 1) {
             const uniqueOwners = Array.from(new Set(enemies.map(function (e) { return e.ownerIdx; })));
@@ -5763,10 +6217,35 @@
       function performSingleCapture(capturerOwnerIdx, capturingToken, victimInfo) {
         const victimPlayer = gameState.players[victimInfo.ownerIdx];
         const victimToken = victimPlayer.tokens[victimInfo.tokenId];
+        const wasWantedByCapturer = Boolean(
+          rulesConfig.qisasVengeanceRule &&
+          Array.isArray(victimToken.wantedByOwners) &&
+          victimToken.wantedByOwners.includes(capturerOwnerIdx)
+        );
         victimToken.state = 'yard';
         victimToken.steps = 0;
         victimToken.homeStep = 0;
         victimToken.lockedThisTurn = false;
+        victimToken.spawnShielded = false;
+        victimToken.safeCampTurns = 0;
+        victimToken.campingEvicted = false;
+        victimToken.wantedByOwners = [];
+        if (rulesConfig.heavyJailRule) {
+          victimToken.inHeavyJail = true;
+        }
+        if (rulesConfig.qisasVengeanceRule) {
+          if (!Array.isArray(capturingToken.wantedByOwners)) capturingToken.wantedByOwners = [];
+          if (!capturingToken.wantedByOwners.includes(victimInfo.ownerIdx)) {
+            capturingToken.wantedByOwners.push(victimInfo.ownerIdx);
+          }
+        }
+        gameState.madeCaptureThisTurn = true;
+        if (wasWantedByCapturer) {
+          const nextDieId = gameState.dicePool.length;
+          gameState.dicePool.push({ id: nextDieId, value: 10, used: false, isQisasJump: true });
+          addGameLog('⚖️ QISAS BLOOD VENGEANCE! ' + gameState.players[capturerOwnerIdx].name + ' hunted down the Wanted killer bead and earned an instant +10-Step Bonus Jump!', 'gold');
+          showToast('⚖️ QISAS VENGEANCE! +10-Step Jump added to your dice pool!', true);
+        }
 
         if (rulesConfig.wipeoutResetsHomeEligibility !== false && (victimPlayer.kills || 0) > 0) {
           const hasBeadInsideHome = victimPlayer.tokens.some(function (t) {
@@ -6747,7 +7226,28 @@
       function resetTokenLocksForPlayer(ownerIdx) {
         const p = gameState.players[ownerIdx];
         if (!p) return;
-        p.tokens.forEach(function (tk) { tk.lockedThisTurn = false; });
+        const curTurnNo = (gameState.matchTelemetry ? gameState.matchTelemetry.totalTurns : 0);
+        p.tokens.forEach(function (tk) {
+          tk.lockedThisTurn = false;
+          if (tk.spawnShielded && tk.steps > 0 && tk.spawnShieldTurn !== undefined && curTurnNo > tk.spawnShieldTurn) {
+            tk.spawnShielded = false;
+          }
+          if (rulesConfig.antiCampingLimitRule && tk.state === 'board') {
+            const tIdx = getOuterTrackIndex(tk);
+            const isSafeSq = rulesConfig.safeStopImmunity ? SAFE_TRACK_INDICES.has(tIdx) : START_TRACK_INDEX.includes(tIdx);
+            if (isSafeSq) {
+              tk.safeCampTurns = (tk.safeCampTurns || 0) + 1;
+              if (tk.safeCampTurns >= 3 && !tk.campingEvicted) {
+                tk.campingEvicted = true;
+                tk.spawnShielded = false;
+                addGameLog('⛺ Anti-Camping Eviction! ' + p.name + '\'s Bead #' + (tk.id + 1) + ' camped on a safe square for 3 turns and lost its safe immunity!', 'warn');
+              }
+            } else {
+              tk.safeCampTurns = 0;
+              tk.campingEvicted = false;
+            }
+          }
+        });
       }
 
       function advanceToNextTurn() {
@@ -6771,9 +7271,39 @@
         }
         gameState.matchTelemetry.turnStartedAt = nowTs;
 
+        if (
+          rulesConfig.phookPenaltyRule &&
+          !gameState.madeCaptureThisTurn &&
+          Array.isArray(gameState.phookCandidateBeads) &&
+          gameState.phookCandidateBeads.length > 0
+        ) {
+          const blownKey = gameState.phookCandidateBeads[0];
+          const parts = blownKey.split('_');
+          const bOwner = gameState.players[Number(parts[0])];
+          const bTk = bOwner && bOwner.tokens[Number(parts[1])];
+          if (bTk && (bTk.state === 'board' || bTk.state === 'home_stretch')) {
+            bTk.state = 'yard';
+            bTk.steps = 0;
+            bTk.homeStep = 0;
+            bTk.lockedThisTurn = false;
+            bTk.spawnShielded = false;
+            bTk.safeCampTurns = 0;
+            bTk.campingEvicted = false;
+            if (rulesConfig.heavyJailRule) bTk.inHeavyJail = true;
+            playSound('kill');
+            triggerPlayerEmote(prevTurnIdx, '🌬️ پھونک! (Blown!)');
+            addGameLog('🌬️ Phook / Blown Bead Penalty! ' + bOwner.name + '\'s Bead #' + (bTk.id + 1) + ' missed an available kill and was blown back to the Yard!', 'kill');
+            showToast('🌬️ PHOOK! ' + bOwner.name + '\'s Bead #' + (bTk.id + 1) + ' missed a kill and was blown to Yard!', true);
+          }
+        }
+        gameState.phookCandidateBeads = [];
+        gameState.madeCaptureThisTurn = false;
+
         // Unlock all tokens of the player whose Bari just finished (both their own and controlled partner tokens)
         resetTokenLocksForPlayer(prevTurnIdx);
-        resetTokenLocksForPlayer(getControlledOwnerIndex(prevTurnIdx));
+        if (getControlledOwnerIndex(prevTurnIdx) !== prevTurnIdx) {
+          resetTokenLocksForPlayer(getControlledOwnerIndex(prevTurnIdx));
+        }
         gameState.earnedKillBonusThisTurn = false;
         gameState.earnedHomeBonusThisTurn = false;
         gameState.earnedSixBonusThisRoll = false;
@@ -6911,6 +7441,54 @@
 
           gameState.spawnedBeadsThisRoll = 0;
           gameState.rolledDoubleSixThisBatch = (effectiveDiceCount === 2 && v1 === 6 && v2 === 6);
+          gameState.rolledSixAndOneThisBatch = (effectiveDiceCount === 2 && ((v1 === 6 && v2 === 1) || (v1 === 1 && v2 === 6)));
+
+          if (rulesConfig.strictSpawnOnlySixesRule) {
+            const targetPl = gameState.players[targetOwnerIdx];
+            const canAnyYardSpawnOnSix = Boolean(targetPl && targetPl.tokens.some(function (t) {
+              return t.state === 'yard' && canYardTokenSpawnWithCurrentRoll(t, 6, gameState.dicePool, gameState.rolledDoubleSixThisBatch);
+            }));
+            if (!canAnyYardSpawnOnSix) {
+              let wastedSixes = 0;
+              gameState.dicePool.forEach(function (d) {
+                if (!d.used && d.value === 6) {
+                  d.used = true;
+                  wastedSixes += 1;
+                }
+              });
+              if (wastedSixes > 0) {
+                addGameLog('🚫 Strict Spawn-Only Sixes: ' + wastedSixes + ' rolled 6(s) nullified because no bead can spawn from the yard!', 'warn');
+                showToast('🚫 Spawn-Only Sixes: Rolled 6 nullified (Yard empty)!', true);
+              }
+            }
+          }
+
+          if (rulesConfig.snakeEyesPenaltyRule && effectiveDiceCount === 2 && v1 === 1 && v2 === 1) {
+            const targetPl = gameState.players[targetOwnerIdx];
+            const groundList = targetPl ? targetPl.tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; }) : [];
+            if (groundList.length > 0) {
+              groundList.sort(function (a, b) {
+                const progA = a.state === 'home_stretch' ? (100 + a.homeStep) : a.steps;
+                const progB = b.state === 'home_stretch' ? (100 + b.homeStep) : b.steps;
+                return progB - progA;
+              });
+              const doomedTk = groundList[0];
+              doomedTk.state = 'yard';
+              doomedTk.steps = 0;
+              doomedTk.homeStep = 0;
+              doomedTk.lockedThisTurn = false;
+              doomedTk.spawnShielded = false;
+              if (rulesConfig.heavyJailRule) doomedTk.inHeavyJail = true;
+              playSound('kill');
+              triggerPlayerEmote(actor.id, '🐍 ڈبل ون عذاب! (1+1)');
+              addGameLog('🐍 Snake Eyes Penalty (1+1)! ' + targetPl.name + '\'s most advanced Bead #' + (doomedTk.id + 1) + ' was killed and sent back to the Yard!', 'kill');
+              showToast('🐍 Snake Eyes Trap (1+1)! Most advanced bead sent to Yard!', true);
+              gameState.dicePool.forEach(function (d) { d.used = true; });
+              updateAllUI();
+              setTimeout(advanceToNextTurn, isAiActor ? timings.turnPassDelay : 950);
+              return;
+            }
+          }
 
           const isSixBonusRoll = Boolean(rulesConfig.doubleSixBonusRoll) && (
             (effectiveDiceCount === 1 && v1 === 6) ||
@@ -7040,8 +7618,11 @@
         return START_TRACK_INDEX.includes(trackIdx);
       }
 
-      function isTrackBlockedByJoraOnPlayers(moverOwnerIdx, trackIdx, playersList) {
+      function isTrackBlockedByJoraOnPlayers(moverOwnerIdx, trackIdx, playersList, isDoubleSixBreaker) {
         if (!rulesConfig.pairBlockadeRule) return false;
+        if (rulesConfig.joraBreakerRule && (isDoubleSixBreaker || gameState.rolledDoubleSixThisBatch || (rulesConfig.diceCount === 1 && (gameState.consecutiveBonusSixRolls || 0) >= 2))) {
+          return false;
+        }
         const pList = playersList || gameState.players;
         const moverMeta = PLAYER_META[moverOwnerIdx];
         if (rulesConfig.teamMode) {
@@ -7071,21 +7652,26 @@
       }
 
       function getCaptureCandidatesOnPlayers(moverOwnerIdx, trackIdx, playersList) {
-        if (isSquareSafeFromCapture(trackIdx)) return [];
+        const isNormallySafe = isSquareSafeFromCapture(trackIdx);
+        if (isNormallySafe && !rulesConfig.antiCampingLimitRule) return [];
         const pList = playersList || gameState.players;
         const moverMeta = PLAYER_META[moverOwnerIdx];
         const candidates = [];
         pList.forEach(function (pl) {
           if (!pl || !pl.active || pl.id === moverOwnerIdx) return;
-          if (rulesConfig.teamMode && pl.team === moverMeta.team) return;
+          if (rulesConfig.teamMode && !rulesConfig.friendlyFireRule && pl.team === moverMeta.team) return;
           pl.tokens.forEach(function (tk) {
             if (tk.state === 'board' && getOuterTrackIndex(tk) === trackIdx) {
+              if (rulesConfig.spawnInvincibilityRule && tk.spawnShielded) return;
+              if (isNormallySafe && !(rulesConfig.antiCampingLimitRule && tk.campingEvicted)) return;
               candidates.push({
                 ownerIdx: pl.id,
                 tokenId: tk.id,
                 playerName: pl.name,
                 colorName: PLAYER_META[pl.id].colorName,
-                steps: tk.steps
+                steps: tk.steps,
+                isTeammateVictim: Boolean(rulesConfig.teamMode && pl.team === moverMeta.team),
+                isWantedByMover: Boolean(rulesConfig.qisasVengeanceRule && Array.isArray(tk.wantedByOwners) && tk.wantedByOwners.includes(moverOwnerIdx))
               });
             }
           });
@@ -7520,6 +8106,9 @@
           }
         }
 
+        if (move.sim.isBounceHome) {
+          score -= 260;
+        }
         if (move.sim.newState === 'board') {
           const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
           const newLapPos = move.sim.newSteps % 52;
@@ -7569,7 +8158,16 @@
           }
 
           if (victims.length > 0) {
-            if (shouldLeaveKillForPartner(move.ownerIdx, destTrack, victims, pList)) {
+            const hitsTeammate = rulesConfig.teamMode && rulesConfig.friendlyFireRule && victims.every(function (v) { return pList[v.ownerIdx].team === owner.team; });
+            if (hitsTeammate) {
+              score -= 2400;
+            } else if (rulesConfig.kamikazeJoraRule && victims.length >= 2) {
+              const enemyStepsSum = victims.reduce(function (acc, v) {
+                const vTk = pList[v.ownerIdx].tokens[v.tokenId];
+                return acc + (vTk ? (vTk.steps % 52) : 15);
+              }, 0);
+              score += (enemyStepsSum * 7.5) - (curLapPos * 4.5) + (ownerNeedsKill ? 850 : 280);
+            } else if (shouldLeaveKillForPartner(move.ownerIdx, destTrack, victims, pList)) {
               score -= 280;
             } else {
               const bestVictim = chooseBestCaptureVictim(move.ownerIdx, victims, rulesConfig.killAllStackedEnemies, pList);
@@ -7587,6 +8185,12 @@
 
               if (willCaptureTriggerGroundWipeout(vOwner, countKilled)) {
                 killScore += 1350 * wipeoutOffenseMult;
+              }
+              if (rulesConfig.qisasVengeanceRule && victims.some(function (v) { return v.isWantedByMover; })) {
+                killScore += 1100;
+              }
+              if (rulesConfig.phookPenaltyRule) {
+                killScore += 950;
               }
 
               const vRemainingOutside = vOwner.tokens.filter(function (vt) {
@@ -7686,22 +8290,32 @@
                 state: tk.state,
                 steps: tk.steps,
                 homeStep: tk.homeStep,
-                lockedThisTurn: tk.lockedThisTurn
+                lockedThisTurn: tk.lockedThisTurn,
+                inHeavyJail: Boolean(tk.inHeavyJail),
+                spawnShielded: Boolean(tk.spawnShielded),
+                safeCampTurns: tk.safeCampTurns || 0,
+                campingEvicted: Boolean(tk.campingEvicted),
+                wantedByOwners: Array.isArray(tk.wantedByOwners) ? tk.wantedByOwners.slice() : []
               };
             })
           };
         });
       }
 
-      function simulateAdvanceOnSimPlayers(token, delta, simPlayers, forceOuterLoop, customEligibleHome) {
+      function simulateAdvanceOnSimPlayers(token, delta, simPlayers, forceOuterLoop, customEligibleHome, simUnusedDice, simRolledDblSix) {
         if (token.state === 'completed') return { valid: false };
         if (token.state === 'yard') {
-          if (isSpawnDieValue(delta)) {
+          if (canYardTokenSpawnWithCurrentRoll(token, delta, simUnusedDice || gameState.dicePool, simRolledDblSix !== undefined ? simRolledDblSix : gameState.rolledDoubleSixThisBatch)) {
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', 0, 0, simPlayers)) return { valid: false };
             return { valid: true, isSpawn: true, newState: 'board', newSteps: 0, newHomeStep: 0 };
           }
           return { valid: false };
         }
         if (token.lockedThisTurn && rulesConfig.closeGameMode) {
+          return { valid: false };
+        }
+
+        if (rulesConfig.strictSpawnOnlySixesRule && delta === 6 && token.state !== 'yard') {
           return { valid: false };
         }
 
@@ -7714,7 +8328,15 @@
         if (token.state === 'home_stretch') {
           const targetHome = token.homeStep + delta;
           if (targetHome === 6) return { valid: true, newState: 'completed', newSteps: token.steps, newHomeStep: 6 };
-          if (targetHome < 6) return { valid: true, newState: 'home_stretch', newSteps: token.steps, newHomeStep: targetHome };
+          if (targetHome < 6) {
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps, targetHome, simPlayers)) return { valid: false };
+            return { valid: true, newState: 'home_stretch', newSteps: token.steps, newHomeStep: targetHome };
+          }
+          if (rulesConfig.bouncingHomeRule) {
+            const bouncedStep = Math.max(1, 12 - targetHome);
+            if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps, bouncedStep, simPlayers)) return { valid: false };
+            return { valid: true, isBounceHome: true, newState: 'home_stretch', newSteps: token.steps, newHomeStep: bouncedStep };
+          }
           return { valid: false };
         }
 
@@ -7737,9 +8359,20 @@
             if (forceOuterLoop && isOptionalLoopAfterKillAllowed()) {
               return { valid: true, loopedPastHome: true, optionalOuterLoop: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
             }
+            if (rulesConfig.tollGateRule) {
+              if (stepsToHomeGate > 0 || delta !== 1) return { valid: false };
+            }
             const intoHome = delta - stepsToHomeGate;
             if (intoHome === 6) return { valid: true, newState: 'completed', newSteps: token.steps + stepsToHomeGate, newHomeStep: 6 };
-            if (intoHome < 6) return { valid: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: intoHome };
+            if (intoHome < 6) {
+              if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps + stepsToHomeGate, intoHome, simPlayers)) return { valid: false };
+              return { valid: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: intoHome };
+            }
+            if (rulesConfig.bouncingHomeRule) {
+              const bouncedStep = Math.max(1, 12 - intoHome);
+              if (wouldExceedMaxStackLimit(token.owner, token.id, 'home_stretch', token.steps + stepsToHomeGate, bouncedStep, simPlayers)) return { valid: false };
+              return { valid: true, isBounceHome: true, newState: 'home_stretch', newSteps: token.steps + stepsToHomeGate, newHomeStep: bouncedStep };
+            }
             return { valid: false };
           }
           if (!canNoKillBeadLoopAroundBoard(token, owner.tokens)) {
@@ -7748,6 +8381,7 @@
           return { valid: true, loopedPastHome: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
         }
 
+        if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', token.steps + delta, 0, simPlayers)) return { valid: false };
         return { valid: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
       }
 
@@ -7890,7 +8524,7 @@
           unusedDice.forEach(function (die) {
             if (seenVals.has(die.value)) return;
             seenVals.add(die.value);
-            const sim = simulateAdvanceOnSimPlayers(tk, die.value, simPlayers, false, eligibleHome);
+            const sim = simulateAdvanceOnSimPlayers(tk, die.value, simPlayers, false, eligibleHome, unusedDice, rolledDoubleSixBatch);
             if (sim.valid) {
               candidateSingles.push({
                 tokenId: tk.id,
@@ -7900,6 +8534,20 @@
                 allowsSecondDie: checkSimSecondDieAllowance(tk, die, sim),
                 sim: sim
               });
+            }
+            if (rulesConfig.reverseKillRule && tk.state === 'board' && (die.value === 1 || die.value === 2)) {
+              const revSim = simulateReverseKillAdvance(tk, die.value, simPlayers);
+              if (revSim.valid) {
+                candidateSingles.push({
+                  tokenId: tk.id,
+                  ownerIdx: targetOwnerIdx,
+                  diceIds: [die.id],
+                  delta: die.value,
+                  isReverseKill: true,
+                  allowsSecondDie: checkSimSecondDieAllowance(tk, die, revSim),
+                  sim: revSim
+                });
+              }
             }
             if (tk.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed()) {
               const posInLap = tk.steps % 52;
@@ -8466,6 +9114,9 @@
         for (let i = 0; i < 7; i++) {
           let d1 = randDie();
           let d2 = randDie();
+          if (rulesConfig.snakeEyesPenaltyRule && effectiveDiceCount === 2 && d1 === 1 && d2 === 1) {
+            d2 = Math.floor(Math.random() * 5) + 2;
+          }
           if (avoidBonusSixBust) {
             if (effectiveDiceCount === 1 && d1 === 6) d1 = Math.floor(Math.random() * 5) + 1;
             if (effectiveDiceCount === 2 && d1 === 6 && d2 === 6) d2 = 5;
@@ -9282,7 +9933,12 @@
             ctx.font = 'bold ' + Math.round(radius * 0.85) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            const label = (tk.lockedThisTurn && rulesConfig.closeGameMode) ? '🔒' : String(tk.id + 1);
+            let label = String(tk.id + 1);
+            if (tk.lockedThisTurn && rulesConfig.closeGameMode) label = '🔒';
+            else if (tk.state === 'yard' && rulesConfig.heavyJailRule && tk.inHeavyJail) label = '⛓️';
+            else if (tk.state === 'board' && rulesConfig.spawnInvincibilityRule && tk.spawnShielded) label = '🛡️';
+            else if (tk.state === 'board' && rulesConfig.antiCampingLimitRule && tk.campingEvicted) label = '⛺';
+            else if (tk.state === 'board' && rulesConfig.qisasVengeanceRule && Array.isArray(tk.wantedByOwners) && tk.wantedByOwners.length > 0) label = '⚖️';
             ctx.fillText(label, tx, ty);
 
             if (rulesConfig.teamMode && tk.state !== 'completed') {
@@ -9450,7 +10106,7 @@
             ctx.font = '900 ' + Math.round(cell * 0.25) + 'px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('+' + mv.delta, dx, dy);
+            ctx.fillText((mv.isReverseKill ? '-' : '+') + mv.delta, dx, dy);
 
             if (rulesConfig.showTooltips) {
               const pillW = Math.max(cell * 1.5, outcome.tag.length * (cell * 0.13));
@@ -10416,6 +11072,39 @@
         if (chkMandCap) chkMandCap.checked = Boolean(rulesConfig.mandatoryCapture);
         const chk3TimeoutBot = document.getElementById('chkThreeTimeoutsBotTakeover');
         if (chk3TimeoutBot) chk3TimeoutBot.checked = Boolean(rulesConfig.threeTimeoutsBotTakeover);
+        const chkRevKill = document.getElementById('chkReverseKill');
+        if (chkRevKill) chkRevKill.checked = Boolean(rulesConfig.reverseKillRule);
+        const chkFF = document.getElementById('chkFriendlyFire');
+        if (chkFF) chkFF.checked = Boolean(rulesConfig.friendlyFireRule);
+        const chkKamikaze = document.getElementById('chkKamikazeJora');
+        if (chkKamikaze) chkKamikaze.checked = Boolean(rulesConfig.kamikazeJoraRule);
+        const chkSnakeEyes = document.getElementById('chkSnakeEyesPenalty');
+        if (chkSnakeEyes) chkSnakeEyes.checked = Boolean(rulesConfig.snakeEyesPenaltyRule);
+        const chkMaxStack = document.getElementById('chkMaxStackLimit');
+        if (chkMaxStack) chkMaxStack.checked = Boolean(rulesConfig.maxStackLimitRule);
+        const chkHeavyJail = document.getElementById('chkHeavyJail');
+        if (chkHeavyJail) chkHeavyJail.checked = Boolean(rulesConfig.heavyJailRule);
+        const chkPosHijack = document.getElementById('chkPositionHijack');
+        if (chkPosHijack) chkPosHijack.checked = Boolean(rulesConfig.positionHijackRule);
+        const chkSpawnInv = document.getElementById('chkSpawnInvincibility');
+        if (chkSpawnInv) chkSpawnInv.checked = Boolean(rulesConfig.spawnInvincibilityRule);
+        const chkPhook = document.getElementById('chkPhookPenalty');
+        if (chkPhook) chkPhook.checked = Boolean(rulesConfig.phookPenaltyRule);
+        const chkBounceHome = document.getElementById('chkBouncingHome');
+        if (chkBounceHome) chkBounceHome.checked = Boolean(rulesConfig.bouncingHomeRule);
+        const chkAntiCamp = document.getElementById('chkAntiCampingLimit');
+        if (chkAntiCamp) chkAntiCamp.checked = Boolean(rulesConfig.antiCampingLimitRule);
+        const chkJoraBrk = document.getElementById('chkJoraBreaker');
+        if (chkJoraBrk) chkJoraBrk.checked = Boolean(rulesConfig.joraBreakerRule);
+        const chkTollGate = document.getElementById('chkTollGate');
+        if (chkTollGate) chkTollGate.checked = Boolean(rulesConfig.tollGateRule);
+        const chkQisas = document.getElementById('chkQisasVengeance');
+        if (chkQisas) chkQisas.checked = Boolean(rulesConfig.qisasVengeanceRule);
+        const chkStrictSix = document.getElementById('chkStrictSpawnOnlySixes');
+        if (chkStrictSix) chkStrictSix.checked = Boolean(rulesConfig.strictSpawnOnlySixesRule);
+        const chkDiceSplit = document.getElementById('chkDiceSplitting');
+        if (chkDiceSplit) chkDiceSplit.checked = Boolean(rulesConfig.diceSplittingRule);
+        updateActiveHouseRulesBadge();
         updateMultiMouseStatusUI();
         const chkAuto1 = document.getElementById('autoRollTurnChk');
         const chkAuto2 = document.getElementById('chkAutoRollTurn');
@@ -10575,6 +11264,22 @@
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
+        rulesConfig.reverseKillRule = false;
+        rulesConfig.friendlyFireRule = false;
+        rulesConfig.kamikazeJoraRule = false;
+        rulesConfig.snakeEyesPenaltyRule = false;
+        rulesConfig.maxStackLimitRule = false;
+        rulesConfig.heavyJailRule = false;
+        rulesConfig.positionHijackRule = false;
+        rulesConfig.spawnInvincibilityRule = false;
+        rulesConfig.phookPenaltyRule = false;
+        rulesConfig.bouncingHomeRule = false;
+        rulesConfig.antiCampingLimitRule = false;
+        rulesConfig.joraBreakerRule = false;
+        rulesConfig.tollGateRule = false;
+        rulesConfig.qisasVengeanceRule = false;
+        rulesConfig.strictSpawnOnlySixesRule = false;
+        rulesConfig.diceSplittingRule = false;
         saveRulesPreferences(true);
         syncRulesStudioControls();
         if (restartNow) {
@@ -10614,6 +11319,22 @@
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
+        rulesConfig.reverseKillRule = false;
+        rulesConfig.friendlyFireRule = false;
+        rulesConfig.kamikazeJoraRule = false;
+        rulesConfig.snakeEyesPenaltyRule = false;
+        rulesConfig.maxStackLimitRule = false;
+        rulesConfig.heavyJailRule = false;
+        rulesConfig.positionHijackRule = false;
+        rulesConfig.spawnInvincibilityRule = false;
+        rulesConfig.phookPenaltyRule = false;
+        rulesConfig.bouncingHomeRule = false;
+        rulesConfig.antiCampingLimitRule = false;
+        rulesConfig.joraBreakerRule = false;
+        rulesConfig.tollGateRule = false;
+        rulesConfig.qisasVengeanceRule = false;
+        rulesConfig.strictSpawnOnlySixesRule = false;
+        rulesConfig.diceSplittingRule = false;
         saveRulesPreferences(true);
         syncRulesStudioControls();
         if (restartNow) {
@@ -15043,6 +15764,262 @@
           offEffectUr: 'آف (OFF): شکار کرنے والی گوٹی ری رول ملتے ہی اسی باری میں کھل جائے گی۔',
           exampleEn: 'You roll 3+4, move Bead #1 by +3 to kill Green (Bead #1 locks 🔒), and move Bead #2 by +4. Now you roll your Kill Bonus (say 5+2) in the same Bari: Bead #1 stays locked until your next Bari!',
           exampleUr: 'مثال: آپ نے 3 چل کر مخالف گوٹی ماری تو وہ گوٹی لاک ہو گئی۔ اب شکار کے انعام میں جو آپ دوبارہ ڈائس پھینکیں گے، اس میں بھی وہ گوٹی لاک رہے گی۔'
+        },
+        {
+          id: 'reverse_kill_rule',
+          cat: 'combat',
+          ruleKey: 'reverseKillRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '28. Reverse Kill / Backstab Rule',
+          titleUr: 'الٹا شکار (پیچھے ہٹ کر مارنے کا اصول)',
+          enDesc: 'If you roll a 1 or 2, you can choose to move a bead backwards (-1 or -2 squares) to capture an opponent bead sitting right behind you.',
+          urDesc: 'اگر ڈائس پر 1 یا 2 آئے تو کھلاڑی اپنی گوٹی کو پیچھے کی طرف (-1 یا -2 خانے) چلا کر اپنے پیچھے کھڑی مخالف گوٹی کا شکار کر سکتا ہے۔',
+          onEffectEn: 'ENABLED (ON): Shows a red "🔄⚔️ BACKSTAB (-1/-2)" target behind your bead whenever a 1 or 2 can capture an enemy behind you.',
+          onEffectUr: 'آن (ON): 1 یا 2 آنے پر پیچھے موجود دشمن کو الٹا چل کر مارا جا سکتا ہے۔',
+          offEffectEn: 'DISABLED (Default OFF): Beads can only move forward along the track.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): گوٹیاں صرف آگے کی طرف چل سکتی ہیں۔',
+          exampleEn: 'Your bead is at step 10 and Green is right behind you at step 9. You roll 1+4: you can move -1 backwards to backstab Green!',
+          exampleUr: 'مثال: آپ کی گوٹی خانہ 10 پر ہے اور دشمن خانہ 9 پر؛ 1 آنے پر آپ پیچھے ہٹ کر اسے مار سکتے ہیں۔'
+        },
+        {
+          id: 'friendly_fire_rule',
+          cat: 'combat',
+          ruleKey: 'friendlyFireRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '29. Friendly Fire (Hardcore 2v2 Team Mode)',
+          titleUr: 'فرینڈلی فائر — 2v2 میں پارٹنر کی گوٹی کا شکار',
+          enDesc: 'In 2v2 Team Mode, landing on your teammate\'s bead on an unprotected square captures it and sends it back to the yard instead of stacking safely.',
+          urDesc: '2v2 ٹیم میچ میں اگر آپ کی گوٹی کسی غیر محفوظ خانے پر آپ کے اپنے پارٹنر کی گوٹی کے اوپر آ جائے تو پارٹنر کی گوٹی مر کر واپس کھڈے میں چلی جائے گی۔',
+          onEffectEn: 'ENABLED (ON): Teammates cannot stack on unprotected squares without capturing each other.',
+          onEffectUr: 'آن (ON): عام خانے پر پارٹنر کی گوٹی پر بیٹھنے سے پارٹنر کی گوٹی کٹ جائے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Teammates stack safely together on any square.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): دونوں پارٹنر ہر خانے پر محفوظ طریقے سے اکٹھے بیٹھ سکتے ہیں۔',
+          exampleEn: 'Red lands on Yellow (teammate) on square 12: with Friendly Fire ON, Yellow is sent back to the yard!',
+          exampleUr: 'مثال: لال نے پیلے پارٹنر کے خانے پر قدم رکھا تو پیلے کی گوٹی کھڈے میں واپس چلی جائے گی۔'
+        },
+        {
+          id: 'kamikaze_jora_rule',
+          cat: 'combat',
+          ruleKey: 'kamikazeJoraRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '30. Kamikaze / Mutual Destruction on Jora',
+          titleUr: 'خودکش حملہ (جوڑے پر دونوں طرف کی تباہی)',
+          enDesc: 'If your bead lands on an opponent\'s Jora (2+ enemy beads on an unprotected square), your attacking bead and all defending enemy beads in that Jora are destroyed and sent back to the yard.',
+          urDesc: 'جب آپ کی گوٹی مخالف کے جوڑے (2 یا زیادہ دشمن گوٹیوں) کے اوپر اترتی ہے تو حملہ کرنے والی گوٹی اور دشمن کا پورا جوڑا دونوں ختم ہو کر واپس کھڈے میں چلے جاتے ہیں۔',
+          onEffectEn: 'ENABLED (ON): Landing on 2+ enemy beads triggers mutual destruction of the attacker and all defenders on that square.',
+          onEffectUr: 'آن (ON): دشمن کے جوڑے پر اترنے سے اپنی گوٹی اور دشمن کی تمام گوٹیاں دونوں کھڈے میں واپس چلی جائیں گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Normal capture rules apply without destroying your attacking bead.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): حملہ آور گوٹی محفوظ رہتی ہے اور صرف دشمن کی گوٹی کٹتی ہے۔',
+          exampleEn: 'Green has a Jora of 2 beads at step 35. Red lands there with a freshly spawned bead—Red sacrifices 1 bead to wipe out both of Green\'s advanced beads!',
+          exampleUr: 'مثال: ہرے کی 2 گوٹیاں خانہ 35 پر ہیں؛ لال اپنی نئی گوٹی وہاں گرا کر خودکش حملے سے ہرے کی دونوں گوٹیاں اڑا دیتا ہے۔'
+        },
+        {
+          id: 'snake_eyes_penalty_rule',
+          cat: 'dice',
+          ruleKey: 'snakeEyesPenaltyRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '31. Snake Eyes Penalty (Double 1s Trap)',
+          titleUr: 'ڈبل ون (1+1) کا عذاب — سب سے آگے والی گوٹی کا مرنا',
+          enDesc: 'Rolling 1+1 in 2-dice mode automatically kills your most advanced on-ground bead, sending it back to the yard.',
+          urDesc: '2 ڈائس موڈ میں اگر دونوں دانوں پر ایک ایک (1+1) آ جائے تو میدان میں موجود آپ کی سب سے آگے والی گوٹی خودکار طور پر مر کر کھڈے میں واپس چلی جاتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Rolling 1+1 immediately sends your furthest-ahead board/home-stretch bead back to the yard and ends your turn.',
+          onEffectUr: 'آن (ON): 1+1 آتے ہی سب سے آگے والی گوٹی کھڈے میں چلی جائے گی اور باری ختم ہو جائے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Rolling 1+1 is played normally as two 1-step moves.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): 1+1 عام نمبروں کی طرح چلا جائے گا۔',
+          exampleEn: 'You have a bead at step 48 near Home and roll 1+1: Snake Eyes strikes and sends that lead bead back to the yard!',
+          exampleUr: 'مثال: آپ کی گوٹی گھر کے قریب خانہ 48 پر ہے اور 1+1 آ گیا تو وہ گوٹی واپس کھڈے میں چلی جائے گی۔'
+        },
+        {
+          id: 'max_stack_limit_rule',
+          cat: 'combat',
+          ruleKey: 'maxStackLimitRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '32. Max Stack Limit (Max 2 Beads per Square)',
+          titleUr: 'رش کی حد — ایک خانے پر زیادہ سے زیادہ 2 گوٹیاں',
+          enDesc: 'A maximum of 2 beads can occupy any single square on the track or Home stretch (even safe stars). Any move that would place a 3rd bead there is invalid.',
+          urDesc: 'کسی بھی ایک خانے پر (حتیٰ کہ سٹاپ اور سٹار خانوں پر بھی) ایک وقت میں زیادہ سے زیادہ 2 گوٹیاں کھڑی ہو سکتی ہیں۔ تیسری گوٹی وہاں نہیں رک سکتی۔',
+          onEffectEn: 'ENABLED (ON): Prevents hoarding 3 or 4 beads on a single safe star or track square.',
+          onEffectUr: 'آن (ON): پہلے سے 2 گوٹیاں موجود ہونے پر تیسری گوٹی اس خانے پر نہیں آ سکے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Unlimited beads can stack on any square.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): ایک خانے پر جتنی مرضی گوٹیاں جمع ہو سکتی ہیں۔',
+          exampleEn: '2 beads are already sitting on ★ STOP square 8. A 3rd bead 4 steps behind rolls a 4—it cannot land on square 8 until one of the 2 beads leaves!',
+          exampleUr: 'مثال: سٹار سٹاپ پر پہلے سے 2 گوٹیاں موجود ہیں تو تیسری گوٹی وہاں نہیں رک سکتی۔'
+        },
+        {
+          id: 'heavy_jail_rule',
+          cat: 'dice',
+          ruleKey: 'heavyJailRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '33. Heavy Jail (Hardcore Respawn)',
+          titleUr: 'سخت قید — ماری گئی گوٹی کے لیے ڈبل سکس لازمی',
+          enDesc: 'A bead captured by an opponent is placed in Heavy Jail (⛓️) and requires a Double-6 (6+6 in 2-dice mode) or two consecutive 6s (in 1-die mode) to spawn again.',
+          urDesc: 'جو گوٹی دشمن کے ہاتھوں ماری جائے وہ سخت قید (⛓️) میں چلی جاتی ہے اور دوبارہ باہر نکلنے کے لیے اسے عام چھکے کے بجائے ڈبل سکس (6+6) درکار ہوتا ہے۔',
+          onEffectEn: 'ENABLED (ON): Killed beads show a ⛓️ icon in the yard and only respawn when you roll 6+6.',
+          onEffectUr: 'آن (ON): ماری گئی گوٹی پر ⛓️ کا نشان آ جائے گا اور وہ صرف ڈبل سکس پر کھلے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Captured beads respawn normally on any single 6 (or 1).',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): ماری گئی گوٹی عام چھکے پر باہر آ جاتی ہے۔',
+          exampleEn: 'Your Bead #1 is killed by Green. Back in the yard, Bead #1 shows ⛓️ and waits for a 6+6 roll to break out of Heavy Jail!',
+          exampleUr: 'مثال: آپ کی گوٹی نمبر 1 مر کر کھڈے میں گئی تو اب اسے دوبارہ نکالنے کے لیے 6+6 لانا ہو گا۔'
+        },
+        {
+          id: 'position_hijack_rule',
+          cat: 'combat',
+          ruleKey: 'positionHijackRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '34. Position Hijack (6+1 Swap Rule)',
+          titleUr: 'پوزیشن ہائی جیک — 6+1 پر گوٹیوں کی جگہ کا تبادلہ',
+          enDesc: 'Rolling 6+1 (or 1+6) in 2-dice mode and landing on an opponent bead swaps the board positions of the two beads rather than sending the opponent to the yard.',
+          urDesc: '2 ڈائس موڈ میں اگر 6 اور 1 (6+1) آئے اور آپ کی گوٹی مخالف کی گوٹی پر اترے تو مخالف کھڈے میں جانے کے بجائے آپ کی پچھلی جگہ پر آ جائے گا اور آپ اس کی جگہ قبضہ کر لیں گے۔',
+          onEffectEn: 'ENABLED (ON): Capturing on a 6+1 roll swaps the two beads\' squares and counts toward your Blood Gate kill.',
+          onEffectUr: 'آن (ON): 6+1 پر شکار کرنے سے دونوں گوٹیوں کی جگہ آپس میں بدل جائے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Landing on an opponent on 6+1 performs a normal capture to the yard.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): 6+1 پر بھی عام شکار ہو گا اور دشمن کھڈے میں جائے گا۔',
+          exampleEn: 'You roll 6+1 and hit an enemy bead sitting right outside your Home gate—your bead takes that advanced spot while the enemy is swapped back!',
+          exampleUr: 'مثال: 6+1 آنے پر آپ نے آگے جاتی ہوئی دشمن گوٹی کو مارا تو دونوں کی جگہ آپس میں بدل گئی۔'
+        },
+        {
+          id: 'spawn_invincibility_rule',
+          cat: 'combat',
+          ruleKey: 'spawnInvincibilityRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '35. Spawn Invincibility (First Turn Shield)',
+          titleUr: 'عارضی پناہ — نئی نکلنے والی گوٹی کو پہلی باری کا تحفظ',
+          enDesc: 'A bead that just spawned onto the board receives a First-Turn Shield (🛡️) and cannot be killed by an opponent until it has moved on a subsequent turn.',
+          urDesc: 'کھڈے سے نئی نکلنے والی گوٹی کو عارضی پناہ (🛡️ شیلڈ) ملتی ہے اور جب تک اسے اگلی باری پر آگے چلنے کا موقع نہ ملے، کوئی دشمن اسے مار نہیں سکتا۔',
+          onEffectEn: 'ENABLED (ON): Newly spawned beads display a 🛡️ icon and are 100% immune to capture until their owner\'s next turn move.',
+          onEffectUr: 'آن (ON): نئی نکلنے والی گوٹی پر 🛡️ شیلڈ ہو گی اور پہلی باری تک کوئی اسے مار نہیں سکے گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Newly spawned beads have no special shield outside safe stops.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): سٹاپ سے ہٹتے ہی گوٹی عام اصول کے مطابق ماری جا سکتی ہے۔',
+          exampleEn: 'You roll 6+2, spawning a bead and moving it 2 steps to square 2. With Spawn Invincibility ON, it keeps its 🛡️ shield until your next turn so the next player cannot immediately snipe it!',
+          exampleUr: 'مثال: آپ نے 6+2 پر گوٹی نکال کر 2 خانے آگے کی تو 🛡️ شیلڈ کی وجہ سے اگلا کھلاڑی فوراً اسے نہیں مار سکے گا۔'
+        },
+        {
+          id: 'phook_penalty_rule',
+          cat: 'combat',
+          ruleKey: 'phookPenaltyRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '36. Phook / Blown Bead Penalty',
+          titleUr: 'پھونک / کچی گوٹی — شکار چھوڑنے پر اپنی گوٹی کا مرنا',
+          enDesc: 'Unlike Mandatory Capture (which forces the kill), Phook lets you choose any move—but if your bead could have killed an opponent and you missed or ignored it, that bead is "blown" (sent to yard) at the end of your turn!',
+          urDesc: 'اس اصول میں گیم آپ کو شکار پر مجبور نہیں کرتی، لیکن اگر آپ کی گوٹی کسی دشمن کو مار سکتی تھی اور آپ نے شکار چھوڑ کر کوئی اور چال چلی تو باری ختم ہوتے ہی آپ کی وہ گوٹی "پھونک" ہو کر کھڈے میں چلی جائے گی۔',
+          onEffectEn: 'ENABLED (ON): Auto-disables Mandatory Capture so you can freely miss kills, and blows the offending bead to the yard at turn end.',
+          onEffectUr: 'آن (ON): شکار نہ کرنے والی گوٹی باری کے اختتام پر پھونک ہو کر کھڈے میں چلی جائے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): No penalty for ignoring an available capture.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): شکار چھوڑنے پر کوئی سزا نہیں ہو گی۔',
+          exampleEn: 'Bead #1 can kill Green on +4, but you move Bead #2 instead. At the end of your turn, Bead #1 is blown (🌬️ PHOOK!) back to your yard!',
+          exampleUr: 'مثال: گوٹی نمبر 1 دشمن کو مار سکتی تھی مگر آپ نے گوٹی نمبر 2 چلا دی؛ باری ختم ہوتے ہی گوٹی نمبر 1 کھڈے میں چلی جائے گی۔'
+        },
+        {
+          id: 'bouncing_home_rule',
+          cat: 'combat',
+          ruleKey: 'bouncingHomeRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '37. Bouncing Home (Overshoot Penalty)',
+          titleUr: 'باؤنس بیک — بڑے نمبر پر گھر کے اندر سے الٹا واپس آنا',
+          enDesc: 'If a bead needs N spaces to reach the center Home triangle and rolls more than N, it steps to the center and bounces backwards down the Home stretch by the excess spaces.',
+          urDesc: 'اگر گوٹی کو پکا ہونے کے لیے کم نمبر چاہیے (مثلاً 2) لیکن ڈائس پر بڑا نمبر (مثلاً 5) آ جائے تو گوٹی اندر جا کر فالتو نمبروں کے برابر الٹا پیچھے باؤنس ہو جاتی ہے۔',
+          onEffectEn: 'ENABLED (ON): Overshooting Home bounces the bead backwards inside the Home stretch instead of being an invalid move.',
+          onEffectUr: 'آن (ON): فالتو نمبر آنے پر گوٹی گھر کے اندر ٹکرا کر واپس پیچھے کے خانوں پر آ جائے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Overshooting Home is simply an invalid move.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): پکا ہونے کے لیے پورا پورا نمبر ہی درکار ہو گا۔',
+          exampleEn: 'Your bead is at Home step 4 (needs 2) and rolls 5: it moves 2 steps to step 6 and bounces 3 steps back to Home step 3!',
+          exampleUr: 'مثال: گوٹی کو 2 نمبر چاہیے اور 5 آ گیا تو وہ 2 آگے جا کر 3 خانے واپس پیچھے آ جائے گی۔'
+        },
+        {
+          id: 'anti_camping_limit_rule',
+          cat: 'combat',
+          ruleKey: 'antiCampingLimitRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '38. Anti-Camping Limit (Safe Square Eviction)',
+          titleUr: 'کیمپنگ پابندی — سٹاپ پر 3 باری سے زیادہ بیٹھنے پر تحفظ ختم',
+          enDesc: 'A bead may only sit on a Safe/Star square for a maximum of 3 consecutive turns. On the 4th turn without moving, its safe immunity drops (⛺) and enemies can capture it right on the safe stop!',
+          urDesc: 'کوئی بھی گوٹی کسی محفوظ سٹاپ یا سٹار خانے پر لگاتار صرف 3 باریوں تک محفوظ بیٹھ سکتی ہے۔ چوتھی باری پر نہ ہلنے کی صورت میں اس کا سیف تحفظ ختم (⛺) ہو جاتا ہے اور دشمن اسے سٹاپ کے اوپر بھی مار سکتا ہے۔',
+          onEffectEn: 'ENABLED (ON): Displays ⛺ on beads that camp on a safe stop for 3+ turns and strips their capture immunity.',
+          onEffectUr: 'آن (ON): مسلسل 3 باریوں تک سٹاپ سے نہ ہلنے والی گوٹی پر ⛺ نشان آ جائے گا اور وہ سٹاپ پر بھی ماری جا سکے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Beads can sit on safe stops indefinitely.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): سٹاپ پر جتنی مرضی دیر بیٹھیں، گوٹی محفوظ رہے گی۔',
+          exampleEn: 'Green leaves Bead #1 on ★ STOP square 8 for 3 turns in a row. On Turn 4, Bead #1 gets the ⛺ badge and Red kills it right on square 8!',
+          exampleUr: 'مثال: ہری گوٹی 3 باریوں تک سٹار سٹاپ پر بیٹھی رہی تو چوتھی باری پر لال نے اسے سٹاپ کے اوپر ہی مار دیا۔'
+        },
+        {
+          id: 'jora_breaker_rule',
+          cat: 'combat',
+          ruleKey: 'joraBreakerRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '39. Jora Breaker (Double-6 Wall Crushing)',
+          titleUr: 'جوڑا توڑ — ڈبل سکس (6+6) پر دشمن کی دیوار توڑنا',
+          enDesc: 'Modifies Pair Blockade (Jora): an opponent can jump over or capture an impassable Jora blockade if they roll a strict Double-6 (6+6) in 2-dice mode!',
+          urDesc: 'جوڑا (دیوار) اصول میں ترمیم: اگر مخالف کھلاڑی ڈبل سکس (6+6) پھینک دے تو وہ دشمن کے جوڑے کے اوپر سے گزر بھی سکتا ہے اور اسے توڑ بھی سکتا ہے۔',
+          onEffectEn: 'ENABLED (ON): Auto-enables Pair Blockade and lets a 6+6 roll bypass or crush any Jora wall.',
+          onEffectUr: 'آن (ON): ڈبل سکس آنے پر دشمن کا جوڑا راستہ نہیں روک سکے گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Jora blockades remain completely impassable regardless of dice rolled.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): جوڑا ہر نمبر کے لیے راستہ بند رکھے گا۔',
+          exampleEn: 'Blue has a Jora blocking square 20. Red rolls 6+6: Red\'s Jora Breaker activates and Red jumps right past square 20!',
+          exampleUr: 'مثال: نیلے کا جوڑا راستہ روکے کھڑا ہے؛ لال نے 6+6 پھینکا اور جوڑا توڑتا ہوا آگے نکل گیا۔'
+        },
+        {
+          id: 'toll_gate_rule',
+          cat: 'combat',
+          ruleKey: 'tollGateRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '40. The Toll Gate (Chungi at Step 50)',
+          titleUr: 'چنگی گیٹ — گھر میں داخل ہونے کے لیے دروازے پر رک کر 1 لانا لازمی',
+          enDesc: 'A bead cannot walk into Home with a large roll from behind step 50. It must land on step 50 (Home Gate) first, and then roll an exact 1 to unlock the gate and step inside!',
+          urDesc: 'گوٹی بڑے نمبر کے ساتھ سیدھی گھر کے اندر نہیں جا سکتی۔ اسے پہلے دروازے والے خانے (خانہ 50) پر رکنا ہو گا اور وہاں سے اندر قدم رکھنے کے لیے ڈائس پر 1 لانا لازمی ہو گا۔',
+          onEffectEn: 'ENABLED (ON): Requires stopping on step 50 and using an exact 1 to step into Home step 1.',
+          onEffectUr: 'آن (ON): خانہ 50 پر رک کر 1 کے نمبر سے ہی گھر کے اندر پہلا قدم رکھا جا سکے گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Eligible beads can enter Home directly with any roll that fits.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): شکار ہونے کے بعد کسی بھی نمبر سے سیدھا گھر میں جایا جا سکتا ہے۔',
+          exampleEn: 'Your bead reaches step 50. On your next roll you get 1+5: the 1 unlocks the Chungi Toll Gate into Home step 1, and the 5 completes it into step 6!',
+          exampleUr: 'مثال: گوٹی خانہ 50 پر رکی؛ اگلی باری پر 1+5 آیا تو 1 سے دروازہ کھلا اور 5 سے گوٹی سیدھی پکی ہو گئی!'
+        },
+        {
+          id: 'qisas_vengeance_rule',
+          cat: 'combat',
+          ruleKey: 'qisasVengeanceRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '41. Qisas / Blood Vengeance (+10 Jump)',
+          titleUr: 'قصاص — اپنی گوٹی کے قاتل کو مارنے پر 10 خانوں کی اضافی چھلانگ',
+          enDesc: 'The engine tracks which specific enemy bead killed yours (marked with ⚖️). If you capture that exact "Wanted" killer bead later, you earn an instant +10-step bonus jump for any of your beads!',
+          urDesc: 'گیم یاد رکھتی ہے کہ دشمن کی کس گوٹی نے آپ کی گوٹی ماری تھی (اس پر ⚖️ کا نشان آ جاتا ہے)۔ اگر آپ بعد میں اسی قاتل گوٹی کا شکار کر لیں تو آپ کو اپنی کسی بھی گوٹی کے لیے 10 خانوں کی مفت چھلانگ ملتی ہے!',
+          onEffectEn: 'ENABLED (ON): Marks killer beads with ⚖️ and awards a +10-step bonus die in your pool when you avenge your bead.',
+          onEffectUr: 'آن (ON): قاتل گوٹی سے بدلہ لینے پر +10 خانوں کی فوری بونس چال ملے گی۔',
+          offEffectEn: 'DISABLED (Default OFF): Standard capture rewards apply without +10 vengeance jumps.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): عام شکار کے اصول لاگو ہوں گے۔',
+          exampleEn: 'Green Bead #2 kills Red. Later, Red hunts down Green Bead #2 (⚖️)—Red gets a +10 Qisas die to launch any Red bead 10 squares forward!',
+          exampleUr: 'مثال: ہری گوٹی نمبر 2 نے لال کو مارا تھا؛ بعد میں لال نے اسی ہری گوٹی کو مار کر قصاص لیا اور +10 خانے آگے چھلانگ لگا دی!'
+        },
+        {
+          id: 'strict_spawn_only_sixes_rule',
+          cat: 'dice',
+          ruleKey: 'strictSpawnOnlySixesRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '42. Strict Spawn-Only Sixes',
+          titleUr: 'چھکے کا ضیاع — 6 صرف کھڈے سے گوٹی نکالنے کے لیے',
+          enDesc: 'A rolled 6 can ONLY be used to spawn a bead from the yard. If your yard is empty (all beads are on the board or completed), any rolled 6 is wasted and cannot move a board bead.',
+          urDesc: 'ڈائس کا 6 صرف کھڈے (ہاتھ) سے نئی گوٹی باہر نکالنے کے کام آ سکتا ہے۔ اگر آپ کی تمام گوٹیاں پہلے ہی باہر ہیں تو آنے والا 6 ضائع ہو جائے گا اور کسی چلتی گوٹی کو آگے نہیں بڑھا سکے گا۔',
+          onEffectEn: 'ENABLED (ON): Blocks 6s from moving board/home beads and auto-nullifies rolled 6s when no bead can spawn from the yard.',
+          onEffectUr: 'آن (ON): کھڈہ خالی ہونے پر 6 کا نمبر ضائع ہو جائے گا اور صرف دوسرا نمبر چلے گا۔',
+          offEffectEn: 'DISABLED (Default OFF): Rolled 6s can freely move board beads when no mandatory spawn applies.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): کھڈہ خالی ہونے پر 6 عام گوٹیوں کو آگے چلاتا ہے۔',
+          exampleEn: 'All 4 of your beads are on the board and you roll 6+4: the 6 is nullified, and you move 4 steps with the remaining die!',
+          exampleUr: 'مثال: چاروں گوٹیاں باہر ہیں اور 6+4 آیا تو 6 ضائع ہو جائے گا اور آپ صرف 4 چلیں گے۔'
+        },
+        {
+          id: 'dice_splitting_rule',
+          cat: 'dice',
+          ruleKey: 'diceSplittingRule',
+          defaultBadge: 'Default: OFF (پہلے سے آف)',
+          titleEn: '43. Dice Splitting in 1-Die Mode (Even 4 or 6)',
+          titleUr: 'ڈائس تقسیم — 1 ڈائس موڈ میں 4 یا 6 کو دو گوٹیوں پر آدھا آدھا چلنا',
+          enDesc: 'When rolling 1 Die (in 1-Die Classic mode or 1-Die endgame), rolling an even 4 or 6 lets you split the value evenly between two different on-ground beads (2+2 or 3+3)!',
+          urDesc: '1 ڈائس موڈ میں اگر جفت نمبر 4 یا 6 آئے اور میدان میں آپ کی دو گوٹیاں موجود ہوں تو آپ اس نمبر کو دو الگ گوٹیوں پر آدھا آدھا (2+2 یا 3+3) تقسیم کر کے چل سکتے ہیں۔',
+          onEffectEn: 'ENABLED (ON): Shows "🔄 SPLIT +2" (on 4) or "🔄 SPLIT +3" (on 6) targets on your beads when rolling 1 die.',
+          onEffectUr: 'آن (ON): 4 کو دو گوٹیوں پر 2+2 اور 6 کو دو گوٹیوں پر 3+3 چلایا جا سکتا ہے۔',
+          offEffectEn: 'DISABLED (Default OFF): A single die must be played in full on one bead.',
+          offEffectUr: 'آف (OFF — ڈیفالٹ): ایک ڈائس کا پورا نمبر ایک ہی گوٹی پر چلنا ہو گا۔',
+          exampleEn: 'In 1-Die mode you roll a 4 with 2 beads on the board: you can move Bead #1 by +2 and Bead #2 by +2!',
+          exampleUr: 'مثال: 1 ڈائس موڈ میں 4 آیا تو آپ نے گوٹی نمبر 1 کو 2 خانے اور گوٹی نمبر 2 کو بھی 2 خانے چلا لیا!'
         }
       ];
 
@@ -15881,7 +16858,12 @@
         'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
         'chkFirstBeadOnBoard', 'initialBeadsOnBoardSelect', 'chkPairBlockadeRule',
         'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft',
-        'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover', 'aiDifficultySelect',
+        'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
+        'chkReverseKill', 'chkFriendlyFire', 'chkKamikazeJora', 'chkSnakeEyesPenalty',
+        'chkMaxStackLimit', 'chkHeavyJail', 'chkPositionHijack', 'chkSpawnInvincibility',
+        'chkPhookPenalty', 'chkBouncingHome', 'chkAntiCampingLimit', 'chkJoraBreaker',
+        'chkTollGate', 'chkQisasVengeance', 'chkStrictSpawnOnlySixes', 'chkDiceSplitting',
+        'aiDifficultySelect',
         'setupName0', 'setupType0', 'setupName1', 'setupType1',
         'setupName2', 'setupType2', 'setupName3', 'setupType3'
       ].forEach(function (elId) {
@@ -15893,6 +16875,8 @@
             rulesConfig.matchFormat = 'custom';
           }
           readRulesFormIntoConfig();
+          resolveHouseRulesConflicts(elId);
+          saveRulesPreferences(true);
           syncRulesStudioControls();
         });
       });
@@ -16050,6 +17034,49 @@
         setShowTooltipsPreference(false);
       });
 
+      const HOUSE_RULE_KEYS = [
+        'reverseKillRule', 'friendlyFireRule', 'kamikazeJoraRule', 'snakeEyesPenaltyRule',
+        'maxStackLimitRule', 'heavyJailRule', 'positionHijackRule', 'spawnInvincibilityRule',
+        'phookPenaltyRule', 'bouncingHomeRule', 'antiCampingLimitRule', 'joraBreakerRule',
+        'tollGateRule', 'qisasVengeanceRule', 'strictSpawnOnlySixesRule', 'diceSplittingRule'
+      ];
+
+      function updateActiveHouseRulesBadge() {
+        const badge = document.getElementById('activeHouseRulesCountBadge');
+        if (!badge) return;
+        const count = HOUSE_RULE_KEYS.filter(function (k) { return Boolean(rulesConfig[k]); }).length;
+        badge.textContent = count + ' / 16 Active • Tap to Expand ▼';
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black border ' +
+          (count > 0 ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm' : 'bg-amber-200 text-amber-950 border-amber-500');
+      }
+
+      function resolveHouseRulesConflicts(changedId) {
+        if (changedId === 'chkPhookPenalty' && rulesConfig.phookPenaltyRule && rulesConfig.mandatoryCapture) {
+          rulesConfig.mandatoryCapture = false;
+          const mc = document.getElementById('chkMandatoryCapture');
+          if (mc) mc.checked = false;
+          showToast('🌬️ Phook Penalty ON: Mandatory Capture auto-disabled so missed kills can be blown!', true);
+        } else if (changedId === 'chkMandatoryCapture' && rulesConfig.mandatoryCapture && rulesConfig.phookPenaltyRule) {
+          rulesConfig.phookPenaltyRule = false;
+          const pp = document.getElementById('chkPhookPenalty');
+          if (pp) pp.checked = false;
+          showToast('🎯 Mandatory Capture ON: Phook Penalty auto-disabled!', true);
+        }
+        if (changedId === 'chkJoraBreaker' && rulesConfig.joraBreakerRule && !rulesConfig.pairBlockadeRule) {
+          rulesConfig.pairBlockadeRule = true;
+          const pb = document.getElementById('chkPairBlockadeRule');
+          if (pb) pb.checked = true;
+          showToast('🧱 Jora Breaker ON: Pair Blockade (Jora Wall) auto-enabled!', true);
+        }
+        if (changedId === 'chkFriendlyFire' && rulesConfig.friendlyFireRule && !rulesConfig.teamMode) {
+          rulesConfig.teamMode = true;
+          const tm = document.getElementById('chkTeamMode');
+          if (tm) tm.checked = true;
+          showToast('🔥 Friendly Fire ON: 2v2 Team Mode auto-enabled!', true);
+        }
+        updateActiveHouseRulesBadge();
+      }
+
       function readRulesFormIntoConfig() {
         rulesConfig.bonusRollOnKill = document.getElementById('chkBonusOnKill').checked;
         const chkKeepLock = document.getElementById('chkKeepCaptureLockOnBonus');
@@ -16081,6 +17108,39 @@
         rulesConfig.oneDieWhenOneBeadLeft = document.getElementById('chkOneDieWhenOneBeadLeft').checked;
         rulesConfig.mandatoryCapture = document.getElementById('chkMandatoryCapture').checked;
         rulesConfig.threeTimeoutsBotTakeover = document.getElementById('chkThreeTimeoutsBotTakeover').checked;
+        const chkRevKill = document.getElementById('chkReverseKill');
+        if (chkRevKill) rulesConfig.reverseKillRule = chkRevKill.checked;
+        const chkFF = document.getElementById('chkFriendlyFire');
+        if (chkFF) rulesConfig.friendlyFireRule = chkFF.checked;
+        const chkKamikaze = document.getElementById('chkKamikazeJora');
+        if (chkKamikaze) rulesConfig.kamikazeJoraRule = chkKamikaze.checked;
+        const chkSnakeEyes = document.getElementById('chkSnakeEyesPenalty');
+        if (chkSnakeEyes) rulesConfig.snakeEyesPenaltyRule = chkSnakeEyes.checked;
+        const chkMaxStack = document.getElementById('chkMaxStackLimit');
+        if (chkMaxStack) rulesConfig.maxStackLimitRule = chkMaxStack.checked;
+        const chkHeavyJail = document.getElementById('chkHeavyJail');
+        if (chkHeavyJail) rulesConfig.heavyJailRule = chkHeavyJail.checked;
+        const chkPosHijack = document.getElementById('chkPositionHijack');
+        if (chkPosHijack) rulesConfig.positionHijackRule = chkPosHijack.checked;
+        const chkSpawnInv = document.getElementById('chkSpawnInvincibility');
+        if (chkSpawnInv) rulesConfig.spawnInvincibilityRule = chkSpawnInv.checked;
+        const chkPhook = document.getElementById('chkPhookPenalty');
+        if (chkPhook) rulesConfig.phookPenaltyRule = chkPhook.checked;
+        const chkBounceHome = document.getElementById('chkBouncingHome');
+        if (chkBounceHome) rulesConfig.bouncingHomeRule = chkBounceHome.checked;
+        const chkAntiCamp = document.getElementById('chkAntiCampingLimit');
+        if (chkAntiCamp) rulesConfig.antiCampingLimitRule = chkAntiCamp.checked;
+        const chkJoraBrk = document.getElementById('chkJoraBreaker');
+        if (chkJoraBrk) rulesConfig.joraBreakerRule = chkJoraBrk.checked;
+        const chkTollGate = document.getElementById('chkTollGate');
+        if (chkTollGate) rulesConfig.tollGateRule = chkTollGate.checked;
+        const chkQisas = document.getElementById('chkQisasVengeance');
+        if (chkQisas) rulesConfig.qisasVengeanceRule = chkQisas.checked;
+        const chkStrictSix = document.getElementById('chkStrictSpawnOnlySixes');
+        if (chkStrictSix) rulesConfig.strictSpawnOnlySixesRule = chkStrictSix.checked;
+        const chkDiceSplit = document.getElementById('chkDiceSplitting');
+        if (chkDiceSplit) rulesConfig.diceSplittingRule = chkDiceSplit.checked;
+        resolveHouseRulesConflicts();
         rulesConfig.multiMouseLock = document.getElementById('chkMultiMouseLock').checked;
         setAutoRollPreference(document.getElementById('chkAutoRollTurn').checked);
         setShowTooltipsPreference(document.getElementById('chkShowTooltips').checked);
