@@ -1758,8 +1758,8 @@
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
 <input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOneDieWhenOneBeadLeft" type="checkbox"/>
 <div>
-<div class="font-bold text-xs text-slate-900">1️⃣ Must Use 1 Die When Only 1 Bead Remains on Board (صرف آخری ایک گوٹی رہنے پر 1 ڈائس استعمال کرنا — Default: ON)</div>
-<p class="text-[11px] text-slate-600">As soon as a player has completed all but 1 bead (only 1 bead left anywhere on the board), they roll only 1 Die instead of 2. Even if turned OFF, reaching the Home stretch or the final point needing 1 automatically switches to 1 Die.</p>
+<div class="font-bold text-xs text-slate-900">1️⃣ Convert to 1 Die Only When All Beads Are Inside Home (تمام گوٹیاں گھر کے اندر آنے پر ہی 1 ڈائس استعمال کرنا — Default: ON)</div>
+<p class="text-[11px] text-slate-600">Default ON: A player converts from 2 Dice to 1 Die ONLY when all of their beads are inside their Home area (inside the Home stretch or completed). If there is even 1 bead outside on the board or in hand/yard, they stay on 2 Dice. When turned OFF, they remain on 2 Dice even when all beads are inside Home.</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -5066,28 +5066,6 @@
         return remaining.every(function (tk) { return tk.state === 'home_stretch'; });
       }
 
-      function isOnlyOneBeadRemainingOnBoardOrYard(ownerIdx) {
-        const p = gameState.players[ownerIdx];
-        if (!p || !p.active) return false;
-        const remaining = p.tokens.filter(function (tk) { return tk.state !== 'completed'; });
-        return remaining.length === 1;
-      }
-
-      function hasReachedLastPointNeedingOne(ownerIdx) {
-        const p = gameState.players[ownerIdx];
-        if (!p || !p.active) return false;
-        const remaining = p.tokens.filter(function (tk) { return tk.state !== 'completed'; });
-        if (remaining.length === 0) return false;
-        const anyAtLastPoint = remaining.some(function (tk) {
-          return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1;
-        });
-        if (remaining.length === 1 && anyAtLastPoint) return true;
-        const allAtLastPoint = remaining.every(function (tk) {
-          return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1;
-        });
-        return allAtLastPoint;
-      }
-
       function getEffectiveDiceCountForOwner(actorIdx, targetOwnerIdx) {
         if (rulesConfig.diceCount === 1) return 1;
         const actor = gameState.players[actorIdx];
@@ -5098,9 +5076,7 @@
           actor && !actor.assistUnlocked
         );
         if (needsAssistSixRoll) return 1;
-        if (isAllBeadsInsideHome(targetOwnerIdx)) return 1;
-        if (rulesConfig.oneDieWhenOneBeadLeft && isOnlyOneBeadRemainingOnBoardOrYard(targetOwnerIdx)) return 1;
-        if (hasReachedLastPointNeedingOne(targetOwnerIdx)) return 1;
+        if (rulesConfig.oneDieWhenOneBeadLeft && isAllBeadsInsideHome(targetOwnerIdx)) return 1;
         return 2;
       }
 
@@ -7004,6 +6980,110 @@
           tags: Array.isArray(mt.tags) ? mt.tags.slice() : [],
           notes: mt.notes || '',
           starred: Boolean(mt.starred),
+          date: new Date(now).toISOString().slice(0, 10),
+          timestamp: new Date(now).toISOString(),
+          mode: rulesConfig.presetName + ' (' + rulesConfig.diceCount + 'D)',
+          rulebookType: (rulesConfig.diceCount === 2 && rulesConfig.killRequiredForHome) ? 'bannu' : 'yalla',
+          closeGameMode: Boolean(rulesConfig.closeGameMode),
+          format: formatLabel,
+          formatCode: rulesConfig.teamMode ? '2v2' : (activePlayersCount === 2 ? '1v1' : 'ffa'),
+          aiDifficulty: rulesConfig.aiDifficulty,
+          result: humanWon ? (vic.isCleanSweep ? 'Clean Sweep 🧹👑' : 'Won 🏆') : 'Lost',
+          winnerTitle: vic.title || 'Match Complete',
+          won: humanWon,
+          isCleanSweep: Boolean(vic.isCleanSweep),
+          kills: gameState.players[0].kills || 0,
+          totalMatchKills: totalKillsAll,
+          deaths: p0Tel.deaths || 0,
+          totalDeaths: totalDeathsAll,
+          closeLocks: p0Tel.closeLocks || 0,
+          totalCloseLocks: totalLocksAll,
+          outerLoops: p0Tel.outerLoops || 0,
+          totalOuterLoops: totalLoopsAll,
+          spawns: p0Tel.spawns || 0,
+          totalSpawns: totalSpawnsAll,
+          totalHomeCompleted: totalHomeAll,
+          stepsMoved: p0Tel.stepsMoved || 0,
+          totalStepsMoved: totalStepsAll,
+          sixesRolled: computedSixes,
+          doubleSixes: totalDoubleSixesAll,
+          totalRolls: Math.max(1, mt.totalRolls || totalTurnsAll || 14),
+          totalMoves: Math.max(1, mt.totalMoves || totalMovesAll || 16),
+          diceFaceCounts: dfCounts,
+          durationMs: durationMs,
+          totalTurns: Math.max(1, mt.totalTurns || totalTurnsAll || 12),
+          avgBeadMoveMs: avgBeadMoveMs,
+          avgDecisionMs: avgDecisionMs,
+          avgAnimMs: avgAnimMs,
+          fastestMoveMs: fastestMoveAll || 780,
+          avgTurnTimeMs: avgTurnTimeMs,
+          playersSummary: mt.players.map(function (pt, idx) {
+            const gPl = gameState.players[idx];
+            const mvs = pt.moves || 0;
+            const trns = pt.turns || 0;
+            return {
+              seat: idx,
+              name: gPl ? gPl.name : pt.name,
+              color: pt.color,
+              active: gPl ? gPl.active : pt.active,
+              kills: gPl ? gPl.kills : pt.kills,
+              deaths: pt.deaths || 0,
+              sixes: pt.sixes || 0,
+              doubleSixes: pt.doubleSixes || 0,
+              rolls: pt.rolls || trns,
+              spawns: pt.spawns || 0,
+              closeLocks: pt.closeLocks || 0,
+              outerLoops: pt.outerLoops || 0,
+              homeCompleted: gPl ? gPl.tokens.filter(function (t) { return t.state === 'completed'; }).length : (pt.homeCompleted || 0),
+              moves: mvs,
+              avgDecisionMs: mvs > 0 ? Math.round((pt.totalDecisionMs || 0) / mvs) : 1100,
+              avgAnimMs: mvs > 0 ? Math.round((pt.totalAnimMs || 0) / mvs) : 240,
+              avgMoveMs: mvs > 0 ? Math.round(((pt.totalDecisionMs || 0) + (pt.totalAnimMs || 0)) / mvs) : 1340,
+              fastestMoveMs: pt.fastestMoveMs || 0,
+              turns: trns,
+              avgTurnMs: trns > 0 ? Math.round((pt.totalTurnTimeMs || 0) / trns) : 4500,
+              totalTurnTimeMs: pt.totalTurnTimeMs || 0,
+              stepsMoved: pt.stepsMoved || 0
+            };
+          }),
+          moveLogs: (mt.moveLogs || []).slice(0, 120),
+          rulesSnapshot: {
+            presetName: rulesConfig.presetName,
+            diceCount: rulesConfig.diceCount,
+            tokensPerPlayer: rulesConfig.tokensPerPlayer,
+            closeGameMode: Boolean(rulesConfig.closeGameMode),
+            teamMode: Boolean(rulesConfig.teamMode),
+            killRequiredForHome: Boolean(rulesConfig.killRequiredForHome),
+            twoKillsForHome: Boolean(rulesConfig.twoKillsForHome),
+            pairBlockadeRule: Boolean(rulesConfig.pairBlockadeRule)
+          },
+          replayFrames: (gameState.replayFrames || []).slice(-160)
+        };
+
+        careerStats.matchRecords.unshift(record);
+        if (careerStats.matchRecords.length > 100) careerStats.matchRecords.length = 100;
+        careerStats.matchRecords.forEach(function (mr, idx) {
+          if (idx >= 25 && mr.replayFrames && mr.replayFrames.length > 40) {
+            delete mr.replayFrames;
+          }
+        });
+
+        careerStats.history.unshift({
+          matchId: record.matchId,
+          customTitle: record.customTitle,
+          category: record.category,
+          tags: record.tags,
+          starred: record.starred,
+          date: record.date,
+          mode: record.mode,
+          format: record.format,
+          result: record.result,
+          isCleanSweep: record.isCleanSweep,
+          kills: record.kills,
+          durationMs: record.durationMs,
+          avgBeadMoveMs: record.avgBeadMoveMs,
+          avgTurnTimeMs: record.avgTurnTimeMs
+        });
         if (careerStats.history.length > 50) careerStats.history.length = 50;
 
         pushActivityEvent(
@@ -7726,9 +7806,7 @@
 
           const enemyRemaining = pl.tokens.filter(function (t) { return t.state !== 'completed'; });
           const enemyAllInHome = enemyRemaining.length > 0 && enemyRemaining.every(function (t) { return t.state === 'home_stretch'; });
-          const enemyOneLeft = rulesConfig.oneDieWhenOneBeadLeft && enemyRemaining.length === 1;
-          const enemyAtLastPoint = enemyRemaining.length === 1 && enemyRemaining[0].state === 'home_stretch' && (6 - enemyRemaining[0].homeStep) === 1;
-          const enemyEffectiveDice = (rulesConfig.diceCount === 1 || enemyAllInHome || enemyOneLeft || enemyAtLastPoint) ? 1 : 2;
+          const enemyEffectiveDice = (rulesConfig.diceCount === 1 || (rulesConfig.oneDieWhenOneBeadLeft && enemyAllInHome)) ? 1 : 2;
           const enemyMaxReach = enemyEffectiveDice === 2 ? 12 : 6;
           const enemyNeedsBloodKill = (reqKills > 0 && (pl.kills || 0) < reqKills);
           const mandatoryCapBoost = rulesConfig.mandatoryCapture ? 1.45 : 1.0;
@@ -8735,7 +8813,7 @@
           boardScore += 920 * wipeoutDefenseMult;
         }
 
-        if (rulesConfig.strictHomeRemainder && rulesConfig.diceCount === 2 && !rulesConfig.oneDieWhenOneBeadLeft) {
+        if (rulesConfig.strictHomeRemainder && rulesConfig.diceCount === 2) {
           if (groundBeads.length === 0 && homeStretchBeads.length === 1 && yardBeads.length > 0) {
             const needed = 6 - homeStretchBeads[0].homeStep;
             if (needed === 1) {
@@ -15412,16 +15490,16 @@
           cat: 'dice',
           ruleKey: 'oneDieWhenOneBeadLeft',
           defaultBadge: 'Default: ON (پہلے سے آن)',
-          titleEn: '2. Must Use 1 Die When Only 1 Bead Remains (+ Auto 1-Die at Last Point)',
-          titleUr: 'صرف آخری ایک گوٹی رہنے پر (یا آخری خانے پر) 1 ڈائس استعمال کرنا',
-          enDesc: 'As soon as 3 of your beads have reached Home and only 1 bead remains anywhere on the board (or in hand), your roll automatically switches from 2 Dice to 1 Die. Even if you turn this rule OFF, once your bead enters the Home column or reaches the last point where it needs 1 to finish, it automatically switches to 1 Die so you never get stuck!',
-          urDesc: 'جب کھلاڑی کی 3 گوٹیاں گھر (پکی) ہو جائیں اور پورے بورڈ پر صرف آخری 1 گوٹی باقی رہ جائے تو خودکار طور پر 2 کی بجائے 1 ڈائس استعمال ہوتا ہے۔ اگر آپ اس اصول کو آف (OFF) بھی کر دیں، تب بھی جب گوٹی گھر کی لائن میں داخل ہو جائے یا آخری پوائنٹ پر پہنچ جائے جہاں جیتنے کے لیے صرف 1 نمبر درکار ہو (کیونکہ 2 ڈائس میں کم از کم 2 آتا ہے)، تو گیم خودکار طور پر 1 ڈائس پر آ جاتی ہے تاکہ گوٹی کبھی پھنسے نہیں۔',
-          onEffectEn: 'ENABLED (Default ON): Switches to 1 Die immediately as soon as only 1 uncompleted bead remains anywhere on the board.',
-          onEffectUr: 'آن (ON — ڈیفالٹ): جیسے ہی صرف آخری ایک گوٹی بورڈ پر باقی رہے گی، کھلاڑی 2 کی بجائے 1 ڈائس پھینکے گا۔',
-          offEffectEn: 'DISABLED (OFF): Keeps rolling 2 Dice while the last bead is on the outer track, but STILL automatically switches to 1 Die inside the Home column or at the last point needing 1.',
-          offEffectUr: 'آف (OFF): آخری گوٹی جب تک باہر کے راستے پر ہے 2 ڈائس چلیں گے، لیکن گھر کی لائن یا آخری پوائنٹ (جہاں 1 نمبر چاہیے) پر پہنچتے ہی خودکار طور پر 1 ڈائس ہو جائے گا۔',
-          exampleEn: 'With 4-bead match: 3 beads are Home and Bead #4 is on outer track step 20. When ON, you roll 1 Die. When OFF, you roll 2 Dice until Bead #4 enters the Home stretch (or reaches step 5 of Home where it needs 1), then it switches to 1 Die.',
-          exampleUr: 'مثال: آپ کی 3 گوٹیاں پکی ہو چکیں اور چوتھی گوٹی باہر چل رہی ہے۔ یہ رول آن ہو تو آپ فوراً 1 ڈائس پھینکیں گے۔ اگر آف ہو تو باہر 2 ڈائس چلیں گے لیکن آخری پوائنٹ جہاں صرف 1 چاہیے وہاں خودکار طور پر 1 ڈائس ہو جائے گا۔'
+          titleEn: '2. Convert to 1 Die Only When All Beads Are Inside Home',
+          titleUr: 'تمام گوٹیاں اپنے گھر کے اندر آنے پر ہی 1 ڈائس استعمال کرنا',
+          enDesc: 'By default in Bannu 2-Dice Ludo, a player converts from 2 Dice to 1 Die ONLY when all of their beads are inside their Home area (inside the colored Home stretch or completed). If there is even a single bead outside on the board track or in hand (yard), the player continues rolling 2 Dice!',
+          urDesc: 'بنوں 2 ڈائس لڈو میں کھلاڑی 2 کی بجائے 1 ڈائس پر صرف اس وقت آتا ہے جب اس کی تمام گوٹیاں اپنے گھر کے اندر (رنگین ہوم لائن میں یا پکی ہو کر) پہنچ چکی ہوں۔ اگر اس کی ایک بھی گوٹی باہر میدان میں یا ہاتھ (کھڈے) میں موجود ہو تو وہ 2 ڈائس ہی پھینکے گا۔',
+          onEffectEn: 'ENABLED (Default ON): Converts to 1 Die ONLY when all of your beads are inside your Home area (0 beads on outer track and 0 in hand/yard). If even 1 bead is outside or in hand, you roll 2 Dice.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): صرف تب 1 ڈائس ہو گا جب آپ کی تمام گوٹیاں گھر کی لائن کے اندر آ جائیں۔ اگر ایک بھی گوٹی باہر یا ہاتھ میں ہے تو 2 ڈائس ہی رہیں گے۔',
+          offEffectEn: 'DISABLED (OFF): Does not convert to 1 Die when all beads are inside Home — you continue rolling 2 Dice even inside the Home stretch.',
+          offEffectUr: 'آف (OFF): تمام گوٹیاں گھر کے اندر آنے پر بھی 1 ڈائس نہیں ہو گا بلکہ اندر بھی 2 ڈائس ہی چلیں گے۔',
+          exampleEn: 'In a 4-bead match: 3 beads are completed/inside Home, and Bead #4 is still outside on step 20 (or in hand). Because 1 bead is still outside Home, you roll 2 Dice! Once Bead #4 also enters the Home stretch (so all 4 beads are inside Home), your roll converts to 1 Die (when ON).',
+          exampleUr: 'مثال: 4 گوٹیوں والے میچ میں 3 گوٹیاں گھر کے اندر ہیں اور چوتھی گوٹی باہر خانہ 20 پر (یا ہاتھ میں) ہے؛ چونکہ ایک گوٹی باہر ہے اس لیے آپ 2 ڈائس ہی پھینکیں گے۔ جیسے ہی چوتھی گوٹی بھی گھر کی لائن میں داخل ہو گی، آپ کی باری 1 ڈائس پر منتقل ہو جائے گی۔'
         },
         {
           id: 'close_game_mode',
