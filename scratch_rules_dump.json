@@ -1,0 +1,227 @@
+[
+  {
+    "id": "chkBonusOnKill",
+    "checked": true,
+    "text": "⚔️ Bonus Re-Roll on Kill / Capture (شکار کرنے پر دوبارہ باری — Default ON) Eating/killing an opponent's bead grants an extra dice re-roll once your current dice are played (can be disabled here)."
+  },
+  {
+    "id": "chkKeepCaptureLockOnBonus",
+    "checked": true,
+    "text": "🔒 Keep Capturing Bead Locked Across Bonus Re-Rolls in Same Bari (شکار کے بعد ری رول میں بھی گوٹی لاک رہنا — Default ON) In Close Game mode, a bead that captures an opponent remains locked on that square during all bonus re-rolls of the same Bari until your next Bari comes (changeable here)."
+  },
+  {
+    "id": "chkMandatorySpawn",
+    "checked": true,
+    "text": "Mandatory Hand/Yard Spawn on 6 (پہلے ہاتھ والی بیڈ نکالنا) Must use a rolled 6 to bring a bead out from hand before moving ground beads."
+  },
+  {
+    "id": "chkKillForHome",
+    "checked": true,
+    "text": "Kill Required to Enter Home + Full Loop (بغیر کِل اندر جانا منع) Without a kill, reaching home entry forces another full 52-square outer lap."
+  },
+  {
+    "id": "chkWipeoutResetsHomeEligibility",
+    "checked": true,
+    "text": "Ground Wipeout Resets Home Eligibility (میدانی صفایا پر شکار کینسل) If all beads on ground are killed/eaten before any bead enters Home, home eligibility is lost and clean sweep is restored until a new kill."
+  },
+  {
+    "id": "chkTeamMode",
+    "checked": true,
+    "text": "2v2 Opposite-Corner Teams & Safe Stacking (دو دو کی ٹیمیں) Red+Yellow vs Green+Blue. Enemy landing on stacked teammates can only eat 1 chosen bead."
+  },
+  {
+    "id": "chkStrictRemainder",
+    "checked": true,
+    "text": "Strict Near-Home Remainder Rule (بقایا نمبر کا اصول) Cannot waste a second die near Home if no other bead can use the remainder."
+  },
+  {
+    "id": "chkTeamAssistSix",
+    "checked": true,
+    "text": "Teammate Assist Requires Rolling a 1-Die Six First (ٹیم میٹ کی مدد کے لیے پہلے 6 لانا) After completing all your beads in 2v2, roll 1 Die for a 6 to unlock 2-Dice control of your partner's beads."
+  },
+  {
+    "id": "chkAutoRollTurn",
+    "checked": false,
+    "text": "🎲 Auto-Roll Dice on Turn Start (باری آنے پر خودکار ڈائس رول) Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads)."
+  },
+  {
+    "id": "chkSingleGroundLoopOnlyWithoutKill",
+    "checked": true,
+    "text": "🚫🔄 No-Kill Loop Only With Single Ground Bead & Free Choice After Kill (بغیر شکار صرف اکیلی میدانی گوٹی کا چکر اور شکار کے بعد آزادی — Default: ON) Default ON: If a player hasn't eaten someone, they cannot come around their Home unless that bead is their ONLY bead on the ground (if they have more beads on the ground, they cannot come around Home). Once they eat an opponent, they are free to either come around Home or go inside it to complete."
+  },
+  {
+    "id": "chkOptionalLoopAfterKill",
+    "checked": true,
+    "text": "🔄 Optional Outer Loop After Kill (شکار کے بعد اندر جانے یا باہر گھومنے کی مرضی — Default: ON) Default ON: Once a player has eaten an opponent, they are free to choose between going inside Home to complete or coming around their Home (looping the outer board again)."
+  },
+  {
+    "id": "chkWaitAllGroundAtGate",
+    "checked": true,
+    "text": "⏳ No-Kill Gate Wait Until All Ground Beads Gather (بغیر شکار تمام میدانی گوٹیاں جمع ہونے تک رکنا — Default: ON) Default ON: A player with 0 kills cannot go around Home (loop past the gate) until all of their on-ground beads have reached the last home point (step 50) and no movement is possible for their on-ground beads—then one bead can go around."
+  },
+  {
+    "id": "chkBonusOnHome",
+    "checked": true,
+    "text": "🏠 Bonus Re-Roll on Bead Home Completion (گوٹی گھر پہنچنے پر دوبارہ باری — Default ON) Grants an extra dice re-roll when any of your beads reaches the final Home triangle."
+  },
+  {
+    "id": "chkDoubleSixBonus",
+    "checked": true,
+    "text": "🎲 Bonus Re-Roll on 6 / Double 6 (چھکا یا ڈبل سکس پر دوبارہ باری — Default ON) Grants an extra dice re-roll on 6+6 (in 2-Dice mode) or 6 (in 1-Die mode)."
+  },
+  {
+    "id": "chkSafeStopImmunity",
+    "checked": true,
+    "text": "★ Star Stop Safe Immunity (سٹاپ پر گوٹی محفوظ رہنا — Default ON) Beads on Star/Stop squares cannot be captured. Disable if only colored starting squares should be safe."
+  },
+  {
+    "id": "chkShowTooltips",
+    "checked": true,
+    "text": "💬 Show Top Tooltips & Preview Hints (ٹول ٹپس دکھائیں) Show top hint banners and floating move labels. Disable to keep the board 100% clear (saved across reloads)."
+  },
+  {
+    "id": "chkThreeConsecutiveSixes",
+    "checked": false,
+    "text": "🚫 Three Consecutive Sixes Penalty (لگاتار 3 چھکے یا 3 ڈبل سکس باری ضائع — Default: OFF) If a player rolls 6 three times in a row (in 1-Die mode) or 6+6 three times in a row (in 2-Dice mode), their entire turn is canceled and passes to the next player."
+  },
+  {
+    "id": "chkSingleSixBonusTwoDice",
+    "checked": false,
+    "text": "🎲 Single Six Re-Roll in 2-Dice Mode (دو دانوں میں ایک چھکے پر بھی باری — Default: OFF) Normally in 2-Dice Bannu Ludo you only get a bonus roll on Double Six (6+6). Enabling this grants a bonus roll even if just one of the two dice is a 6 (e.g., 6+4)."
+  },
+  {
+    "id": "chkStackRollBeforeMoving",
+    "checked": true,
+    "text": "📚 Store / Stack Dice on Kill & Sixes Before Moving (ڈائس محفوظ کر کے اکٹھا چلنا — Default: ON) When you roll 2 dice and kill or complete on one die (e.g. rolled 5 & 4 and killed on 4), you can store the remaining 5 or use it, roll your bonus dice, and use all remaining dice counts at once."
+  },
+  {
+    "id": "chkSpawnOnOneAndSix",
+    "checked": false,
+    "text": "1️⃣ Spawn on 1 as well as 6 (1 یا 6 دونوں پر گوٹی کھلنا — Default: OFF) Allows bringing a bead out of the hand/yard on either a 1 or a 6 (popular in fast matches)."
+  },
+  {
+    "id": "chkDoubleSixSpawnsTwo",
+    "checked": false,
+    "text": "⚡ Double-Six Spawns Two Beads Automatically (ڈبل سکس پر دو گوٹیاں باہر آنا — Default: OFF) When rolling 6+6 with 2+ beads in hand, forces bringing 2 separate beads out of hand automatically (when OFF, you may spawn 1 bead and move it by 6)."
+  },
+  {
+    "id": "chkFirstBeadOnBoard",
+    "checked": false,
+    "text": "🚀 First Bead Starts Already on Board (پہلی گوٹی پہلے سے باہر ہونا — Default: OFF) 1 Bead Out 2 Beads Out 3 Beads Out 4 Beads Out Every player starts the match with 1 (or set number) bead already placed on their starting square so the match begins immediately without waiting for a 6."
+  },
+  {
+    "id": "chkPairBlockadeRule",
+    "checked": false,
+    "text": "🧱 Pair Blockade / Wall Rule (جوڑا راستہ بند کرنا — Default: OFF) When 2 beads of the same player (or same team) sit on the same square, they form a \"Jora\" (wall). Opponent beads cannot jump over a Jora until it breaks."
+  },
+  {
+    "id": "chkKillAllStackedEnemies",
+    "checked": true,
+    "text": "💥 Kill All Stacked Enemy Beads of Same Player (ایک خانے پر موجود ایک ہی کھلاڑی کی تمام گوٹیاں مارنا — Default: ON) If two or more beads of the same player (not teammates) are on the same unprotected square outside safe zones, an opponent landing on them kills both/all of that player's beads."
+  },
+  {
+    "id": "chkTwoKillsForHome",
+    "checked": false,
+    "text": "⚔️⚔️ Two Kills Required for Home Entry (گھر جانے کے لیے 2 شکار لازمی — Default: OFF) Upgrades the blood-gate requirement from 1 kill to 2 kills before a player's home gate opens."
+  },
+  {
+    "id": "chkOneDieWhenOneBeadLeft",
+    "checked": true,
+    "text": "1️⃣ Must Use 1 Die When Only 1 Bead Remains on Board (صرف آخری ایک گوٹی رہنے پر 1 ڈائس استعمال کرنا — Default: ON) As soon as a player has completed all but 1 bead (only 1 bead left anywhere on the board), they roll only 1 Die instead of 2. Even if turned OFF, reaching the Home stretch or the final point needing 1 automatically switches to 1 Die."
+  },
+  {
+    "id": "chkMandatoryCapture",
+    "checked": false,
+    "text": "🎯 Mandatory Capture / Must Kill if Possible (شکار ممکن ہو تو مارنا لازمی / پھونک — Default: OFF) If your dice roll allows you to kill an opponent's bead, you must make the capture move (the referee highlights and forces it)."
+  },
+  {
+    "id": "chkThreeTimeoutsBotTakeover",
+    "checked": true,
+    "text": "🤖 3-Timeouts Auto-Bot Takeover (3 بار وقت ختم ہونے پر بوٹ کنٹرول — Default: ON) If a human player lets the turn timer run out 3 turns in a row without touching the screen, the AI Bot automatically takes over their seat until they tap \"Reclaim Seat\"."
+  },
+  {
+    "id": "chkReverseKill",
+    "checked": false,
+    "text": "🔄 Reverse Kill / Backstab Rule (الٹا شکار — Default: OFF) If you roll a 1 or 2, you can move a bead backwards (-1 or -2) to capture an opponent bead sitting right behind you."
+  },
+  {
+    "id": "chkFriendlyFire",
+    "checked": false,
+    "text": "🔥 Friendly Fire in 2v2 Mode (دوست کا شکار — Default: OFF) In 2v2 Team Mode, landing on your teammate's bead on an unprotected square captures it and sends it back to the yard instead of stacking safely."
+  },
+  {
+    "id": "chkKamikazeJora",
+    "checked": false,
+    "text": "💥 Kamikaze / Mutual Destruction on Jora (خودکش حملہ — Default: OFF) Landing on an opponent's Jora (2+ enemy beads on an unprotected square) destroys both your attacking bead and all defending enemy beads in that Jora."
+  },
+  {
+    "id": "chkSnakeEyesPenalty",
+    "checked": false,
+    "text": "🐍 Snake Eyes Penalty / Double 1s Trap (ڈبل ون کا عذاب — Default: OFF) Rolling 1+1 in 2-dice mode automatically kills your most advanced on-ground bead and sends it back to the yard."
+  },
+  {
+    "id": "chkMaxStackLimit",
+    "checked": false,
+    "text": "🚧 Max Stack Limit of 2 Beads per Square (رش / اوور کراؤڈنگ — Default: OFF) At most 2 beads can occupy any single square (including safe stops). Any move that would place a 3rd bead on the same square is invalid."
+  },
+  {
+    "id": "chkHeavyJail",
+    "checked": false,
+    "text": "⛓️ Heavy Jail / Hardcore Respawn (سخت قید — Default: OFF) A bead captured by an opponent is locked in Heavy Jail (⛓️) and requires a Double-6 (6+6 in 2-dice mode) or two consecutive 6s (in 1-die mode) to respawn."
+  },
+  {
+    "id": "chkPositionHijack",
+    "checked": false,
+    "text": "🔀 Position Hijack / 6+1 Swap Rule (تبادلہ — Default: OFF) When you roll 6+1 (or 1+6) in 2-dice mode and land on an opponent bead, your bead and the opponent bead swap board positions instead of sending the opponent to the yard."
+  },
+  {
+    "id": "chkSpawnInvincibility",
+    "checked": false,
+    "text": "🛡️ Spawn Invincibility / First Turn Shield (عارضی پناہ — Default: OFF) A bead that just spawned onto the board receives a temporary shield (🛡️) and cannot be killed by an opponent until it has moved on a subsequent turn."
+  },
+  {
+    "id": "chkPhookPenalty",
+    "checked": false,
+    "text": "🌬️ Phook / Blown Bead Penalty (پھونک / کچی گوٹی — Default: OFF) Allows you to ignore a capture, but if your bead could have killed an opponent and you missed/ignored the kill, that bead is \"blown\" (sent to yard) at the end of your turn! (Auto-disables Mandatory Capture)."
+  },
+  {
+    "id": "chkBouncingHome",
+    "checked": false,
+    "text": "🔙 Bouncing Home / Overshoot Penalty (باؤنس بیک — Default: OFF) If a bead overshoots the center Home goal (e.g. needs 2 but rolls 5), it steps to the center and bounces backwards down the Home stretch by the excess spaces!"
+  },
+  {
+    "id": "chkAntiCampingLimit",
+    "checked": false,
+    "text": "⛺ Anti-Camping Limit / Safe Square Eviction (کیمپنگ پابندی — Default: OFF) A bead may only sit on a Safe/Star square for 3 consecutive turns. On the 4th turn without moving, its safe immunity drops (⛺) and enemies can capture it right on the safe stop!"
+  },
+  {
+    "id": "chkJoraBreaker",
+    "checked": false,
+    "text": "🧱 Jora Breaker / Double-6 Wall Crushing (دیوار توڑ — Default: OFF) Enhances Pair Blockade (Jora): an opponent can jump over or crush an impassable Jora blockade if they roll a strict Double-6 (6+6)!"
+  },
+  {
+    "id": "chkTollGate",
+    "checked": false,
+    "text": "🪙 The Toll Gate / Chungi at Step 50 (چنگی — Default: OFF) A bead must stop on the Home Gate square (step 50) first and roll an exact 1 to unlock the gate and step inside the Home stretch. Subsequent moves inside Home work normally."
+  },
+  {
+    "id": "chkQisasVengeance",
+    "checked": false,
+    "text": "⚖️ Qisas / Blood Vengeance +10 Jump (قصاص — Default: OFF) Tracks which enemy bead killed yours (marked ⚖️). Capturing that exact \"Wanted\" killer bead rewards you with an instant +10-step bonus jump for any of your beads!"
+  },
+  {
+    "id": "chkStrictSpawnOnlySixes",
+    "checked": false,
+    "text": "🚫 Strict Spawn-Only Sixes (چھکے کا ضیاع — Default: OFF) A rolled 6 can ONLY be used to spawn a bead from the yard. If your yard is empty, any rolled 6 is nullified/wasted and cannot move a board bead forward."
+  },
+  {
+    "id": "chkDiceSplitting",
+    "checked": false,
+    "text": "🔄 Dice Splitting on Even Roll in 1-Die Mode (تقسیم — Default: OFF) When rolling 1 Die (in 1-Die mode or 1-Die endgame), rolling an even 4 or 6 lets you split the die evenly across two different on-ground beads (2+2 or 3+3)!"
+  },
+  {
+    "id": "chkMultiMouseLock",
+    "checked": false,
+    "text": "🖱️ Multi-Mouse Per-Player Hardware Lock — 2, 3, or 4 Mice (ہر کھلاڑی کے لیے الگ ماؤس لاک — Default: OFF) 0 Mice Linked 🖱️ Setup 2–4 Mice & Guide Connect 2, 3, or 4 USB/wireless mice to your laptop using a Multi-Pointer driver (TeamPlayer4 / MouseMux on Windows, or native xinput on Linux). Assigns each physical mouse (via event.pointerId ) to a specific player so each mouse can only roll and touch its own beads on its turn!"
+  }
+]
