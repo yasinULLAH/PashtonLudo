@@ -68,7 +68,7 @@ if (workbox) {
     },
     {
         "url": "client_readme.md",
-        "revision": "2cb95ff675d477536bcc0576fb8cae88"
+        "revision": "f8af481f64dbdc6a51381166175ae66e"
     },
     {
         "url": "easy and short V5 via python and json.py",
@@ -76,15 +76,15 @@ if (workbox) {
     },
     {
         "url": "feature_report.md",
-        "revision": "82ecb324d1553aa6495de9358f0630f7"
+        "revision": "9b8d86f39a4bc7f31d0c6d0b94c7c3ce"
     },
     {
         "url": "index.html",
-        "revision": "5b5cd30b5c057100a6346c2afbddc01a"
+        "revision": "fa411e583578e1da87eeefc4f71c9b34"
     },
     {
         "url": "index.html.bak",
-        "revision": "fa4494aba62fd7be32ef4892237eb562"
+        "revision": "3ff061341d42499202bba41efee7e76a"
     },
     {
         "url": "LICENSE",
@@ -108,7 +108,7 @@ if (workbox) {
     },
     {
         "url": "readme.md",
-        "revision": "2e791ce7a1325452c53331c863fb9e54"
+        "revision": "b7e4f297ea505ef2dd255a16755785ca"
     },
     {
         "url": "snakes.html",
@@ -116,7 +116,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "3c1177f951507309b4e025400be8f54f"
+        "revision": "8406810e4b639de85416c051fd8b747b"
     },
     {
         "url": "transcript of the vioces.txt",

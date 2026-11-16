@@ -912,8 +912,10 @@
       color: #f8fafc;
     }
     #replayBoardFrame {
-      width: min(92vw, calc(100dvh - 315px));
-      height: min(92vw, calc(100dvh - 315px));
+      width: min(92vw, calc(100dvh - 335px));
+      height: min(92vw, calc(100dvh - 335px));
+      min-width: 210px;
+      min-height: 210px;
       max-width: 100%;
       max-height: 100%;
       aspect-ratio: 1 / 1;
@@ -927,31 +929,51 @@
         gap: 4px;
       }
       #replayBoardFrame {
-        width: min(94vw, calc(100dvh - 320px)) !important;
-        height: min(94vw, calc(100dvh - 320px)) !important;
+        width: min(94vw, calc(100dvh - 340px)) !important;
+        height: min(94vw, calc(100dvh - 340px)) !important;
+        min-width: 200px !important;
+        min-height: 200px !important;
       }
     }
     @media (min-width: 820px) {
       #replayStudioWorkspace {
         display: grid !important;
         grid-template-columns: 260px minmax(0, 1fr) 280px !important;
+        grid-template-rows: minmax(0, 1fr) !important;
+        height: 100% !important;
+        max-height: 100% !important;
         gap: 12px !important;
         align-items: stretch !important;
+      }
+      #replayLeftWing,
+      #replayCenterStage {
+        min-height: 0 !important;
+        max-height: 100% !important;
+        height: 100% !important;
+        overflow: hidden !important;
       }
       #replayPlayersStrip {
         display: grid !important;
         grid-template-columns: 1fr !important;
         gap: 8px !important;
+        overflow-y: auto;
       }
       #replayBoardFrame {
-        width: min(100%, calc(100dvh - 164px)) !important;
-        height: min(100%, calc(100dvh - 164px)) !important;
+        width: min(100%, calc(100dvh - 185px)) !important;
+        height: min(100%, calc(100dvh - 185px)) !important;
+        min-width: 260px !important;
+        min-height: 260px !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
       }
       #replayMoveListDrawer {
         display: flex !important;
         position: static !important;
         width: 100% !important;
         height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
         border-radius: 18px !important;
         border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
       }
@@ -2922,7 +2944,7 @@
 </div>
 </div>
 <!-- ==================== MODAL 3C: RENAME, TAG, CATEGORIZE & NOTE MATCH ORGANIZER ==================== -->
-<div class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4" id="matchOrganizerModal">
+<div class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4" id="matchOrganizerModal" style="z-index: 80;">
 <div class="royal-card rounded-3xl p-4 sm:p-5 max-w-lg w-full max-h-[92dvh] overflow-y-auto border-2 border-amber-400 shadow-2xl space-y-3">
 <div class="flex items-center justify-between border-b border-amber-200 pb-2.5">
 <div class="flex items-center gap-2">
@@ -3039,16 +3061,34 @@
 </div>
 <!-- Top Header Bar: 2 Clean Rows on Mobile so Zero Icons Overlap or Overflow -->
 <div class="w-full max-w-7xl mx-auto flex flex-col gap-1.5 bg-slate-900/95 border border-amber-400/60 rounded-2xl px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-xl flex-shrink-0" id="replayTopBar">
-<div class="flex items-center justify-between gap-1.5 w-full">
+<div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 w-full">
 <div class="flex items-center gap-1.5 min-w-0 flex-1">
 <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-amber-400 to-rose-600 flex items-center justify-center text-sm sm:text-base shadow flex-shrink-0 border border-amber-200">🎬</span>
 <select aria-label="Select Match Replay" class="h-7 sm:h-8 bg-slate-800 border border-amber-400/60 text-amber-200 text-[11px] sm:text-xs font-extrabold rounded-xl px-2 min-w-0 flex-1 max-w-full sm:max-w-xs truncate cursor-pointer focus:outline-none" id="replayMatchSelect"></select>
-<span class="hidden md:inline-block px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/40 truncate flex-shrink-0" id="replayMetaModeBadge">Bannu 2-Dice</span>
+<button class="h-7 sm:h-8 px-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[11px] shadow flex items-center gap-1 flex-shrink-0" id="replayOrganizeMatchBtn" title="Rename, Tag &amp; Categorize Selected Match" type="button"><span>🏷️</span><span class="hidden sm:inline">Rename / Tag</span></button>
+<span class="hidden xl:inline-block px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-300 border border-amber-400/40 truncate flex-shrink-0" id="replayMetaModeBadge">Bannu 2-Dice</span>
+</div>
+<div class="flex items-center gap-1 w-full sm:w-auto justify-between sm:justify-end flex-shrink-0">
+<div class="flex items-center gap-1 flex-1 sm:flex-initial min-w-0">
+<input aria-label="Search Replays by Name or Tag" class="h-7 sm:h-8 w-28 sm:w-40 bg-slate-800 border border-amber-400/50 text-white placeholder-slate-400 text-[11px] font-semibold rounded-xl px-2 min-w-0 flex-1 sm:flex-initial focus:outline-none focus:border-amber-400" id="replaySearchInput" placeholder="🔍 Name, #tag..." type="text"/>
+<select aria-label="Filter Replays by Category" class="h-7 sm:h-8 bg-slate-800 border border-amber-400/50 text-amber-200 text-[10px] sm:text-[11px] font-bold rounded-xl px-1.5 cursor-pointer focus:outline-none max-w-[115px] sm:max-w-[140px]" id="replayCategoryFilterSelect">
+<option value="all">📂 All Replays</option>
+<option value="starred">⭐ Starred</option>
+<option value="Tournament / Final">🏆 Tournament</option>
+<option value="Hujra Night">🏡 Hujra Night</option>
+<option value="Family Match">👨‍👩‍👧‍👦 Family</option>
+<option value="Clean Sweep Showcase">🧹 Clean Sweep</option>
+<option value="Epic Comeback">🔥 Comeback</option>
+<option value="Funny / Roast">😂 Funny/Roast</option>
+<option value="AI Training / Lab">🤖 AI Lab</option>
+<option value="General">📌 General</option>
+</select>
 </div>
 <div class="flex items-center gap-1 flex-shrink-0">
 <button class="h-7 sm:h-8 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 text-[11px] font-extrabold flex items-center gap-1 lg:hidden" id="replayToggleLogDrawerBtn" title="Toggle Move-by-Move Jump List" type="button">📜 <span>Log</span></button>
 <button class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 text-xs font-bold flex items-center justify-center" id="replayFullscreenBtn" title="Toggle Fullscreen" type="button">⛶</button>
 <button class="h-7 sm:h-8 px-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow flex items-center gap-1" id="closeReplayStudioBtn" title="Close Replay Studio" type="button">✕ <span class="hidden sm:inline">Exit</span></button>
+</div>
 </div>
 </div>
 <div class="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar w-full pt-0.5 border-t border-slate-800">
@@ -3089,7 +3129,8 @@
 <div class="flex-1 min-h-0 w-full max-w-7xl mx-auto my-0.5 relative flex flex-col justify-between overflow-hidden gap-1" id="replayStudioWorkspace">
 <!-- Left Wing: Event Card & 4 Player Score Cards -->
 <div class="flex flex-col gap-1 flex-shrink-0" id="replayLeftWing">
-<div class="w-full bg-slate-900/95 border border-amber-400/50 rounded-xl px-2.5 py-1.5 flex items-center justify-between gap-2 shadow-md">
+<div class="w-full bg-slate-900/95 border border-amber-400/50 rounded-xl px-2.5 py-1.5 flex flex-col gap-1 shadow-md">
+<div class="flex items-center justify-between gap-2">
 <div class="flex items-center gap-1.5 min-w-0 flex-1">
 <span class="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-black text-[9px] flex-shrink-0" id="replayEventTypeBadge">START</span>
 <div class="min-w-0 flex-1">
@@ -3103,6 +3144,8 @@
 <span class="font-mono font-black text-[11px] text-amber-300" id="replayDiceText">-</span>
 </div>
 </div>
+</div>
+<div class="hidden flex-wrap items-center gap-1 pt-1 border-t border-slate-800 text-[10px]" id="replayMatchMetaTagsBar"></div>
 </div>
 <div class="grid grid-cols-4 gap-1" id="replayPlayersStrip"></div>
 </div>
@@ -6956,6 +6999,11 @@
 
         const record = {
           matchId: mt.matchId || ('M-' + String(now).slice(-6)),
+          customTitle: mt.customTitle || '',
+          category: mt.category || 'General',
+          tags: Array.isArray(mt.tags) ? mt.tags.slice() : [],
+          notes: mt.notes || '',
+          starred: Boolean(mt.starred),
           date: new Date(now).toISOString().slice(0, 10),
           timestamp: new Date(now).toISOString(),
           mode: rulesConfig.presetName + ' (' + rulesConfig.diceCount + 'D)',
@@ -7046,6 +7094,10 @@
 
         careerStats.history.unshift({
           matchId: record.matchId,
+          customTitle: record.customTitle,
+          category: record.category,
+          tags: record.tags,
+          starred: record.starred,
           date: record.date,
           mode: record.mode,
           format: record.format,
@@ -9264,12 +9316,18 @@
       let renderedYardDiceHitboxes = [];
 
       function getTokenGridCoords(token) {
-        if (token.animCoords) return token.animCoords;
-        if (token.state === 'yard') return YARD_SLOTS[token.owner][token.id];
-        if (token.state === 'completed') return HOME_PATHS[token.owner][5];
-        if (token.state === 'home_stretch') return HOME_PATHS[token.owner][token.homeStep - 1];
-        const tIdx = getOuterTrackIndex(token);
-        return MAIN_TRACK[tIdx];
+        if (!token) return MAIN_TRACK[0];
+        if (token.animCoords && Array.isArray(token.animCoords) && token.animCoords.length >= 2) return token.animCoords;
+        const ownerIdx = (token.owner >= 0 && token.owner <= 3) ? token.owner : 0;
+        const tokenIdx = (token.id >= 0 && token.id <= 3) ? token.id : 0;
+        if (token.state === 'yard') return (YARD_SLOTS[ownerIdx] && YARD_SLOTS[ownerIdx][tokenIdx]) ? YARD_SLOTS[ownerIdx][tokenIdx] : YARD_SLOTS[0][0];
+        if (token.state === 'completed') return HOME_PATHS[ownerIdx][5];
+        if (token.state === 'home_stretch') {
+          const hs = Math.max(1, Math.min(6, Number(token.homeStep) || 1));
+          return HOME_PATHS[ownerIdx][hs - 1] || HOME_PATHS[ownerIdx][0];
+        }
+        const tIdx = ((START_TRACK_INDEX[ownerIdx] + Math.max(0, Number(token.steps) || 0)) % 52 + 52) % 52;
+        return MAIN_TRACK[tIdx] || MAIN_TRACK[0];
       }
 
       function getFilteredLegalMovesForToken(ownerIdx, tokenId, allLegal) {
@@ -13771,15 +13829,32 @@
             histEl.innerHTML = '<div class="text-slate-400 italic">No matches recorded yet.</div>';
           } else {
             histEl.innerHTML = list.slice(0, 15).map(function (h, idx) {
-              const mId = h.matchId || ((careerStats.matchRecords && careerStats.matchRecords[idx]) ? careerStats.matchRecords[idx].matchId : '');
-              return '<div class="px-2.5 py-1.5 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center justify-between gap-2">' +
-                '<span class="truncate"><b>' + h.mode + '</b> <span class="text-slate-500">(' + h.date + ')</span></span>' +
-                '<div class="flex items-center gap-1.5 flex-shrink-0">' +
-                  '<span class="font-bold text-amber-900">' + h.result + ' • ⚔️' + h.kills + '</span>' +
+              const recObj = (careerStats.matchRecords || []).find(function (r) { return r.matchId === h.matchId; }) || (careerStats.matchRecords && careerStats.matchRecords[idx]);
+              const mId = h.matchId || (recObj ? recObj.matchId : '');
+              const titleStr = (recObj && recObj.customTitle) ? recObj.customTitle : (h.customTitle || h.mode);
+              const isStarred = Boolean((recObj && recObj.starred) || h.starred);
+              const catStr = (recObj && recObj.category && recObj.category !== 'General') ? recObj.category : (h.category && h.category !== 'General' ? h.category : '');
+              const tagsArr = (recObj && Array.isArray(recObj.tags)) ? recObj.tags : (Array.isArray(h.tags) ? h.tags : []);
+              const tagsHtml = tagsArr.slice(0, 3).map(function (t) {
+                return '<span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-[9px]">#' + t + '</span>';
+              }).join(' ');
+              return '<div class="px-2.5 py-1.5 rounded-xl bg-amber-50/70 border border-amber-200 flex flex-wrap items-center justify-between gap-2">' +
+                '<div class="min-w-0 flex-1">' +
+                  '<div class="truncate"><b>' + (isStarred ? '⭐ ' : '') + titleStr + '</b> <span class="text-slate-500 text-[10px]">(' + (mId ? mId + ' • ' : '') + h.date + ')</span></div>' +
+                  ((catStr || tagsHtml) ? '<div class="flex flex-wrap items-center gap-1 mt-0.5">' + (catStr ? '<span class="px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-900 border border-indigo-300 font-extrabold text-[9px]">📂 ' + catStr + '</span>' : '') + tagsHtml + '</div>' : '') +
+                '</div>' +
+                '<div class="flex items-center gap-1 flex-shrink-0">' +
+                  '<span class="font-bold text-amber-900 text-[11px]">' + h.result + ' • ⚔️' + h.kills + '</span>' +
+                  (mId ? '<button type="button" data-match-id="' + mId + '" class="hist-tag-btn px-2 py-0.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[10px]" title="Rename, Tag &amp; Categorize">🏷️ Tag</button>' : '') +
                   (mId ? '<button type="button" data-match-id="' + mId + '" class="hist-replay-btn px-2 py-0.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px]">🎬 Replay</button>' : '') +
                 '</div>' +
               '</div>';
             }).join('');
+            histEl.querySelectorAll('.hist-tag-btn').forEach(function (btn) {
+              btn.addEventListener('click', function () {
+                openMatchOrganizerModal(btn.dataset.matchId);
+              });
+            });
             histEl.querySelectorAll('.hist-replay-btn').forEach(function (btn) {
               btn.addEventListener('click', function () {
                 openReplayStudio(btn.dataset.matchId);
@@ -13995,7 +14070,11 @@
 
       function ensureReplayFramesForRecord(rec) {
         if (!rec) return [];
-        if (Array.isArray(rec.replayFrames) && rec.replayFrames.length > 1) {
+        if (
+          Array.isArray(rec.replayFrames) &&
+          rec.replayFrames.length > 2 &&
+          rec.replayFrames.every(function (f) { return f && Array.isArray(f.players) && f.players.length === 4; })
+        ) {
           return rec.replayFrames;
         }
         const is2Dice = rec.rulebookType !== 'yalla';
@@ -14046,11 +14125,10 @@
         const idStr = String(rec.matchId || 'M-100');
         for (let c = 0; c < idStr.length; c++) seed = (seed * 31 + idStr.charCodeAt(c)) % 9973;
         function nextRand(max) {
-          seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-          return (seed % max) + 1;
+          seed = (seed * 1664525 + 1013904223) % 2147483647;
+          return (Math.abs(seed) % max) + 1;
         }
 
-        // Phase 1: Spawn & tactical board progression
         const totalRounds = 9;
         for (let r = 0; r < totalRounds; r++) {
           for (let sIdx = 0; sIdx < activeSeats.length; sIdx++) {
@@ -14090,12 +14168,12 @@
             if (boardTks.length > 0) {
               const mvTk = boardTks[r % boardTks.length];
               const prevState = mvTk.state;
-              const prevSteps = mvTk.steps;
-              const prevHome = mvTk.homeStep;
+              const prevSteps = mvTk.steps || 0;
+              const prevHome = Math.max(1, Math.min(6, mvTk.homeStep || 1));
               const startRC = (prevState === 'home_stretch' ? HOME_PATHS[pIdx][prevHome - 1] : MAIN_TRACK[(START_TRACK_INDEX[pIdx] + prevSteps) % 52]).slice();
               const stepDelta = is2Dice ? (d1 === 6 && yardTk ? d2 : (d1 + d2)) : d1;
               const moveDelta = Math.max(2, stepDelta || 4);
-              const pathCoords = computeReplayPathCoordsForMove(pIdx, prevState, prevSteps, prevHome, moveDelta, true);
+              const pathCoords = computeReplayPathCoordsForMove(pIdx, prevState, prevSteps, prevState === 'home_stretch' ? prevHome : 0, moveDelta, true);
               const endRC = pathCoords.length > 0 ? pathCoords[pathCoords.length - 1] : startRC;
               diceArr.forEach(function (d) { d.used = true; });
 
@@ -14111,6 +14189,7 @@
                   if (vTk) {
                     vTk.state = 'yard';
                     vTk.steps = 0;
+                    vTk.homeStep = 0;
                     pl.kills += 1;
                     evType = 'KILL';
                     titleStr = '⚔️ ' + pl.name + ' killed ' + vPl.name + ' (Bead #' + (vTk.id + 1) + ')!';
@@ -14129,12 +14208,14 @@
                 evType = 'HOME';
                 titleStr = '🏠 ' + pl.name + ' completed Bead #' + (mvTk.id + 1) + ' into Home!';
                 subStr = 'Home Goal Reached (' + (doneNow + 1) + '/' + (rec.rulesSnapshot ? rec.rulesSnapshot.tokensPerPlayer : 4) + ')';
+              } else if (mvTk.state === 'home_stretch') {
+                mvTk.homeStep = Math.max(1, Math.min(5, (mvTk.homeStep || 1) + 1));
               } else {
                 const nextSteps = prevSteps + moveDelta;
                 if (nextSteps >= 51 && pl.kills > 0) {
                   mvTk.state = 'home_stretch';
                   mvTk.steps = 50;
-                  mvTk.homeStep = Math.min(5, nextSteps - 50);
+                  mvTk.homeStep = Math.max(1, Math.min(5, nextSteps - 50));
                 } else {
                   mvTk.state = 'board';
                   mvTk.steps = nextSteps % 50;
@@ -14153,7 +14234,6 @@
           }
         }
 
-        // Sync final frame counts with exact record summary
         activeSeats.forEach(function (i) {
           const ps = pSum[i];
           if (!ps) return;
@@ -14171,13 +14251,27 @@
         return frames;
       }
 
-      function getAvailableReplaySources() {
+      function getAvailableReplaySources(applyFilter) {
         ensureCareerStatsSchema();
         const sources = [];
+        const q = applyFilter ? ((document.getElementById('replaySearchInput') && document.getElementById('replaySearchInput').value) || '').trim().toLowerCase() : '';
+        const qNoHash = q.replace(/^#/, '');
+        const catFilter = applyFilter ? ((document.getElementById('replayCategoryFilterSelect') && document.getElementById('replayCategoryFilterSelect').value) || 'all') : 'all';
+
         if (Array.isArray(gameState.replayFrames) && gameState.replayFrames.length > 0) {
-          sources.push({
+          const mt = gameState.matchTelemetry || {};
+          const liveTitle = mt.customTitle ? (mt.customTitle + ' [LIVE]') : 'Current Match';
+          const liveCat = mt.category || 'General';
+          const liveTags = Array.isArray(mt.tags) ? mt.tags : [];
+          const liveStar = Boolean(mt.starred);
+          const liveSource = {
             id: 'LIVE',
-            label: '🔴 Current Match (' + gameState.replayFrames.length + ' steps)',
+            label: (liveStar ? '⭐ ' : '🔴 ') + liveTitle + ' (' + gameState.replayFrames.length + ' steps)',
+            customTitle: mt.customTitle || '',
+            category: liveCat,
+            tags: liveTags,
+            notes: mt.notes || '',
+            starred: liveStar,
             mode: rulesConfig.presetName,
             format: rulesConfig.teamMode ? '2v2 Teams' : 'FFA / Duel',
             rulesSnap: {
@@ -14191,16 +14285,44 @@
               pairBlockadeRule: Boolean(rulesConfig.pairBlockadeRule)
             },
             frames: gameState.replayFrames
-          });
+          };
+          let includeLive = true;
+          if (applyFilter) {
+            if (catFilter === 'starred' && !liveStar) includeLive = false;
+            else if (catFilter !== 'all' && catFilter !== 'starred' && liveCat !== catFilter) includeLive = false;
+            if (includeLive && q) {
+              const hayLive = ('live current match ' + (mt.customTitle || '') + ' ' + liveCat + ' ' + liveTags.join(' ') + ' ' + (mt.notes || '') + ' ' + rulesConfig.presetName).toLowerCase();
+              if (hayLive.indexOf(q) === -1 && hayLive.indexOf(qNoHash) === -1) includeLive = false;
+            }
+          }
+          if (includeLive) sources.push(liveSource);
         }
         (careerStats.matchRecords || []).forEach(function (rec) {
+          const recCat = rec.category || 'General';
+          const recTags = Array.isArray(rec.tags) ? rec.tags : [];
+          const recStar = Boolean(rec.starred);
+          if (applyFilter) {
+            if (catFilter === 'starred' && !recStar) return;
+            if (catFilter !== 'all' && catFilter !== 'starred' && recCat !== catFilter) return;
+            if (q) {
+              const pNames = Array.isArray(rec.playersSummary) ? rec.playersSummary.map(function (p) { return p.name || ''; }).join(' ') : '';
+              const hay = ((rec.customTitle || '') + ' ' + recCat + ' ' + recTags.join(' ') + ' ' + (rec.notes || '') + ' ' + (rec.matchId || '') + ' ' + (rec.mode || '') + ' ' + (rec.format || '') + ' ' + (rec.result || '') + ' ' + (rec.date || '') + ' ' + pNames).toLowerCase();
+              if (hay.indexOf(q) === -1 && hay.indexOf(qNoHash) === -1) return;
+            }
+          }
           const frames = ensureReplayFramesForRecord(rec);
-          const starPrefix = rec.starred ? '⭐ ' : '📜 ';
+          const starPrefix = recStar ? '⭐ ' : '📜 ';
           const customNamePart = rec.customTitle ? (rec.customTitle + ' [' + rec.matchId + ']') : rec.matchId;
-          const catPart = (rec.category && rec.category !== 'General') ? (' • 📂' + rec.category) : '';
+          const catPart = (recCat && recCat !== 'General') ? (' • 📂' + recCat) : '';
+          const tagPart = recTags.length > 0 ? (' • #' + recTags.slice(0, 2).join(' #')) : '';
           sources.push({
             id: rec.matchId,
-            label: starPrefix + customNamePart + ' • ' + (rec.result || 'Match') + catPart + ' (' + (rec.date || '') + ')',
+            label: starPrefix + customNamePart + ' • ' + (rec.result || 'Match') + catPart + tagPart + ' (' + (rec.date || '') + ')',
+            customTitle: rec.customTitle || '',
+            category: recCat,
+            tags: recTags,
+            notes: rec.notes || '',
+            starred: recStar,
             mode: rec.mode || 'Bannu 2-Dice',
             format: rec.format || '2v2 Teams',
             rulesSnap: rec.rulesSnapshot || {
@@ -14232,6 +14354,73 @@
         replayState.animTokenOverride = null;
       }
 
+      function populateReplayStudioMatchSelect(preferredMatchId, applyFilter) {
+        const filteredSources = getAvailableReplaySources(Boolean(applyFilter));
+        const allSources = getAvailableReplaySources(false);
+        const sources = filteredSources.length > 0 ? filteredSources : allSources;
+        const sel = document.getElementById('replayMatchSelect');
+        if (!sel) return null;
+        sel.innerHTML = '';
+        if (filteredSources.length === 0 && applyFilter) {
+          const emptyOpt = document.createElement('option');
+          emptyOpt.value = '';
+          emptyOpt.textContent = '⚠️ No matches match filter — showing all';
+          emptyOpt.disabled = true;
+          sel.appendChild(emptyOpt);
+        }
+        sources.forEach(function (src) {
+          const opt = document.createElement('option');
+          opt.value = src.id;
+          opt.textContent = src.label;
+          sel.appendChild(opt);
+        });
+        let targetId = preferredMatchId;
+        if (!targetId || !sources.some(function (s) { return s.id === targetId; })) {
+          targetId = sources.length > 0 ? sources[0].id : 'LIVE';
+        }
+        sel.value = targetId;
+        return targetId;
+      }
+
+      function renderReplaySelectedMatchMetaBar() {
+        const bar = document.getElementById('replayMatchMetaTagsBar');
+        if (!bar) return;
+        const meta = replayState.matchMeta;
+        if (!meta) {
+          bar.classList.add('hidden');
+          bar.classList.remove('flex');
+          return;
+        }
+        const pills = [];
+        if (meta.starred) {
+          pills.push('<span class="px-1.5 py-0.5 rounded bg-amber-400/25 text-amber-300 border border-amber-400/50 font-black">⭐ Favorite</span>');
+        }
+        if (meta.customTitle) {
+          pills.push('<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 font-black">✏️ ' + meta.customTitle + '</span>');
+        }
+        if (meta.category && meta.category !== 'General') {
+          pills.push('<span class="px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/40 font-extrabold">📂 ' + meta.category + '</span>');
+        }
+        if (Array.isArray(meta.tags) && meta.tags.length > 0) {
+          meta.tags.forEach(function (tg) {
+            pills.push('<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-400/40 font-bold">#' + tg + '</span>');
+          });
+        }
+        if (meta.notes) {
+          pills.push('<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 italic truncate max-w-xs">📝 “' + meta.notes + '”</span>');
+        }
+        pills.push('<button type="button" id="replayInlineEditMetaBtn" class="ml-auto px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/50 font-black text-[10px]">🏷️ ' + (meta.customTitle || (meta.tags && meta.tags.length) || (meta.category && meta.category !== 'General') ? 'Edit Tags / Name' : '+ Add Name, Category & Tags') + '</button>');
+        bar.innerHTML = pills.join('');
+        bar.classList.remove('hidden');
+        bar.classList.add('flex');
+        const inlineBtn = document.getElementById('replayInlineEditMetaBtn');
+        if (inlineBtn) {
+          inlineBtn.addEventListener('click', function () {
+            openMatchOrganizerModal(replayState.activeMatchId || 'LIVE');
+          });
+        }
+      }
+
       function openReplayStudio(preferredMatchId) {
         clearReplayTimers();
         replayState.wasMatchPausedBeforeOpen = Boolean(gameState.isPaused);
@@ -14241,21 +14430,12 @@
         replayState.isOpen = true;
         replayState.isPlaying = false;
 
-        const sources = getAvailableReplaySources();
-        const sel = document.getElementById('replayMatchSelect');
-        sel.innerHTML = '';
-        sources.forEach(function (src) {
-          const opt = document.createElement('option');
-          opt.value = src.id;
-          opt.textContent = src.label;
-          sel.appendChild(opt);
-        });
+        const sInp = document.getElementById('replaySearchInput');
+        const cSel = document.getElementById('replayCategoryFilterSelect');
+        if (sInp) sInp.value = '';
+        if (cSel) cSel.value = 'all';
 
-        let targetId = preferredMatchId;
-        if (!targetId || !sources.some(function (s) { return s.id === targetId; })) {
-          targetId = sources.length > 0 ? sources[0].id : 'LIVE';
-        }
-        sel.value = targetId;
+        const targetId = populateReplayStudioMatchSelect(preferredMatchId, false);
         document.getElementById('replayStudioModal').classList.remove('hidden');
         loadMatchIntoReplayStudio(targetId);
       }
@@ -14289,27 +14469,41 @@
       function loadMatchIntoReplayStudio(matchId) {
         clearReplayTimers();
         replayState.isPlaying = false;
-        const sources = getAvailableReplaySources();
-        const chosen = sources.find(function (s) { return s.id === matchId; }) || sources[0];
+        const allSources = getAvailableReplaySources(false);
+        const chosen = allSources.find(function (s) { return s.id === matchId; }) || allSources[0];
         if (!chosen) return;
 
         replayState.activeMatchId = chosen.id;
         replayState.frames = chosen.frames || [];
         replayState.rulesSnap = chosen.rulesSnap || Object.assign({}, rulesConfig);
         replayState.matchMeta = chosen;
-        replayState.currentFrameIdx = 0;
+
+        let initialStepIdx = 0;
+        if (chosen.id !== 'LIVE' && replayState.frames.length > 2) {
+          const firstActionIdx = replayState.frames.findIndex(function (f, idx) {
+            return idx > 0 && (f.type === 'SPAWN' || f.type === 'MOVE' || f.type === 'KILL');
+          });
+          if (firstActionIdx > 0) initialStepIdx = firstActionIdx;
+        } else if (chosen.id === 'LIVE' && replayState.frames.length > 1) {
+          initialStepIdx = replayState.frames.length - 1;
+        }
+        replayState.currentFrameIdx = initialStepIdx;
 
         const slider = document.getElementById('replayTimelineSlider');
         slider.min = '0';
         slider.max = String(Math.max(0, replayState.frames.length - 1));
-        slider.value = '0';
+        slider.value = String(initialStepIdx);
 
         const modeBadge = document.getElementById('replayMetaModeBadge');
         if (modeBadge) modeBadge.textContent = chosen.mode + ' • ' + chosen.format;
 
+        renderReplaySelectedMatchMetaBar();
         renderReplayMoveListDrawer();
-        stepReplayToFrame(0, false);
+        stepReplayToFrame(initialStepIdx, false);
         updateReplayPlayPauseUI();
+        requestAnimationFrame(function () {
+          drawReplayBoardCanvas();
+        });
       }
 
       function renderReplayMoveListDrawer() {
@@ -17498,6 +17692,20 @@
       document.getElementById('replayMatchSelect').addEventListener('change', function () {
         loadMatchIntoReplayStudio(this.value);
       });
+      document.getElementById('replayOrganizeMatchBtn').addEventListener('click', function () {
+        openMatchOrganizerModal(replayState.activeMatchId || 'LIVE');
+      });
+      ['replaySearchInput', 'replayCategoryFilterSelect'].forEach(function (id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const evName = id === 'replaySearchInput' ? 'input' : 'change';
+        el.addEventListener(evName, function () {
+          const nextId = populateReplayStudioMatchSelect(replayState.activeMatchId, true);
+          if (nextId && nextId !== replayState.activeMatchId) {
+            loadMatchIntoReplayStudio(nextId);
+          }
+        });
+      });
       document.getElementById('replayPlayPauseBtn').addEventListener('click', toggleReplayPlayPause);
       document.getElementById('replayStopBtn').addEventListener('click', stopReplayPlayback);
       document.getElementById('replayFirstStepBtn').addEventListener('click', function () {
@@ -18096,15 +18304,34 @@
       function openMatchOrganizerModal(matchId) {
         ensureCareerStatsSchema();
         const records = careerStats.matchRecords || [];
-        const rec = (matchId && matchId !== 'ALL-PAST')
-          ? (records.find(function (r) { return r.matchId === matchId; }) || records[0])
-          : records[0];
+        let rec = null;
+        if (matchId === 'LIVE') {
+          if (!gameState.matchTelemetry) gameState.matchTelemetry = createFreshMatchTelemetry();
+          const mt = gameState.matchTelemetry;
+          rec = {
+            matchId: 'LIVE',
+            isLiveTarget: true,
+            result: 'In Progress',
+            mode: rulesConfig.presetName,
+            format: rulesConfig.teamMode ? '2v2 Teams' : 'FFA / Duel',
+            date: new Date().toISOString().slice(0, 10),
+            starred: Boolean(mt.starred),
+            customTitle: mt.customTitle || '',
+            category: mt.category || 'General',
+            tags: Array.isArray(mt.tags) ? mt.tags : [],
+            notes: mt.notes || ''
+          };
+        } else {
+          rec = (matchId && matchId !== 'ALL-PAST')
+            ? (records.find(function (r) { return r.matchId === matchId; }) || records[0])
+            : records[0];
+        }
         if (!rec) {
           showToast('⚠️ No recorded match found to organize yet.', true);
           return;
         }
         organizingMatchId = rec.matchId;
-        document.getElementById('matchOrgModalTitle').textContent = '🏷️ Organize Match — ' + rec.matchId + ' (' + (rec.result || '') + ')';
+        document.getElementById('matchOrgModalTitle').textContent = '🏷️ Organize Match — ' + (rec.customTitle ? (rec.customTitle + ' [' + rec.matchId + ']') : rec.matchId) + ' (' + (rec.result || '') + ')';
         document.getElementById('matchOrgModalSubtitle').textContent = (rec.mode || '') + ' • ' + (rec.format || '') + ' • ' + (rec.date || '');
         document.getElementById('matchOrgStarredChk').checked = Boolean(rec.starred);
         document.getElementById('matchOrgTitleInput').value = rec.customTitle || '';
@@ -18135,31 +18362,55 @@
 
       function saveMatchOrganizerMetadata() {
         ensureCareerStatsSchema();
-        const rec = (careerStats.matchRecords || []).find(function (r) { return r.matchId === organizingMatchId; });
-        if (!rec) return;
-
-        rec.starred = Boolean(document.getElementById('matchOrgStarredChk').checked);
-        rec.customTitle = document.getElementById('matchOrgTitleInput').value.trim();
+        const starredVal = Boolean(document.getElementById('matchOrgStarredChk').checked);
+        const titleVal = document.getElementById('matchOrgTitleInput').value.trim();
         const selCat = document.getElementById('matchOrgCategorySelect').value;
         const custCat = document.getElementById('matchOrgCustomCatInput').value.trim();
-        rec.category = (selCat === 'Custom' ? (custCat || 'General') : selCat);
-        rec.tags = parseTagsInputString(document.getElementById('matchOrgTagsInput').value);
-        rec.notes = document.getElementById('matchOrgNotesInput').value.trim();
+        const catVal = (selCat === 'Custom' ? (custCat || 'General') : selCat);
+        const tagsVal = parseTagsInputString(document.getElementById('matchOrgTagsInput').value);
+        const notesVal = document.getElementById('matchOrgNotesInput').value.trim();
 
-        const histItem = (careerStats.history || []).find(function (h) { return h.matchId === organizingMatchId; });
-        if (histItem) {
-          histItem.customTitle = rec.customTitle;
-          histItem.category = rec.category;
-          histItem.tags = rec.tags;
-          histItem.starred = rec.starred;
+        let savedLabel = organizingMatchId || 'Match';
+        if (organizingMatchId === 'LIVE') {
+          if (!gameState.matchTelemetry) gameState.matchTelemetry = createFreshMatchTelemetry();
+          gameState.matchTelemetry.starred = starredVal;
+          gameState.matchTelemetry.customTitle = titleVal;
+          gameState.matchTelemetry.category = catVal;
+          gameState.matchTelemetry.tags = tagsVal;
+          gameState.matchTelemetry.notes = notesVal;
+          savedLabel = titleVal || 'Current Match [LIVE]';
+        } else {
+          const rec = (careerStats.matchRecords || []).find(function (r) { return r.matchId === organizingMatchId; });
+          if (!rec) return;
+          rec.starred = starredVal;
+          rec.customTitle = titleVal;
+          rec.category = catVal;
+          rec.tags = tagsVal;
+          rec.notes = notesVal;
+          savedLabel = rec.customTitle || rec.matchId;
+
+          const histItem = (careerStats.history || []).find(function (h) { return h.matchId === organizingMatchId; });
+          if (histItem) {
+            histItem.customTitle = rec.customTitle;
+            histItem.category = rec.category;
+            histItem.tags = rec.tags;
+            histItem.starred = rec.starred;
+          }
+          saveCareerStats();
         }
 
-        saveCareerStats();
         populateVicFullStatsMatchSelect(currentVicFullStatsMatchId);
         renderVictoryFullStatsModalContent();
         renderReportsTableAndPagination();
+        if (replayState.isOpen) {
+          populateReplayStudioMatchSelect(replayState.activeMatchId, Boolean(document.getElementById('replaySearchInput') && document.getElementById('replaySearchInput').value));
+          const allSrc = getAvailableReplaySources(false);
+          const updatedMeta = allSrc.find(function (s) { return s.id === replayState.activeMatchId; });
+          if (updatedMeta) replayState.matchMeta = updatedMeta;
+          renderReplaySelectedMatchMetaBar();
+        }
         document.getElementById('matchOrganizerModal').classList.add('hidden');
-        showToast('🏷️ Saved name, category & tags for ' + (rec.customTitle || rec.matchId) + '!', true);
+        showToast('🏷️ Saved name, category & tags for ' + savedLabel + '!', true);
       }
 
       document.getElementById('matchOrgCategorySelect').addEventListener('change', function () {
