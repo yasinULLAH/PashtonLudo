@@ -75,9 +75,11 @@
         white-space: nowrap;
       }
     }
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: rgba(251, 191, 36, 0.1); }
-    ::-webkit-scrollbar-thumb { background: rgba(217, 119, 6, 0.35); border-radius: 9999px; }
+    * { scrollbar-width: thin; scrollbar-color: #78350f rgba(15, 23, 42, 0.14); }
+    ::-webkit-scrollbar { width: 9px; height: 9px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.12); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #92400e 0%, #451a03 100%); border: 1.5px solid rgba(255, 251, 235, 0.9); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #78350f 0%, #1e293b 100%); }
 
     @keyframes diceBounceSlot3D {
       0% { transform: translateY(0px) scale(1); }
