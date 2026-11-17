@@ -1637,25 +1637,27 @@
 <p class="text-[11px] text-slate-600">Automatically rolls the dice as soon as your turn or bonus re-roll begins (saved across reloads).</p>
 </div>
 </label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSingleGroundLoopOnlyWithoutKill" type="checkbox"/>
-<div>
-<div class="font-bold text-xs text-slate-900">🚫🔄 No-Kill Loop Only With Single Ground Bead &amp; Free Choice After Kill (بغیر شکار صرف اکیلی میدانی گوٹی کا چکر اور شکار کے بعد آزادی — Default: ON)</div>
-<p class="text-[11px] text-slate-600">Default ON: If a player hasn't eaten someone, they cannot come around their Home unless that bead is their ONLY bead on the ground (if they have more beads on the ground, they cannot come around Home). Once they eat an opponent, they are free to either come around Home or go inside it to complete.</p>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkWaitAllGroundAtGate" type="checkbox"/>
+<input checked="" class="hidden" id="chkSingleGroundLoopOnlyWithoutKill" type="checkbox"/>
+<div class="flex-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkWaitAllGroundAtGate">⏳🔄 No-Kill Come-Around-Home When No Move Possible (بغیر شکار چال نہ ہونے پر گھر کے گرد چکر — Default: 1 Bead)</label>
+<select aria-label="No-Kill Come Around Home Bead Limit" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="noKillLoopLimitSelect">
+<option selected="" value="1">1️⃣ 1 Bead Only (Default)</option>
+<option value="2">2️⃣ 2 Beads</option>
+<option value="all">♾️ All Beads</option>
+<option value="off">🚫 Off (Draw on Stalemate)</option>
+</select>
 </div>
-</label>
+<p class="text-[11px] text-slate-600 mt-0.5">Default ON (1 Bead): When a player has 0 kills (cannot enter Home) and no legal non-looping movement is possible by the dice on the ground, 1 bead by default (or 2 / All beads) can come around Home. If turned OFF completely, when all players on the ground have no legal movement possible, the match ends in a Draw (مقابلہ برابر)!</p>
+</div>
+</div>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
 <input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOptionalLoopAfterKill" type="checkbox"/>
 <div>
 <div class="font-bold text-xs text-slate-900">🔄 Optional Outer Loop After Kill (شکار کے بعد اندر جانے یا باہر گھومنے کی مرضی — Default: ON)</div>
 <p class="text-[11px] text-slate-600">Default ON: Once a player has eaten an opponent, they are free to choose between going inside Home to complete or coming around their Home (looping the outer board again).</p>
-</div>
-</label>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkWaitAllGroundAtGate" type="checkbox"/>
-<div>
-<div class="font-bold text-xs text-slate-900">⏳ No-Kill Gate Wait Until All Ground Beads Gather (بغیر شکار تمام میدانی گوٹیاں جمع ہونے تک رکنا — Default: ON)</div>
-<p class="text-[11px] text-slate-600">Default ON: A player with 0 kills cannot go around Home (loop past the gate) until all of their on-ground beads have reached the last home point (step 50) and no movement is possible for their on-ground beads—then one bead can go around.</p>
 </div>
 </label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -3634,6 +3636,7 @@
         singleGroundLoopOnlyWithoutKill: true,
         allowOptionalLoopAfterKill: true,
         waitAllGroundAtGateBeforeLoop: true,
+        noKillLoopBeadLimit: '1',
         bonusRollOnHome: true,
         doubleSixBonusRoll: true,
         safeStopImmunity: true,
@@ -4214,6 +4217,15 @@
           if (localStorage.getItem('bannu_ludo_wait_gate_default_v2') !== 'migrated') {
             rulesConfig.waitAllGroundAtGateBeforeLoop = true;
             localStorage.setItem('bannu_ludo_wait_gate_default_v2', 'migrated');
+          }
+          if (!['1', '2', 'all', 'off'].includes(rulesConfig.noKillLoopBeadLimit)) {
+            rulesConfig.noKillLoopBeadLimit = (rulesConfig.waitAllGroundAtGateBeforeLoop === false || rulesConfig.singleGroundLoopOnlyWithoutKill === false) ? 'off' : '1';
+          }
+          if (localStorage.getItem('bannu_ludo_nokill_loop_limit_v2') !== 'migrated') {
+            rulesConfig.noKillLoopBeadLimit = '1';
+            rulesConfig.waitAllGroundAtGateBeforeLoop = true;
+            rulesConfig.singleGroundLoopOnlyWithoutKill = true;
+            localStorage.setItem('bannu_ludo_nokill_loop_limit_v2', 'migrated');
           }
         } catch (e) {}
       }
@@ -4952,6 +4964,9 @@
           const data = getSavedMatchSnapshotData();
           if (!data) return;
           rulesConfig = Object.assign({}, rulesConfig, data.rulesConfig || {});
+          if (!['1', '2', 'all', 'off'].includes(rulesConfig.noKillLoopBeadLimit)) {
+            rulesConfig.noKillLoopBeadLimit = (rulesConfig.waitAllGroundAtGateBeforeLoop === false) ? 'off' : '1';
+          }
           seatConfig = data.seatConfig || seatConfig;
           gameState.players = data.players;
           gameState.currentTurn = data.currentTurn || 0;
@@ -5521,25 +5536,112 @@
         return Boolean(rulesConfig.singleGroundLoopOnlyWithoutKill !== false || rulesConfig.allowOptionalLoopAfterKill);
       }
 
-      function canNoKillBeadLoopAroundBoard(token, customTokensList) {
-        const ownerObj = gameState.players[token.owner];
+      function getMaxNoKillLoopBeads() {
+        if (rulesConfig.waitAllGroundAtGateBeforeLoop === false || rulesConfig.singleGroundLoopOnlyWithoutKill === false || rulesConfig.noKillLoopBeadLimit === 'off') {
+          return 0;
+        }
+        const mode = rulesConfig.noKillLoopBeadLimit || '1';
+        if (mode === 'all') return Math.max(4, Number(rulesConfig.tokensPerPlayer) || 4);
+        if (mode === '2') return 2;
+        return 1;
+      }
+
+      function canBeadMoveWithoutLooping(tk, stepDelta, pList) {
+        if (!tk || tk.state !== 'board') return false;
+        if (tk.lockedThisTurn && rulesConfig.closeGameMode) return false;
+        if (rulesConfig.strictSpawnOnlySixesRule && stepDelta === 6) return false;
+        const posInLap = tk.steps % 52;
+        if (posInLap + stepDelta > 50) return false;
+        if (rulesConfig.pairBlockadeRule) {
+          for (let s = 1; s < stepDelta; s++) {
+            const stepTrackIdx = (START_TRACK_INDEX[tk.owner] + tk.steps + s) % 52;
+            if (isTrackBlockedByJoraOnPlayers(tk.owner, stepTrackIdx, pList)) {
+              return false;
+            }
+          }
+        }
+        if (wouldExceedMaxStackLimit(tk.owner, tk.id, 'board', tk.steps + stepDelta, 0, pList)) {
+          return false;
+        }
+        return true;
+      }
+
+      function canGateBeadLoopOnDelta(tk, stepDelta, pList) {
+        if (!tk || tk.state !== 'board') return false;
+        if (tk.lockedThisTurn && rulesConfig.closeGameMode) return false;
+        if (rulesConfig.strictSpawnOnlySixesRule && stepDelta === 6) return false;
+        const posInLap = tk.steps % 52;
+        if (posInLap + stepDelta <= 50) return false;
+        if (rulesConfig.pairBlockadeRule) {
+          for (let s = 1; s < stepDelta; s++) {
+            const stepTrackIdx = (START_TRACK_INDEX[tk.owner] + tk.steps + s) % 52;
+            if (isTrackBlockedByJoraOnPlayers(tk.owner, stepTrackIdx, pList)) {
+              return false;
+            }
+          }
+        }
+        if (wouldExceedMaxStackLimit(tk.owner, tk.id, 'board', tk.steps + stepDelta, 0, pList)) {
+          return false;
+        }
+        return true;
+      }
+
+      function canNoKillBeadLoopAroundBoard(token, customTokensList, delta, simPlayers) {
+        const maxLoopBeads = getMaxNoKillLoopBeads();
+        if (maxLoopBeads <= 0) return false;
+
+        const pList = simPlayers || gameState.players;
+        const ownerObj = pList[token.owner];
         const tokensRef = customTokensList || (ownerObj ? ownerObj.tokens : []);
         const groundBeads = tokensRef.filter(function (t) {
           return t.state === 'board';
         });
-        if (groundBeads.length <= 1) return true;
-        if (rulesConfig.singleGroundLoopOnlyWithoutKill !== false) {
+        if (groundBeads.length === 0) return false;
+
+        const effDelta = (typeof delta === 'number' && delta > 0) ? delta : 1;
+        const checkDeltas = [effDelta];
+        if (effDelta > 6 && gameState.phase === 'MOVE' && Array.isArray(gameState.dicePool)) {
+          gameState.dicePool.forEach(function (d) {
+            if (!d.used && d.value > 0 && d.value <= 6 && !checkDeltas.includes(d.value)) {
+              checkDeltas.push(d.value);
+            }
+          });
+        }
+
+        // 1. If any unlooped ground bead (steps <= 50) can legally move without crossing step 50,
+        // then a non-looping move is still possible on the board.
+        const anyUnloopedCanMove = groundBeads.some(function (t) {
+          if (t.steps > 50) return false;
+          return checkDeltas.some(function (dVal) {
+            return canBeadMoveWithoutLooping(t, dVal, pList);
+          });
+        });
+        if (anyUnloopedCanMove) return false;
+
+        // 2. Count how many already-looped beads (steps > 50) can currently move without crossing step 50.
+        const activeLoopedBeads = groundBeads.filter(function (t) {
+          if (t.steps <= 50) return false;
+          return checkDeltas.some(function (dVal) {
+            return canBeadMoveWithoutLooping(t, dVal, pList);
+          });
+        });
+        if (activeLoopedBeads.length >= maxLoopBeads) {
           return false;
         }
-        if (!rulesConfig.waitAllGroundAtGateBeforeLoop) return true;
-        // All on-ground beads must have reached the last home point (step 50) so no non-looping ground movement is possible
-        const allGroundAtLastHomePoint = groundBeads.every(function (t) {
-          return (t.steps % 52) === 50;
+
+        // 3. Allow up to (maxLoopBeads - activeLoopedBeads.length) stuck gate beads to come around Home,
+        // prioritizing the beads closest to the Home Gate (step 50).
+        const allowedNewLoops = Math.max(1, maxLoopBeads - activeLoopedBeads.length);
+        const stuckCandidates = groundBeads.filter(function (t) {
+          return canGateBeadLoopOnDelta(t, effDelta, pList);
         });
-        if (!allGroundAtLastHomePoint) return false;
-        // Only allow ONE bead from the gathered gate beads to go around
-        const firstGateBead = groundBeads[0];
-        return firstGateBead ? (firstGateBead.id === token.id) : true;
+        stuckCandidates.sort(function (a, b) {
+          const posDiff = (b.steps % 52) - (a.steps % 52);
+          if (posDiff !== 0) return posDiff;
+          return a.id - b.id;
+        });
+        const permittedIds = stuckCandidates.slice(0, allowedNewLoops).map(function (t) { return t.id; });
+        return permittedIds.includes(token.id);
       }
 
       function simulateTokenAdvance(token, delta, customEligibleHome, customTokensList, forceOuterLoop) {
@@ -5662,12 +5764,12 @@
               return { valid: false, reason: 'Overshoots Home goal' };
             }
           } else {
-            if (!canNoKillBeadLoopAroundBoard(token, customTokensList)) {
+            if (!canNoKillBeadLoopAroundBoard(token, customTokensList, delta, gameState.players)) {
               return {
                 valid: false,
-                reason: rulesConfig.singleGroundLoopOnlyWithoutKill !== false
-                  ? 'Cannot come around Home without a kill when you have more than 1 bead on the ground'
-                  : 'No kill yet & other ground beads have not all gathered at Home Gate'
+                reason: getMaxNoKillLoopBeads() <= 0
+                  ? 'No-Kill Come-Around-Home rule is OFF (cannot loop past Home without a kill)'
+                  : 'Other ground beads still have legal moves or max allowed looping beads reached'
               };
             }
             if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', token.steps + delta, 0, gameState.players)) {
@@ -6400,6 +6502,9 @@
 
       function finalizeMoveExecution(actorIdx, owner, token, move) {
         gameState.phase = 'MOVE';
+        gameState.players.forEach(function (pl) {
+          if (pl) pl.noLegalMoveOnLastRoll = false;
+        });
         const prevTokenState = token.state;
         const prevTokenSteps = token.steps;
         token.state = move.sim.newState;
@@ -7269,6 +7374,111 @@
         return { won: false };
       }
 
+      function checkDrawCondition() {
+        if (getMaxNoKillLoopBeads() > 0) return { isDraw: false };
+        const activeUnfinished = (gameState.players || []).filter(function (pl) {
+          return pl && pl.active && !pl.finishRank && !hasPlayerCompletedAllTokens(pl.id);
+        });
+        if (activeUnfinished.length === 0) return { isDraw: false };
+
+        const allStuckOnGroundWithoutKill = activeUnfinished.every(function (pl) {
+          const targetIdx = getControlledOwnerIndex(pl.id);
+          const owner = gameState.players[targetIdx];
+          if (!owner || canOwnerEnterHomeStretch(owner.id)) return false;
+          const groundBeads = owner.tokens.filter(function (t) { return t.state === 'board'; });
+          if (groundBeads.length === 0) return false;
+          return true;
+        });
+        if (!allStuckOnGroundWithoutKill) return { isDraw: false };
+
+        // Check 1: All active unfinished players on the ground are in the Home Gate zone and just had 0 legal moves on their dice roll
+        const allFailedRollAtGate = activeUnfinished.every(function (pl) {
+          const targetIdx = getControlledOwnerIndex(pl.id);
+          const owner = gameState.players[targetIdx];
+          const groundBeads = owner.tokens.filter(function (t) { return t.state === 'board'; });
+          const allNearGate = groundBeads.every(function (t) { return (t.steps % 52) >= 44; });
+          return Boolean(pl.noLegalMoveOnLastRoll && allNearGate);
+        });
+
+        // Check 2: Mathematical 0-move deadlock across all possible dice rolls for all active unfinished players
+        let mathematicalDeadlock = true;
+        for (let i = 0; i < activeUnfinished.length; i++) {
+          const pl = activeUnfinished[i];
+          const targetIdx = getControlledOwnerIndex(pl.id);
+          const effDice = getEffectiveDiceCountForOwner(pl.id, targetIdx);
+          let anyRollHasMove = false;
+          if (effDice === 1) {
+            for (let d1 = 1; d1 <= 6; d1++) {
+              const simPlayers = clonePlayersForAiSim(gameState.players);
+              const moves = generateSimLegalMoves(targetIdx, simPlayers, [{ id: 0, value: d1, used: false }], 0, false);
+              if (moves.length > 0) { anyRollHasMove = true; break; }
+            }
+          } else {
+            for (let d1 = 1; d1 <= 6 && !anyRollHasMove; d1++) {
+              for (let d2 = d1; d2 <= 6; d2++) {
+                const simPlayers = clonePlayersForAiSim(gameState.players);
+                const moves = generateSimLegalMoves(targetIdx, simPlayers, [{ id: 0, value: d1, used: false }, { id: 1, value: d2, used: false }], 0, d1 === 6 && d2 === 6);
+                if (moves.length > 0) { anyRollHasMove = true; break; }
+              }
+            }
+          }
+          if (anyRollHasMove) {
+            mathematicalDeadlock = false;
+            break;
+          }
+        }
+
+        if (allFailedRollAtGate || mathematicalDeadlock) {
+          return {
+            isDraw: true,
+            title: '🤝 Match Draw! (مقابلہ برابر — Stalemate)',
+            subtitle: 'All players on the ground have 0 kills and no legal movement possible while the No-Kill Come-Around-Home rule is OFF!'
+          };
+        }
+        return { isDraw: false };
+      }
+
+      function triggerMatchDraw(drawInfo) {
+        if (!drawInfo || !drawInfo.isDraw || gameState.phase === 'GAME_OVER') return false;
+        recordLiveReplayFrame({
+          type: 'VICTORY',
+          actorIdx: gameState.currentTurn,
+          ownerIdx: gameState.currentTurn,
+          tokenId: null,
+          delta: 0,
+          title: drawInfo.title,
+          subtitle: drawInfo.subtitle,
+          trail: gameState.lastMovedTrail ? JSON.parse(JSON.stringify(gameState.lastMovedTrail)) : null
+        });
+        gameState.phase = 'GAME_OVER';
+        clearSavedMatchSnapshot();
+        playSound('home');
+        ensureCareerStatsSchema();
+        careerStats.matches += 1;
+        recordCompletedMatchTelemetry({
+          won: false,
+          isDraw: true,
+          isCleanSweep: false,
+          isTeamWin: false,
+          title: drawInfo.title,
+          subtitle: drawInfo.subtitle
+        }, false);
+        saveCareerStats();
+
+        const sweepBadge = document.getElementById('victoryCleanSweepBadge');
+        const crownIcon = document.getElementById('victoryCrownIcon');
+        if (sweepBadge) sweepBadge.classList.add('hidden');
+        if (crownIcon) crownIcon.textContent = '🤝';
+        document.getElementById('victoryTitle').textContent = drawInfo.title;
+        document.getElementById('victorySubtitle').textContent = drawInfo.subtitle;
+        pickAndRenderUniqueVictoryRoast({ won: false, isDraw: true, isCleanSweep: true });
+        document.getElementById('victoryModal').classList.remove('hidden');
+        addGameLog('🤝 MATCH DRAW (مقابلہ برابر): ' + drawInfo.subtitle, 'warn');
+        showToast('🤝 Match Draw! No legal movement possible on the ground.', true);
+        updateAllUI();
+        return true;
+      }
+
       function recordCompletedMatchTelemetry(vic, humanWon) {
         ensureCareerStatsSchema();
         const now = Date.now();
@@ -7369,7 +7579,7 @@
           format: formatLabel,
           formatCode: rulesConfig.teamMode ? '2v2' : (activePlayersCount === 2 ? '1v1' : 'ffa'),
           aiDifficulty: rulesConfig.aiDifficulty,
-          result: humanWon ? (vic.isCleanSweep ? 'Clean Sweep 🧹👑' : 'Won 🏆') : 'Lost',
+          result: vic.isDraw ? 'Draw 🤝' : (humanWon ? (vic.isCleanSweep ? 'Clean Sweep 🧹👑' : 'Won 🏆') : 'Lost'),
           winnerTitle: vic.title || 'Match Complete',
           won: humanWon,
           isCleanSweep: Boolean(vic.isCleanSweep),
@@ -7563,6 +7773,12 @@
           pickAndRenderUniqueVictoryRoast(vic);
           document.getElementById('victoryModal').classList.remove('hidden');
           updateAllUI();
+          return;
+        }
+
+        const drawCheck = checkDrawCondition();
+        if (drawCheck.isDraw) {
+          triggerMatchDraw(drawCheck);
           return;
         }
 
@@ -8002,7 +8218,13 @@
           updateAllUI();
 
           if (legal.length === 0) {
+            actor.noLegalMoveOnLastRoll = true;
             const targetIdx = getControlledOwnerIndex(actor.id);
+            const drawCheck = checkDrawCondition();
+            if (drawCheck.isDraw) {
+              triggerMatchDraw(drawCheck);
+              return;
+            }
             const groundTk = gameState.players[targetIdx].tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
             if (rulesConfig.strictHomeRemainder && effectiveDiceCount === 2 && groundTk.length >= 1) {
               addGameLog('⛔ No playable move: Rolled dice (' + v1 + '+' + v2 + ') cannot be consumed without overshooting Home!', 'warn');
@@ -8013,6 +8235,7 @@
             setTimeout(advanceToNextTurn, isAiActor ? timings.turnPassDelay : 950);
             return;
           }
+          actor.noLegalMoveOnLastRoll = false;
 
           if (!checkAndTriggerAutoMoveIfForced()) {
             scheduleAiIfNeeded();
@@ -8227,7 +8450,7 @@
             if (dist >= 1 && dist <= enemyMaxReach) {
               const ePosInLap = et.steps % 52;
               const eStepsToGate = 50 - ePosInLap;
-              const enemyCanLoop = canNoKillBeadLoopAroundBoard(et, pl.tokens);
+              const enemyCanLoop = canNoKillBeadLoopAroundBoard(et, pl.tokens, dist, pList);
               if (eStepsToGate >= 0 && dist > eStepsToGate) {
                 const enemyEligibleHome = reqKills <= 0 || (pl.kills || 0) >= reqKills;
                 if (enemyEligibleHome && !isOptionalLoopAfterKillAllowed()) return;
@@ -8499,7 +8722,11 @@
         });
 
         if (move.sim.loopedPastHome && !move.isOptionalLoop && ownerNeedsKill) {
-          score -= 390 * loopDiscouragementMult;
+          if (curLapPos >= 45 && getMaxNoKillLoopBeads() > 0) {
+            score += 240;
+          } else {
+            score -= 390 * loopDiscouragementMult;
+          }
         }
 
         if (tk.state === 'board' && rulesConfig.pairBlockadeRule && !isSquareSafeFromCapture(curTrack)) {
@@ -8787,7 +9014,7 @@
             }
             return { valid: false };
           }
-          if (!canNoKillBeadLoopAroundBoard(token, owner.tokens)) {
+          if (!canNoKillBeadLoopAroundBoard(token, owner.tokens, delta, simPlayers)) {
             return { valid: false };
           }
           return { valid: true, loopedPastHome: true, newState: 'board', newSteps: token.steps + delta, newHomeStep: 0 };
@@ -11505,12 +11732,17 @@
         document.getElementById('chkTeamMode').checked = Boolean(rulesConfig.teamMode);
         document.getElementById('chkStrictRemainder').checked = Boolean(rulesConfig.strictHomeRemainder);
         document.getElementById('chkTeamAssistSix').checked = Boolean(rulesConfig.teamAssistRequiresSix);
+        const isNoKillLoopOn = (rulesConfig.waitAllGroundAtGateBeforeLoop !== false && rulesConfig.singleGroundLoopOnlyWithoutKill !== false && rulesConfig.noKillLoopBeadLimit !== 'off');
         const chkSingleGroundLoop = document.getElementById('chkSingleGroundLoopOnlyWithoutKill');
-        if (chkSingleGroundLoop) chkSingleGroundLoop.checked = rulesConfig.singleGroundLoopOnlyWithoutKill !== false;
+        if (chkSingleGroundLoop) chkSingleGroundLoop.checked = isNoKillLoopOn;
         const chkOptLoop = document.getElementById('chkOptionalLoopAfterKill');
         if (chkOptLoop) chkOptLoop.checked = Boolean(rulesConfig.allowOptionalLoopAfterKill);
         const chkWaitGate = document.getElementById('chkWaitAllGroundAtGate');
-        if (chkWaitGate) chkWaitGate.checked = Boolean(rulesConfig.waitAllGroundAtGateBeforeLoop);
+        if (chkWaitGate) chkWaitGate.checked = isNoKillLoopOn;
+        const selNoKillLimit = document.getElementById('noKillLoopLimitSelect');
+        if (selNoKillLimit) {
+          selNoKillLimit.value = isNoKillLoopOn ? (rulesConfig.noKillLoopBeadLimit && rulesConfig.noKillLoopBeadLimit !== 'off' ? rulesConfig.noKillLoopBeadLimit : '1') : 'off';
+        }
         const chkHomeBon = document.getElementById('chkBonusOnHome');
         if (chkHomeBon) chkHomeBon.checked = Boolean(rulesConfig.bonusRollOnHome);
         const chkDblSix = document.getElementById('chkDoubleSixBonus');
@@ -11725,6 +11957,7 @@
         rulesConfig.singleGroundLoopOnlyWithoutKill = true;
         rulesConfig.allowOptionalLoopAfterKill = true;
         rulesConfig.waitAllGroundAtGateBeforeLoop = true;
+        rulesConfig.noKillLoopBeadLimit = '1';
         rulesConfig.bonusRollOnHome = true;
         rulesConfig.doubleSixBonusRoll = true;
         rulesConfig.safeStopImmunity = true;
@@ -11782,6 +12015,7 @@
         rulesConfig.singleGroundLoopOnlyWithoutKill = false;
         rulesConfig.allowOptionalLoopAfterKill = false;
         rulesConfig.waitAllGroundAtGateBeforeLoop = false;
+        rulesConfig.noKillLoopBeadLimit = 'off';
         rulesConfig.bonusRollOnHome = true;
         rulesConfig.doubleSixBonusRoll = true;
         rulesConfig.safeStopImmunity = true;
@@ -16429,17 +16663,17 @@
           id: 'wait_all_ground_at_gate',
           cat: 'home_loop',
           ruleKey: 'waitAllGroundAtGateBeforeLoop',
-          defaultBadge: 'Default: ON (پہلے سے آن)',
-          titleEn: 'No-Kill Gate Wait Until All Ground Beads Gather',
-          titleUr: 'بغیر شکار تمام میدانی گوٹیاں دروازے پر جمع ہونے تک رکنا',
-          enDesc: 'For players with 0 kills: a bead cannot go around Home (loop past the Home gate at step 50) until all of that player’s on-ground beads have reached the last home point (step 50) and no movement is possible for their on-ground beads—then one bead can go around.',
-          urDesc: 'اگر کھلاڑی کا ابھی کوئی شکار نہیں ہوا اور گوٹی گھر کے دروازے (آخری خانہ 50) پر پہنچ گئی، تو وہ اس وقت تک باہر کے چکر پر نہیں گھوم سکتی جب تک میدان میں موجود اس کی تمام گوٹیاں آخری پوائنٹ پر جمع نہ ہو جائیں اور کوئی دوسری چال ممکن نہ رہے—اس کے بعد ایک گوٹی چکر لگا سکتی ہے۔',
-          onEffectEn: 'ENABLED (Default ON): A 0-kill bead at step 50 (Home gate) stays there until all other on-ground beads of that player reach step 50, then one bead goes around.',
-          onEffectUr: 'آن (ON — ڈیفالٹ): بغیر شکار والی گوٹی دروازے پر تمام میدانی گوٹیاں جمع ہونے تک رکے گی، پھر ایک گوٹی چکر پر نکلے گی۔',
-          offEffectEn: 'DISABLED (OFF): Any 0-kill bead reaching the gate immediately loops past the gate on its own.',
-          offEffectUr: 'آف (OFF): بغیر شکار والی گوٹی دروازے پر رکے بغیر فوراً اپنا اگلا چکر شروع کر لیتی ہے۔',
-          exampleEn: 'You have 0 kills, Bead #1 is at step 50 (gate), and Bead #2 is at step 12. When ON, Bead #1 stays at the gate while you advance Bead #2 until Bead #2 also reaches step 50, then one bead loops around.',
-          exampleUr: 'مثال: آپ کا 0 شکار ہے، گوٹی نمبر 1 دروازے پر ہے اور گوٹی نمبر 2 پیچھے ہے؛ آن ہونے پر پہلے گوٹی نمبر 2 بھی دروازے تک آئے گی، پھر ایک گوٹی باہر چکر لگائے گی۔'
+          defaultBadge: 'Default: ON — 1 Bead (1، 2، تمام، یا آف)',
+          titleEn: 'No-Kill Come-Around-Home When No Legal Move Possible (1, 2, All, or Off → Draw)',
+          titleUr: 'بغیر شکار چال نہ ہونے پر گھر کے گرد چکر (1 گوٹی، 2 گوٹیاں، تمام، یا آف پر میچ ڈرا)',
+          enDesc: 'When a player has 0 kills (so they cannot enter Home) and on the dice roll there is no legal non-looping movement possible on the ground, 1 bead by default can come around Home (loop past step 50). In Advanced Rules, you can change this limit to 2 Beads, All Beads, or turn it OFF completely (in which case, when all players on the ground have no legal movement possible, the match is declared a Draw!).',
+          urDesc: 'جب کھلاڑی کا کوئی شکار نہ ہو (جس کی وجہ سے وہ گھر کے اندر نہیں جا سکتا) اور ڈائس رول پر اس کے لیے میدان میں کوئی عام چال ممکن نہ ہو، تو ڈیفالٹ طور پر اس کی 1 گوٹی اپنے گھر کے آگے سے گھوم کر چکر لگا سکتی ہے۔ آپ رولز میں اسے 2 گوٹیاں یا تمام (All) گوٹیاں بھی کر سکتے ہیں، اور اگر یہ اصول مکمل آف (OFF) کر دیں تو جب میدان میں موجود تمام کھلاڑیوں کی کوئی چال ممکن نہ رہے تو میچ ڈرا (برابر) قرار پاتا ہے۔',
+          onEffectEn: 'ENABLED (Default: 1 Bead, changeable to 2 or All): Allows 1 bead (or 2 / All beads) to come around Home whenever no non-looping move is possible for the rolled dice.',
+          onEffectUr: 'آن (ON — ڈیفالٹ 1 گوٹی، تبدیلی ممکن: 2 یا تمام): جب ڈائس پر کوئی دوسری چال ممکن نہ ہو تو 1 (یا منتخب تعداد میں) گوٹی گھر کے گرد چکر لگا سکتی ہے۔',
+          offEffectEn: 'DISABLED (OFF): No bead can come around Home without a kill; when all players on the ground have no legal movement possible, the match ends in a Draw (مقابلہ برابر)!',
+          offEffectUr: 'آف (OFF): بغیر شکار کوئی گوٹی گھر کے آگے سے نہیں گھوم سکتی، اور تمام میدانی کھلاڑیوں کی چال بند ہونے پر میچ ڈرا (برابر) ہو جاتا ہے۔',
+          exampleEn: 'Red has 3 beads on ★ SAFE (step 47) and 1 bead on step 50 with 0 kills, and rolls 4+5. Since no bead can move 4 or 5 without passing step 50, 1 bead (by default) comes around Home!',
+          exampleUr: 'مثال: لال کھلاڑی کا 0 شکار ہے، 3 گوٹیاں خانہ 47 پر اور 1 گوٹی خانہ 50 پر ہے اور 4+5 آ گیا؛ چونکہ کوئی دوسری چال ممکن نہیں، اس لیے 1 گوٹی (ڈیفالٹ) گھر کے آگے سے گھوم کر نیا چکر شروع کر لے گی۔'
         },
         {
           id: 'strict_home_remainder',
@@ -17862,7 +18096,7 @@
       [
         'chkBonusOnKill', 'chkKeepCaptureLockOnBonus', 'chkMandatorySpawn',
         'chkKillForHome', 'chkWipeoutResetsHomeEligibility', 'chkSingleGroundLoopOnlyWithoutKill', 'chkOptionalLoopAfterKill',
-        'chkWaitAllGroundAtGate', 'chkBonusOnHome', 'chkDoubleSixBonus',
+        'chkWaitAllGroundAtGate', 'noKillLoopLimitSelect', 'chkBonusOnHome', 'chkDoubleSixBonus',
         'chkSafeStopImmunity', 'chkTeamMode', 'chkStrictRemainder',
         'chkTeamAssistSix', 'chkThreeConsecutiveSixes', 'chkSingleSixBonusTwoDice',
         'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
@@ -18103,10 +18337,26 @@
         rulesConfig.killRequiredForHome = document.getElementById('chkKillForHome').checked;
         const chkWipeout = document.getElementById('chkWipeoutResetsHomeEligibility');
         if (chkWipeout) rulesConfig.wipeoutResetsHomeEligibility = chkWipeout.checked;
-        const chkSingleGroundLoop = document.getElementById('chkSingleGroundLoopOnlyWithoutKill');
-        if (chkSingleGroundLoop) rulesConfig.singleGroundLoopOnlyWithoutKill = chkSingleGroundLoop.checked;
+        const chkWaitGateEl = document.getElementById('chkWaitAllGroundAtGate');
+        const selNoKillLimitEl = document.getElementById('noKillLoopLimitSelect');
+        if (document.activeElement === selNoKillLimitEl && selNoKillLimitEl) {
+          const val = selNoKillLimitEl.value || '1';
+          rulesConfig.noKillLoopBeadLimit = val;
+          const enabled = (val !== 'off');
+          rulesConfig.waitAllGroundAtGateBeforeLoop = enabled;
+          rulesConfig.singleGroundLoopOnlyWithoutKill = enabled;
+          if (chkWaitGateEl) chkWaitGateEl.checked = enabled;
+        } else if (chkWaitGateEl) {
+          const enabled = Boolean(chkWaitGateEl.checked);
+          rulesConfig.waitAllGroundAtGateBeforeLoop = enabled;
+          rulesConfig.singleGroundLoopOnlyWithoutKill = enabled;
+          if (!enabled) {
+            rulesConfig.noKillLoopBeadLimit = 'off';
+          } else if (!rulesConfig.noKillLoopBeadLimit || rulesConfig.noKillLoopBeadLimit === 'off') {
+            rulesConfig.noKillLoopBeadLimit = (selNoKillLimitEl && selNoKillLimitEl.value !== 'off') ? selNoKillLimitEl.value : '1';
+          }
+        }
         rulesConfig.allowOptionalLoopAfterKill = document.getElementById('chkOptionalLoopAfterKill').checked;
-        rulesConfig.waitAllGroundAtGateBeforeLoop = document.getElementById('chkWaitAllGroundAtGate').checked;
         rulesConfig.bonusRollOnHome = document.getElementById('chkBonusOnHome').checked;
         rulesConfig.doubleSixBonusRoll = document.getElementById('chkDoubleSixBonus').checked;
         rulesConfig.safeStopImmunity = document.getElementById('chkSafeStopImmunity').checked;

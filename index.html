@@ -5170,6 +5170,9 @@
           gameState.aiTimer = null;
         }
         gameState.isPaused = false;
+        gameState.isRollingDice = false;
+        gameState.rollBatchCounter = 0;
+        stop3dDiceRollTumble();
         gameState.players = [0, 1, 2, 3].map(createPlayerObject);
         gameState.finishOrder = [];
         gameState.currentTurn = 0;
@@ -5366,6 +5369,72 @@
           return remaining.every(function (tk) { return tk.state === 'home_stretch' && (6 - tk.homeStep) === 1; });
         }
         return remaining.every(function (tk) { return tk.state === 'home_stretch'; });
+      }
+
+      function getDisplayDiceForCurrentTurn(effDiceCount) {
+        const pool = Array.isArray(gameState.dicePool)
+          ? gameState.dicePool.filter(function (d) { return !d.isQisasJump; })
+          : [];
+        if (pool.length === 0) {
+          return effDiceCount === 1
+            ? [{ id: 0, value: 6, used: true }]
+            : [{ id: 0, value: 6, used: true }, { id: 1, value: 6, used: true }];
+        }
+        if (pool.length <= 2) {
+          return pool.slice(0, effDiceCount === 1 ? 1 : 2);
+        }
+
+        const batchesMap = new Map();
+        const batchOrder = [];
+        pool.forEach(function (d, idx) {
+          const bId = d.batchId !== undefined ? d.batchId : Math.floor(idx / 2);
+          if (!batchesMap.has(bId)) {
+            batchesMap.set(bId, []);
+            batchOrder.push(bId);
+          }
+          batchesMap.get(bId).push(d);
+        });
+
+        function padToEffectiveCount(arr) {
+          const res = arr.slice(0, effDiceCount === 1 ? 1 : 2);
+          if (effDiceCount === 2 && res.length === 1 && pool.length >= 2) {
+            const partnerDie = pool.find(function (d) { return d.id !== res[0].id && !d.used; }) ||
+                               pool.slice().reverse().find(function (d) { return d.id !== res[0].id; });
+            if (partnerDie) res.push(partnerDie);
+          }
+          return res;
+        }
+
+        if (gameState.preferredDieFilter !== null && gameState.preferredDieFilter !== 'combined') {
+          const selDie = pool.find(function (d) { return d.id === gameState.preferredDieFilter && !d.used; });
+          if (selDie) {
+            const selBId = selDie.batchId !== undefined ? selDie.batchId : 0;
+            const selBatch = batchesMap.get(selBId);
+            if (selBatch && selBatch.length > 0) return padToEffectiveCount(selBatch);
+          }
+        }
+
+        for (let i = batchOrder.length - 1; i >= 0; i--) {
+          const batch = batchesMap.get(batchOrder[i]);
+          if (batch && batch.every(function (d) { return !d.used; })) {
+            return padToEffectiveCount(batch);
+          }
+        }
+
+        const activeUnused = pool.filter(function (d) { return !d.used; });
+        if (activeUnused.length >= 2) {
+          return activeUnused.slice(-2);
+        }
+        if (activeUnused.length === 1) {
+          const remDie = activeUnused[0];
+          const remBId = remDie.batchId !== undefined ? remDie.batchId : 0;
+          const remBatch = batchesMap.get(remBId);
+          if (remBatch && remBatch.length > 0) return padToEffectiveCount(remBatch);
+          return padToEffectiveCount([remDie]);
+        }
+
+        const newestBatch = batchesMap.get(batchOrder[batchOrder.length - 1]) || pool.slice(-(effDiceCount === 1 ? 1 : 2));
+        return padToEffectiveCount(newestBatch);
       }
 
       function getEffectiveDiceCountForOwner(actorIdx, targetOwnerIdx) {
@@ -7945,9 +8014,12 @@
           break;
         }
         gameState.phase = 'ROLL';
+        gameState.isRollingDice = false;
+        stop3dDiceRollTumble();
         if (Array.isArray(gameState.dicePool) && gameState.dicePool.length > 0) {
-          gameState.dicePool = gameState.dicePool.map(function (d) {
-            return { id: d.id, value: d.value, used: true };
+          const lastPair = getDisplayDiceForCurrentTurn(rulesConfig.diceCount);
+          gameState.dicePool = lastPair.map(function (d, idx) {
+            return { id: idx, value: d.value, used: true, batchId: 0 };
           });
         }
         gameState.selectedTokenKey = null;
@@ -7960,7 +8032,7 @@
       }
 
       function rollDiceForCurrentPlayer(forcedValues, isRemoteSync) {
-        if (gameState.isPaused) return;
+        if (gameState.isPaused || gameState.isRollingDice) return;
         const isBonusStackRoll = canPlayerRollBonusNow();
         if (gameState.phase !== 'ROLL' && !isBonusStackRoll) return;
         if (isBonusStackRoll) {
@@ -7984,6 +8056,7 @@
                                    !actor.assistUnlocked;
         const effectiveDiceCount = getEffectiveDiceCountForOwner(actor.id, targetOwnerIdx);
 
+        gameState.isRollingDice = true;
         playSound('roll');
         const dSlot0 = document.getElementById('dieSlot0');
         const dSlot1 = document.getElementById('dieSlot1');
@@ -7997,6 +8070,8 @@
         trigger3dDiceRollTumble(effectiveDiceCount, actor.id, rollTumbleDuration);
 
         setTimeout(function () {
+          gameState.isRollingDice = false;
+          stop3dDiceRollTumble();
           dSlot0.classList.remove('dice-rolling');
           dSlot1.classList.remove('dice-rolling');
 
@@ -8040,10 +8115,14 @@
             if (v2 === 6 && actor.id === 0) careerStats.sixesRolled += 1;
           }
 
+          const nextBatchId = (gameState.rollBatchCounter = (gameState.rollBatchCounter || 0) + 1);
           const newlyRolledDice = (effectiveDiceCount === 1)
-            ? [{ id: 0, value: v1, used: false }]
-            : [{ id: 0, value: v1, used: false }, { id: 1, value: v2, used: false }];
+            ? [{ id: 0, value: v1, used: false, batchId: nextBatchId }]
+            : [{ id: 0, value: v1, used: false, batchId: nextBatchId }, { id: 1, value: v2, used: false, batchId: nextBatchId }];
           actor.lastRolledDice = newlyRolledDice.map(function (d) { return d.value; });
+          if (targetOwnerIdx !== actor.id && gameState.players[targetOwnerIdx]) {
+            gameState.players[targetOwnerIdx].lastRolledDice = actor.lastRolledDice.slice();
+          }
 
           if (effectiveDiceCount === 2 && v1 === 6 && v2 === 6) {
             triggerPlayerEmote(actor.id, '🔥 ڈبل سکس! (6+6)');
@@ -8058,7 +8137,13 @@
             const keptUnused = gameState.dicePool.filter(function (d) { return !d.used; });
             const combinedPool = keptUnused.concat(newlyRolledDice);
             gameState.dicePool = combinedPool.map(function (d, idx) {
-              return { id: idx, value: d.value, used: false };
+              return {
+                id: idx,
+                value: d.value,
+                used: false,
+                batchId: d.batchId !== undefined ? d.batchId : 0,
+                isQisasJump: Boolean(d.isQisasJump)
+              };
             });
           } else {
             gameState.dicePool = newlyRolledDice;
@@ -10211,15 +10296,32 @@
 
             if (canvas3dRollState.active && canvas3dRollState.actorIdx === yo.pIdx) {
               ctx.save();
-              ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+              const grad = ctx.createLinearGradient(px, py, px, py + stageH);
+              grad.addColorStop(0, 'rgba(15, 23, 42, 0.96)');
+              grad.addColorStop(1, 'rgba(30, 41, 59, 0.96)');
+              ctx.fillStyle = grad;
               ctx.beginPath();
               ctx.roundRect(px, py, stageW, stageH, 14);
               ctx.fill();
               ctx.lineWidth = 2.5;
               ctx.strokeStyle = '#f59e0b';
               ctx.stroke();
+
+              const ctaW = stageW * 0.90;
+              const ctaH = Math.max(cellH * 0.42, cell * 0.40);
+              const ctaX = yardCx - ctaW / 2;
+              const ctaY = py + stageH - ctaH - cellH * 0.08;
+              ctx.fillStyle = 'rgba(245, 158, 11, 0.25)';
+              ctx.beginPath();
+              ctx.roundRect(ctaX, ctaY, ctaW, ctaH, 7);
+              ctx.fill();
+              ctx.fillStyle = '#fde047';
+              ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.20 : 0.19)) + 'px Inter, sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText('🎲 ROLLING...', yardCx, ctaY + ctaH / 2);
               ctx.restore();
-              drawCanvas3dRollingDiceInYard(ctx, yardCx, yardCy, cell, canvas3dRollState);
+              drawCanvas3dRollingDiceInYard(ctx, yardCx, yardCy - stageH * 0.13, cell, canvas3dRollState);
             } else if (gameState.phase === 'ROLL') {
               ctx.save();
               const grad = ctx.createLinearGradient(px, py, px, py + stageH);
@@ -10233,38 +10335,42 @@
               ctx.strokeStyle = '#f59e0b';
               ctx.stroke();
 
+              const queuedUnused = gameState.dicePool.filter(function (d) { return !d.used; });
+              const hasQueuedBonus = queuedUnused.length > 0;
               const prevRoll = (pl.lastRolledDice && pl.lastRolledDice.length > 0) ? pl.lastRolledDice : null;
               const dVal0 = prevRoll ? prevRoll[0] : 6;
               const dVal1 = (prevRoll && prevRoll[1]) ? prevRoll[1] : 6;
+              const dimPrevRoll = !hasQueuedBonus && (gameState.consecutiveBonusSixRolls || 0) === 0;
               const dSize = cell * (effDiceCount === 1 ? (isCompactCanvas ? 0.98 : 0.90) : (isCompactCanvas ? 0.88 : 0.80));
               const diceCy = yardCy - stageH * 0.13;
               if (effDiceCount === 1) {
-                drawIsometric3dDieOnCanvas(ctx, yardCx, diceCy, dSize, dVal0, false, 0, 0);
+                drawIsometric3dDieOnCanvas(ctx, yardCx, diceCy, dSize, dVal0, dimPrevRoll, 0, 0);
               } else {
-                drawIsometric3dDieOnCanvas(ctx, yardCx - dSize * 0.74, diceCy, dSize, dVal0, false, 0, 0);
-                drawIsometric3dDieOnCanvas(ctx, yardCx + dSize * 0.74, diceCy, dSize, dVal1, false, 0, 0);
+                drawIsometric3dDieOnCanvas(ctx, yardCx - dSize * 0.74, diceCy, dSize, dVal0, dimPrevRoll, 0, 0);
+                drawIsometric3dDieOnCanvas(ctx, yardCx + dSize * 0.74, diceCy, dSize, dVal1, dimPrevRoll, 0, 0);
               }
 
               const ctaW = stageW * 0.90;
               const ctaH = Math.max(cellH * 0.42, cell * 0.40);
               const ctaX = yardCx - ctaW / 2;
               const ctaY = py + stageH - ctaH - cellH * 0.08;
-              ctx.fillStyle = '#f59e0b';
+              ctx.fillStyle = hasQueuedBonus ? '#10b981' : '#f59e0b';
               ctx.beginPath();
               ctx.roundRect(ctaX, ctaY, ctaW, ctaH, 7);
               ctx.fill();
 
-              ctx.fillStyle = '#0f172a';
-              ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.22 : 0.205)) + 'px Inter, sans-serif';
+              ctx.fillStyle = hasQueuedBonus ? '#ffffff' : '#0f172a';
+              ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.21 : 0.20)) + 'px Inter, sans-serif';
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText(effDiceCount === 2 ? '🎲 TAP TO ROLL (2D)' : '🎲 TAP TO ROLL', yardCx, ctaY + ctaH / 2);
+              const rollCtaText = hasQueuedBonus
+                ? ('🎲 BONUS ROLL (' + queuedUnused.map(function (d) { return d.value; }).join('+') + ')')
+                : (effDiceCount === 2 ? '🎲 TAP TO ROLL (2D)' : '🎲 TAP TO ROLL');
+              ctx.fillText(rollCtaText, yardCx, ctaY + ctaH / 2);
               ctx.restore();
             } else {
               const activeUnused = gameState.dicePool.filter(function (d) { return !d.used; });
-              const poolToShow = (gameState.dicePool.length > 2 && activeUnused.length > 0)
-                ? activeUnused.slice(0, 2)
-                : gameState.dicePool.slice(0, 2);
+              const poolToShow = getDisplayDiceForCurrentTurn(effDiceCount);
 
               ctx.save();
               const grad = ctx.createLinearGradient(px, py, px, py + stageH);
@@ -10326,7 +10432,6 @@
                 });
               }
 
-              // Bottom interactive bar inside Yard Dice Stage (Bonus Roll CTA or Sum / Filter Pill)
               const barW = stageW * 0.90;
               const barH = Math.max(cellH * 0.42, cell * 0.39);
               const barX = yardCx - barW / 2;
@@ -10358,9 +10463,11 @@
                 ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.20 : 0.19)) + 'px Inter, sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                const sumLabel = activeUnused.length >= 2
-                  ? (poolToShow[0].value + ' + ' + poolToShow[1].value + ' = ' + unusedSum + (isCombSel ? ' ✓' : ''))
-                  : (activeUnused.length === 1 ? ('LEFT: +' + activeUnused[0].value) : ('ROLLED: ' + poolToShow[0].value + '+' + poolToShow[1].value));
+                const sumLabel = activeUnused.length > 2
+                  ? (activeUnused.map(function (d) { return d.value; }).join('+') + ' = ' + unusedSum + (isCombSel ? ' ✓' : ''))
+                  : (activeUnused.length === 2
+                    ? (activeUnused[0].value + ' + ' + activeUnused[1].value + ' = ' + unusedSum + (isCombSel ? ' ✓' : ''))
+                    : (activeUnused.length === 1 ? ('LEFT: +' + activeUnused[0].value) : ('ROLLED: ' + poolToShow[0].value + '+' + poolToShow[1].value)));
                 ctx.fillText(sumLabel, yardCx, barY + barH / 2);
                 if (activeUnused.length >= 2) {
                   renderedYardDiceHitboxes.push({
@@ -11193,6 +11300,14 @@
         cube.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) rotateZ(' + rz + 'deg)';
       }
 
+      function stop3dDiceRollTumble() {
+        if (canvas3dRollState.rafId) {
+          cancelAnimationFrame(canvas3dRollState.rafId);
+          canvas3dRollState.rafId = null;
+        }
+        canvas3dRollState.active = false;
+      }
+
       function trigger3dDiceRollTumble(diceCount, actorIdx, durationMs) {
         ['dieFace0', 'dieFace1'].forEach(function (id, idx) {
           const container = document.getElementById(id);
@@ -11211,25 +11326,28 @@
           cube.style.transform = 'scale(1.16) rotateX(' + tumbleRx + 'deg) rotateY(' + tumbleRy + 'deg) rotateZ(' + tumbleRz + 'deg)';
         });
 
-        if (canvas3dRollState.rafId) cancelAnimationFrame(canvas3dRollState.rafId);
+        stop3dDiceRollTumble();
         canvas3dRollState.active = true;
         canvas3dRollState.actorIdx = actorIdx || 0;
         canvas3dRollState.diceCount = diceCount || 2;
         canvas3dRollState.startTime = performance.now();
         canvas3dRollState.duration = durationMs || 440;
+        canvas3dRollState.tempVal0 = Math.floor(Math.random() * 6) + 1;
+        canvas3dRollState.tempVal1 = Math.floor(Math.random() * 6) + 1;
 
         function animateCanvasDiceTick(now) {
+          if (!canvas3dRollState.active) return;
           const elapsed = now - canvas3dRollState.startTime;
           const progress = Math.min(1, elapsed / Math.max(1, canvas3dRollState.duration));
           canvas3dRollState.bounce = Math.abs(Math.sin(progress * Math.PI * 2.5)) * (1 - progress * 0.45);
           canvas3dRollState.angle0 = progress * Math.PI * 6;
           canvas3dRollState.angle1 = -progress * Math.PI * 6.5;
-          if (Math.random() < 0.42) {
+          if (Math.random() < 0.48) {
             canvas3dRollState.tempVal0 = Math.floor(Math.random() * 6) + 1;
             canvas3dRollState.tempVal1 = Math.floor(Math.random() * 6) + 1;
           }
           drawBoard();
-          if (progress < 1 && canvas3dRollState.active) {
+          if (elapsed < canvas3dRollState.duration + 250 && canvas3dRollState.active) {
             canvas3dRollState.rafId = requestAnimationFrame(animateCanvasDiceTick);
           } else {
             canvas3dRollState.active = false;
@@ -11442,8 +11560,9 @@
         }
 
         const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
-        const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : (gameState.dicePool[0] || { id: 0, value: 6, used: true });
-        const d1 = (gameState.dicePool.length > 2 && activePool.length > 1) ? activePool[1] : (gameState.dicePool[1] || { id: 1, value: 6, used: true });
+        const displayPair = getDisplayDiceForCurrentTurn(effectiveDiceCount);
+        const d0 = displayPair[0] || gameState.dicePool[0] || { id: 0, value: 6, used: true };
+        const d1 = displayPair[1] || gameState.dicePool[1] || { id: 1, value: 6, used: true };
         const justRolledSpin = Boolean(gameState.justRolled3dFlag);
         renderDieFace('dieFace0', d0.value, d0.used && gameState.phase === 'MOVE', justRolledSpin);
         document.getElementById('dieStatus0').textContent = (d0.used && gameState.phase === 'MOVE') ? '✓' : ('D' + (d0.id + 1) + ':' + d0.value);
@@ -11455,13 +11574,13 @@
         dieSlot0.className = 'relative w-10 h-10 rounded-xl bg-white text-slate-900 shadow border-2 flex flex-col items-center justify-center transition ' +
           (gameState.preferredDieFilter === d0.id ? 'border-sky-500 ring-2 ring-sky-300' : 'border-amber-400');
 
-        if (effectiveDiceCount === 2 || (gameState.dicePool.length >= 2 && activePool.length >= 2)) {
+        if (effectiveDiceCount === 2 || displayPair.length >= 2) {
           dieSlot1.classList.remove('hidden');
           divider.classList.remove('hidden');
           renderDieFace('dieFace1', d1.value, d1.used && gameState.phase === 'MOVE', justRolledSpin);
         }
         gameState.justRolled3dFlag = false;
-        if (effectiveDiceCount === 2 || (gameState.dicePool.length >= 2 && activePool.length >= 2)) {
+        if (effectiveDiceCount === 2 || displayPair.length >= 2) {
           document.getElementById('dieStatus1').textContent = (d1.used && gameState.phase === 'MOVE') ? '✓' : ('D' + (d1.id + 1) + ':' + d1.value);
           const totalUnusedSum = activePool.length >= 2
             ? activePool.reduce(function (acc, item) { return acc + item.value; }, 0)
@@ -17950,8 +18069,9 @@
         }
         if (!verifyMultiMouseAccess(e.pointerId, 'use Die 1')) return;
         actor.consecutiveTimeouts = 0;
-        const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
-        const d0 = (gameState.dicePool.length > 2 && activePool.length > 0) ? activePool[0] : gameState.dicePool[0];
+        const effCount = getEffectiveDiceCountForOwner(actor.id, getControlledOwnerIndex(actor.id));
+        const displayPair = getDisplayDiceForCurrentTurn(effCount);
+        const d0 = displayPair[0] || gameState.dicePool[0];
         if (gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer();
         } else if (gameState.phase === 'MOVE' && d0 && !d0.used) {
@@ -17970,8 +18090,9 @@
         }
         if (!verifyMultiMouseAccess(e.pointerId, 'use Die 2')) return;
         actor.consecutiveTimeouts = 0;
-        const activePool = gameState.dicePool.filter(function (d) { return !d.used; });
-        const d1 = (gameState.dicePool.length > 2 && activePool.length > 1) ? activePool[1] : gameState.dicePool[1];
+        const effCount = getEffectiveDiceCountForOwner(actor.id, getControlledOwnerIndex(actor.id));
+        const displayPair = getDisplayDiceForCurrentTurn(effCount);
+        const d1 = displayPair[1] || gameState.dicePool[1];
         if (gameState.phase === 'ROLL') {
           rollDiceForCurrentPlayer();
         } else if (gameState.phase === 'MOVE' && d1 && !d1.used) {
