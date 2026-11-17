@@ -1159,6 +1159,7 @@
 <div class="flex gap-1">
 <select class="w-full bg-amber-50/90 border border-amber-400 rounded-xl px-2 py-1.5 text-xs font-extrabold text-amber-950" id="homeQuickAiSpeedSelect">
 <option selected="" value="default">⚡ Fast (Default)</option>
+<option value="human">🧠 Human-like (Adaptive)</option>
 <option value="slow">🐢 Slow</option>
 <option value="dramatic">🎭 Dramatic</option>
 <option value="slowest">⏳ Slowest</option>
@@ -1349,8 +1350,8 @@
 <span class="truncate" id="rollDiceBtnLabel">Roll Dice</span>
 </button>
 <div class="flex items-center justify-between text-[9px] text-slate-900 font-extrabold px-0.5 mt-0.5">
-<span class="truncate text-amber-950" id="turnBannerText">Red's Turn</span>
-<span class="font-mono text-slate-900" id="turnCountdownBadge">30s</span>
+<span class="truncate min-w-0 flex-1 text-amber-950" id="turnBannerText">Red's Turn</span>
+<span class="font-mono text-slate-900 flex-shrink-0 ml-1" id="turnCountdownBadge">30s</span>
 </div>
 <div class="hidden flex-wrap items-center gap-0.5 mt-0.5" id="stackedDiceQueueBar"></div>
 </div>
@@ -1460,6 +1461,7 @@
 <div class="flex items-center gap-1">
 <select class="bg-white border border-amber-300 rounded-lg px-2 py-0.5 text-[11px] font-extrabold text-amber-950" id="pauseAiSpeedSelect">
 <option selected="" value="default">⚡ Fast (Default)</option>
+<option value="human">🧠 Human-like (Adaptive)</option>
 <option value="slow">🐢 Slow (Deliberate)</option>
 <option value="dramatic">🎭 Dramatic (Suspenseful)</option>
 <option value="slowest">⏳ Slowest (Spectator)</option>
@@ -1771,6 +1773,13 @@
 <p class="text-[11px] text-slate-600 mt-0.5">Default ON (All Beads Inside Home): Converts from 2 Dice to 1 Die ONLY when all of a player's beads are inside their Home area (if even 1 bead is outside on the board or in hand, they stay on 2 Dice). Pick any non-conflicting variant from the dropdown, or turn OFF to stay on 2 Dice always.</p>
 </div>
 </div>
+<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMidPathKillOnCombinedMove" type="checkbox"/>
+<div>
+<div class="font-bold text-xs text-slate-900">⚡⚔️ Auto-Kill Mid-Path Enemy on Combined 2-Dice Move (اکٹھا نمبر چلنے پر درمیان میں آنے والی دشمن گوٹی کا خودکار شکار — Default: ON)</div>
+<p class="text-[11px] text-slate-600">Default ON: If you roll 2 dice (e.g. 5 &amp; 3) and move a single bead by their combined total (8), any enemy bead sitting on the intermediate square (+3 or +5) that could be killed by either die is automatically killed while your bead completes its full 8-step move!</p>
+</div>
+</label>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkMandatoryCapture" type="checkbox"/>
 <div>
@@ -1947,6 +1956,7 @@
 </select>
 <select class="bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold text-amber-900" id="aiSpeedSelect">
 <option selected="" value="default">⚡ AI Pace: Fast (Default)</option>
+<option value="human">🧠 AI Pace: Human-like (Adaptive Thinking)</option>
 <option value="slow">🐢 AI Pace: Slow (Deliberate)</option>
 <option value="dramatic">🎭 AI Pace: Dramatic (Suspenseful)</option>
 <option value="slowest">⏳ AI Pace: Slowest (Spectator)</option>
@@ -2777,11 +2787,11 @@
 <!-- Category Filter Bar, Status Filter & Search -->
 <div class="flex flex-col gap-2.5 bg-amber-50/80 p-3 rounded-2xl border border-amber-200">
 <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5" id="guideCategoryTabs">
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Categories (44)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Categories (45)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="core" type="button">🏔️ 1. Core Heritage (5)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 2. Dice &amp; Spawns (10)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="home_loop" type="button">🩸 3. Blood Gate &amp; Home (7)</button>
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ 4. Combat &amp; Jora (3)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ 4. Combat &amp; Jora (4)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="team_system" type="button">🤝 5. 2v2 &amp; Systems (4)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="hujra" type="button">🔥 6. Hujra House Rules (15)</button>
 </div>
@@ -3354,6 +3364,22 @@
 <button class="w-5 h-5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] font-black text-white flex items-center justify-center" id="closeToastBannerBtn" title="Close" type="button">✕</button>
 </div>
 </div>
+<!-- ==================== GENERIC CRITICAL-ACTION CONFIRMATION DIALOG ==================== -->
+<div aria-describedby="confirmActionMessage" aria-labelledby="confirmActionTitle" aria-modal="true" class="hidden fixed inset-0 z-[120] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4" id="confirmActionModal" role="dialog">
+<div class="royal-card w-full max-w-sm sm:max-w-md rounded-3xl border-2 border-amber-400 shadow-2xl p-5 sm:p-6">
+<div class="flex items-start gap-3">
+<div class="w-11 h-11 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center text-2xl flex-shrink-0" id="confirmActionIcon">⚠️</div>
+<div class="min-w-0 flex-1">
+<h3 class="text-base sm:text-lg font-black text-slate-900 leading-tight" id="confirmActionTitle">Are you sure?</h3>
+<p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-snug" id="confirmActionMessage">This action cannot be undone.</p>
+</div>
+</div>
+<div class="mt-5 flex flex-col-reverse sm:flex-row gap-2 sm:justify-end">
+<button class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold border border-slate-300" id="confirmActionCancelBtn" type="button">Cancel</button>
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black shadow-md" id="confirmActionOkBtn" type="button">Confirm</button>
+</div>
+</div>
+</div>
 <!-- ==================== COMPLETE GAME, VISUAL TRAILS, RESILIENCE & NETWORK ENGINE ==================== -->
 <script>
     /* ==========================================================================
@@ -3626,6 +3652,7 @@
         twoKillsForHome: false,
         oneDieWhenOneBeadLeft: true,
         oneDieConversionMode: 'all_in_home',
+        midPathKillOnCombinedMove: true,
         mandatoryCapture: false,
         threeTimeoutsBotTakeover: true,
         reverseKillRule: false,
@@ -3682,6 +3709,17 @@
             turnPassDelay: 3000
           };
         }
+        if (speed === 'human') {
+          // Baseline used for bead hops and dice tumble. The real think delay
+          // is computed per decision in scheduleAiIfNeeded().
+          return {
+            rollDelay: 760,
+            diceRollDuration: 460,
+            moveDelay: 1100,
+            hopInterval: 95,
+            turnPassDelay: 1050
+          };
+        }
         if (speed === 'custom') {
           const customSec = Math.max(0.2, Math.min(10, Number(rulesConfig.aiCustomSpeedSec) || 1.5));
           const baseMs = Math.round(customSec * 1000);
@@ -3700,6 +3738,191 @@
           hopInterval: null,
           turnPassDelay: 950
         };
+      }
+
+      // --- Human-like adaptive AI pacing ---------------------------------
+      // Rather than a single fixed timer, this mode estimates how hard the
+      // current decision is: obvious or forced moves are played quickly,
+      // while close calls, captures and endgame choices get a longer,
+      // visibly "thinking" pause with natural random variation.
+
+      let aiThinkingClearTimer = null;
+
+      function clampAiPaceMs(value, min, max) {
+        return Math.round(Math.max(min, Math.min(max, value)));
+      }
+
+      function humanPaceRandom(min, max) {
+        return min + Math.random() * Math.max(0, max - min);
+      }
+
+      function countThreatenedAiBeads(ownerIdx) {
+        const owner = gameState.players[ownerIdx];
+        if (!owner || !Array.isArray(owner.tokens)) return 0;
+        const ownerTeam = owner.team;
+        let threatened = 0;
+        owner.tokens.forEach(function (tk) {
+          if (!tk || tk.state !== 'board') return;
+          const ownTrack = ((START_TRACK_INDEX[ownerIdx] + (Number(tk.steps) || 0)) % 52 + 52) % 52;
+          if (rulesConfig.safeStopImmunity && SAFE_TRACK_INDICES.has(ownTrack)) return;
+          const inDanger = gameState.players.some(function (op) {
+            if (!op || !op.active || op.id === ownerIdx) return false;
+            if (rulesConfig.teamMode && !rulesConfig.friendlyFireRule && op.team === ownerTeam) return false;
+            return op.tokens.some(function (etk) {
+              if (!etk || etk.state !== 'board') return false;
+              const enemyTrack = ((START_TRACK_INDEX[op.id] + (Number(etk.steps) || 0)) % 52 + 52) % 52;
+              let gap = ownTrack - enemyTrack;
+              if (gap <= 0) gap += 52;
+              return gap >= 1 && gap <= 6;
+            });
+          });
+          if (inDanger) threatened += 1;
+        });
+        return threatened;
+      }
+
+      function computeHumanAiRollDelay(actor) {
+        const actorId = actor && actor.id !== undefined ? actor.id : gameState.currentTurn;
+        const ownerIdx = getControlledOwnerIndex(actorId);
+        const owner = gameState.players[ownerIdx];
+        // Tapping the dice is never a hard decision, so this stays brisk.
+        let delay = humanPaceRandom(280, 620);
+        if (owner) {
+          const completed = owner.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+          const required = Math.max(1, Number(rulesConfig.tokensPerPlayer) || 4);
+          if (completed >= required - 1) delay += humanPaceRandom(80, 220); // brief endgame focus
+          if (countThreatenedAiBeads(ownerIdx) >= 2) delay += humanPaceRandom(60, 180);
+        }
+        if (Math.random() < 0.1) delay += humanPaceRandom(180, 420); // rare hesitation
+        return clampAiPaceMs(delay, 260, 1300);
+      }
+
+      function computeHumanAiMoveDelay(legalMoves) {
+        const legal = Array.isArray(legalMoves) ? legalMoves : [];
+
+        // Obvious or forced actions get a quick, natural tap rather than a
+        // drawn-out "thinking" pause.
+        function quickPace(min, max) {
+          const hesitation = Math.random() < 0.06 ? humanPaceRandom(150, 320) : 0;
+          return clampAiPaceMs(humanPaceRandom(min, max) + hesitation, min, max + 380);
+        }
+
+        if (legal.length === 0) return quickPace(300, 680);
+        if (legal.length === 1) return quickPace(320, 720);
+
+        // Rolling a 6 with beads in the yard is a forced spawn: every option
+        // is equally obvious, no matter how many beads are waiting.
+        if (legal.every(function (m) { return m.isMandatorySpawn; })) return quickPace(300, 680);
+        if (legal.every(function (m) { return m.sim && m.sim.isSpawn; })) return quickPace(300, 680);
+
+        // Only one bead can move at all, so there is nothing to weigh up.
+        const uniqueTokens = new Set(legal.map(function (m) { return m.ownerIdx + '_' + m.tokenId; }));
+        const hasOptionalLoopChoice = legal.some(function (m) { return m.isOptionalLoop; }) &&
+                                      legal.some(function (m) { return !m.isOptionalLoop && (m.sim.newState === 'home_stretch' || m.sim.newState === 'completed'); });
+        if (uniqueTokens.size === 1 && !hasOptionalLoopChoice) return quickPace(360, 800);
+
+        let scored;
+        try {
+          scored = legal.map(function (m) { return { move: m, score: evaluateMoveScore(m) }; });
+        } catch (err) {
+          scored = legal.map(function (m) { return { move: m, score: 0 }; });
+        }
+        scored.sort(function (a, b) { return b.score - a.score; });
+
+        const best = scored[0];
+        const second = scored[1] || best;
+        const margin = Math.abs(best.score - second.score);
+
+        // Every remaining option is worth the same, so the pick is arbitrary.
+        if (margin < 25) return quickPace(340, 760);
+
+        let difficulty = Math.min(30, Math.max(0, legal.length - 1) * 4);
+
+        if (margin < 120) difficulty += 26;       // genuine toss-up
+        else if (margin < 300) difficulty += 16;
+        else if (margin < 700) difficulty += 8;
+
+        if (best.score >= 2400) difficulty += 7;  // capture or big tactical swing
+        if (best.score >= 8500) {
+          // A clearly winning move is slammed down quickly; a narrow one is checked.
+          difficulty += margin >= 450 ? -6 : 6;
+        }
+        if (legal.some(function (m) { return m.isCombined; })) difficulty += 5;
+        if (legal.some(function (m) { return m.isSplitMove || m.isOptionalLoop; })) difficulty += 5;
+
+        const ownerIdx = getControlledOwnerIndex(gameState.currentTurn);
+        const owner = gameState.players[ownerIdx];
+        if (owner) {
+          const completed = owner.tokens.filter(function (t) { return t.state === 'completed'; }).length;
+          const required = Math.max(1, Number(rulesConfig.tokensPerPlayer) || 4);
+          if (completed >= required - 1) difficulty += 8;
+          difficulty += countThreatenedAiBeads(ownerIdx) * 2;
+        }
+
+        difficulty = Math.max(0, Math.min(100, difficulty));
+
+        // Easy/medium decisions land around 0.5-1.4s; only true close calls
+        // reach the 2-3s range.
+        let delay = 470 + difficulty * 26 + humanPaceRandom(-90, 190);
+        if (difficulty >= 55 && Math.random() < 0.3) {
+          delay += humanPaceRandom(350, 850); // visible double-check
+        }
+        return clampAiPaceMs(delay, 380, 3200);
+      }
+
+      function getHumanAiThinkingLabel(phase, delayMs) {
+        if (phase === 'ROLL') {
+          return delayMs > 1400 ? 'is reading the board…' : 'is thinking…';
+        }
+        if (delayMs > 3000) return 'is double-checking the best move…';
+        if (delayMs > 2000) return 'is weighing the options…';
+        return 'is thinking…';
+      }
+
+      function showAiThinkingIndicator(actor, phase, delayMs) {
+        const el = document.getElementById('turnBannerText');
+        if (!el) return;
+        if (aiThinkingClearTimer) {
+          clearTimeout(aiThinkingClearTimer);
+          aiThinkingClearTimer = null;
+        }
+        const name = actor ? actor.name : 'AI';
+        // Icon only: the banner must never overflow on small screens.
+        el.textContent = '🤔 …';
+        el.title = name + ' ' + getHumanAiThinkingLabel(phase, delayMs);
+        el.setAttribute('aria-label', el.title);
+        el.classList.add('animate-pulse');
+        el.dataset.aiThinking = '1';
+        // Safety net in case the turn timer is cleared or interrupted.
+        aiThinkingClearTimer = setTimeout(function () {
+          clearAiThinkingIndicator();
+        }, delayMs + 900);
+      }
+
+      function clearAiThinkingIndicator() {
+        if (aiThinkingClearTimer) {
+          clearTimeout(aiThinkingClearTimer);
+          aiThinkingClearTimer = null;
+        }
+        const el = document.getElementById('turnBannerText');
+        if (!el) return;
+        el.classList.remove('animate-pulse');
+        if (el.dataset.aiThinking === '1') {
+          delete el.dataset.aiThinking;
+          el.removeAttribute('title');
+          el.removeAttribute('aria-label');
+          if (gameState.isMatchActive && gameState.phase !== 'GAME_OVER') {
+            const actor = gameState.players[gameState.currentTurn];
+            if (actor) {
+              const targetIdx = getControlledOwnerIndex(actor.id);
+              if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) {
+                el.textContent = '⏳ Waiting for ' + actor.name + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
+              } else {
+                el.textContent = '⚡ ' + actor.name + (targetIdx !== actor.id ? (' → ' + gameState.players[targetIdx].name) : '');
+              }
+            }
+          }
+        }
       }
 
       let secretEasyAiCheatActive = false;
@@ -3955,6 +4178,13 @@
           }
           if (!['all_in_home', 'last_bead_in_home', 'last_bead_out_no_yard', 'last_bead_anywhere', 'final_step_only'].includes(rulesConfig.oneDieConversionMode)) {
             rulesConfig.oneDieConversionMode = 'all_in_home';
+          }
+          if (rulesConfig.midPathKillOnCombinedMove === undefined) {
+            rulesConfig.midPathKillOnCombinedMove = true;
+          }
+          if (localStorage.getItem('bannu_ludo_mid_kill_default_v1') !== 'migrated') {
+            rulesConfig.midPathKillOnCombinedMove = true;
+            localStorage.setItem('bannu_ludo_mid_kill_default_v1', 'migrated');
           }
           if (localStorage.getItem('bannu_ludo_kill_stacked_v1') !== 'migrated') {
             rulesConfig.killAllStackedEnemies = true;
@@ -4579,6 +4809,7 @@
             clearTimeout(gameState.aiTimer);
             gameState.aiTimer = null;
           }
+          clearAiThinkingIndicator();
           if (autoMoveTimer) {
             clearTimeout(autoMoveTimer);
             autoMoveTimer = null;
@@ -5509,6 +5740,56 @@
         });
       }
 
+      function getMidPathCaptureCandidatesForCombined(token, compValues, customPlayers) {
+        if (rulesConfig.midPathKillOnCombinedMove === false) return [];
+        if (!token || token.state !== 'board' || !Array.isArray(compValues) || compValues.length < 2) return [];
+        const pList = customPlayers || gameState.players;
+        const owner = pList[token.owner];
+        if (!owner) return [];
+        const reqKills = getRequiredKillsForHome();
+        const eligibleHome = reqKills <= 0 || ((owner.kills || 0) >= reqKills);
+        const posInLap = token.steps % 52;
+        const stepsToHomeGate = 50 - posInLap;
+
+        const uniqueVals = Array.from(new Set(compValues));
+        let bestMidCandidates = [];
+        let bestMidScore = -999999;
+
+        uniqueVals.forEach(function (dVal) {
+          if (!dVal || dVal <= 0) return;
+          if (rulesConfig.strictSpawnOnlySixesRule && dVal === 6) return;
+          if (stepsToHomeGate >= 0 && dVal > stepsToHomeGate && eligibleHome) {
+            return;
+          }
+          if (rulesConfig.pairBlockadeRule) {
+            for (let s = 1; s < dVal; s++) {
+              const stepTrackIdx = (START_TRACK_INDEX[token.owner] + token.steps + s) % 52;
+              if (isTrackBlockedByJoraOnPlayers(token.owner, stepTrackIdx, pList)) {
+                return;
+              }
+            }
+          }
+          const midSteps = token.steps + dVal;
+          if (wouldExceedMaxStackLimit(token.owner, token.id, 'board', midSteps, 0, pList)) {
+            return;
+          }
+          const midTrackIdx = (START_TRACK_INDEX[token.owner] + midSteps) % 52;
+          const cands = getCaptureCandidatesOnPlayers(token.owner, midTrackIdx, pList);
+          if (cands.length > 0) {
+            const bestV = chooseBestCaptureVictim(token.owner, cands, rulesConfig.killAllStackedEnemies, pList);
+            const score = bestV ? ((bestV.steps || 0) + cands.length * 100) : cands.length * 100;
+            if (score > bestMidScore) {
+              bestMidScore = score;
+              bestMidCandidates = cands.map(function (c) {
+                return Object.assign({}, c, { midDieValue: dVal, midTrackIdx: midTrackIdx });
+              });
+            }
+          }
+        });
+
+        return bestMidCandidates;
+      }
+
       function getDestinationGridCoordForSim(ownerIdx, sim) {
         if (sim.isSpawn) return MAIN_TRACK[START_TRACK_INDEX[ownerIdx]];
         if (sim.newState === 'completed') return HOME_PATHS[ownerIdx][5];
@@ -5748,14 +6029,22 @@
                 const d1 = unusedDice[j];
                 if (rulesConfig.strictSpawnOnlySixesRule && (d0.value === 6 || d1.value === 6)) continue;
                 const sumDelta = d0.value + d1.value;
-                if (seenCombinedSums.has(sumDelta)) continue;
-                seenCombinedSums.add(sumDelta);
-                const simCombined = simulateTokenAdvance(tk, sumDelta, undefined, tokens, false);
+                const pairKey = sumDelta + '_' + Math.min(d0.value, d1.value) + '_' + Math.max(d0.value, d1.value);
+                if (seenCombinedSums.has(pairKey)) continue;
+                seenCombinedSums.add(pairKey);
+                const midCands = tk.state === 'board' ? getMidPathCaptureCandidatesForCombined(tk, [d0.value, d1.value], gameState.players) : [];
+                const addedMidKills = rulesConfig.killAllStackedEnemies ? midCands.length : (midCands.length > 0 ? 1 : 0);
+                const unlockedByMidKill = !canOwnerEnterHomeStretch(targetOwnerIdx) && midCands.length > 0 && ((owner.kills + addedMidKills) >= getRequiredKillsForHome());
+                const effHomeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || unlockedByMidKill;
+                const simCombined = simulateTokenAdvance(tk, sumDelta, effHomeEligible, tokens, false);
                 if (simCombined.valid) {
+                  if (unlockedByMidKill) simCombined.unlockedHomeByMidKill = true;
                   candidateCombinedMoves.push({
                     tokenId: tk.id,
                     ownerIdx: targetOwnerIdx,
                     diceIds: [d0.id, d1.id],
+                    componentValues: [d0.value, d1.value],
+                    midCaptureCandidates: midCands,
                     delta: sumDelta,
                     isCombined: true,
                     allowsSecondDie: true,
@@ -5767,7 +6056,7 @@
                 if (
                   tk.state === 'board' &&
                   isOptionalLoopAfterKillAllowed() &&
-                  canOwnerEnterHomeStretch(targetOwnerIdx)
+                  effHomeEligible
                 ) {
                   const posInLap = tk.steps % 52;
                   const stepsToGate = 50 - posInLap;
@@ -5778,6 +6067,8 @@
                         tokenId: tk.id,
                         ownerIdx: targetOwnerIdx,
                         diceIds: [d0.id, d1.id],
+                        componentValues: [d0.value, d1.value],
+                        midCaptureCandidates: midCands,
                         delta: sumDelta,
                         isCombined: true,
                         isOptionalLoop: true,
@@ -5809,7 +6100,9 @@
 
         const allLegalMoves = filteredSingles.concat(candidateCombinedMoves);
         const captureMoves = allLegalMoves.filter(function (mv) {
-          if (!mv.sim || mv.sim.newState !== 'board') return false;
+          if (!mv.sim) return false;
+          if (mv.midCaptureCandidates && mv.midCaptureCandidates.length > 0) return true;
+          if (mv.sim.newState !== 'board') return false;
           const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
           return getCaptureCandidatesAtTrackIndex(mv.ownerIdx, destTrack).length > 0;
         });
@@ -5831,16 +6124,19 @@
 
       // Describe the tactical outcome of a move for Single-Click Outcome Preview
       function getMoveOutcomePreviewTag(move) {
+        const hasMidKill = Boolean(move.isCombined && move.midCaptureCandidates && move.midCaptureCandidates.length > 0);
         if (move.isReverseKill || (move.sim && move.sim.isReverseKill)) return { tag: '🔄⚔️ BACKSTAB (-' + move.delta + ')', color: '#e11d48' };
         if (move.sim && move.sim.isBounceHome) return { tag: '🔙 BOUNCE (Step ' + move.sim.newHomeStep + ')', color: '#ea580c' };
         if (move.isSplitMove) return { tag: '🔄 SPLIT +' + move.delta, color: '#0284c7' };
         if (move.sim.isSpawn) return { tag: '⚡ SPAWN (+' + move.delta + ')', color: '#d97706' };
-        if (move.sim.newState === 'completed') return { tag: '🏠 COMPLETE! (+' + move.delta + ')', color: '#059669' };
-        if (move.sim.newState === 'home_stretch') return { tag: '🏠 HOME PATH (+' + move.delta + ')', color: '#059669' };
-        if (move.sim.loopedPastHome) return { tag: '🔄 LOOP (+' + move.delta + ')', color: '#7c3aed' };
+        if (move.sim.newState === 'completed') return { tag: (hasMidKill ? '⚔️🏠 MID-KILL & HOME! (+' : '🏠 COMPLETE! (+') + move.delta + ')', color: hasMidKill ? '#e11d48' : '#059669' };
+        if (move.sim.newState === 'home_stretch') return { tag: (hasMidKill ? '⚔️🏠 MID-KILL & HOME! (+' : '🏠 HOME PATH (+') + move.delta + ')', color: hasMidKill ? '#e11d48' : '#059669' };
+        if (move.sim.loopedPastHome) return { tag: (hasMidKill ? '⚔️🔄 MID-KILL & LOOP (+' : '🔄 LOOP (+') + move.delta + ')', color: hasMidKill ? '#e11d48' : '#7c3aed' };
         const destTrack = (START_TRACK_INDEX[move.ownerIdx] + move.sim.newSteps) % 52;
         const enemies = getCaptureCandidatesAtTrackIndex(move.ownerIdx, destTrack);
+        if (enemies.length > 0 && hasMidKill) return { tag: '⚔️💥 DOUBLE KILL! (+' + move.delta + ')', color: '#e11d48' };
         if (enemies.length > 0) return { tag: '⚔️ KILL! (+' + move.delta + ')', color: '#e11d48' };
+        if (hasMidKill) return { tag: '⚡⚔️ MID-KILL! (+' + move.delta + ')', color: '#e11d48' };
         if (SAFE_TRACK_INDICES.has(destTrack)) return { tag: '★ SAFE (+' + move.delta + ')', color: '#059669' };
         if (rulesConfig.teamMode) {
           const owner = gameState.players[move.ownerIdx];
@@ -5918,13 +6214,22 @@
         }
         if (uniqueTokenKeys.length === 1) {
           let chosenMove = legal[0];
+          const combinedCapture = legal.find(function (m) {
+            if (!m.isCombined) return false;
+            if (m.midCaptureCandidates && m.midCaptureCandidates.length > 0) return true;
+            if (m.sim.newState !== 'board') return false;
+            const dTrack = (START_TRACK_INDEX[m.ownerIdx] + m.sim.newSteps) % 52;
+            return getCaptureCandidatesAtTrackIndex(m.ownerIdx, dTrack).length > 0;
+          });
           const captureSingle = legal.find(function (m) {
             if (m.isCombined || m.sim.newState !== 'board') return false;
             const dTrack = (START_TRACK_INDEX[m.ownerIdx] + m.sim.newSteps) % 52;
             return getCaptureCandidatesAtTrackIndex(m.ownerIdx, dTrack).length > 0;
           });
           const combinedMove = legal.find(function (m) { return m.isCombined; });
-          if (captureSingle) {
+          if (combinedCapture) {
+            chosenMove = combinedCapture;
+          } else if (captureSingle) {
             chosenMove = captureSingle;
           } else if (combinedMove) {
             chosenMove = combinedMove;
@@ -5991,7 +6296,7 @@
           return bCoords;
         }
         const coords = [];
-        const eligibleHome = canOwnerEnterHomeStretch(token.owner) && !simResult.optionalOuterLoop;
+        const eligibleHome = (canOwnerEnterHomeStretch(token.owner) || Boolean(simResult && simResult.unlockedHomeByMidKill)) && !simResult.optionalOuterLoop;
         let curState = token.state;
         let curSteps = token.steps;
         let curHomeStep = token.homeStep;
@@ -6210,6 +6515,26 @@
           addGameLog('🎉 ' + owner.name + ' completed Bead #' + (token.id + 1) + ' into Home! (+Bonus Re-Roll Earned!)', 'gold');
         } else {
           addGameLog(owner.name + ' moved Bead #' + (token.id + 1) + ' forward by ' + move.delta + ' [' + (fullMoveMs / 1000).toFixed(2) + 's].', 'info');
+        }
+
+        if (move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && prevTokenState === 'board') {
+          const compVals = Array.isArray(move.componentValues) && move.componentValues.length >= 2
+            ? move.componentValues
+            : gameState.dicePool.filter(function (d) { return move.diceIds && move.diceIds.includes(d.id); }).map(function (d) { return d.value; });
+          const preMoveToken = { owner: token.owner, id: token.id, state: prevTokenState, steps: prevTokenSteps, homeStep: 0 };
+          const midEnemies = getMidPathCaptureCandidatesForCombined(preMoveToken, compVals, gameState.players);
+          if (midEnemies.length > 0) {
+            const bestMidVictim = chooseBestCaptureVictim(move.ownerIdx, midEnemies, rulesConfig.killAllStackedEnemies, gameState.players) || midEnemies[0];
+            const midVictimsToKill = rulesConfig.killAllStackedEnemies
+              ? midEnemies.filter(function (e) { return e.ownerIdx === bestMidVictim.ownerIdx; })
+              : [bestMidVictim];
+            midVictimsToKill.forEach(function (enemy) {
+              performSingleCapture(move.ownerIdx, token, enemy);
+            });
+            const midDieUsed = bestMidVictim.midDieValue || compVals[0];
+            addGameLog('⚡⚔️ Mid-Path Auto-Kill! ' + owner.name + ' auto-killed ' + bestMidVictim.playerName + ' at +' + midDieUsed + ' while moving the full +' + move.delta + '!', 'kill');
+            showToast('⚡⚔️ Mid-Jump Kill at +' + midDieUsed + '! Moved full +' + move.delta + '!');
+          }
         }
 
         if (token.state === 'board') {
@@ -8189,6 +8514,13 @@
         if (move.sim.isBounceHome) {
           score -= 260;
         }
+        if (move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && tk.state === 'board' && Array.isArray(move.componentValues)) {
+          const midVictims = getMidPathCaptureCandidatesForCombined(tk, move.componentValues, pList);
+          if (midVictims.length > 0) {
+            score += (ownerNeedsKill ? 1200 : 560) * killHungerMult + midVictims.length * 260;
+          }
+        }
+
         if (move.sim.newState === 'board') {
           const destTrack = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
           const newLapPos = move.sim.newSteps % 52;
@@ -8659,11 +8991,14 @@
                 if (seenSums.has(sumDelta)) continue;
                 seenSums.add(sumDelta);
                 const simC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, false, eligibleHome);
+                const midCandsSim = tk.state === 'board' ? getMidPathCaptureCandidatesForCombined(tk, [d0.value, d1.value], simPlayers) : [];
                 if (simC.valid) {
                   candidateCombined.push({
                     tokenId: tk.id,
                     ownerIdx: targetOwnerIdx,
                     diceIds: [d0.id, d1.id],
+                    componentValues: [d0.value, d1.value],
+                    midCaptureCandidates: midCandsSim,
                     delta: sumDelta,
                     isCombined: true,
                     allowsSecondDie: true,
@@ -8711,7 +9046,9 @@
 
         if (rulesConfig.mandatoryCapture && candidateMoves.length > 0) {
           const capOnly = candidateMoves.filter(function (mv) {
-            if (!mv.sim || mv.sim.newState !== 'board') return false;
+            if (!mv.sim) return false;
+            if (mv.midCaptureCandidates && mv.midCaptureCandidates.length > 0) return true;
+            if (mv.sim.newState !== 'board') return false;
             const destTrack = (START_TRACK_INDEX[mv.ownerIdx] + mv.sim.newSteps) % 52;
             return getCaptureCandidatesOnPlayers(mv.ownerIdx, destTrack, simPlayers).length > 0;
           });
@@ -8746,6 +9083,36 @@
         }
 
         let killedOnThisMove = 0;
+        if (mv.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && prevState === 'board' && Array.isArray(mv.componentValues)) {
+          const preTk = { owner: tk.owner, id: tk.id, state: prevState, steps: mv.sim.newSteps - mv.delta, homeStep: 0 };
+          const midEnemiesSim = getMidPathCaptureCandidatesForCombined(preTk, mv.componentValues, simPlayers);
+          if (midEnemiesSim.length > 0) {
+            const bestMidV = chooseBestCaptureVictim(mv.ownerIdx, midEnemiesSim, rulesConfig.killAllStackedEnemies, simPlayers) || midEnemiesSim[0];
+            const midToKill = rulesConfig.killAllStackedEnemies
+              ? midEnemiesSim.filter(function (e) { return e.ownerIdx === bestMidV.ownerIdx; })
+              : [bestMidV];
+            const vPlMid = simPlayers[bestMidV.ownerIdx];
+            midToKill.forEach(function (v) {
+              const vTk = vPlMid.tokens[v.tokenId];
+              const vLap = vTk ? (vTk.steps % 52) : 12;
+              if (turnEvents) {
+                turnEvents.killsEarned += 1;
+                turnEvents.victimStepsSum += vLap;
+                if (vLap >= 36) turnEvents.urgentThreatKills += 1;
+              }
+              vTk.state = 'yard';
+              vTk.steps = 0;
+              vTk.homeStep = 0;
+              vTk.lockedThisTurn = false;
+              owner.kills += 1;
+              killedOnThisMove += 1;
+            });
+            if (rulesConfig.bonusRollOnKill) {
+              earnedBonus = true;
+              if (turnEvents) turnEvents.bonusRollEarned = true;
+            }
+          }
+        }
         if (tk.state === 'board') {
           const destTrack = getOuterTrackIndex(tk);
           const enemies = getCaptureCandidatesOnPlayers(mv.ownerIdx, destTrack, simPlayers);
@@ -9286,6 +9653,7 @@
           clearTimeout(gameState.aiTimer);
           gameState.aiTimer = null;
         }
+        clearAiThinkingIndicator();
         if (!gameState.isMatchActive || gameState.isPaused) return;
         const actor = gameState.players[gameState.currentTurn];
         if (!actor || !actor.active) return;
@@ -9308,13 +9676,30 @@
         if (netMatch.isActive && !netMatch.isHost) return;
 
         const timings = getAiSpeedTimings();
+        const useHumanPace = (rulesConfig.aiSpeed || 'default') === 'human';
 
         if (gameState.phase === 'ROLL') {
+          const rollDelay = useHumanPace ? computeHumanAiRollDelay(actor) : timings.rollDelay;
+          if (useHumanPace) showAiThinkingIndicator(actor, 'ROLL', rollDelay);
           gameState.aiTimer = setTimeout(function () {
+            if (useHumanPace) clearAiThinkingIndicator();
             rollDiceForCurrentPlayer();
-          }, timings.rollDelay);
+          }, rollDelay);
         } else if (gameState.phase === 'MOVE') {
+          const legalPreview = useHumanPace ? computeLegalMoves() : null;
+          let moveDelay;
+          if (!useHumanPace) {
+            moveDelay = timings.moveDelay;
+          } else if (canPlayerRollBonusNow() && !legalPreview.some(function (m) { return evaluateMoveScore(m) >= 8500; })) {
+            // The AI is only going to tap the dice again, so don't stage a
+            // long think over an action it isn't taking.
+            moveDelay = clampAiPaceMs(humanPaceRandom(280, 620), 260, 900);
+          } else {
+            moveDelay = computeHumanAiMoveDelay(legalPreview);
+          }
+          if (useHumanPace) showAiThinkingIndicator(actor, 'MOVE', moveDelay);
           gameState.aiTimer = setTimeout(function () {
+            if (useHumanPace) clearAiThinkingIndicator();
             if (canPlayerRollBonusNow()) {
               const legalNow = computeLegalMoves();
               const hasImmediateWinningMove = legalNow.some(function (m) {
@@ -9332,7 +9717,7 @@
             }
             const chosen = chooseBestAiMove(legal);
             executeMove(chosen || legal[0]);
-          }, timings.moveDelay);
+          }, moveDelay);
         }
       }
       // --- 8. CANVAS BOARD RENDERER (With Active Turn Yard Glow, Moved Bead Trail, Teammate Badges & On-Board Dice!) ---
@@ -11160,6 +11545,8 @@
           sel1DieMode.disabled = !rulesConfig.oneDieWhenOneBeadLeft;
           sel1DieMode.classList.toggle('opacity-50', !rulesConfig.oneDieWhenOneBeadLeft);
         }
+        const chkMidKill = document.getElementById('chkMidPathKillOnCombinedMove');
+        if (chkMidKill) chkMidKill.checked = rulesConfig.midPathKillOnCombinedMove !== false;
         const chkMandCap = document.getElementById('chkMandatoryCapture');
         if (chkMandCap) chkMandCap.checked = Boolean(rulesConfig.mandatoryCapture);
         const chk3TimeoutBot = document.getElementById('chkThreeTimeoutsBotTakeover');
@@ -11227,7 +11614,7 @@
         const pauseAiSel = document.getElementById('pauseAiDifficultySelect');
         if (pauseAiSel) pauseAiSel.value = rulesConfig.aiDifficulty;
 
-        const presetSpeeds = ['default', 'slow', 'dramatic', 'slowest'];
+        const presetSpeeds = ['default', 'human', 'slow', 'dramatic', 'slowest'];
         const curSpeed = rulesConfig.aiSpeed || 'default';
         const isPresetSpeed = presetSpeeds.includes(curSpeed);
         const curCustomSec = rulesConfig.aiCustomSpeedSec || 1.5;
@@ -11266,6 +11653,7 @@
         if (quickAiSpeedLabel) {
           const shortMap = {
             default: 'Fast',
+            human: 'Human',
             slow: 'Slow',
             dramatic: 'Drama',
             slowest: 'Slowest',
@@ -11355,6 +11743,7 @@
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.oneDieConversionMode = 'all_in_home';
+        rulesConfig.midPathKillOnCombinedMove = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         rulesConfig.reverseKillRule = false;
@@ -11411,6 +11800,7 @@
         rulesConfig.twoKillsForHome = false;
         rulesConfig.oneDieWhenOneBeadLeft = true;
         rulesConfig.oneDieConversionMode = 'all_in_home';
+        rulesConfig.midPathKillOnCombinedMove = true;
         rulesConfig.mandatoryCapture = false;
         rulesConfig.threeTimeoutsBotTakeover = true;
         rulesConfig.reverseKillRule = false;
@@ -15529,6 +15919,110 @@
         }, 2400);
       }
 
+      // --- 15A. REUSABLE CONFIRMATION DIALOG FOR CRITICAL / DESTRUCTIVE ACTIONS ---
+      let pendingConfirmAction = null;
+      let confirmReturnFocus = null;
+
+      function closeConfirmActionModal() {
+        const modal = document.getElementById('confirmActionModal');
+        if (!modal || modal.classList.contains('hidden')) return;
+        modal.classList.add('hidden');
+        pendingConfirmAction = null;
+        if (confirmReturnFocus && typeof confirmReturnFocus.focus === 'function') {
+          try { confirmReturnFocus.focus(); } catch (e) {}
+        }
+        confirmReturnFocus = null;
+      }
+
+      function hasResumableMatchData() {
+        if (gameState.isMatchActive) return true;
+        try {
+          const snap = getSavedMatchSnapshotData();
+          return Boolean(snap && Array.isArray(snap.players) && snap.players.length === 4);
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function confirmCriticalAction(options, onConfirm) {
+        const modal = document.getElementById('confirmActionModal');
+        const opts = (typeof options === 'string') ? { message: options } : (options || {});
+        if (!modal) {
+          // Fail safe: never block the action if the dialog is unavailable.
+          if (typeof onConfirm === 'function') onConfirm();
+          return;
+        }
+        if (!modal.classList.contains('hidden')) closeConfirmActionModal();
+
+        const iconEl = document.getElementById('confirmActionIcon');
+        const titleEl = document.getElementById('confirmActionTitle');
+        const messageEl = document.getElementById('confirmActionMessage');
+        const okBtn = document.getElementById('confirmActionOkBtn');
+        const cancelBtn = document.getElementById('confirmActionCancelBtn');
+
+        const tone = opts.tone === 'warn' ? 'warn' : (opts.tone === 'info' ? 'info' : 'danger');
+        const toneStyles = {
+          danger: {
+            icon: 'bg-rose-100 border border-rose-300',
+            button: 'bg-rose-600 hover:bg-rose-500 text-white'
+          },
+          warn: {
+            icon: 'bg-amber-100 border border-amber-300',
+            button: 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+          },
+          info: {
+            icon: 'bg-emerald-100 border border-emerald-300',
+            button: 'bg-emerald-600 hover:bg-emerald-500 text-white'
+          }
+        };
+
+        if (iconEl) {
+          iconEl.textContent = opts.icon || (tone === 'info' ? 'ℹ️' : '⚠️');
+          iconEl.className = 'w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 ' + toneStyles[tone].icon;
+        }
+        if (titleEl) titleEl.textContent = opts.title || 'Are you sure?';
+        if (messageEl) messageEl.textContent = opts.message || 'This action cannot be undone.';
+        if (okBtn) {
+          okBtn.textContent = opts.confirmLabel || 'Confirm';
+          okBtn.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition ' + toneStyles[tone].button;
+        }
+        if (cancelBtn) cancelBtn.textContent = opts.cancelLabel || 'Cancel';
+
+        pendingConfirmAction = typeof onConfirm === 'function' ? onConfirm : null;
+        confirmReturnFocus = document.activeElement;
+
+        modal.classList.remove('hidden');
+        // Focus Cancel (not the destructive button) to avoid accidental confirmation.
+        setTimeout(function () {
+          if (cancelBtn && !modal.classList.contains('hidden')) {
+            try { cancelBtn.focus(); } catch (e) {}
+          }
+        }, 30);
+      }
+
+      document.getElementById('confirmActionOkBtn').addEventListener('click', function () {
+        const action = pendingConfirmAction;
+        closeConfirmActionModal();
+        if (typeof action === 'function') {
+          setTimeout(function () {
+            try { action(); } catch (err) { console.error('Confirmed action failed:', err); }
+          }, 0);
+        }
+      });
+      document.getElementById('confirmActionCancelBtn').addEventListener('click', closeConfirmActionModal);
+      document.getElementById('confirmActionModal').addEventListener('click', function (e) {
+        if (e.target === this) closeConfirmActionModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        const modal = document.getElementById('confirmActionModal');
+        if (!modal || modal.classList.contains('hidden')) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          e.stopPropagation();
+          closeConfirmActionModal();
+        }
+      });
+
       // --- 15B. COMPREHENSIVE BILINGUAL (ENGLISH + URDU) RULEBOOK GUIDE RENDERER ---
       const GUIDE_CATEGORIES_META = [
         {
@@ -15964,7 +16458,23 @@
           exampleUr: 'مثال: آپ کی صرف ایک گوٹی ہے جسے پکا ہونے کے لیے 6 چاہیے اور آپ کا 5+4 (کل 9) آ گیا۔ چونکہ 5 چلنے کے بعد 4 چلنے کے لیے کوئی دوسری گوٹی نہیں، اس لیے یہ چال نہیں ہو سکے گی۔'
         },
 
-        // ==================== CATEGORY 4: COMBAT, CAPTURES & JORA BLOCKADES (3) ====================
+        // ==================== CATEGORY 4: COMBAT, CAPTURES & JORA BLOCKADES (4) ====================
+        {
+          id: 'mid_path_kill_on_combined_move',
+          cat: 'combat',
+          ruleKey: 'midPathKillOnCombinedMove',
+          defaultBadge: 'Default: ON (پہلے سے آن)',
+          titleEn: 'Auto-Kill Mid-Path Enemy on Combined 2-Dice Move',
+          titleUr: 'اکٹھا نمبر چلنے پر درمیان میں آنے والی دشمن گوٹی کا خودکار شکار',
+          enDesc: 'When you roll 2 dice (for example 5 and 3) and move a single bead by their combined total (8), if there is an enemy bead sitting on the intermediate square (+3 or +5) that could be killed by either die, that enemy bead is automatically killed while your bead completes its full 8-step move!',
+          urDesc: 'جب آپ کے دو دانوں پر مثلاً 5 اور 3 آئے اور آپ ایک ہی گوٹی کو اکٹھا 8 (5+3) چلائیں، تو اگر راستے کے درمیانی خانے (+3 یا +5) پر دشمن کی ایسی گوٹی موجود ہو جو 3 یا 5 سے مر سکتی تھی، تو وہ دشمن گوٹی خودکار طور پر مر جائے گی اور آپ کی گوٹی پورا 8 خانے آگے چلی جائے گی۔',
+          onEffectEn: 'ENABLED (Default ON): Moving a bead by the combined sum of both dice automatically kills any captureable enemy at the first-die or second-die midpoint and advances the full combined total.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): دونوں ڈائس کا مجموعہ اکٹھا چلنے پر درمیان میں (پہلے یا دوسرے ڈائس کے فاصلے پر) بیٹھی دشمن گوٹی خودکار طور پر شکار ہو جائے گی اور آپ کی گوٹی پورا مجموعہ طے کرے گی۔',
+          offEffectEn: 'DISABLED (OFF): Combined moves jump directly to the final sum square without capturing enemies on the intermediate single-die squares.',
+          offEffectUr: 'آف (OFF): اکٹھا نمبر چلنے پر گوٹی درمیان والی دشمن گوٹی کو مارے بغیر سیدھی آخری خانے پر جائے گی۔',
+          exampleEn: 'You roll 5 and 3, and Green is sitting 3 steps ahead of your bead. You tap +8 (or auto-move with 1 bead): your bead automatically kills Green at +3 AND continues +5 to land 8 steps ahead (+Bonus Kill Re-Roll earned)!',
+          exampleUr: 'مثال: آپ کا 5 اور 3 آیا اور آپ کی گوٹی سے 3 خانے آگے ہری گوٹی بیٹھی ہے۔ آپ نے گوٹی کو اکٹھا 8 چلایا تو ہری گوٹی 3 پر خودکار طور پر مر جائے گی اور آپ کی گوٹی پورے 8 خانے آگے پہنچ جائے گی!'
+        },
         {
           id: 'kill_all_stacked_enemies',
           cat: 'combat',
@@ -16641,6 +17151,17 @@
       });
 
       document.getElementById('resumeSavedMatchBtn').addEventListener('click', function () {
+        if (gameState.isMatchActive) {
+          confirmCriticalAction({
+            icon: '📂',
+            title: 'Replace the Current Match?',
+            message: 'Resuming the saved match will overwrite the match currently in progress. Save or finish it first if you want to keep it.',
+            confirmLabel: 'Resume Saved Match',
+            cancelLabel: 'Keep Current Match',
+            tone: 'danger'
+          }, resumeSavedMatch);
+          return;
+        }
         resumeSavedMatch();
       });
 
@@ -16822,8 +17343,17 @@
         syncRulesStudioControls();
         showToast('🧠 AI Intelligence set to: ' + this.options[this.selectedIndex].text, true);
       });
-      document.getElementById('pauseResetAiLearningBtn').addEventListener('click', resetAiKnowledge);
-      document.getElementById('rulesResetAiLearningBtn').addEventListener('click', resetAiKnowledge);
+      function requestAiMemoryReset() {
+        confirmCriticalAction({
+          icon: '🧠',
+          title: 'Reset AI Learned Memory?',
+          message: 'The AI will forget every learned experience, corrected mistake and mastered tactic, returning to Generation 1. This cannot be undone.',
+          confirmLabel: 'Reset AI Memory',
+          tone: 'warn'
+        }, resetAiKnowledge);
+      }
+      document.getElementById('pauseResetAiLearningBtn').addEventListener('click', requestAiMemoryReset);
+      document.getElementById('rulesResetAiLearningBtn').addEventListener('click', requestAiMemoryReset);
       document.getElementById('homeQuickAiSpeedSelect').addEventListener('change', function () {
         const isCustom = this.value === 'custom';
         document.getElementById('homeCustomAiSpeedInput').classList.toggle('hidden', !isCustom);
@@ -16865,7 +17395,7 @@
         syncRulesStudioControls();
       });
       document.getElementById('quickAiSpeedBtn').addEventListener('click', function () {
-        const order = ['default', 'slow', 'dramatic', 'slowest'];
+        const order = ['default', 'human', 'slow', 'dramatic', 'slowest'];
         let curIdx = order.indexOf(rulesConfig.aiSpeed);
         if (curIdx === -1) curIdx = 0;
         const nextSpeed = order[(curIdx + 1) % order.length];
@@ -16874,6 +17404,7 @@
         syncRulesStudioControls();
         const labelMap = {
           default: '⚡ Fast (Default)',
+          human: '🧠 Human-like (Adaptive)',
           slow: '🐢 Slow (Deliberate)',
           dramatic: '🎭 Dramatic (Suspenseful)',
           slowest: '⏳ Slowest (Spectator)'
@@ -16969,6 +17500,19 @@
           }
           const armed = Boolean(startBtnCheatArmed);
           clearStartBtnSecretHold(false);
+          if (hasResumableMatchData()) {
+            confirmCriticalAction({
+              icon: '🎲',
+              title: 'Start a New Match?',
+              message: 'A match is still active or saved. Starting now will replace that progress with a fresh game. Use "Leave Match" first if you want to resume it later.',
+              confirmLabel: 'Start New Match',
+              cancelLabel: 'Keep Current Match',
+              tone: 'danger'
+            }, function () {
+              launchMatchFromHeroBtn(armed);
+            });
+            return;
+          }
           launchMatchFromHeroBtn(armed);
         });
       }
@@ -17047,10 +17591,19 @@
         setGamePaused(false);
       });
       document.getElementById('exitToHomeBtn').addEventListener('click', function () {
-        setGamePaused(false);
-        saveActiveMatchSnapshot();
-        document.getElementById('pauseMenuModal').classList.add('hidden');
-        switchNavigationTab('viewHome');
+        confirmCriticalAction({
+          icon: '🚪',
+          title: 'Leave the Current Match?',
+          message: 'Your match progress will be saved so you can resume from the Home screen. AI turns will pause until you return.',
+          confirmLabel: 'Leave Match',
+          cancelLabel: 'Keep Playing',
+          tone: 'warn'
+        }, function () {
+          setGamePaused(false);
+          saveActiveMatchSnapshot();
+          document.getElementById('pauseMenuModal').classList.add('hidden');
+          switchNavigationTab('viewHome');
+        });
       });
 
       document.getElementById('quickCustomizeRulesBtn').addEventListener('click', function () {
@@ -17214,6 +17767,8 @@
 
       window.addEventListener('keydown', function (e) {
         if (e.code === 'Space' && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+          const confirmModal = document.getElementById('confirmActionModal');
+          if (confirmModal && !confirmModal.classList.contains('hidden')) return;
           if (gameState.isMatchActive && gameState.phase === 'ROLL' && gameState.players[gameState.currentTurn].type === 'human') {
             if (netMatch.isActive && gameState.currentTurn !== netMatch.myLocalSeat) return;
             e.preventDefault();
@@ -17222,13 +17777,42 @@
         }
       });
 
-      document.getElementById('presetBannuQuickBtn').addEventListener('click', function () { applyBannuRulesPreset(true); });
-      document.getElementById('presetYallaQuickBtn').addEventListener('click', function () { applyYallaClassicPreset(true); });
+      document.getElementById('presetBannuQuickBtn').addEventListener('click', function () {
+        if (!hasResumableMatchData()) { applyBannuRulesPreset(true); return; }
+        confirmCriticalAction({
+          icon: '🏔️',
+          title: 'Load Bannu Preset & Restart?',
+          message: 'A match is active or saved. Loading this preset will replace your house rules and start a brand-new match, discarding that saved progress.',
+          confirmLabel: 'Load & Restart',
+          cancelLabel: 'Keep Current Match',
+          tone: 'danger'
+        }, function () { applyBannuRulesPreset(true); });
+      });
+      document.getElementById('presetYallaQuickBtn').addEventListener('click', function () {
+        if (!hasResumableMatchData()) { applyYallaClassicPreset(true); return; }
+        confirmCriticalAction({
+          icon: '🎯',
+          title: 'Load Yalla Preset & Restart?',
+          message: 'A match is active or saved. Loading this preset will replace your house rules and start a brand-new match, discarding that saved progress.',
+          confirmLabel: 'Load & Restart',
+          cancelLabel: 'Keep Current Match',
+          tone: 'danger'
+        }, function () { applyYallaClassicPreset(true); });
+      });
       document.getElementById('applyBannuPresetBtn').addEventListener('click', function () { applyBannuRulesPreset(false); });
       document.getElementById('applyYallaPresetBtn').addEventListener('click', function () { applyYallaClassicPreset(false); });
       document.getElementById('newMatchQuickBtn').addEventListener('click', function () {
-        netMatch.isActive = false;
-        initNewMatch(null, false);
+        confirmCriticalAction({
+          icon: '🎲',
+          title: 'Start a New Match?',
+          message: 'The current match in progress will be abandoned and replaced with a fresh game. Any unsaved progress will be lost.',
+          confirmLabel: 'Start New Match',
+          cancelLabel: 'Keep Current Match',
+          tone: 'danger'
+        }, function () {
+          netMatch.isActive = false;
+          initNewMatch(null, false);
+        });
       });
 
       document.getElementById('demoScenarioBtn').addEventListener('click', function () {
@@ -17284,7 +17868,7 @@
         'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
         'chkFirstBeadOnBoard', 'initialBeadsOnBoardSelect', 'chkPairBlockadeRule',
         'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft', 'oneDieConversionModeSelect',
-        'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
+        'chkMidPathKillOnCombinedMove', 'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
         'chkReverseKill', 'chkFriendlyFire', 'chkKamikazeJora', 'chkSnakeEyesPenalty',
         'chkMaxStackLimit', 'chkHeavyJail', 'chkPositionHijack', 'chkSpawnInvincibility',
         'chkPhookPenalty', 'chkBouncingHome', 'chkAntiCampingLimit', 'chkJoraBreaker',
@@ -17431,12 +18015,20 @@
       });
 
       document.getElementById('clearAllMiceBtn').addEventListener('click', function () {
-        multiMouseState.wizardStep = null;
-        multiMouseState.playerPointerIds = { 0: null, 1: null, 2: null, 3: null };
-        saveMultiMouseMap();
-        document.getElementById('mmWizardPromptText').textContent =
-          '🗑️ Cleared all mouse bindings. Click any player box below with that player\'s mouse to bind.';
-        showToast('🗑️ All mouse hardware bindings cleared.', true);
+        confirmCriticalAction({
+          icon: '🖱️',
+          title: 'Clear All Mouse Bindings?',
+          message: 'Every seat\'s physical mouse pointer binding will be removed. You will need to re-bind each player\'s mouse before using Multi-Mouse mode.',
+          confirmLabel: 'Clear Bindings',
+          tone: 'warn'
+        }, function () {
+          multiMouseState.wizardStep = null;
+          multiMouseState.playerPointerIds = { 0: null, 1: null, 2: null, 3: null };
+          saveMultiMouseMap();
+          document.getElementById('mmWizardPromptText').textContent =
+            '🗑️ Cleared all mouse bindings. Click any player box below with that player\'s mouse to bind.';
+          showToast('🗑️ All mouse hardware bindings cleared.', true);
+        });
       });
       document.getElementById('autoRollTurnChk').addEventListener('change', function () {
         setAutoRollPreference(this.checked);
@@ -17534,6 +18126,8 @@
         rulesConfig.oneDieWhenOneBeadLeft = document.getElementById('chkOneDieWhenOneBeadLeft').checked;
         const sel1DieMode = document.getElementById('oneDieConversionModeSelect');
         if (sel1DieMode) rulesConfig.oneDieConversionMode = sel1DieMode.value || 'all_in_home';
+        const chkMidKill = document.getElementById('chkMidPathKillOnCombinedMove');
+        if (chkMidKill) rulesConfig.midPathKillOnCombinedMove = chkMidKill.checked;
         rulesConfig.mandatoryCapture = document.getElementById('chkMandatoryCapture').checked;
         rulesConfig.threeTimeoutsBotTakeover = document.getElementById('chkThreeTimeoutsBotTakeover').checked;
         const chkRevKill = document.getElementById('chkReverseKill');
@@ -17609,19 +18203,27 @@
       }
 
       document.getElementById('resetDefaultRulesBtn').addEventListener('click', function () {
-        const keepAuto = rulesConfig.autoRollOnTurn;
-        const keepTips = rulesConfig.showTooltips;
-        const keepSpeed = rulesConfig.aiSpeed;
-        const keepCustom = rulesConfig.aiCustomSpeedSec;
-        rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, {
-          autoRollOnTurn: keepAuto,
-          showTooltips: keepTips,
-          aiSpeed: keepSpeed,
-          aiCustomSpeedSec: keepCustom
+        confirmCriticalAction({
+          icon: '⚙️',
+          title: 'Restore Default Rules?',
+          message: 'Every custom house-rule toggle will be replaced with the default Bannu rules. Your AI pace, auto-roll and tooltip preferences are kept.',
+          confirmLabel: 'Restore Defaults',
+          tone: 'warn'
+        }, function () {
+          const keepAuto = rulesConfig.autoRollOnTurn;
+          const keepTips = rulesConfig.showTooltips;
+          const keepSpeed = rulesConfig.aiSpeed;
+          const keepCustom = rulesConfig.aiCustomSpeedSec;
+          rulesConfig = Object.assign({}, DEFAULT_RULES_CONFIG, {
+            autoRollOnTurn: keepAuto,
+            showTooltips: keepTips,
+            aiSpeed: keepSpeed,
+            aiCustomSpeedSec: keepCustom
+          });
+          saveRulesPreferences(true);
+          syncRulesStudioControls();
+          showToast('🔄 Restored Default Bannu Rules & saved preferences!', true);
         });
-        saveRulesPreferences(true);
-        syncRulesStudioControls();
-        showToast('🔄 Restored Default Bannu Rules & saved preferences!', true);
       });
 
       document.getElementById('syncRulesToPeersBtn').addEventListener('click', function () {
@@ -17630,11 +18232,25 @@
       });
 
       document.getElementById('saveAndStartMatchBtn').addEventListener('click', function () {
-        secretEasyAiCheatActive = false;
-        readRulesFormIntoConfig();
-        switchNavigationTab('viewPlay');
-        initNewMatch('Started custom match (' + rulesConfig.diceCount + ' Dice, ' + rulesConfig.tokensPerPlayer + ' Beads).', false);
-        broadcastSettingsSync();
+        const startCustomMatch = function () {
+          secretEasyAiCheatActive = false;
+          readRulesFormIntoConfig();
+          switchNavigationTab('viewPlay');
+          initNewMatch('Started custom match (' + rulesConfig.diceCount + ' Dice, ' + rulesConfig.tokensPerPlayer + ' Beads).', false);
+          broadcastSettingsSync();
+        };
+        if (!hasResumableMatchData()) {
+          startCustomMatch();
+          return;
+        }
+        confirmCriticalAction({
+          icon: '🎲',
+          title: 'Start a New Match?',
+          message: 'A match is active or saved. Saving these rules and starting now will replace that progress with a fresh game.',
+          confirmLabel: 'Save & Start',
+          cancelLabel: 'Keep Current Match',
+          tone: 'danger'
+        }, startCustomMatch);
       });
 
       document.getElementById('createWifiRoomBtn').addEventListener('click', function () {
@@ -17832,37 +18448,55 @@
       document.getElementById('importStatsBackupInput').addEventListener('change', function (e) {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function (ev) {
-          try {
-            const data = JSON.parse(ev.target.result);
-            if (data.careerStats) {
-              careerStats = Object.assign({}, DEFAULT_STATS, data.careerStats);
-              if (data.rulesConfig) rulesConfig = Object.assign({}, rulesConfig, data.rulesConfig);
-              if (data.aiKnowledgeBase) {
-                aiKnowledgeBase = Object.assign({}, DEFAULT_AI_KNOWLEDGE, data.aiKnowledgeBase);
-                saveAiKnowledge();
+        // Allow choosing the same file again if the restore is cancelled.
+        e.target.value = '';
+        confirmCriticalAction({
+          icon: '⬆️',
+          title: 'Restore Backup Data?',
+          message: 'Restoring this backup will overwrite your current career stats, custom rules and AI memory with the values in the file. This cannot be undone.',
+          confirmLabel: 'Restore Backup',
+          tone: 'danger'
+        }, function () {
+          const reader = new FileReader();
+          reader.onload = function (ev) {
+            try {
+              const data = JSON.parse(ev.target.result);
+              if (data.careerStats) {
+                careerStats = Object.assign({}, DEFAULT_STATS, data.careerStats);
+                if (data.rulesConfig) rulesConfig = Object.assign({}, rulesConfig, data.rulesConfig);
+                if (data.aiKnowledgeBase) {
+                  aiKnowledgeBase = Object.assign({}, DEFAULT_AI_KNOWLEDGE, data.aiKnowledgeBase);
+                  saveAiKnowledge();
+                }
+                saveCareerStats();
+                syncRulesStudioControls();
+                showToast('✅ Career Stats & Custom Rules Restored Successfully!');
               }
-              saveCareerStats();
-              syncRulesStudioControls();
-              showToast('✅ Career Stats & Custom Rules Restored Successfully!');
+            } catch (err) {
+              showToast('⚠️ Invalid backup file format.');
             }
-          } catch (err) {
-            showToast('⚠️ Invalid backup file format.');
-          }
-        };
-        reader.readAsText(file);
+          };
+          reader.readAsText(file);
+        });
       });
 
       document.getElementById('resetStatsBtn').addEventListener('click', function () {
-        const keepName = careerStats.playerName;
-        const keepRole = careerStats.role || 'super_admin';
-        careerStats = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATS)), {
-          playerName: keepName,
-          role: keepRole
+        confirmCriticalAction({
+          icon: '🗑️',
+          title: 'Reset All Career Stats?',
+          message: 'This permanently erases your win/loss record, telemetry, badges progress and turn history. Your player name and role are kept. This cannot be undone.',
+          confirmLabel: 'Yes, Reset Everything',
+          tone: 'danger'
+        }, function () {
+          const keepName = careerStats.playerName;
+          const keepRole = careerStats.role || 'super_admin';
+          careerStats = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATS)), {
+            playerName: keepName,
+            role: keepRole
+          });
+          saveCareerStats();
+          showToast('Career stats & telemetry reset to zero.', true);
         });
-        saveCareerStats();
-        showToast('Career stats & telemetry reset to zero.', true);
       });
 
       document.getElementById('refreshStatsCardBtn').addEventListener('click', function () {
@@ -18708,17 +19342,35 @@
         switchNavigationTab('viewStats');
       });
       document.getElementById('victoryExitLobbyBtn').addEventListener('click', function () {
-        document.getElementById('victoryModal').classList.add('hidden');
-        clearSavedMatchSnapshot();
-        switchNavigationTab('viewHome');
+        confirmCriticalAction({
+          icon: '🚪',
+          title: 'Return to the Home Lobby?',
+          message: 'You will leave the victory screen and clear this saved match snapshot. The completed match stays in your match history.',
+          confirmLabel: 'Leave to Lobby',
+          cancelLabel: 'Stay Here',
+          tone: 'warn'
+        }, function () {
+          document.getElementById('victoryModal').classList.add('hidden');
+          clearSavedMatchSnapshot();
+          switchNavigationTab('viewHome');
+        });
       });
       document.getElementById('victoryQuitMatchBtn').addEventListener('click', function () {
-        document.getElementById('victoryModal').classList.add('hidden');
-        clearSavedMatchSnapshot();
-        netMatch.isActive = false;
-        initNewMatch('Match exited to Home Lobby.', true);
-        switchNavigationTab('viewHome');
-        showToast('🚪 Exited match to Home Lobby.', true);
+        confirmCriticalAction({
+          icon: '🛑',
+          title: 'Exit This Match?',
+          message: 'You will quit the current match and clear its saved snapshot. The completed match remains in your history.',
+          confirmLabel: 'Exit Match',
+          cancelLabel: 'Keep Playing',
+          tone: 'danger'
+        }, function () {
+          document.getElementById('victoryModal').classList.add('hidden');
+          clearSavedMatchSnapshot();
+          netMatch.isActive = false;
+          initNewMatch('Match exited to Home Lobby.', true);
+          switchNavigationTab('viewHome');
+          showToast('🚪 Exited match to Home Lobby.', true);
+        });
       });
 
       // Dashboard Sub-Tabs, Role Switcher, Chart Data Modal, Filters, Pagination & Exports
