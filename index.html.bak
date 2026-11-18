@@ -69,15 +69,28 @@
     button, select {
       white-space: nowrap;
       touch-action: manipulation;
+      max-width: 100%;
     }
-    @media (min-width: 820px) {
-      label {
-        white-space: nowrap;
-      }
+    #viewRules label, #viewRules p, #viewRules div, #viewRules span, #viewRules summary,
+    #viewGuide label, #viewGuide p, #viewGuide div, #viewGuide span,
+    #pauseMenuModal label, #pauseMenuModal div, #pauseMenuModal span {
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      min-width: 0;
+      max-width: 100%;
     }
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: rgba(251, 191, 36, 0.1); }
-    ::-webkit-scrollbar-thumb { background: rgba(217, 119, 6, 0.35); border-radius: 9999px; }
+    #viewRules select, #viewHome select, #pauseMenuModal select {
+      max-width: 100%;
+      min-width: 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    * { scrollbar-width: thin; scrollbar-color: #78350f rgba(15, 23, 42, 0.14); }
+    ::-webkit-scrollbar { width: 9px; height: 9px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.12); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #92400e 0%, #451a03 100%); border: 1.5px solid rgba(255, 251, 235, 0.9); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #78350f 0%, #1e293b 100%); }
 
     @keyframes diceBounceSlot3D {
       0% { transform: translateY(0px) scale(1); }
@@ -1709,6 +1722,26 @@
 <p class="text-[11px] text-slate-600">When you roll 2 dice and kill or complete on one die (e.g. rolled 5 &amp; 4 and killed on 4), you can store the remaining 5 or use it, roll your bonus dice, and use all remaining dice counts at once.</p>
 </div>
 </label>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkFirstSixGiftRule" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkFirstSixGiftRule">🎁 First-Six Free Gift Rule (پہلا چھکا انعام / گفٹ رول — Default: ON)</label>
+<div class="flex flex-wrap items-center gap-1.5">
+<select aria-label="First Six Gift Eligibility Scope" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="firstSixGiftScopeSelect">
+<option selected="" value="first_round_window">🌍 1st Player + Next 3 in Round (Default)</option>
+<option value="first_player_only">1️⃣ Very First Player Only</option>
+</select>
+<select aria-label="First Six Gift Count" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="firstSixGiftCountSelect">
+<option selected="" value="1">🎁 +1 Free Six (Default)</option>
+<option value="2">🎁 +2 Free Sixes</option>
+<option value="3">🎁 +3 Free Sixes</option>
+</select>
+</div>
+</div>
+<p class="text-[11px] text-slate-600 mt-0.5">Default ON: The very first player in the match to roll a 6 gets +1 free 6 as a gift! By default, the remaining players also get a 1-turn window in that current round only to roll a 6 and claim the gift (if missed in that round, it expires for the match). Or choose "Very First Player Only" so only the first player gets the gift.</p>
+</div>
+</div>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkSpawnOnOneAndSix" type="checkbox"/>
 <div>
@@ -2789,9 +2822,9 @@
 <!-- Category Filter Bar, Status Filter & Search -->
 <div class="flex flex-col gap-2.5 bg-amber-50/80 p-3 rounded-2xl border border-amber-200">
 <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5" id="guideCategoryTabs">
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Categories (45)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-white shadow-sm" data-cat="all" type="button">📚 All Categories (46)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="core" type="button">🏔️ 1. Core Heritage (5)</button>
-<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 2. Dice &amp; Spawns (10)</button>
+<button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="dice" type="button">🎲 2. Dice &amp; Spawns (11)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="home_loop" type="button">🩸 3. Blood Gate &amp; Home (7)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="combat" type="button">⚔️ 4. Combat &amp; Jora (4)</button>
 <button class="guide-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-amber-200" data-cat="team_system" type="button">🤝 5. 2v2 &amp; Systems (4)</button>
@@ -3646,6 +3679,9 @@
         threeConsecutiveSixesPenalty: false,
         singleSixBonusInTwoDice: false,
         stackRollBeforeMoving: true,
+        firstSixGiftRule: true,
+        firstSixGiftScope: 'first_round_window',
+        firstSixGiftCount: 1,
         spawnOnOneAndSix: false,
         doubleSixSpawnsTwoBeads: false,
         firstBeadStartsOnBoard: false,
@@ -3784,45 +3820,28 @@
         return threatened;
       }
 
-      function computeHumanAiRollDelay(actor) {
-        const actorId = actor && actor.id !== undefined ? actor.id : gameState.currentTurn;
-        const ownerIdx = getControlledOwnerIndex(actorId);
-        const owner = gameState.players[ownerIdx];
-        // Tapping the dice is never a hard decision, so this stays brisk.
-        let delay = humanPaceRandom(280, 620);
-        if (owner) {
-          const completed = owner.tokens.filter(function (t) { return t.state === 'completed'; }).length;
-          const required = Math.max(1, Number(rulesConfig.tokensPerPlayer) || 4);
-          if (completed >= required - 1) delay += humanPaceRandom(80, 220); // brief endgame focus
-          if (countThreatenedAiBeads(ownerIdx) >= 2) delay += humanPaceRandom(60, 180);
-        }
-        if (Math.random() < 0.1) delay += humanPaceRandom(180, 420); // rare hesitation
-        return clampAiPaceMs(delay, 260, 1300);
+      function computeHumanAiRollDelay() {
+        // Rolling the dice requires zero calculation; keep it snappy like a real player tapping Roll.
+        return clampAiPaceMs(humanPaceRandom(130, 240), 120, 260);
       }
 
       function computeHumanAiMoveDelay(legalMoves) {
         const legal = Array.isArray(legalMoves) ? legalMoves : [];
 
-        // Obvious or forced actions get a quick, natural tap rather than a
-        // drawn-out "thinking" pause.
-        function quickPace(min, max) {
-          const hesitation = Math.random() < 0.06 ? humanPaceRandom(150, 320) : 0;
-          return clampAiPaceMs(humanPaceRandom(min, max) + hesitation, min, max + 380);
+        // Instant/snappy execution for forced or obvious moves (no thinking pause).
+        function instantPace(min, max) {
+          return clampAiPaceMs(humanPaceRandom(min, max), min, max);
         }
 
-        if (legal.length === 0) return quickPace(300, 680);
-        if (legal.length === 1) return quickPace(320, 720);
+        if (legal.length <= 1) return instantPace(95, 175);
+        if (legal.every(function (m) { return m.isMandatorySpawn || (m.sim && m.sim.isSpawn); })) {
+          return instantPace(95, 175);
+        }
 
-        // Rolling a 6 with beads in the yard is a forced spawn: every option
-        // is equally obvious, no matter how many beads are waiting.
-        if (legal.every(function (m) { return m.isMandatorySpawn; })) return quickPace(300, 680);
-        if (legal.every(function (m) { return m.sim && m.sim.isSpawn; })) return quickPace(300, 680);
-
-        // Only one bead can move at all, so there is nothing to weigh up.
         const uniqueTokens = new Set(legal.map(function (m) { return m.ownerIdx + '_' + m.tokenId; }));
         const hasOptionalLoopChoice = legal.some(function (m) { return m.isOptionalLoop; }) &&
                                       legal.some(function (m) { return !m.isOptionalLoop && (m.sim.newState === 'home_stretch' || m.sim.newState === 'completed'); });
-        if (uniqueTokens.size === 1 && !hasOptionalLoopChoice) return quickPace(360, 800);
+        if (uniqueTokens.size === 1 && !hasOptionalLoopChoice) return instantPace(105, 190);
 
         let scored;
         try {
@@ -3836,41 +3855,21 @@
         const second = scored[1] || best;
         const margin = Math.abs(best.score - second.score);
 
-        // Every remaining option is worth the same, so the pick is arbitrary.
-        if (margin < 25) return quickPace(340, 760);
+        // Identical options (e.g. stacked beads on same square) or an overwhelmingly obvious play (kill / home finish).
+        if (margin < 30) return instantPace(110, 195);
+        if (margin >= 600 || best.score >= 8500) return instantPace(135, 240);
 
-        let difficulty = Math.min(30, Math.max(0, legal.length - 1) * 4);
+        let difficulty = Math.min(28, Math.max(0, uniqueTokens.size - 1) * 6);
+        if (margin < 120) difficulty += 24;
+        else if (margin < 280) difficulty += 14;
+        else difficulty += 6;
 
-        if (margin < 120) difficulty += 26;       // genuine toss-up
-        else if (margin < 300) difficulty += 16;
-        else if (margin < 700) difficulty += 8;
+        if (legal.some(function (m) { return m.isCombined; })) difficulty += 4;
+        if (hasOptionalLoopChoice) difficulty += 6;
 
-        if (best.score >= 2400) difficulty += 7;  // capture or big tactical swing
-        if (best.score >= 8500) {
-          // A clearly winning move is slammed down quickly; a narrow one is checked.
-          difficulty += margin >= 450 ? -6 : 6;
-        }
-        if (legal.some(function (m) { return m.isCombined; })) difficulty += 5;
-        if (legal.some(function (m) { return m.isSplitMove || m.isOptionalLoop; })) difficulty += 5;
-
-        const ownerIdx = getControlledOwnerIndex(gameState.currentTurn);
-        const owner = gameState.players[ownerIdx];
-        if (owner) {
-          const completed = owner.tokens.filter(function (t) { return t.state === 'completed'; }).length;
-          const required = Math.max(1, Number(rulesConfig.tokensPerPlayer) || 4);
-          if (completed >= required - 1) difficulty += 8;
-          difficulty += countThreatenedAiBeads(ownerIdx) * 2;
-        }
-
-        difficulty = Math.max(0, Math.min(100, difficulty));
-
-        // Easy/medium decisions land around 0.5-1.4s; only true close calls
-        // reach the 2-3s range.
-        let delay = 470 + difficulty * 26 + humanPaceRandom(-90, 190);
-        if (difficulty >= 55 && Math.random() < 0.3) {
-          delay += humanPaceRandom(350, 850); // visible double-check
-        }
-        return clampAiPaceMs(delay, 380, 3200);
+        difficulty = Math.max(0, Math.min(80, difficulty));
+        const delay = 360 + difficulty * 12 + humanPaceRandom(-50, 110);
+        return clampAiPaceMs(delay, 320, 1450);
       }
 
       function getHumanAiThinkingLabel(phase, delayMs) {
@@ -4203,6 +4202,15 @@
             rulesConfig.stackRollBeforeMoving = true;
             localStorage.setItem('bannu_ludo_stack_roll_default_v2', 'migrated');
           }
+          if (rulesConfig.firstSixGiftRule === undefined) {
+            rulesConfig.firstSixGiftRule = true;
+          }
+          if (!['first_round_window', 'first_player_only'].includes(rulesConfig.firstSixGiftScope)) {
+            rulesConfig.firstSixGiftScope = 'first_round_window';
+          }
+          if (![1, 2, 3].includes(Number(rulesConfig.firstSixGiftCount))) {
+            rulesConfig.firstSixGiftCount = 1;
+          }
           if (rulesConfig.singleGroundLoopOnlyWithoutKill === undefined) {
             rulesConfig.singleGroundLoopOnlyWithoutKill = true;
           }
@@ -4268,6 +4276,8 @@
           const el = document.getElementById(item.elId);
           if (!el) return;
           el.addEventListener('pointerdown', function () {
+            const curActor = gameState.players && gameState.players[gameState.currentTurn];
+            if (!curActor || curActor.type !== 'human' || curActor.isBotTakeover) return;
             const now = Date.now();
             if (regionTapTracker.zone !== item.zone) {
               regionTapTracker.zone = item.zone;
@@ -4803,6 +4813,7 @@
         consecutiveBonusSixRolls: 0,
         spawnedBeadsThisRoll: 0,
         rolledDoubleSixThisBatch: false,
+        firstSixGiftState: { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] },
         turnStartSnapshot: null,
         lastMovedTrail: null,
         preferredDieFilter: null,
@@ -4850,6 +4861,7 @@
             dicePool: gameState.dicePool,
             earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
             earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
+            firstSixGiftState: gameState.firstSixGiftState || { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] },
             sEc: Boolean(secretEasyAiCheatActive),
             lastMovedTrail: gameState.lastMovedTrail,
             replayFrames: (gameState.replayFrames || []).slice(-140),
@@ -4974,6 +4986,7 @@
           gameState.dicePool = data.dicePool || [{ id: 0, value: 6, used: true }, { id: 1, value: 6, used: true }];
           gameState.earnedKillBonusThisTurn = Boolean(data.earnedKillBonusThisTurn);
           gameState.earnedHomeBonusThisTurn = Boolean(data.earnedHomeBonusThisTurn);
+          gameState.firstSixGiftState = data.firstSixGiftState || { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] };
           secretEasyAiCheatActive = Boolean(data.sEc);
           gameState.lastMovedTrail = data.lastMovedTrail || null;
           gameState.replayFrames = Array.isArray(data.replayFrames) ? data.replayFrames : [];
@@ -5087,6 +5100,7 @@
           dicePool: gameState.dicePool,
           earnedKillBonusThisTurn: gameState.earnedKillBonusThisTurn,
           earnedHomeBonusThisTurn: gameState.earnedHomeBonusThisTurn,
+          firstSixGiftState: JSON.parse(JSON.stringify(gameState.firstSixGiftState || { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] })),
           finishOrder: gameState.finishOrder || [],
           lastMovedTrail: gameState.lastMovedTrail
         });
@@ -5110,6 +5124,7 @@
         gameState.dicePool = snap.dicePool;
         gameState.earnedKillBonusThisTurn = Boolean(snap.earnedKillBonusThisTurn);
         gameState.earnedHomeBonusThisTurn = Boolean(snap.earnedHomeBonusThisTurn);
+        gameState.firstSixGiftState = snap.firstSixGiftState || { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] };
         gameState.finishOrder = Array.isArray(snap.finishOrder) ? snap.finishOrder : [];
         gameState.lastMovedTrail = snap.lastMovedTrail || null;
         if (Array.isArray(gameState.replayFrames) && gameState.replayFrames.length > 1) {
@@ -5187,6 +5202,7 @@
         gameState.consecutiveBonusSixRolls = 0;
         gameState.spawnedBeadsThisRoll = 0;
         gameState.rolledDoubleSixThisBatch = false;
+        gameState.firstSixGiftState = { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] };
         gameState.turnStartSnapshot = null;
         gameState.lastMovedTrail = null;
         gameState.selectedTokenKey = null;
@@ -6031,30 +6047,31 @@
           });
         }
 
+        const isSoleRemainingBeadOutside = Boolean(
+          yardTokens.length === 0 &&
+          groundTokens.length === 1 &&
+          groundTokens[0].state === 'board'
+        );
+
         if (
-          rulesConfig.strictHomeRemainder &&
+          (rulesConfig.strictHomeRemainder || isSoleRemainingBeadOutside) &&
           unusedDice.length === 2 &&
           groundTokens.length === 1 &&
           (yardTokens.length === 0 || !hasUnusedSix)
         ) {
           const soleToken = groundTokens[0];
           const sumVal = unusedDice[0].value + unusedDice[1].value;
-          const combinedSim = simulateTokenAdvance(soleToken, sumVal, undefined, tokens, false);
-          const combinedLoopSim = (canOwnerEnterHomeStretch(targetOwnerIdx) && isOptionalLoopAfterKillAllowed())
+          const midCandsForSole = soleToken.state === 'board' ? getMidPathCaptureCandidatesForCombined(soleToken, [unusedDice[0].value, unusedDice[1].value], gameState.players) : [];
+          const addedMidKillsSole = rulesConfig.killAllStackedEnemies ? midCandsForSole.length : (midCandsForSole.length > 0 ? 1 : 0);
+          const effEligibleSole = canOwnerEnterHomeStretch(targetOwnerIdx) || ((owner.kills + addedMidKillsSole) >= getRequiredKillsForHome());
+          const combinedSim = simulateTokenAdvance(soleToken, sumVal, effEligibleSole, tokens, false);
+          const solePosInLap = soleToken.steps % 52;
+          const soleStepsToGate = 50 - solePosInLap;
+          const soleOvershootsHomeOnTwoDice = Boolean(effEligibleSole && soleStepsToGate >= 0 && sumVal > (soleStepsToGate + 6));
+          const combinedLoopSim = (!isSoleRemainingBeadOutside && !soleOvershootsHomeOnTwoDice && effEligibleSole && isOptionalLoopAfterKillAllowed())
             ? simulateTokenAdvance(soleToken, sumVal, true, tokens, true)
             : { valid: false };
-          const singleTriggersFlawlessWin = areOpponentsWithoutKillsForPlayer(targetOwnerIdx) &&
-            yardTokens.length === 0 &&
-            unusedDice.some(function (d) {
-              const sSim = simulateTokenAdvance(soleToken, d.value, undefined, tokens, false);
-              return sSim.valid && (sSim.newState === 'home_stretch' || sSim.newState === 'completed');
-            });
-          const singleCompletesAll = yardTokens.length === 0 &&
-            unusedDice.some(function (d) {
-              const sSim = simulateTokenAdvance(soleToken, d.value, undefined, tokens, false);
-              return sSim.valid && sSim.newState === 'completed';
-            });
-          if (!combinedSim.valid && !combinedLoopSim.valid && !singleTriggersFlawlessWin && !singleCompletesAll) {
+          if (!combinedSim.valid && !combinedLoopSim.valid) {
             return [];
           }
         }
@@ -6082,11 +6099,6 @@
               lockedThisTurn: locksAfterMove
             };
           });
-          const allSimCompleted = simTokens.every(function (t) { return t.state === 'completed'; });
-          if (allSimCompleted) return true;
-          const allSimInsideHome = simTokens.every(function (t) { return t.state === 'home_stretch' || t.state === 'completed'; });
-          if (allSimInsideHome && areOpponentsWithoutKillsForPlayer(targetOwnerIdx)) return true;
-
           const simEnemies = sim.newState === 'board' ? getCaptureCandidatesAtTrackIndex(targetOwnerIdx, (START_TRACK_INDEX[tk.owner] + sim.newSteps) % 52) : [];
           const addedKills = rulesConfig.killAllStackedEnemies ? simEnemies.length : (simEnemies.length > 0 ? 1 : 0);
           const willHomeBeEligible = canOwnerEnterHomeStretch(targetOwnerIdx) || ((owner.kills + addedKills) >= getRequiredKillsForHome());
@@ -6168,6 +6180,7 @@
 
             if (
               tk.state === 'board' &&
+              !isSoleRemainingBeadOutside &&
               isOptionalLoopAfterKillAllowed() &&
               canOwnerEnterHomeStretch(targetOwnerIdx)
             ) {
@@ -6226,6 +6239,7 @@
                 }
                 if (
                   tk.state === 'board' &&
+                  !isSoleRemainingBeadOutside &&
                   isOptionalLoopAfterKillAllowed() &&
                   effHomeEligible
                 ) {
@@ -6258,11 +6272,11 @@
 
         const anyConsumesBoth = candidateSingleMoves.some(function (m) { return m.allowsSecondDie; }) || candidateCombinedMoves.length > 0;
         let filteredSingles = candidateSingleMoves;
-        if (rulesConfig.strictHomeRemainder && unusedDice.length === 2) {
+        if ((rulesConfig.strictHomeRemainder || isSoleRemainingBeadOutside) && unusedDice.length === 2) {
           if (anyConsumesBoth) {
             filteredSingles = candidateSingleMoves.filter(function (m) { return m.allowsSecondDie; });
           } else {
-            const allNearHome = groundTokens.every(function (gt) {
+            const allNearHome = isSoleRemainingBeadOutside || groundTokens.every(function (gt) {
               return gt.state === 'home_stretch' || (canOwnerEnterHomeStretch(targetOwnerIdx) && (gt.steps % 52) >= 44);
             });
             if (allNearHome) return [];
@@ -7993,6 +8007,20 @@
         gameState.phookCandidateBeads = [];
         gameState.madeCaptureThisTurn = false;
 
+        if (
+          gameState.firstSixGiftState &&
+          gameState.firstSixGiftState.triggered &&
+          Array.isArray(gameState.firstSixGiftState.eligibleSeatsThisRound) &&
+          gameState.firstSixGiftState.eligibleSeatsThisRound.includes(prevTurnIdx)
+        ) {
+          gameState.firstSixGiftState.eligibleSeatsThisRound = gameState.firstSixGiftState.eligibleSeatsThisRound.filter(function (sId) {
+            return sId !== prevTurnIdx;
+          });
+          if (gameState.firstSixGiftState.eligibleSeatsThisRound.length === 0) {
+            addGameLog('🎁 First-Six Gift round window has ended for the rest of the match.', 'info');
+          }
+        }
+
         // Unlock all tokens of the player whose Bari just finished (both their own and controlled partner tokens)
         resetTokenLocksForPlayer(prevTurnIdx);
         if (getControlledOwnerIndex(prevTurnIdx) !== prevTurnIdx) {
@@ -8075,7 +8103,7 @@
           dSlot0.classList.remove('dice-rolling');
           dSlot1.classList.remove('dice-rolling');
 
-          if (!forcedValues && actor.type === 'human') {
+          if (!forcedValues && actor.type === 'human' && !actor.isBotTakeover) {
             if (queuedCheatModeObject) {
               forcedValues = (effectiveDiceCount === 1)
                 ? [queuedCheatModeObject.oneDie]
@@ -8087,7 +8115,10 @@
               queuedCheatDice = null;
             }
           } else if (!forcedValues && isAiActor) {
-            forcedValues = selectTacticalAiDiceRoll(actor, targetOwnerIdx, effectiveDiceCount, needsAssistSixRoll);
+            // AI is never aware of and can never use human cheats; only apply secret dumb-AI roll when human activated the Play-button hold cheat.
+            if (secretEasyAiCheatActive) {
+              forcedValues = selectTacticalAiDiceRoll(actor, targetOwnerIdx, effectiveDiceCount, needsAssistSixRoll);
+            }
           }
 
           const v1 = forcedValues ? forcedValues[0] : (Math.floor(Math.random() * 6) + 1);
@@ -8119,6 +8150,72 @@
           const newlyRolledDice = (effectiveDiceCount === 1)
             ? [{ id: 0, value: v1, used: false, batchId: nextBatchId }]
             : [{ id: 0, value: v1, used: false, batchId: nextBatchId }, { id: 1, value: v2, used: false, batchId: nextBatchId }];
+
+          // First-Six Free Gift Rule (پہلا چھکا انعام / گفٹ رول)
+          if (rulesConfig.firstSixGiftRule && !needsAssistSixRoll) {
+            if (!gameState.firstSixGiftState) {
+              gameState.firstSixGiftState = { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] };
+            }
+            const gState = gameState.firstSixGiftState;
+            const rolledAnySix = newlyRolledDice.some(function (d) { return d.value === 6; });
+            const giftCount = Math.max(1, Math.min(3, Number(rulesConfig.firstSixGiftCount) || 1));
+            if (rolledAnySix && !gState.triggered) {
+              gState.triggered = true;
+              gState.firstWinnerIdx = actor.id;
+              gState.claimedBySeats = [actor.id];
+              if (rulesConfig.firstSixGiftScope === 'first_player_only') {
+                gState.eligibleSeatsThisRound = [];
+              } else {
+                const otherActiveSeats = [];
+                for (let step = 1; step <= 3; step++) {
+                  const cand = (actor.id + step) % 4;
+                  const cp = gameState.players[cand];
+                  if (cp && cp.active && (!hasPlayerCompletedAllTokens(cand) || rulesConfig.teamMode)) {
+                    otherActiveSeats.push(cand);
+                  }
+                }
+                gState.eligibleSeatsThisRound = otherActiveSeats;
+              }
+              for (let g = 0; g < giftCount; g++) {
+                newlyRolledDice.push({
+                  id: newlyRolledDice.length,
+                  value: 6,
+                  used: false,
+                  batchId: nextBatchId,
+                  isGiftSix: true
+                });
+              }
+              triggerPlayerEmote(actor.id, '🎁 پہلا چھکا گفٹ! (+' + giftCount + '×6)');
+              const scopeNote = (rulesConfig.firstSixGiftScope === 'first_player_only' || gState.eligibleSeatsThisRound.length === 0)
+                ? ' (Only very first player mode — gift closed for match!)'
+                : ' (Other players are eligible during this current round only!)';
+              addGameLog('🎁 FIRST-SIX FREE GIFT! ' + actor.name + ' was the first player to roll a 6 and received +' + giftCount + ' Free Six(es) as a gift!' + scopeNote, 'gold');
+              showToast('🎁 First-Six Gift! ' + actor.name + ' got +' + giftCount + ' Free 6!' + (gState.eligibleSeatsThisRound.length > 0 ? ' Next players eligible this round!' : ''), true);
+            } else if (
+              rolledAnySix &&
+              gState.triggered &&
+              Array.isArray(gState.eligibleSeatsThisRound) &&
+              gState.eligibleSeatsThisRound.includes(actor.id) &&
+              (!Array.isArray(gState.claimedBySeats) || !gState.claimedBySeats.includes(actor.id))
+            ) {
+              if (!Array.isArray(gState.claimedBySeats)) gState.claimedBySeats = [];
+              gState.claimedBySeats.push(actor.id);
+              gState.eligibleSeatsThisRound = gState.eligibleSeatsThisRound.filter(function (sId) { return sId !== actor.id; });
+              for (let g = 0; g < giftCount; g++) {
+                newlyRolledDice.push({
+                  id: newlyRolledDice.length,
+                  value: 6,
+                  used: false,
+                  batchId: nextBatchId,
+                  isGiftSix: true
+                });
+              }
+              triggerPlayerEmote(actor.id, '🎁 راؤنڈ چھکا گفٹ! (+' + giftCount + '×6)');
+              addGameLog('🎁 First-Round Six Gift! ' + actor.name + ' also rolled a 6 in the eligible round and claimed +' + giftCount + ' Free Six(es)!', 'gold');
+              showToast('🎁 Round Gift Claimed! ' + actor.name + ' got +' + giftCount + ' Free 6!', true);
+            }
+          }
+
           actor.lastRolledDice = newlyRolledDice.map(function (d) { return d.value; });
           if (targetOwnerIdx !== actor.id && gameState.players[targetOwnerIdx]) {
             gameState.players[targetOwnerIdx].lastRolledDice = actor.lastRolledDice.slice();
@@ -8787,15 +8884,27 @@
         if (move.isOptionalLoop) {
           const destTrackLoop = (START_TRACK_INDEX[tk.owner] + move.sim.newSteps) % 52;
           const loopVictims = getCaptureCandidatesOnPlayers(move.ownerIdx, destTrackLoop, pList);
-          const opponentsThreateningCleanSweep = pList.some(function (op) {
+          const loopStalkScore = computeOffensiveStalkScore(move.ownerIdx, destTrackLoop, false, pList);
+          const wipeoutVulnerableEnemyAhead = pList.some(function (op) {
             if (!op || !op.active || (is2v2Mode ? op.team === owner.team : op.id === move.ownerIdx)) return false;
-            const opRem = op.tokens.filter(function (t) { return t.state === 'yard' || t.state === 'board'; }).length;
-            return opRem <= 1 && ownerNeedsKill;
+            return willCaptureTriggerGroundWipeout(op, 1) && op.tokens.some(function (ot) {
+              if (ot.state !== 'board') return false;
+              const dist = (getOuterTrackIndex(ot) - destTrackLoop + 52) % 52;
+              return dist >= 0 && dist <= 12;
+            });
           });
-          if (loopVictims.length > 0) {
-            score += 320;
-          } else if (!opponentsThreateningCleanSweep) {
-            score -= 780;
+          const partnerNeedsHelp = is2v2Mode && pList[owner.partner] && pList[owner.partner].active && (pList[owner.partner].kills || 0) < reqKills;
+          if (rulesConfig.wipeoutResetsHomeEligibility !== false && ownerInsideHomeCount === 0) {
+            // Never loop past Home if we have 0 beads anchored inside Home yet!
+            score -= 3500;
+          } else if (loopVictims.length > 0) {
+            score += 950 * killHungerMult;
+          } else if (wipeoutVulnerableEnemyAhead && ownerGroundCount >= 2) {
+            score += 720 * wipeoutOffenseMult;
+          } else if (partnerNeedsHelp && loopStalkScore > 65 && ownerGroundCount >= 2) {
+            score += 340;
+          } else {
+            score -= 1450 * loopDiscouragementMult;
           }
         }
 
@@ -8924,8 +9033,10 @@
                 killScore += 580 * cleanSweepUrgencyMult;
               }
 
-              if (rulesConfig.closeGameMode && ownerGroundCount > 1 && destDanger > 20 && !ownerNeedsKill) {
-                const lockRiskPenalty = destDanger * (0.70 + (newLapPos / 36)) * lockCautionMult * (rulesConfig.keepCaptureLockOnBonusRoll ? 1.25 : 1.0);
+              if (rulesConfig.closeGameMode && ownerGroundCount > 1 && destDanger > 12 && !ownerNeedsKill) {
+                const isHighValueKill = willCaptureTriggerGroundWipeout(vOwner, countKilled) || vRemainingOutside <= 2 || victimStepsSum >= 32;
+                const lockPersistenceFactor = rulesConfig.keepCaptureLockOnBonusRoll ? 1.85 : 1.15;
+                const lockRiskPenalty = destDanger * (1.15 + (newLapPos / 22)) * lockCautionMult * lockPersistenceFactor * (isHighValueKill ? 0.65 : 1.75);
                 score -= lockRiskPenalty;
               }
 
@@ -9165,30 +9276,31 @@
           return k === 0 || (reqKills > 0 && k < reqKills);
         });
 
+        const isSoleRemainingSimBeadOutside = Boolean(
+          yardTokens.length === 0 &&
+          groundTokens.length === 1 &&
+          groundTokens[0].state === 'board'
+        );
+
         if (
-          rulesConfig.strictHomeRemainder &&
+          (rulesConfig.strictHomeRemainder || isSoleRemainingSimBeadOutside) &&
           unusedDice.length === 2 &&
           groundTokens.length === 1 &&
           (yardTokens.length === 0 || !hasUnusedSpawnDie)
         ) {
           const soleToken = groundTokens[0];
           const sumVal = unusedDice[0].value + unusedDice[1].value;
-          const combinedSim = simulateAdvanceOnSimPlayers(soleToken, sumVal, simPlayers, false, eligibleHome);
-          const combinedLoopSim = (eligibleHome && isOptionalLoopAfterKillAllowed())
-            ? simulateAdvanceOnSimPlayers(soleToken, sumVal, simPlayers, true, eligibleHome)
+          const midCandsSimSole = soleToken.state === 'board' ? getMidPathCaptureCandidatesForCombined(soleToken, [unusedDice[0].value, unusedDice[1].value], simPlayers) : [];
+          const addedMidKillsSimSole = rulesConfig.killAllStackedEnemies ? midCandsSimSole.length : (midCandsSimSole.length > 0 ? 1 : 0);
+          const effEligibleSimSole = eligibleHome || ((owner.kills + addedMidKillsSimSole) >= reqKills);
+          const combinedSim = simulateAdvanceOnSimPlayers(soleToken, sumVal, simPlayers, false, effEligibleSimSole);
+          const solePosInLap = soleToken.steps % 52;
+          const soleStepsToGate = 50 - solePosInLap;
+          const soleOvershootsHome = Boolean(effEligibleSimSole && soleStepsToGate >= 0 && sumVal > (soleStepsToGate + 6));
+          const combinedLoopSim = (!isSoleRemainingSimBeadOutside && !soleOvershootsHome && effEligibleSimSole && isOptionalLoopAfterKillAllowed())
+            ? simulateAdvanceOnSimPlayers(soleToken, sumVal, simPlayers, true, effEligibleSimSole)
             : { valid: false };
-          const singleTriggersFlawlessWin = allOpponentsZeroKills &&
-            yardTokens.length === 0 &&
-            unusedDice.some(function (d) {
-              const sSim = simulateAdvanceOnSimPlayers(soleToken, d.value, simPlayers, false, eligibleHome);
-              return sSim.valid && (sSim.newState === 'home_stretch' || sSim.newState === 'completed');
-            });
-          const singleCompletesAll = yardTokens.length === 0 &&
-            unusedDice.some(function (d) {
-              const sSim = simulateAdvanceOnSimPlayers(soleToken, d.value, simPlayers, false, eligibleHome);
-              return sSim.valid && sSim.newState === 'completed';
-            });
-          if (!combinedSim.valid && !combinedLoopSim.valid && !singleTriggersFlawlessWin && !singleCompletesAll) {
+          if (!combinedSim.valid && !combinedLoopSim.valid) {
             return [];
           }
         }
@@ -9213,11 +9325,6 @@
               if (rulesConfig.closeGameMode && gCount > 1) nextTk.lockedThisTurn = true;
             }
           }
-          const allCompleted = nextOwner.tokens.every(function (t) { return t.state === 'completed'; });
-          if (allCompleted) return true;
-          const allInsideHome = nextOwner.tokens.every(function (t) { return t.state === 'home_stretch' || t.state === 'completed'; });
-          if (allInsideHome && allOpponentsZeroKills) return true;
-
           const nextEligibleHome = reqKills <= 0 || (nextOwner.kills >= reqKills);
           const lockedNext = nextOwner.tokens.filter(function (t) { return t.lockedThisTurn && (t.state === 'board' || t.state === 'home_stretch'); });
           if (lockedNext.length > 0 && rulesConfig.closeGameMode) {
@@ -9273,7 +9380,7 @@
                 });
               }
             }
-            if (tk.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed()) {
+            if (tk.state === 'board' && !isSoleRemainingSimBeadOutside && eligibleHome && isOptionalLoopAfterKillAllowed()) {
               const posInLap = tk.steps % 52;
               const stepsToGate = 50 - posInLap;
               if (stepsToGate >= 0 && die.value > stepsToGate) {
@@ -9299,11 +9406,15 @@
               for (let j = i + 1; j < unusedDice.length; j++) {
                 const d0 = unusedDice[i];
                 const d1 = unusedDice[j];
+                if (rulesConfig.strictSpawnOnlySixesRule && (d0.value === 6 || d1.value === 6)) continue;
                 const sumDelta = d0.value + d1.value;
-                if (seenSums.has(sumDelta)) continue;
-                seenSums.add(sumDelta);
-                const simC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, false, eligibleHome);
+                const pairKey = sumDelta + '_' + Math.min(d0.value, d1.value) + '_' + Math.max(d0.value, d1.value);
+                if (seenSums.has(pairKey)) continue;
+                seenSums.add(pairKey);
                 const midCandsSim = tk.state === 'board' ? getMidPathCaptureCandidatesForCombined(tk, [d0.value, d1.value], simPlayers) : [];
+                const addedMidKillsSim = rulesConfig.killAllStackedEnemies ? midCandsSim.length : (midCandsSim.length > 0 ? 1 : 0);
+                const effHomeEligibleSim = eligibleHome || ((owner.kills + addedMidKillsSim) >= reqKills);
+                const simC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, false, effHomeEligibleSim);
                 if (simC.valid) {
                   candidateCombined.push({
                     tokenId: tk.id,
@@ -9317,16 +9428,18 @@
                     sim: simC
                   });
                 }
-                if (tk.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed()) {
+                if (tk.state === 'board' && !isSoleRemainingSimBeadOutside && effHomeEligibleSim && isOptionalLoopAfterKillAllowed()) {
                   const posInLap = tk.steps % 52;
                   const stepsToGate = 50 - posInLap;
                   if (stepsToGate >= 0 && sumDelta > stepsToGate) {
-                    const loopSimC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, true, eligibleHome);
+                    const loopSimC = simulateAdvanceOnSimPlayers(tk, sumDelta, simPlayers, true, true);
                     if (loopSimC.valid) {
                       candidateCombined.push({
                         tokenId: tk.id,
                         ownerIdx: targetOwnerIdx,
                         diceIds: [d0.id, d1.id],
+                        componentValues: [d0.value, d1.value],
+                        midCaptureCandidates: midCandsSim,
                         delta: sumDelta,
                         isCombined: true,
                         isOptionalLoop: true,
@@ -9343,11 +9456,11 @@
 
         const anyConsumesBoth = candidateSingles.some(function (m) { return m.allowsSecondDie; }) || candidateCombined.length > 0;
         let filteredSingles = candidateSingles;
-        if (rulesConfig.strictHomeRemainder && unusedDice.length === 2) {
+        if ((rulesConfig.strictHomeRemainder || isSoleRemainingSimBeadOutside) && unusedDice.length === 2) {
           if (anyConsumesBoth) {
             filteredSingles = candidateSingles.filter(function (m) { return m.allowsSecondDie; });
           } else {
-            const allNearHome = groundTokens.every(function (gt) {
+            const allNearHome = isSoleRemainingSimBeadOutside || groundTokens.every(function (gt) {
               return gt.state === 'home_stretch' || (eligibleHome && (gt.steps % 52) >= 44);
             });
             if (allNearHome) return [];
@@ -9824,6 +9937,7 @@
         const effDiff = getEffectiveAiDifficultyForEngine();
         const randDie = function () { return Math.floor(Math.random() * 6) + 1; };
 
+        // Only alter AI rolls when the human player explicitly armed the 4s Play-button hold secret mode.
         if (effDiff === 'easy_secret_dumb') {
           if (needsAssistSixRoll) {
             let r = randDie();
@@ -9860,104 +9974,8 @@
           return bestDumbPair;
         }
 
-        if (effDiff !== 'hardest') {
-          return [randDie(), randDie()];
-        }
-
-        if (needsAssistSixRoll) {
-          return Math.random() < 0.65 ? [6, randDie()] : [randDie(), randDie()];
-        }
-
-        const avoidBonusSixBust = Boolean(rulesConfig.threeConsecutiveSixesPenalty && (gameState.consecutiveBonusSixRolls || 0) >= 2);
-        const candidates = [];
-        for (let i = 0; i < 7; i++) {
-          let d1 = randDie();
-          let d2 = randDie();
-          if (rulesConfig.snakeEyesPenaltyRule && effectiveDiceCount === 2 && d1 === 1 && d2 === 1) {
-            d2 = Math.floor(Math.random() * 5) + 2;
-          }
-          if (avoidBonusSixBust) {
-            if (effectiveDiceCount === 1 && d1 === 6) d1 = Math.floor(Math.random() * 5) + 1;
-            if (effectiveDiceCount === 2 && d1 === 6 && d2 === 6) d2 = 5;
-            if (effectiveDiceCount === 2 && rulesConfig.singleSixBonusInTwoDice && (d1 === 6 || d2 === 6)) {
-              if (d1 === 6) d1 = 5;
-              if (d2 === 6) d2 = 4;
-            }
-          }
-          candidates.push([d1, d2]);
-        }
-
-        const initialOwner = gameState.players[targetOwnerIdx];
-        const initialOwnerKills = initialOwner ? (initialOwner.kills || 0) : 0;
-        const initialInsideHome = initialOwner ? initialOwner.tokens.filter(function (t) {
-          return t.state === 'home_stretch' || t.state === 'completed';
-        }).length : 0;
-
-        let bestRoll = candidates[0];
-        let bestRollScore = -99999999;
-
-        candidates.forEach(function (pair) {
-          const c1 = pair[0];
-          const c2 = pair[1];
-          const rolledPool = effectiveDiceCount === 1
-            ? [{ id: 0, value: c1, used: false }]
-            : [{ id: 0, value: c1, used: false }, { id: 1, value: c2, used: false }];
-          const isDblSix = (effectiveDiceCount === 2 && c1 === 6 && c2 === 6);
-          const simPlayers = clonePlayersForAiSim(gameState.players);
-          const moves1 = generateSimLegalMoves(targetOwnerIdx, simPlayers, rolledPool, 0, isDblSix);
-
-          if (moves1.length === 0) {
-            const forfeitScore = evaluatePostTurnBoardSafety(targetOwnerIdx, simPlayers) - 950;
-            if (forfeitScore > bestRollScore) {
-              bestRollScore = forfeitScore;
-              bestRoll = pair;
-            }
-            return;
-          }
-
-          let bestForThisPair = -99999999;
-          moves1.forEach(function (mv1) {
-            const sp1 = clonePlayersForAiSim(simPlayers);
-            const ev1 = createFreshTurnEventsTracker(mv1);
-            applyMoveOnSimPlayers(mv1, sp1, ev1);
-            const rem1 = rolledPool.filter(function (d) { return !mv1.diceIds.includes(d.id); });
-            const spawned1 = (mv1.sim && mv1.sim.isSpawn) ? 1 : 0;
-
-            if (rem1.length === 0) {
-              const sc = evaluateTerminalTurnSequenceScore(targetOwnerIdx, initialOwnerKills, initialInsideHome, sp1, ev1);
-              if (sc > bestForThisPair) bestForThisPair = sc;
-            } else {
-              const moves2 = generateSimLegalMoves(targetOwnerIdx, sp1, rem1, spawned1, isDblSix);
-              if (moves2.length === 0) {
-                const sc = evaluateTerminalTurnSequenceScore(targetOwnerIdx, initialOwnerKills, initialInsideHome, sp1, ev1);
-                if (sc > bestForThisPair) bestForThisPair = sc;
-              } else {
-                moves2.forEach(function (mv2) {
-                  const sp2 = clonePlayersForAiSim(sp1);
-                  const ev2 = cloneTurnEventsTracker(ev1);
-                  applyMoveOnSimPlayers(mv2, sp2, ev2);
-                  const sc = evaluateTerminalTurnSequenceScore(targetOwnerIdx, initialOwnerKills, initialInsideHome, sp2, ev2);
-                  if (sc > bestForThisPair) bestForThisPair = sc;
-                });
-              }
-            }
-          });
-
-          const isBonusSix = Boolean(rulesConfig.doubleSixBonusRoll) && (
-            (effectiveDiceCount === 1 && c1 === 6) ||
-            (effectiveDiceCount === 2 && ((c1 === 6 && c2 === 6) || (rulesConfig.singleSixBonusInTwoDice && (c1 === 6 || c2 === 6))))
-          );
-          if (isBonusSix && !avoidBonusSixBust) {
-            bestForThisPair += 420;
-          }
-
-          if (bestForThisPair > bestRollScore) {
-            bestRollScore = bestForThisPair;
-            bestRoll = pair;
-          }
-        });
-
-        return bestRoll;
+        // All normal AI difficulties (including Hardest) roll 100% fair, unrigged random dice.
+        return [randDie(), randDie()];
       }
 
       function scheduleAiIfNeeded() {
@@ -9992,9 +10010,8 @@
 
         if (gameState.phase === 'ROLL') {
           const rollDelay = useHumanPace ? computeHumanAiRollDelay(actor) : timings.rollDelay;
-          if (useHumanPace) showAiThinkingIndicator(actor, 'ROLL', rollDelay);
           gameState.aiTimer = setTimeout(function () {
-            if (useHumanPace) clearAiThinkingIndicator();
+            clearAiThinkingIndicator();
             rollDiceForCurrentPlayer();
           }, rollDelay);
         } else if (gameState.phase === 'MOVE') {
@@ -10003,13 +10020,11 @@
           if (!useHumanPace) {
             moveDelay = timings.moveDelay;
           } else if (canPlayerRollBonusNow() && !legalPreview.some(function (m) { return evaluateMoveScore(m) >= 8500; })) {
-            // The AI is only going to tap the dice again, so don't stage a
-            // long think over an action it isn't taking.
-            moveDelay = clampAiPaceMs(humanPaceRandom(280, 620), 260, 900);
+            moveDelay = clampAiPaceMs(humanPaceRandom(130, 230), 120, 260);
           } else {
             moveDelay = computeHumanAiMoveDelay(legalPreview);
           }
-          if (useHumanPace) showAiThinkingIndicator(actor, 'MOVE', moveDelay);
+          if (useHumanPace && moveDelay >= 340) showAiThinkingIndicator(actor, 'MOVE', moveDelay);
           gameState.aiTimer = setTimeout(function () {
             if (useHumanPace) clearAiThinkingIndicator();
             if (canPlayerRollBonusNow()) {
@@ -10986,6 +11001,8 @@
         const crownY = 7.5 * cellH;
 
         if (Math.hypot(pt.x - crownX, pt.y - crownY) <= cell * 0.65) {
+          const curTurnActor = gameState.players && gameState.players[gameState.currentTurn];
+          if (!curTurnActor || curTurnActor.type !== 'human' || curTurnActor.isBotTakeover) return;
           if (e.cancelable) e.preventDefault();
           const now = Date.now();
           crownTapTimestamps = crownTapTimestamps.filter(function (t) { return now - t < 1800; });
@@ -11607,7 +11624,7 @@
                 (dieItem.used
                   ? 'bg-slate-200 text-slate-400 border-slate-300 line-through'
                   : (isSelected ? 'bg-sky-500 text-white border-sky-300' : 'bg-amber-200 text-slate-950 border-amber-500'));
-              chip.textContent = dieItem.value;
+              chip.textContent = (dieItem.isGiftSix ? '🎁' : (dieItem.isQisasJump ? '⚖️' : '')) + dieItem.value;
               if (!dieItem.used) {
                 chip.addEventListener('click', function () {
                   if (gameState.phase === 'MOVE') {
@@ -11874,6 +11891,20 @@
         if (chkSingle6) chkSingle6.checked = Boolean(rulesConfig.singleSixBonusInTwoDice);
         const chkStackRoll = document.getElementById('chkStackRollBeforeMoving');
         if (chkStackRoll) chkStackRoll.checked = Boolean(rulesConfig.stackRollBeforeMoving);
+        const chkGift = document.getElementById('chkFirstSixGiftRule');
+        if (chkGift) chkGift.checked = rulesConfig.firstSixGiftRule !== false;
+        const selGiftScope = document.getElementById('firstSixGiftScopeSelect');
+        if (selGiftScope) {
+          selGiftScope.value = rulesConfig.firstSixGiftScope || 'first_round_window';
+          selGiftScope.disabled = (rulesConfig.firstSixGiftRule === false);
+          selGiftScope.classList.toggle('opacity-50', rulesConfig.firstSixGiftRule === false);
+        }
+        const selGiftCount = document.getElementById('firstSixGiftCountSelect');
+        if (selGiftCount) {
+          selGiftCount.value = String(rulesConfig.firstSixGiftCount || 1);
+          selGiftCount.disabled = (rulesConfig.firstSixGiftRule === false);
+          selGiftCount.classList.toggle('opacity-50', rulesConfig.firstSixGiftRule === false);
+        }
         const chkSpawn16 = document.getElementById('chkSpawnOnOneAndSix');
         if (chkSpawn16) chkSpawn16.checked = Boolean(rulesConfig.spawnOnOneAndSix);
         const chkDbl6Two = document.getElementById('chkDoubleSixSpawnsTwo');
@@ -12086,6 +12117,9 @@
         rulesConfig.threeConsecutiveSixesPenalty = false;
         rulesConfig.singleSixBonusInTwoDice = false;
         rulesConfig.stackRollBeforeMoving = true;
+        rulesConfig.firstSixGiftRule = true;
+        rulesConfig.firstSixGiftScope = 'first_round_window';
+        rulesConfig.firstSixGiftCount = 1;
         rulesConfig.spawnOnOneAndSix = false;
         rulesConfig.doubleSixSpawnsTwoBeads = false;
         rulesConfig.firstBeadStartsOnBoard = false;
@@ -12144,6 +12178,9 @@
         rulesConfig.threeConsecutiveSixesPenalty = false;
         rulesConfig.singleSixBonusInTwoDice = false;
         rulesConfig.stackRollBeforeMoving = false;
+        rulesConfig.firstSixGiftRule = true;
+        rulesConfig.firstSixGiftScope = 'first_round_window';
+        rulesConfig.firstSixGiftCount = 1;
         rulesConfig.spawnOnOneAndSix = false;
         rulesConfig.doubleSixSpawnsTwoBeads = false;
         rulesConfig.firstBeadStartsOnBoard = false;
@@ -16601,6 +16638,22 @@
           exampleUr: 'مثال: آپ کی گوٹی کو پکا ہونے کے لیے 3 چاہیے، آپ نے 3 چلا کر گوٹی پکی کی تو آپ کو دوبارہ باری ملے گی۔'
         },
         {
+          id: 'first_six_gift_rule',
+          cat: 'dice',
+          ruleKey: 'firstSixGiftRule',
+          defaultBadge: 'Default: ON — +1 Free 6 (1st Round Window)',
+          titleEn: 'First-Six Free Gift Rule (1st Player + Current Round Window or 1st Player Only)',
+          titleUr: 'پہلا چھکا انعام / گفٹ رول (پہلے کھلاڑی اور موجودہ راؤنڈ کے لیے مفت چھکا)',
+          enDesc: 'The very first time any player rolls a 6 in the match, they receive +1 (or user-defined +2/+3) free 6 as a gift! By default, the next 3 players also have a 1-turn window in that current round only to roll a 6 and get the gift—if anyone misses it in that round, it expires for the rest of the match. You can also set it so ONLY the very first player gets the gift.',
+          urDesc: 'میچ میں سب سے پہلے جس کھلاڑی کا چھکا (6) آئے گا اسے بطور انعام (گفٹ) ایک اضافی مفت چھکا (یا منتخب کردہ 2/3 چھکے) ملے گا۔ ڈیفالٹ اصول کے مطابق پہلے کھلاڑی کے گفٹ لینے کے بعد صرف اسی جاری راؤنڈ کی ایک باری میں باقی کھلاڑی بھی چھکا لا کر یہ گفٹ لے سکتے ہیں، اور اگر اس راؤنڈ میں نہ ملا تو بقیہ میچ کے لیے ختم ہو جاتا ہے۔ آپ چاہیں تو صرف پہلے کھلاڑی تک محدود بھی کر سکتے ہیں۔',
+          onEffectEn: 'ENABLED (Default ON): Awards +1 (or +2/+3) free Gift Six to the first player to roll a 6 (and to other players who roll a 6 during that same round if Round Window is selected).',
+          onEffectUr: 'آن (ON — ڈیفالٹ): سب سے پہلے 6 لانے والے کھلاڑی (اور راؤنڈ ونڈو موڈ میں اسی راؤنڈ کے دوران 6 لانے والے دیگر کھلاڑیوں) کو مفت اضافی چھکا بطور گفٹ ملے گا۔',
+          offEffectEn: 'DISABLED (OFF): Rolling the first 6 of the match gives no extra gift die.',
+          offEffectUr: 'آف (OFF): پہلا چھکا آنے پر کوئی مفت انعامی چھکا نہیں ملے گا۔',
+          exampleEn: 'Turn 1: Red rolls 6+3 → Red is the first player to get a 6, so Red gets +1 Free Gift 6 (pool becomes 6, 3, 🎁6)! Now Green, Yellow, and Blue each have their 1 turn in this round to roll a 6 and claim their gift before it disappears for the rest of the match!',
+          exampleUr: 'مثال: لال نے 6+3 پھینکا اور سب سے پہلے چھکا لانے پر اسے ایک مفت انعامی چھکا (🎁6) مل گیا! اب ہرے، پیلے اور نیلے کھلاڑی کے پاس صرف اسی راؤنڈ کی اپنی ایک باری میں موقع ہے کہ اگر ان کا 6 آیا تو انہیں بھی گفٹ مل جائے گا ورنہ پورے میچ کے لیے ختم ہو جائے گا۔'
+        },
+        {
           id: 'stack_roll_before_moving',
           cat: 'dice',
           ruleKey: 'stackRollBeforeMoving',
@@ -17823,7 +17876,7 @@
           startBtnHoldTimer = setTimeout(function () {
             startBtnCheatArmed = true;
             startHeroBtnEl.classList.add('secret-hold-activated');
-          }, 5000);
+          }, 4000);
         });
         startHeroBtnEl.addEventListener('pointerup', function () {
           if (startBtnHoldTimer) {
@@ -18220,7 +18273,7 @@
         'chkWaitAllGroundAtGate', 'noKillLoopLimitSelect', 'chkBonusOnHome', 'chkDoubleSixBonus',
         'chkSafeStopImmunity', 'chkTeamMode', 'chkStrictRemainder',
         'chkTeamAssistSix', 'chkThreeConsecutiveSixes', 'chkSingleSixBonusTwoDice',
-        'chkStackRollBeforeMoving', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
+        'chkStackRollBeforeMoving', 'chkFirstSixGiftRule', 'firstSixGiftScopeSelect', 'firstSixGiftCountSelect', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
         'chkFirstBeadOnBoard', 'initialBeadsOnBoardSelect', 'chkPairBlockadeRule',
         'chkKillAllStackedEnemies', 'chkTwoKillsForHome', 'chkOneDieWhenOneBeadLeft', 'oneDieConversionModeSelect',
         'chkMidPathKillOnCombinedMove', 'chkMandatoryCapture', 'chkThreeTimeoutsBotTakeover',
@@ -18487,6 +18540,12 @@
         rulesConfig.threeConsecutiveSixesPenalty = document.getElementById('chkThreeConsecutiveSixes').checked;
         rulesConfig.singleSixBonusInTwoDice = document.getElementById('chkSingleSixBonusTwoDice').checked;
         rulesConfig.stackRollBeforeMoving = document.getElementById('chkStackRollBeforeMoving').checked;
+        const chkGiftEl = document.getElementById('chkFirstSixGiftRule');
+        if (chkGiftEl) rulesConfig.firstSixGiftRule = chkGiftEl.checked;
+        const selGiftScopeEl = document.getElementById('firstSixGiftScopeSelect');
+        if (selGiftScopeEl) rulesConfig.firstSixGiftScope = selGiftScopeEl.value || 'first_round_window';
+        const selGiftCountEl = document.getElementById('firstSixGiftCountSelect');
+        if (selGiftCountEl) rulesConfig.firstSixGiftCount = Math.max(1, Math.min(3, Number(selGiftCountEl.value) || 1));
         rulesConfig.spawnOnOneAndSix = document.getElementById('chkSpawnOnOneAndSix').checked;
         rulesConfig.doubleSixSpawnsTwoBeads = document.getElementById('chkDoubleSixSpawnsTwo').checked;
         rulesConfig.firstBeadStartsOnBoard = document.getElementById('chkFirstBeadOnBoard').checked;
