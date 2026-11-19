@@ -1666,13 +1666,20 @@
 <p class="text-[11px] text-slate-600 mt-0.5">Default ON (1 Bead): When a player has 0 kills (cannot enter Home) and no legal non-looping movement is possible by the dice on the ground, 1 bead by default (or 2 / All beads) can come around Home. If turned OFF completely, when all players on the ground have no legal movement possible, the match ends in a Draw (مقابلہ برابر)!</p>
 </div>
 </div>
-<label class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 cursor-pointer whitespace-normal">
-<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkOptionalLoopAfterKill" type="checkbox"/>
-<div>
-<div class="font-bold text-xs text-slate-900">🔄 Optional Outer Loop After Kill (شکار کے بعد اندر جانے یا باہر گھومنے کی مرضی — Default: ON)</div>
-<p class="text-[11px] text-slate-600">Default ON: Once a player has eaten an opponent, they are free to choose between going inside Home to complete or coming around their Home (looping the outer board again).</p>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-400 whitespace-normal">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkOptionalLoopAfterKill" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkOptionalLoopAfterKill">🔄 Optional Outer Loop After Kill &amp; Overshoot Choice (شکار کے بعد باہر گھومنے یا رکنے کی مرضی — Default: ON)</label>
+<select aria-label="Overshoot Home Loop Behavior" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="overshootHomeLoopModeSelect">
+<option selected="" value="choice_loop_or_stay">✋🔄 Choose: Come Around or Stay in Place (Default)</option>
+<option value="force_loop">🔄 Force Come Around Home on Overshoot</option>
+<option value="stay_only">🛑 Stay in Place Only (No Loop on Overshoot)</option>
+</select>
 </div>
-</label>
+<p class="text-[11px] text-slate-600 mt-0.5">Default ON (Choose: Come Around or Stay): Once you have a kill, you can choose to enter Home or come around Home. If your rolled dice overshoot Home (e.g. need 5+2 to complete and roll 5+4), by default you are NOT forced to loop — you can choose whether to come around Home OR stay in the same place (pass turn). Or switch to "Force Come Around Home" in the dropdown!</p>
+</div>
+</div>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkBonusOnHome" type="checkbox"/>
 <div>
@@ -1726,10 +1733,11 @@
 <input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkFirstSixGiftRule" type="checkbox"/>
 <div class="flex-1 min-w-0">
 <div class="flex flex-wrap items-center justify-between gap-2">
-<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkFirstSixGiftRule">🎁 First Double-Six (2D) / Six (1D) Free Gift Rule (پہلا ڈبل سکس / چھکا انعام گفٹ رول — Default: ON)</label>
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkFirstSixGiftRule">🎁 First Six / First Bead Laid Free Gift Rule (پہلی گوٹی نکالنے / پہلے چھکے پر انعامی چھکا — Default: ON)</label>
 <div class="flex flex-wrap items-center gap-1.5">
 <select aria-label="First Six Gift Eligibility Scope" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="firstSixGiftScopeSelect">
 <option selected="" value="first_round_window">🌍 1st Player + Next 3 in Round (Default)</option>
+<option value="each_player_first_six">👤 Every Player's Very First 6 (1st Bead)</option>
 <option value="first_player_only">1️⃣ Very First Player Only</option>
 </select>
 <select aria-label="First Six Gift Count" class="bg-white border border-amber-400 rounded-lg px-2 py-0.5 text-[11px] font-bold text-amber-950" id="firstSixGiftCountSelect">
@@ -1739,7 +1747,7 @@
 </select>
 </div>
 </div>
-<p class="text-[11px] text-slate-600 mt-0.5">Default ON: The very first player in the match to roll two sixes (6+6) in 2-Dice mode — or one six (6) in 1-Die mode — gets +1 free 6 as a gift! By default, the remaining players also get a 1-turn window in that current round only to roll 6+6 (in 2-Dice) or 6 (in 1-Die) and claim the gift (if missed in that round, it expires for the match). Or choose "Very First Player Only" so only the first player gets the gift.</p>
+<p class="text-[11px] text-slate-600 mt-0.5">Default ON: Triggers on the very first 6 rolled by a player (when laying their first bead onto the board, e.g. 6+2 or 6 — NOT requiring double sixes!) and awards +1 free 6 as a gift! Choose whether the remaining players have that current round to roll their first 6, or every player gets it on their first 6, or only the very first player.</p>
 </div>
 </div>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
@@ -3668,6 +3676,7 @@
         wipeoutResetsHomeEligibility: true,
         singleGroundLoopOnlyWithoutKill: true,
         allowOptionalLoopAfterKill: true,
+        overshootHomeLoopMode: 'choice_loop_or_stay',
         waitAllGroundAtGateBeforeLoop: true,
         noKillLoopBeadLimit: '1',
         bonusRollOnHome: true,
@@ -4205,8 +4214,11 @@
           if (rulesConfig.firstSixGiftRule === undefined) {
             rulesConfig.firstSixGiftRule = true;
           }
-          if (!['first_round_window', 'first_player_only'].includes(rulesConfig.firstSixGiftScope)) {
+          if (!['first_round_window', 'each_player_first_six', 'first_player_only'].includes(rulesConfig.firstSixGiftScope)) {
             rulesConfig.firstSixGiftScope = 'first_round_window';
+          }
+          if (!['choice_loop_or_stay', 'force_loop', 'stay_only'].includes(rulesConfig.overshootHomeLoopMode)) {
+            rulesConfig.overshootHomeLoopMode = 'choice_loop_or_stay';
           }
           if (![1, 2, 3].includes(Number(rulesConfig.firstSixGiftCount))) {
             rulesConfig.firstSixGiftCount = 1;
@@ -5301,7 +5313,14 @@
               } else if (gameState.phase === 'MOVE') {
                 const legal = computeLegalMoves();
                 if (legal.length > 0) {
-                  if (isAiActor) {
+                  if (canPassOptionalLoopTurn(legal)) {
+                    const chosenOpt = chooseBestAiMove(legal);
+                    if (!chosenOpt || evaluateMoveScore(chosenOpt) < 0) {
+                      passOptionalLoopTurn(false);
+                    } else {
+                      executeMove(chosenOpt);
+                    }
+                  } else if (isAiActor) {
                     const chosen = chooseBestAiMove(legal);
                     executeMove(chosen || legal[0]);
                   } else {
@@ -6052,6 +6071,7 @@
           groundTokens.length === 1 &&
           groundTokens[0].state === 'board'
         );
+        const overshootLoopMode = rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay';
 
         if (
           (rulesConfig.strictHomeRemainder || isSoleRemainingBeadOutside) &&
@@ -6065,10 +6085,7 @@
           const addedMidKillsSole = rulesConfig.killAllStackedEnemies ? midCandsForSole.length : (midCandsForSole.length > 0 ? 1 : 0);
           const effEligibleSole = canOwnerEnterHomeStretch(targetOwnerIdx) || ((owner.kills + addedMidKillsSole) >= getRequiredKillsForHome());
           const combinedSim = simulateTokenAdvance(soleToken, sumVal, effEligibleSole, tokens, false);
-          const solePosInLap = soleToken.steps % 52;
-          const soleStepsToGate = 50 - solePosInLap;
-          const soleOvershootsHomeOnTwoDice = Boolean(effEligibleSole && soleStepsToGate >= 0 && sumVal > (soleStepsToGate + 6));
-          const combinedLoopSim = (!isSoleRemainingBeadOutside && !soleOvershootsHomeOnTwoDice && effEligibleSole && isOptionalLoopAfterKillAllowed())
+          const combinedLoopSim = (soleToken.state === 'board' && effEligibleSole && isOptionalLoopAfterKillAllowed() && overshootLoopMode !== 'stay_only')
             ? simulateTokenAdvance(soleToken, sumVal, true, tokens, true)
             : { valid: false };
           if (!combinedSim.valid && !combinedLoopSim.valid) {
@@ -6180,7 +6197,6 @@
 
             if (
               tk.state === 'board' &&
-              !isSoleRemainingBeadOutside &&
               isOptionalLoopAfterKillAllowed() &&
               canOwnerEnterHomeStretch(targetOwnerIdx)
             ) {
@@ -6239,7 +6255,6 @@
                 }
                 if (
                   tk.state === 'board' &&
-                  !isSoleRemainingBeadOutside &&
                   isOptionalLoopAfterKillAllowed() &&
                   effHomeEligible
                 ) {
@@ -6284,6 +6299,11 @@
         }
 
         const allLegalMoves = filteredSingles.concat(candidateCombinedMoves);
+        if (allLegalMoves.length > 0 && allLegalMoves.every(function (m) { return Boolean(m.isOptionalLoop); })) {
+          if ((rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay') === 'stay_only') {
+            return [];
+          }
+        }
         const captureMoves = allLegalMoves.filter(function (mv) {
           if (!mv.sim) return false;
           if (mv.midCaptureCandidates && mv.midCaptureCandidates.length > 0) return true;
@@ -6341,6 +6361,32 @@
         );
       }
 
+      function canPassOptionalLoopTurn(legalMoves) {
+        if (gameState.phase !== 'MOVE') return false;
+        if ((rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay') !== 'choice_loop_or_stay') return false;
+        const moves = Array.isArray(legalMoves) ? legalMoves : computeLegalMoves();
+        if (moves.length === 0) return false;
+        return moves.every(function (m) { return Boolean(m.isOptionalLoop); });
+      }
+
+      function passOptionalLoopTurn(isRemoteSync) {
+        if (gameState.phase !== 'MOVE') return;
+        const actorIdx = gameState.currentTurn;
+        const targetOwnerIdx = getControlledOwnerIndex(actorIdx);
+        const owner = gameState.players[targetOwnerIdx] || gameState.players[actorIdx];
+        if (!isRemoteSync) {
+          broadcastNetworkAction({ type: 'PASS_OPTIONAL_LOOP', actorIdx: actorIdx });
+        }
+        gameState.dicePool.forEach(function (d) { d.used = true; });
+        gameState.selectedTokenKey = null;
+        gameState.draggingToken = null;
+        gameState.preferredDieFilter = null;
+        const pName = owner ? owner.name : 'Player';
+        addGameLog('🛑 ' + pName + ' chose to stay in place (rolled dice overshoot Home — skipped coming around Home).', 'info');
+        showToast('🛑 Stayed in place (did not come around Home).');
+        continueTurnAfterMove();
+      }
+
       // Auto-Execute when:
       // (A) Mandatory 6 Pocket Spawn applies (unless all beads are already on the ground or completed, 6 MUST auto-place an unplaced pocket bead!)
       // (B) Only 1 movable bead exists on the ground (player has only that 1 bead and no other option!)
@@ -6387,13 +6433,20 @@
         }
 
         const uniqueTokenKeys = Array.from(new Set(legal.map(function (m) { return m.ownerIdx + '_' + m.tokenId; })));
-        const hasOptionalLoopChoice = legal.some(function (m) { return m.isOptionalLoop; }) &&
-                                      legal.some(function (m) { return !m.isOptionalLoop && (m.sim.newState === 'home_stretch' || m.sim.newState === 'completed'); });
+        const canPassLoop = canPassOptionalLoopTurn(legal);
+        const hasOptionalLoopChoice = canPassLoop || (
+          legal.some(function (m) { return m.isOptionalLoop; }) &&
+          legal.some(function (m) { return !m.isOptionalLoop && (m.sim.newState === 'home_stretch' || m.sim.newState === 'completed'); })
+        );
         if (hasOptionalLoopChoice) {
-          if (uniqueTokenKeys.length === 1) {
+          if (uniqueTokenKeys.length === 1 || canPassLoop) {
             gameState.selectedTokenKey = uniqueTokenKeys[0];
             drawBoard();
-            showToast('🔄🏠 Free Choice: Tap Green Home target to go inside OR Purple Loop target to come around Home!');
+            if (canPassLoop) {
+              showToast('🔄🛑 Dice overshoot Home! Tap Purple Loop target to come around Home OR tap "🛑 STAY" to stay in place!');
+            } else {
+              showToast('🔄🏠 Free Choice: Tap Green Home target to go inside OR Purple Loop target to come around Home!');
+            }
           }
           return false;
         }
@@ -6567,13 +6620,53 @@
           ? timings.hopInterval
           : Math.min(65, Math.floor(260 / Math.max(1, pathCoords.length)));
 
+        let midKillPlan = null;
+        if (move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && token.state === 'board') {
+          const compVals = Array.isArray(move.componentValues) && move.componentValues.length >= 2
+            ? move.componentValues
+            : gameState.dicePool.filter(function (d) { return move.diceIds && move.diceIds.includes(d.id); }).map(function (d) { return d.value; });
+          const preMoveToken = { owner: token.owner, id: token.id, state: token.state, steps: token.steps, homeStep: 0 };
+          const midEnemies = getMidPathCaptureCandidatesForCombined(preMoveToken, compVals, gameState.players);
+          if (midEnemies.length > 0) {
+            const bestMidVictim = chooseBestCaptureVictim(move.ownerIdx, midEnemies, rulesConfig.killAllStackedEnemies, gameState.players) || midEnemies[0];
+            const midVictimsToKill = rulesConfig.killAllStackedEnemies
+              ? midEnemies.filter(function (e) { return e.ownerIdx === bestMidVictim.ownerIdx; })
+              : [bestMidVictim];
+            const midStepVal = bestMidVictim.midDieValue || compVals[0];
+            midKillPlan = {
+              midStepIndex: midStepVal,
+              bestMidVictim: bestMidVictim,
+              midVictimsToKill: midVictimsToKill,
+              executed: false
+            };
+          }
+        }
+
         let stepIdx = 0;
         function hopNext() {
           if (stepIdx < pathCoords.length) {
             token.animCoords = pathCoords[stepIdx];
             playSound('step');
-            drawBoard();
             stepIdx += 1;
+
+            if (midKillPlan && !midKillPlan.executed && stepIdx === midKillPlan.midStepIndex) {
+              midKillPlan.executed = true;
+              move._midKillExecutedDuringHop = true;
+              move._midKillVictimName = midKillPlan.bestMidVictim.playerName;
+              move._midKillStep = midKillPlan.midStepIndex;
+              midKillPlan.midVictimsToKill.forEach(function (enemy) {
+                performSingleCapture(move.ownerIdx, token, enemy, true);
+              });
+              const midDieUsed = midKillPlan.midStepIndex;
+              const remDelta = move.delta - midDieUsed;
+              addGameLog('⚡⚔️ Mid-Path Auto-Kill! ' + owner.name + ' ate ' + midKillPlan.bestMidVictim.playerName + ' at +' + midDieUsed + ' and then moved +' + remDelta + ' (Total +' + move.delta + ')!', 'kill');
+              showToast('⚡⚔️ Ate ' + midKillPlan.bestMidVictim.playerName + ' on +' + midDieUsed + '! Moving +' + remDelta + '...');
+              drawBoard();
+              setTimeout(hopNext, Math.max(260, hopDelay * 3));
+              return;
+            }
+
+            drawBoard();
             setTimeout(hopNext, hopDelay);
           } else {
             token.animCoords = null;
@@ -6643,7 +6736,8 @@
         }
 
         let outcomeLabel = '+' + move.delta + ' Advance';
-        if (move.sim.isSpawn) outcomeLabel = '⚡ Spawn (+' + move.delta + ')';
+        if (move._midKillExecutedDuringHop) outcomeLabel = '⚡⚔️ Kill ' + (move._midKillVictimName || 'Enemy') + ' (+' + move._midKillStep + ' then +' + (move.delta - move._midKillStep) + ')';
+        else if (move.sim.isSpawn) outcomeLabel = '⚡ Spawn (+' + move.delta + ')';
         else if (move.sim.loopedPastHome) outcomeLabel = '🔄 Outer Blood Loop (+' + move.delta + ')';
         else if (token.state === 'completed') outcomeLabel = '🏠 Home Completed (+' + move.delta + ')';
         else if (token.state === 'home_stretch') outcomeLabel = '🏠 Home Stretch (+' + move.delta + ')';
@@ -6705,7 +6799,7 @@
           addGameLog(owner.name + ' moved Bead #' + (token.id + 1) + ' forward by ' + move.delta + ' [' + (fullMoveMs / 1000).toFixed(2) + 's].', 'info');
         }
 
-        if (move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && prevTokenState === 'board') {
+        if (!move._midKillExecutedDuringHop && move.isCombined && rulesConfig.midPathKillOnCombinedMove !== false && prevTokenState === 'board') {
           const compVals = Array.isArray(move.componentValues) && move.componentValues.length >= 2
             ? move.componentValues
             : gameState.dicePool.filter(function (d) { return move.diceIds && move.diceIds.includes(d.id); }).map(function (d) { return d.value; });
@@ -6802,7 +6896,7 @@
         continueTurnAfterMove();
       }
 
-      function performSingleCapture(capturerOwnerIdx, capturingToken, victimInfo) {
+      function performSingleCapture(capturerOwnerIdx, capturingToken, victimInfo, skipMoveLogPatch) {
         const victimPlayer = gameState.players[victimInfo.ownerIdx];
         const victimToken = victimPlayer.tokens[victimInfo.tokenId];
         const wasWantedByCapturer = Boolean(
@@ -6861,7 +6955,7 @@
         if (gameState.matchTelemetry.players[victimInfo.ownerIdx]) {
           gameState.matchTelemetry.players[victimInfo.ownerIdx].deaths += 1;
         }
-        if (gameState.matchTelemetry.moveLogs && gameState.matchTelemetry.moveLogs[0]) {
+        if (!skipMoveLogPatch && gameState.matchTelemetry.moveLogs && gameState.matchTelemetry.moveLogs[0]) {
           gameState.matchTelemetry.moveLogs[0].outcome = '⚔️ Kill ' + victimPlayer.name + ' (+' + gameState.matchTelemetry.moveLogs[0].delta + ')';
         }
 
@@ -8008,6 +8102,7 @@
         gameState.madeCaptureThisTurn = false;
 
         if (
+          rulesConfig.firstSixGiftScope !== 'each_player_first_six' &&
           gameState.firstSixGiftState &&
           gameState.firstSixGiftState.triggered &&
           Array.isArray(gameState.firstSixGiftState.eligibleSeatsThisRound) &&
@@ -8151,16 +8246,14 @@
             ? [{ id: 0, value: v1, used: false, batchId: nextBatchId }]
             : [{ id: 0, value: v1, used: false, batchId: nextBatchId }, { id: 1, value: v2, used: false, batchId: nextBatchId }];
 
-          // First Double-Six (2D) / Six (1D) Free Gift Rule (پہلا ڈبل سکس / چھکا انعام گفٹ رول)
+          // First Six / First Bead Laid Free Gift Rule (پہلی گوٹی نکالنے / پہلے چھکے پر انعامی چھکا گفٹ رول)
           if (rulesConfig.firstSixGiftRule && !needsAssistSixRoll) {
             if (!gameState.firstSixGiftState) {
               gameState.firstSixGiftState = { triggered: false, firstWinnerIdx: null, eligibleSeatsThisRound: [], claimedBySeats: [] };
             }
             const gState = gameState.firstSixGiftState;
-            const rolledQualifyingGiftSixes = (effectiveDiceCount === 2)
-              ? (newlyRolledDice.length >= 2 && newlyRolledDice[0].value === 6 && newlyRolledDice[1].value === 6)
-              : (newlyRolledDice.length >= 1 && newlyRolledDice[0].value === 6);
-            const triggerRollLabel = (effectiveDiceCount === 2) ? '6+6 (Double Six)' : '6';
+            const rolledQualifyingGiftSixes = newlyRolledDice.some(function (d) { return d.value === 6; });
+            const triggerRollLabel = 'their First 6 (1st Bead)';
             const giftCount = Math.max(1, Math.min(3, Number(rulesConfig.firstSixGiftCount) || 1));
             if (rolledQualifyingGiftSixes && !gState.triggered) {
               gState.triggered = true;
@@ -8191,9 +8284,11 @@
               triggerPlayerEmote(actor.id, '🎁 پہلا گفٹ چھکا! (+' + giftCount + '×6)');
               const scopeNote = (rulesConfig.firstSixGiftScope === 'first_player_only' || gState.eligibleSeatsThisRound.length === 0)
                 ? ' (Only very first player mode — gift closed for match!)'
-                : ' (Other players are eligible during this current round only!)';
-              addGameLog('🎁 FIRST-SIXES FREE GIFT! ' + actor.name + ' was the first player to roll ' + triggerRollLabel + ' and received +' + giftCount + ' Free Six(es) as a gift!' + scopeNote, 'gold');
-              showToast('🎁 First ' + triggerRollLabel + ' Gift! ' + actor.name + ' got +' + giftCount + ' Free 6!' + (gState.eligibleSeatsThisRound.length > 0 ? ' Next players eligible this round!' : ''), true);
+                : (rulesConfig.firstSixGiftScope === 'each_player_first_six'
+                  ? ' (Other players will also get it on their very first 6!)'
+                  : ' (Other players are eligible during this current round only!)');
+              addGameLog('🎁 FIRST-SIX FREE GIFT! ' + actor.name + ' rolled ' + triggerRollLabel + ' to lay their first bead and received +' + giftCount + ' Free Six(es) as a gift!' + scopeNote, 'gold');
+              showToast('🎁 First-Six Gift! ' + actor.name + ' got +' + giftCount + ' Free 6 on laying their 1st bead!' + (gState.eligibleSeatsThisRound.length > 0 ? ' Next players eligible!' : ''), true);
             } else if (
               rolledQualifyingGiftSixes &&
               gState.triggered &&
@@ -8213,9 +8308,9 @@
                   isGiftSix: true
                 });
               }
-              triggerPlayerEmote(actor.id, '🎁 راؤنڈ گفٹ چھکا! (+' + giftCount + '×6)');
-              addGameLog('🎁 First-Round Six Gift! ' + actor.name + ' also rolled ' + triggerRollLabel + ' in the eligible round and claimed +' + giftCount + ' Free Six(es)!', 'gold');
-              showToast('🎁 Round Gift Claimed! ' + actor.name + ' rolled ' + triggerRollLabel + ' and got +' + giftCount + ' Free 6!', true);
+              triggerPlayerEmote(actor.id, '🎁 پہلا گفٹ چھکا! (+' + giftCount + '×6)');
+              addGameLog('🎁 First-Six Free Gift! ' + actor.name + ' rolled ' + triggerRollLabel + ' to lay their first bead and claimed +' + giftCount + ' Free Six(es)!', 'gold');
+              showToast('🎁 First-Six Gift Claimed! ' + actor.name + ' rolled a 6 and got +' + giftCount + ' Free 6!', true);
             }
           }
 
@@ -9284,6 +9379,7 @@
           groundTokens.length === 1 &&
           groundTokens[0].state === 'board'
         );
+        const simOvershootLoopMode = rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay';
 
         if (
           (rulesConfig.strictHomeRemainder || isSoleRemainingSimBeadOutside) &&
@@ -9297,10 +9393,7 @@
           const addedMidKillsSimSole = rulesConfig.killAllStackedEnemies ? midCandsSimSole.length : (midCandsSimSole.length > 0 ? 1 : 0);
           const effEligibleSimSole = eligibleHome || ((owner.kills + addedMidKillsSimSole) >= reqKills);
           const combinedSim = simulateAdvanceOnSimPlayers(soleToken, sumVal, simPlayers, false, effEligibleSimSole);
-          const solePosInLap = soleToken.steps % 52;
-          const soleStepsToGate = 50 - solePosInLap;
-          const soleOvershootsHome = Boolean(effEligibleSimSole && soleStepsToGate >= 0 && sumVal > (soleStepsToGate + 6));
-          const combinedLoopSim = (!isSoleRemainingSimBeadOutside && !soleOvershootsHome && effEligibleSimSole && isOptionalLoopAfterKillAllowed())
+          const combinedLoopSim = (soleToken.state === 'board' && effEligibleSimSole && isOptionalLoopAfterKillAllowed() && simOvershootLoopMode !== 'stay_only')
             ? simulateAdvanceOnSimPlayers(soleToken, sumVal, simPlayers, true, effEligibleSimSole)
             : { valid: false };
           if (!combinedSim.valid && !combinedLoopSim.valid) {
@@ -9383,7 +9476,7 @@
                 });
               }
             }
-            if (tk.state === 'board' && !isSoleRemainingSimBeadOutside && eligibleHome && isOptionalLoopAfterKillAllowed()) {
+            if (tk.state === 'board' && eligibleHome && isOptionalLoopAfterKillAllowed()) {
               const posInLap = tk.steps % 52;
               const stepsToGate = 50 - posInLap;
               if (stepsToGate >= 0 && die.value > stepsToGate) {
@@ -9431,7 +9524,7 @@
                     sim: simC
                   });
                 }
-                if (tk.state === 'board' && !isSoleRemainingSimBeadOutside && effHomeEligibleSim && isOptionalLoopAfterKillAllowed()) {
+                if (tk.state === 'board' && effHomeEligibleSim && isOptionalLoopAfterKillAllowed()) {
                   const posInLap = tk.steps % 52;
                   const stepsToGate = 50 - posInLap;
                   if (stepsToGate >= 0 && sumDelta > stepsToGate) {
@@ -9471,6 +9564,11 @@
         }
 
         const candidateMoves = filteredSingles.concat(candidateCombined);
+        if (candidateMoves.length > 0 && candidateMoves.every(function (m) { return Boolean(m.isOptionalLoop); })) {
+          if ((rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay') === 'stay_only') {
+            return [];
+          }
+        }
 
         if (rulesConfig.mandatoryCapture && candidateMoves.length > 0) {
           const capOnly = candidateMoves.filter(function (mv) {
@@ -10046,6 +10144,10 @@
               return;
             }
             const chosen = chooseBestAiMove(legal);
+            if (canPassOptionalLoopTurn(legal) && (!chosen || evaluateMoveScore(chosen) < 0)) {
+              passOptionalLoopTurn(false);
+              return;
+            }
             executeMove(chosen || legal[0]);
           }, moveDelay);
         }
@@ -10455,6 +10557,7 @@
               const barX = yardCx - barW / 2;
               const barY = py + stageH - barH - cellH * 0.08;
               const canBonusNow = canPlayerRollBonusNow();
+              const canPassLoopNow = !canBonusNow && canPassOptionalLoopTurn();
 
               ctx.save();
               if (canBonusNow) {
@@ -10467,6 +10570,16 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('🎲 TAP FOR BONUS ROLL!', yardCx, barY + barH / 2);
+              } else if (canPassLoopNow) {
+                ctx.fillStyle = '#e11d48';
+                ctx.beginPath();
+                ctx.roundRect(barX, barY, barW, barH, 7);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '900 ' + Math.round(cell * (isCompactCanvas ? 0.19 : 0.18)) + 'px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🛑 TAP TO STAY / PASS', yardCx, barY + barH / 2);
               } else if (poolToShow.length >= 2) {
                 const isCombSel = (gameState.preferredDieFilter === 'combined');
                 const unusedSum = activeUnused.reduce(function (acc, item) { return acc + item.value; }, 0);
@@ -10956,6 +11069,73 @@
               move: mv
             });
           });
+
+          if (canPassOptionalLoopTurn(legalMoves)) {
+            const stayRC = HOME_PATHS[selOwner][0];
+            const stX = (stayRC[1] + 0.5) * cellW;
+            const stY = (stayRC[0] + 0.5) * cellH;
+            const stayColor = '#e11d48';
+
+            ctx.save();
+            ctx.strokeStyle = stayColor;
+            ctx.lineWidth = 3.5;
+            ctx.setLineDash([5, 4]);
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(stX, stY);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(stX, stY, cell * 0.46, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.strokeStyle = stayColor;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(stX, stY, cell * 0.32, 0, Math.PI * 2);
+            ctx.fillStyle = '#0f172a';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#fda4af';
+            ctx.stroke();
+
+            ctx.fillStyle = '#fde047';
+            ctx.font = '900 ' + Math.round(cell * 0.21) + 'px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('STAY', stX, stY);
+
+            if (rulesConfig.showTooltips) {
+              const stayLabel = '🛑 STAY IN PLACE (Pass)';
+              const pillW = Math.max(cell * 1.9, stayLabel.length * (cell * 0.125));
+              const pillH = cell * 0.36;
+              const px = Math.min(canvas.width - pillW - 4, Math.max(4, stX - pillW / 2));
+              const py = stY > cellH * 2 ? (stY - cell * 0.78) : (stY + cell * 0.46);
+              ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+              ctx.beginPath();
+              ctx.roundRect(px, py, pillW, pillH, 6);
+              ctx.fill();
+              ctx.strokeStyle = stayColor;
+              ctx.lineWidth = 1.4;
+              ctx.stroke();
+              ctx.fillStyle = '#fde047';
+              ctx.font = '800 ' + Math.round(cell * 0.18) + 'px Inter, sans-serif';
+              ctx.fillText(stayLabel, px + pillW / 2, py + pillH / 2);
+            }
+            ctx.restore();
+
+            renderedDestinationTargets.push({
+              x: stX,
+              y: stY,
+              r: cell * 0.56,
+              isStayPassTarget: true
+            });
+          }
         }
 
         if (gameState.draggingToken) {
@@ -11045,6 +11225,17 @@
             return;
           }
         }
+        if (gameState.phase === 'MOVE' && !canPlayerRollBonusNow() && canPassOptionalLoopTurn() && renderedYardRollHitbox) {
+          const hb = renderedYardRollHitbox;
+          const hitDie = renderedYardDiceHitboxes.some(function (dhb) {
+            return !dhb.used && pt.x >= dhb.x && pt.x <= dhb.x + dhb.w && pt.y >= dhb.y && pt.y <= dhb.y + dhb.h;
+          });
+          if (!hitDie && pt.x >= hb.x && pt.x <= hb.x + hb.w && pt.y >= hb.y && pt.y <= hb.y + hb.h) {
+            if (e.cancelable) e.preventDefault();
+            passOptionalLoopTurn(false);
+            return;
+          }
+        }
         if (gameState.phase === 'MOVE' && renderedYardDiceHitboxes.length > 0) {
           for (let i = 0; i < renderedYardDiceHitboxes.length; i++) {
             const dhb = renderedYardDiceHitboxes[i];
@@ -11066,7 +11257,11 @@
           const tgt = renderedDestinationTargets[i];
           if (Math.hypot(pt.x - tgt.x, pt.y - tgt.y) <= tgt.r) {
             if (e.cancelable) e.preventDefault();
-            executeMove(tgt.move);
+            if (tgt.isStayPassTarget) {
+              passOptionalLoopTurn(false);
+            } else {
+              executeMove(tgt.move);
+            }
             return;
           }
         }
@@ -11649,7 +11844,8 @@
         const immRollLabel = document.getElementById('immersiveRollLabel');
         const isMyTurn = netMatch.isActive ? (gameState.currentTurn === netMatch.myLocalSeat) : (actor.type === 'human');
         const canRollBonus = isMyTurn && canPlayerRollBonusNow();
-        if ((gameState.phase === 'ROLL' && isMyTurn) || canRollBonus) {
+        const canPassOptionalLoop = isMyTurn && !canRollBonus && gameState.phase === 'MOVE' && canPassOptionalLoopTurn();
+        if ((gameState.phase === 'ROLL' && isMyTurn) || canRollBonus || canPassOptionalLoop) {
           rollBtn.disabled = false;
           rollBtn.classList.remove('opacity-50', 'cursor-not-allowed');
           if (canRollBonus && gameState.phase === 'MOVE') {
@@ -11657,6 +11853,11 @@
             const lbl = '🎲 Roll Bonus (Store +' + storedSum + ')';
             rollLabel.textContent = lbl;
             if (immRollLabel) immRollLabel.textContent = lbl;
+            rollBtn.classList.add('active-turn-glow');
+          } else if (canPassOptionalLoop) {
+            const lbl = '🛑 Stay / Pass Turn';
+            rollLabel.textContent = lbl;
+            if (immRollLabel) immRollLabel.textContent = '🛑 Stay / Pass';
             rollBtn.classList.add('active-turn-glow');
           } else {
             rollBtn.classList.remove('active-turn-glow');
@@ -11876,6 +12077,12 @@
         if (chkSingleGroundLoop) chkSingleGroundLoop.checked = isNoKillLoopOn;
         const chkOptLoop = document.getElementById('chkOptionalLoopAfterKill');
         if (chkOptLoop) chkOptLoop.checked = Boolean(rulesConfig.allowOptionalLoopAfterKill);
+        const selOvershootLoop = document.getElementById('overshootHomeLoopModeSelect');
+        if (selOvershootLoop) {
+          selOvershootLoop.value = rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay';
+          selOvershootLoop.disabled = !rulesConfig.allowOptionalLoopAfterKill;
+          selOvershootLoop.classList.toggle('opacity-50', !rulesConfig.allowOptionalLoopAfterKill);
+        }
         const chkWaitGate = document.getElementById('chkWaitAllGroundAtGate');
         if (chkWaitGate) chkWaitGate.checked = isNoKillLoopOn;
         const selNoKillLimit = document.getElementById('noKillLoopLimitSelect');
@@ -12109,6 +12316,7 @@
         rulesConfig.wipeoutResetsHomeEligibility = true;
         rulesConfig.singleGroundLoopOnlyWithoutKill = true;
         rulesConfig.allowOptionalLoopAfterKill = true;
+        rulesConfig.overshootHomeLoopMode = 'choice_loop_or_stay';
         rulesConfig.waitAllGroundAtGateBeforeLoop = true;
         rulesConfig.noKillLoopBeadLimit = '1';
         rulesConfig.bonusRollOnHome = true;
@@ -12170,6 +12378,7 @@
         rulesConfig.wipeoutResetsHomeEligibility = false;
         rulesConfig.singleGroundLoopOnlyWithoutKill = false;
         rulesConfig.allowOptionalLoopAfterKill = false;
+        rulesConfig.overshootHomeLoopMode = 'choice_loop_or_stay';
         rulesConfig.waitAllGroundAtGateBeforeLoop = false;
         rulesConfig.noKillLoopBeadLimit = 'off';
         rulesConfig.bonusRollOnHome = true;
@@ -13121,6 +13330,8 @@
             return m.tokenId === payload.tokenId && m.ownerIdx === payload.ownerIdx && m.delta === payload.delta;
           });
           if (match) executeMove(match, true);
+        } else if (payload.type === 'PASS_OPTIONAL_LOOP' && gameState.phase === 'MOVE') {
+          passOptionalLoopTurn(true);
         } else if (payload.type === 'EMOTE') {
           triggerPlayerEmote(payload.playerIdx || 0, payload.text);
         }
@@ -16644,17 +16855,17 @@
           id: 'first_six_gift_rule',
           cat: 'dice',
           ruleKey: 'firstSixGiftRule',
-          defaultBadge: 'Default: ON — +1 Free 6 on 1st 6+6 (2D) or 6 (1D)',
-          titleEn: 'First Double-Six (2-Dice) / Six (1-Die) Free Gift Rule',
-          titleUr: 'پہلا ڈبل سکس (2 ڈائس) یا چھکا (1 ڈائس) انعام / گفٹ رول',
-          enDesc: 'The very first time any player rolls two sixes (6+6) in 2-Dice mode — or one six (6) in 1-Die mode — they receive +1 (or user-defined +2/+3) free 6 as a gift! By default, the next 3 players also have a 1-turn window in that current round only to roll 6+6 (in 2-Dice) or 6 (in 1-Die) and get the gift—if anyone misses it in that round, it expires for the rest of the match. You can also set it so ONLY the very first player gets the gift.',
-          urDesc: 'میچ میں سب سے پہلے جس کھلاڑی کا 2 ڈائس موڈ میں ڈبل سکس (6+6) یا 1 ڈائس موڈ میں چھکا (6) آئے گا اسے بطور انعام (گفٹ) ایک اضافی مفت چھکا (یا منتخب کردہ 2/3 چھکے) ملے گا۔ ڈیفالٹ اصول کے مطابق پہلے کھلاڑی کے گفٹ لینے کے بعد صرف اسی جاری راؤنڈ کی ایک باری میں باقی تین کھلاڑی بھی ڈبل سکس (2 ڈائس میں) یا چھکا (1 ڈائس میں) لا کر یہ گفٹ لے سکتے ہیں، اور اگر اس راؤنڈ میں نہ ملا تو بقیہ میچ کے لیے ختم ہو جاتا ہے۔ آپ چاہیں تو صرف پہلے کھلاڑی تک محدود بھی کر سکتے ہیں۔',
-          onEffectEn: 'ENABLED (Default ON): Awards +1 (or +2/+3) free Gift Six to the first player to roll 6+6 in 2-Dice mode (or 6 in 1-Die mode), plus other players who roll it during that same round if Round Window is selected.',
-          onEffectUr: 'آن (ON — ڈیفالٹ): سب سے پہلے 6+6 (دو ڈائس میں) یا 6 (ایک ڈائس میں) لانے والے کھلاڑی اور راؤنڈ ونڈو موڈ میں اسی راؤنڈ کے دوران لانے والے دیگر کھلاڑیوں کو مفت اضافی چھکا بطور گفٹ ملے گا۔',
-          offEffectEn: 'DISABLED (OFF): Rolling the first 6+6 or 6 of the match gives no extra gift die.',
-          offEffectUr: 'آف (OFF): پہلا ڈبل سکس یا چھکا آنے پر کوئی مفت انعامی چھکا نہیں ملے گا۔',
-          exampleEn: 'In 2-Dice mode, Red is the first player to roll 6+6 → Red gets +1 Free Gift 6 (pool becomes 6, 6, 🎁6)! Now Green, Yellow, and Blue each have their 1 turn in this current round to also roll 6+6 and claim their gift before it disappears for the rest of the match!',
-          exampleUr: 'مثال: 2 ڈائس موڈ میں لال نے سب سے پہلے 6+6 (ڈبل سکس) پھینکا تو اسے ایک مفت انعامی چھکا (🎁6) مل گیا (کل تین چھکے ہو گئے)! اب ہرے، پیلے اور نیلے کھلاڑی کے پاس صرف اسی راؤنڈ کی اپنی ایک باری میں موقع ہے کہ اگر ان کا بھی 6+6 آیا تو انہیں بھی گفٹ مل جائے گا ورنہ پورے میچ کے لیے ختم ہو جائے گا۔'
+          defaultBadge: 'Default: ON — +1 Free 6 on Very First 6 (1st Bead)',
+          titleEn: 'First Six / First Bead Laid Free Gift Rule',
+          titleUr: 'پہلی گوٹی نکالنے / پہلے چھکے پر انعامی چھکا (گفٹ رول)',
+          enDesc: 'When a player rolls their very first 6 in the match (the first time a person lays their first bead onto the board, e.g. rolling 6+2 or 6 — NOT requiring double sixes!), they receive +1 (or user-defined +2/+3) free 6 as a gift! By default, the remaining players also get a 1-turn window in that current round to roll their first 6 and claim the gift, or you can set it to Every Player\'s First 6 or Very First Player Only.',
+          urDesc: 'میچ میں جب کوئی کھلاڑی اپنا سب سے پہلا چھکا (6) لاتا ہے (یعنی پہلی بار کھڈے سے اپنی پہلی گوٹی باہر نکالتا ہے، جیسے 6+2 یا 6 — اس کے لیے ڈبل سکس شرط نہیں ہے!) تو اسے بطور انعام (گفٹ) ایک اضافی مفت چھکا ملتا ہے۔ ڈیفالٹ اصول کے مطابق باقی کھلاڑیوں کو بھی اسی جاری راؤنڈ میں اپنا پہلا 6 لا کر گفٹ لینے کا موقع ملتا ہے (یا آپ اسے ہر کھلاڑی کے پہلے چھکے یا صرف پہلے کھلاڑی تک بھی سیٹ کر سکتے ہیں)۔',
+          onEffectEn: 'ENABLED (Default ON): Awards +1 (or +2/+3) free Gift Six on the very first 6 rolled by a player when laying their first bead.',
+          onEffectUr: 'آن (ON — ڈیفالٹ): پہلی گوٹی نکالنے (پہلا 6 آنے) پر کھلاڑی کو مفت اضافی چھکا بطور گفٹ ملے گا۔',
+          offEffectEn: 'DISABLED (OFF): Rolling the first 6 of the match gives no extra gift die.',
+          offEffectUr: 'آف (OFF): پہلا چھکا آنے پر کوئی مفت انعامی چھکا نہیں ملے گا۔',
+          exampleEn: 'In 2-Dice mode, Red rolls 6 and 3 (their very first 6 to lay their first bead) → Red gets +1 Free Gift 6 (pool becomes 6, 3, 🎁6)! Now Green, Yellow, and Blue also have their turn in this round (or on their first 6) to roll a 6 and claim their gift!',
+          exampleUr: 'مثال: 2 ڈائس موڈ میں لال کا پہلی بار 6 اور 3 آیا (پہلی گوٹی نکالنے کا پہلا چھکا) تو اسے ایک مفت انعامی چھکا (🎁6) مل گیا! اب دوسری گوٹی بھی نکل سکتی ہے یا پہلی گوٹی آگے چل سکتی ہے۔'
         },
         {
           id: 'stack_roll_before_moving',
@@ -16822,17 +17033,17 @@
           id: 'optional_loop_after_kill',
           cat: 'home_loop',
           ruleKey: 'allowOptionalLoopAfterKill',
-          defaultBadge: 'Default: ON (پہلے سے آن)',
-          titleEn: 'Optional Outer Loop After Kill',
-          titleUr: 'شکار کرنے کے بعد گھر جانے یا باہر گھومنے کی مرضی',
-          enDesc: 'Once you have eaten an opponent (at least 1 kill), you are free to choose whether a bead passing its Home gate turns inside the Home column to complete OR comes around the outer board again to hunt more enemies.',
-          urDesc: 'جب کھلاڑی کم از کم ایک شکار کر لے تو اسے مکمل آزادی ہوتی ہے کہ وہ دروازے پر پہنچ کر چاہے تو گوٹی گھر کے اندر ڈال کر پکی کرے یا مزید شکار کے لیے دوبارہ باہر کے چکر پر گھمائے۔',
-          onEffectEn: 'ENABLED (Default ON): Shows two target rings at the Home gate—one inside Home (+delta) and one continuing around the outer loop (Loop +delta).',
-          onEffectUr: 'آن (ON — ڈیفالٹ): دروازے کے قریب گوٹی سلیکٹ کرنے پر اندر جانے اور باہر گھومنے دونوں کے نشان نظر آئیں گے۔',
-          offEffectEn: 'DISABLED (OFF): If Single-Bead Loop & Free Choice rule is also OFF, eligible beads with a kill must turn into their Home column.',
-          offEffectUr: 'آف (OFF): شکار ہونے کے بعد گوٹی لازمی اپنے گھر کی لائن میں ہی داخل ہو گی۔',
-          exampleEn: 'You already have 1 kill, and your partner needs help hunting an enemy ahead of your start square. With this ON, you can choose "Loop +4" to bypass your Home gate and chase the enemy!',
-          exampleUr: 'مثال: آپ کا شکار ہو چکا ہے لیکن آپ آگے کھڑی مخالف گوٹی کو مارنا چاہتے ہیں؛ آن ہونے پر آپ گھر جانے کے بجائے باہر کا چکر منتخب کر سکتے ہیں۔'
+          defaultBadge: 'Default: ON — Choose Come Around or Stay',
+          titleEn: 'Optional Outer Loop After Kill & Overshoot Choice (Come Around or Stay)',
+          titleUr: 'شکار کے بعد اندر/باہر جانے کی مرضی اور بڑے نمبر پر رکنے یا گھومنے کا اختیار',
+          enDesc: 'Once you have eaten an opponent, you can choose between going inside Home or coming around Home. Furthermore, if your bead near Home needs e.g. 5+2 (7) to complete and you roll 5+4 (9) which overshoots Home, by default you are NOT forced to come around Home — you can choose whether to come around Home (🔄 LOOP) OR stay in the same place (🛑 STAY / Pass)! You can also enable "Force Come Around Home on Overshoot" in Advanced Rules.',
+          urDesc: 'جب کھلاڑی شکار کر لے تو وہ دروازے پر پہنچ کر گھر کے اندر بھی جا سکتا ہے اور باہر کا چکر بھی لگا سکتا ہے۔ مزید یہ کہ اگر گوٹی کو پکا ہونے کے لیے مثلاً 2+5 (7) چاہیے اور ڈائس پر 4+5 (9) آ جائے جو گھر کے اندر نہیں جا سکتا، تو ڈیفالٹ اصول کے مطابق آپ کو زبردستی باہر چکر لگانے پر مجبور نہیں کیا جاتا بلکہ آپ کی مرضی ہوتی ہے کہ چاہیں تو باہر چکر لگائیں (🔄 LOOP) یا اپنی جگہ پر ہی رکیں (🛑 STAY / باری چھوڑیں)۔ آپ چاہیں تو رولز میں زبردستی چکر والا آپشن بھی آن کر سکتے ہیں۔',
+          onEffectEn: 'ENABLED (Default ON): Gives free choice between entering Home and looping; on an overshoot roll (like 5+4 when needing 5+2), lets you choose to Come Around Home OR Stay in Place (or Force Loop if selected).',
+          onEffectUr: 'آن (ON — ڈیفالٹ): بڑا نمبر آنے پر کھلاڑی اپنی مرضی سے باہر چکر لگا سکتا ہے یا اپنی جگہ پر رک سکتا ہے۔',
+          offEffectEn: 'DISABLED (OFF): Eligible beads with a kill cannot voluntarily loop around the outer board.',
+          offEffectUr: 'آف (OFF): شکار ہونے کے بعد گوٹی باہر کے چکر پر نہیں گھوم سکے گی۔',
+          exampleEn: 'Your bead at step 49 needs 5+2 (7) to complete Home and you roll 5+4 (9). Because 5+4 cannot fit into Home, you see both "🔄 LOOP (+9)" and "🛑 STAY IN PLACE (Pass)" — tap STAY to remain safely at step 49, or tap LOOP to come around Home!',
+          exampleUr: 'مثال: آپ کی گوٹی کو پکا ہونے کے لیے 2+5 (7) چاہیے اور 4+5 (9) آ گیا۔ اب آپ پر لازم نہیں کہ پورا بورڈ دوبارہ گھومیں؛ آپ "🛑 STAY" دبا کر اپنی جگہ رک سکتے ہیں یا چاہیں تو "🔄 LOOP" دبا کر چکر لگا سکتے ہیں۔'
         },
         {
           id: 'wait_all_ground_at_gate',
@@ -17545,8 +17756,12 @@
           showToast('⏳ Waiting for ' + (actor ? actor.name : 'other player') + '\'s turn...');
           return;
         }
-        if ((gameState.phase === 'ROLL' || canPlayerRollBonusNow()) && gameState.players[gameState.currentTurn].type === 'human') {
-          rollDiceForCurrentPlayer();
+        if (gameState.players[gameState.currentTurn].type === 'human') {
+          if (gameState.phase === 'ROLL' || canPlayerRollBonusNow()) {
+            rollDiceForCurrentPlayer();
+          } else if (gameState.phase === 'MOVE' && canPassOptionalLoopTurn()) {
+            passOptionalLoopTurn(false);
+          }
         }
       });
 
@@ -18111,6 +18326,8 @@
           actor.consecutiveTimeouts = 0;
           if (gameState.phase === 'ROLL' || canPlayerRollBonusNow()) {
             rollDiceForCurrentPlayer();
+          } else if (gameState.phase === 'MOVE' && canPassOptionalLoopTurn()) {
+            passOptionalLoopTurn(false);
           }
         }
       });
@@ -18273,7 +18490,7 @@
       [
         'chkBonusOnKill', 'chkKeepCaptureLockOnBonus', 'chkMandatorySpawn',
         'chkKillForHome', 'chkWipeoutResetsHomeEligibility', 'chkSingleGroundLoopOnlyWithoutKill', 'chkOptionalLoopAfterKill',
-        'chkWaitAllGroundAtGate', 'noKillLoopLimitSelect', 'chkBonusOnHome', 'chkDoubleSixBonus',
+        'overshootHomeLoopModeSelect', 'chkWaitAllGroundAtGate', 'noKillLoopLimitSelect', 'chkBonusOnHome', 'chkDoubleSixBonus',
         'chkSafeStopImmunity', 'chkTeamMode', 'chkStrictRemainder',
         'chkTeamAssistSix', 'chkThreeConsecutiveSixes', 'chkSingleSixBonusTwoDice',
         'chkStackRollBeforeMoving', 'chkFirstSixGiftRule', 'firstSixGiftScopeSelect', 'firstSixGiftCountSelect', 'chkSpawnOnOneAndSix', 'chkDoubleSixSpawnsTwo',
@@ -18534,6 +18751,8 @@
           }
         }
         rulesConfig.allowOptionalLoopAfterKill = document.getElementById('chkOptionalLoopAfterKill').checked;
+        const selOvershootEl = document.getElementById('overshootHomeLoopModeSelect');
+        if (selOvershootEl) rulesConfig.overshootHomeLoopMode = selOvershootEl.value || 'choice_loop_or_stay';
         rulesConfig.bonusRollOnHome = document.getElementById('chkBonusOnHome').checked;
         rulesConfig.doubleSixBonusRoll = document.getElementById('chkDoubleSixBonus').checked;
         rulesConfig.safeStopImmunity = document.getElementById('chkSafeStopImmunity').checked;
