@@ -1073,19 +1073,27 @@
 <!-- ==================== SCREEN 0: TRADITIONAL HOME LOBBY / START SCREEN ==================== -->
 <section class="w-full h-dvh overflow-y-auto flex flex-col justify-between p-3 sm:py-3 sm:px-6 max-w-5xl mx-auto" id="viewHome">
 <div class="w-full flex flex-nowrap items-center justify-between gap-2 bg-slate-900/95 backdrop-blur-md border-2 border-amber-400/70 rounded-2xl px-2.5 py-2 sm:px-4 sm:py-2.5 shadow-lg" id="homeTopBar">
-<div class="flex items-center gap-2 min-w-0 flex-1">
-<div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-md text-white text-lg sm:text-xl flex-shrink-0 border border-amber-200">
-          👑
-        </div>
+<div class="flex items-center gap-2 min-w-0 flex-1 cursor-pointer group" id="homeProfileRankBtn" title="Tap to view Full Ranks, Levels &amp; Career Progression">
+<div class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex flex-col items-center justify-center shadow-md text-white flex-shrink-0 border border-amber-200 group-hover:scale-105 transition">
+<span class="text-base sm:text-lg leading-none" id="homeRankCrestIcon">👑</span>
+<span class="text-[8px] font-black bg-slate-950 text-amber-300 px-1 rounded -mt-0.5 border border-amber-400/60" id="homeLevelMiniBadge">LV.1</span>
+</div>
 <div class="min-w-0 flex-1">
 <div class="flex items-center gap-1.5 min-w-0">
 <span class="font-black text-xs sm:text-base text-amber-300 truncate" id="homePlayerName">Bannu Champion</span>
+<span class="px-1.5 py-0.5 text-[8px] sm:text-[10px] font-black rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/50 truncate flex-shrink-0" id="homeRankTitlePill">#1 Novice</span>
 <span class="px-1.5 py-0.5 text-[8px] sm:text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 truncate flex-shrink-0" id="networkResilienceBadge">
               🟢 Ready
             </span>
 </div>
-<div class="text-[10px] sm:text-[11px] font-bold text-slate-300 truncate mt-0.5">
-<span id="homeQuickStats">🏆 0 Wins • ⚔️ 0 Kills</span>
+<div class="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold text-slate-300 truncate mt-0.5">
+<span class="truncate" id="homeQuickStats">🏆 0 Wins • ⚔️ 0 Kills</span>
+<div class="hidden sm:flex items-center gap-1.5 flex-1 max-w-[160px]">
+<div class="w-full h-1.5 bg-slate-700 rounded-full overflow-hidden border border-amber-400/40">
+<div class="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-300" id="homeTopXpBar" style="width: 35%"></div>
+</div>
+<span class="text-[9px] font-mono text-amber-300 whitespace-nowrap" id="homeTopRpBadge">1000 RP</span>
+</div>
 </div>
 </div>
 </div>
@@ -1095,8 +1103,11 @@
 <option value="ur">اردو</option>
 <option value="ps">پښتو</option>
 </select>
-<button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-400/50 text-white flex items-center justify-center text-xs sm:text-sm transition shadow-sm" id="soundToggleBtn" title="Toggle Sound Effects" type="button">
+<button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-400/50 text-white flex items-center justify-center text-xs sm:text-sm transition shadow-sm" id="soundToggleBtn" title="Toggle Basic Board Sound Effects (Dice &amp; Steps)" type="button">
           🔊
+        </button>
+<button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-600 hover:bg-amber-500 border border-amber-300 text-white flex items-center justify-center text-xs sm:text-sm transition shadow-sm" id="hypeSoundToggleBtn" title="Toggle Energetic Mid-Game Hype &amp; Human Sounds (6+6, Kills, Streaks, Clean Sweep)" type="button">
+          🎤
         </button>
 <button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl gold-gradient-btn font-bold text-xs flex items-center justify-center shadow-sm transition" id="fullscreenToggleBtn" title="Toggle Fullscreen" type="button">
           ⛶
@@ -1292,6 +1303,9 @@
 <button class="px-2 py-1 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-extrabold text-[10px] sm:text-[11px] border border-rose-400/60 shadow-sm flex items-center gap-1" id="openLiveReplayBtn" title="Open Full-Screen Game Replay Studio" type="button">
 <span>🎬</span><span class="hidden sm:inline">Replay</span>
 </button>
+<button class="px-2 py-1 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-[10px] border border-amber-300 shadow-sm" id="inGameHypeSoundBtn" title="Toggle Energetic Mid-Game Hype &amp; Human Sounds" type="button">
+          🎤
+        </button>
 <button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[10px] border border-amber-400/40 shadow-sm" id="demoScenarioBtn" title="Test Cultural Rule Drills" type="button">
           ⚡
         </button>
@@ -1531,6 +1545,14 @@
 <span>🎲 Auto-Roll Dice on My Turn</span>
 <input class="accent-amber-600 rounded w-4 h-4" id="autoRollTurnChk" type="checkbox"/>
 </label>
+<label class="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 text-xs font-bold text-slate-900 cursor-pointer">
+<span>🎤🔥 Energetic Mid-Game Hype &amp; Human Sounds</span>
+<input checked="" class="accent-amber-600 rounded w-4 h-4" id="pauseHypeSoundChk" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
+<span>🔊 Basic Board Sounds (Dice &amp; Steps)</span>
+<input checked="" class="accent-amber-600 rounded w-4 h-4" id="pauseBasicSoundChk" type="checkbox"/>
+</label>
 <label class="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer">
 <span>💬 Show Top Tooltips &amp; Hints</span>
 <input checked="" class="accent-amber-600 rounded w-4 h-4" id="showTooltipsChk" type="checkbox"/>
@@ -1708,6 +1730,28 @@
 <p class="text-[11px] text-slate-600">Show top hint banners and floating move labels. Disable to keep the board 100% clear (saved across reloads).</p>
 </div>
 </label>
+<div class="flex items-start gap-2.5 p-3 rounded-2xl bg-amber-50/95 border-2 border-amber-500 whitespace-normal md:col-span-2">
+<input checked="" class="mt-1 w-4 h-4 accent-amber-600 rounded cursor-pointer" id="chkHypeSounds" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<label class="font-bold text-xs text-slate-900 cursor-pointer" for="chkHypeSounds">🎤🔥 Energetic Mid-Game Hype &amp; Human-Like Reaction Sounds (ڈبل سکس، شکار، بیک ٹو بیک کِل اور کلین سویپ پر پرجوش انسانی آوازیں — Separate Toggle)</label>
+<label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700 bg-white px-2.5 py-0.5 rounded-lg border border-amber-300 cursor-pointer">
+<input checked="" class="w-3.5 h-3.5 accent-amber-600 rounded" id="chkBasicSounds" type="checkbox"/>
+<span>🔊 Basic Dice/Step SFX</span>
+</label>
+</div>
+<p class="text-[11px] text-slate-600 mt-0.5">Controls energetic human crowd cheers, formant vocal exclamations, Hujra hand-claps, Dhol beats, and stingers on Double Six (6+6), First-Six Gift, Enemy Kills, Back-to-Back Kill Streaks, Mid-Path Kills, Ground Wipeout, Home Completion, Level/Rank-Up, and Flawless Clean Sweep — completely independent from basic board dice/step sounds!</p>
+<div class="flex flex-wrap items-center gap-1.5 mt-2 pt-1.5 border-t border-amber-200/80">
+<span class="text-[10px] font-black uppercase text-amber-900">🎵 Test Hype Sounds:</span>
+<button class="hype-sound-preview-btn px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-black text-[10px] shadow-sm" data-hype="double_six" type="button">🔥 Double 6 (6+6)</button>
+<button class="hype-sound-preview-btn px-2 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] shadow-sm" data-hype="kill_enemy" type="button">⚔️ Kill Enemy</button>
+<button class="hype-sound-preview-btn px-2 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-black text-[10px] shadow-sm" data-hype="back_to_back_kill" type="button">⚡⚔️ Back-to-Back Kill</button>
+<button class="hype-sound-preview-btn px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] shadow-sm" data-hype="bead_home_complete" type="button">🏠 Home Complete</button>
+<button class="hype-sound-preview-btn px-2 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-black text-[10px] shadow-sm" data-hype="rank_up" type="button">🎖️ Rank / Level Up</button>
+<button class="hype-sound-preview-btn px-2 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-300 font-black text-[10px] shadow-sm border border-amber-400" data-hype="flawless_clean_sweep" type="button">🧹👑 Flawless Clean Sweep</button>
+</div>
+</div>
+</div>
 <label class="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-amber-200 cursor-pointer whitespace-normal">
 <input class="mt-1 w-4 h-4 accent-amber-600 rounded" id="chkThreeConsecutiveSixes" type="checkbox"/>
 <div>
@@ -2649,8 +2693,10 @@
 </div>
 </div>
 </div>
-<!-- ==================== SUB-TAB 4: 64 ACHIEVEMENTS, 20 RANKS & MODE MASTERY ==================== -->
+<!-- ==================== SUB-TAB 4: 64 ACHIEVEMENTS, 25 RANKS, LEAGUES & MODE MASTERY ==================== -->
 <div class="hidden space-y-3.5" id="dashPane_progression">
+<!-- Comprehensive League, Division, RP Rating, Streak Multiplier & Live XP Sources Breakdown -->
+<div class="royal-card rounded-3xl p-4 sm:p-5 border-2 border-amber-400 space-y-3" id="proRankSystemOverviewCard"></div>
 <!-- 20 Ranks Progression Ladder & 6 Mode Masteries -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
 <div class="lg:col-span-5 royal-card rounded-3xl p-4 border border-amber-300 space-y-2.5">
@@ -2953,6 +2999,7 @@
 </div>
 <p class="text-sm sm:text-base font-extrabold text-amber-200 leading-relaxed pt-0.5" dir="rtl" id="victoryRoastText"></p>
 </div>
+<div class="p-3 rounded-2xl bg-slate-900 text-white border-2 border-amber-400 text-left space-y-1.5 shadow-md" id="victoryRankProgressBox"></div>
 <div class="p-2.5 rounded-2xl bg-amber-50/95 border border-amber-300 text-[11px] text-left space-y-2" id="victoryTelemetrySummaryBox">
 <div class="flex flex-wrap items-center justify-between gap-1 border-b border-amber-200/80 pb-1.5">
 <span class="font-black text-[10px] uppercase tracking-wider text-amber-900 flex items-center gap-1"><span>📊</span><span>Match Telemetry Summary</span></span>
@@ -3477,21 +3524,25 @@
         { id: 3, colorName: 'Blue', hex: '#2563eb', darkHex: '#1e40af', lightHex: '#dbeafe', team: 1, partner: 1, teamTag: '★T2', teamRing: '#06b6d4' }
       ];
 
-      // --- 2. SYNTHESIZED SOUND ENGINE ---
+      // --- 2. SYNTHESIZED SOUND ENGINE (BASIC BOARD SFX + SEPARATE ENERGETIC HUMAN-LIKE MID-GAME HYPE ENGINE) ---
       let soundEnabled = true;
+      let hypeSoundEnabled = true;
       let audioCtx = null;
+      let hypeNoiseBuffer = null;
       let currentLang = 'en';
       try {
         if (localStorage.getItem('bannu_ludo_sound_v1') !== null) {
           soundEnabled = localStorage.getItem('bannu_ludo_sound_v1') === 'true';
+        }
+        if (localStorage.getItem('bannu_ludo_hype_sound_v1') !== null) {
+          hypeSoundEnabled = localStorage.getItem('bannu_ludo_hype_sound_v1') === 'true';
         }
         if (localStorage.getItem('bannu_ludo_lang_v1')) {
           currentLang = localStorage.getItem('bannu_ludo_lang_v1');
         }
       } catch (e) {}
 
-      function ensureAudio() {
-        if (!soundEnabled) return null;
+      function getRawAudioContext() {
         if (!audioCtx) {
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
           if (AudioContextClass) audioCtx = new AudioContextClass();
@@ -3500,6 +3551,413 @@
           audioCtx.resume().catch(function(){});
         }
         return audioCtx;
+      }
+
+      function ensureAudio() {
+        if (!soundEnabled) return null;
+        return getRawAudioContext();
+      }
+
+      function ensureHypeAudio() {
+        if (!hypeSoundEnabled) return null;
+        return getRawAudioContext();
+      }
+
+      function getNoiseBuffer(ctx) {
+        if (hypeNoiseBuffer && hypeNoiseBuffer.sampleRate === ctx.sampleRate) return hypeNoiseBuffer;
+        const len = ctx.sampleRate * 2;
+        const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0;
+        for (let i = 0; i < len; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99765 * b0 + white * 0.0990460;
+          b1 = 0.96300 * b1 + white * 0.2965164;
+          b2 = 0.57000 * b2 + white * 1.0526913;
+          data[i] = (b0 + b1 + b2 + white * 0.1848) * 0.18;
+        }
+        hypeNoiseBuffer = buf;
+        return buf;
+      }
+
+      // Human Vocal Formant Synthesizer: Passes glottal sawtooth + vibrato through parallel vowel formant bandpass filters (F1, F2, F3)
+      function triggerHumanVocalCheer(ctx, startTime, duration, pitchStart, pitchEnd, vowelType, gainLevel) {
+        const formants = {
+          a: [780, 1220, 2550],
+          o: [480, 880, 2450],
+          u: [350, 750, 2350],
+          e: [530, 1850, 2500],
+          i: [310, 2250, 2900]
+        }[vowelType || 'a'] || [780, 1220, 2550];
+
+        const src = ctx.createOscillator();
+        const sub = ctx.createOscillator();
+        const vib = ctx.createOscillator();
+        const vibGain = ctx.createGain();
+        const master = ctx.createGain();
+
+        src.type = 'sawtooth';
+        sub.type = 'triangle';
+        src.frequency.setValueAtTime(pitchStart, startTime);
+        src.frequency.exponentialRampToValueAtTime(Math.max(60, pitchEnd), startTime + duration);
+        sub.frequency.setValueAtTime(pitchStart * 0.5, startTime);
+        sub.frequency.exponentialRampToValueAtTime(Math.max(40, pitchEnd * 0.5), startTime + duration);
+
+        vib.frequency.setValueAtTime(5.8, startTime);
+        vibGain.gain.setValueAtTime(pitchStart * 0.032, startTime);
+        vib.connect(vibGain);
+        vibGain.connect(src.frequency);
+
+        const fWeights = [1.0, 0.72, 0.35];
+        formants.forEach(function (fFreq, idx) {
+          const bp = ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(fFreq, startTime);
+          bp.frequency.linearRampToValueAtTime(fFreq * (pitchEnd > pitchStart ? 1.08 : 0.92), startTime + duration);
+          bp.Q.setValueAtTime(6.5 + idx * 2, startTime);
+          const fGain = ctx.createGain();
+          fGain.gain.setValueAtTime((gainLevel || 0.22) * fWeights[idx], startTime);
+          src.connect(bp);
+          sub.connect(bp);
+          bp.connect(fGain);
+          fGain.connect(master);
+        });
+
+        master.gain.setValueAtTime(0.001, startTime);
+        master.gain.linearRampToValueAtTime(1.0, startTime + Math.min(0.045, duration * 0.2));
+        master.gain.setValueAtTime(0.95, startTime + duration * 0.68);
+        master.gain.exponentialRampToValueAtTime(0.008, startTime + duration);
+        master.connect(ctx.destination);
+
+        src.start(startTime);
+        sub.start(startTime);
+        vib.start(startTime);
+        src.stop(startTime + duration + 0.02);
+        sub.stop(startTime + duration + 0.02);
+        vib.stop(startTime + duration + 0.02);
+      }
+
+      // Hujra Hand-Claps & Stadium Crowd Roar
+      function triggerCrowdClapAndRoar(ctx, startTime, clapCount, clapSpacing, roarDuration, intensity) {
+        const nBuf = getNoiseBuffer(ctx);
+        const vol = intensity || 0.22;
+        for (let c = 0; c < clapCount; c++) {
+          for (let layer = 0; layer < 3; layer++) {
+            const t = startTime + c * clapSpacing + (layer * 0.009) + (Math.random() * 0.006);
+            const nSrc = ctx.createBufferSource();
+            nSrc.buffer = nBuf;
+            const bp = ctx.createBiquadFilter();
+            bp.type = 'bandpass';
+            bp.frequency.setValueAtTime(1150 + layer * 280, t);
+            bp.Q.setValueAtTime(2.4, t);
+            const env = ctx.createGain();
+            env.gain.setValueAtTime(vol * 0.75, t);
+            env.gain.exponentialRampToValueAtTime(0.005, t + 0.065);
+            nSrc.connect(bp);
+            bp.connect(env);
+            env.connect(ctx.destination);
+            nSrc.start(t, Math.random() * 0.8, 0.07);
+          }
+        }
+        if (roarDuration > 0.05) {
+          const rSrc = ctx.createBufferSource();
+          rSrc.buffer = nBuf;
+          const rFilter = ctx.createBiquadFilter();
+          rFilter.type = 'bandpass';
+          rFilter.frequency.setValueAtTime(680, startTime);
+          rFilter.frequency.linearRampToValueAtTime(1180, startTime + roarDuration * 0.5);
+          rFilter.frequency.linearRampToValueAtTime(760, startTime + roarDuration);
+          rFilter.Q.setValueAtTime(1.4, startTime);
+          const rEnv = ctx.createGain();
+          rEnv.gain.setValueAtTime(0.001, startTime);
+          rEnv.gain.linearRampToValueAtTime(vol * 0.55, startTime + Math.min(0.12, roarDuration * 0.25));
+          rEnv.gain.exponentialRampToValueAtTime(0.008, startTime + roarDuration);
+          rSrc.connect(rFilter);
+          rFilter.connect(rEnv);
+          rEnv.connect(ctx.destination);
+          rSrc.start(startTime, 0, Math.min(1.9, roarDuration));
+        }
+      }
+
+      // Traditional Pashtun Dhol / Drum Beat + Celebratory Whistle
+      function triggerDholBeat(ctx, startTime, isLowDhamaka, gainVal) {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = isLowDhamaka ? 'sine' : 'triangle';
+        const f0 = isLowDhamaka ? 145 : 310;
+        const f1 = isLowDhamaka ? 46 : 115;
+        const dur = isLowDhamaka ? 0.19 : 0.11;
+        osc.frequency.setValueAtTime(f0, startTime);
+        osc.frequency.exponentialRampToValueAtTime(f1, startTime + dur);
+        g.gain.setValueAtTime(gainVal || 0.28, startTime);
+        g.gain.exponentialRampToValueAtTime(0.008, startTime + dur);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + dur + 0.01);
+      }
+
+      function triggerHumanWhistle(ctx, startTime, dur, fStart, fPeak, gainVal) {
+        const osc = ctx.createOscillator();
+        const vib = ctx.createOscillator();
+        const vibG = ctx.createGain();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(fStart, startTime);
+        osc.frequency.exponentialRampToValueAtTime(fPeak, startTime + dur * 0.65);
+        osc.frequency.exponentialRampToValueAtTime(fPeak * 0.92, startTime + dur);
+        vib.frequency.setValueAtTime(14, startTime);
+        vibG.gain.setValueAtTime(28, startTime);
+        vib.connect(vibG);
+        vibG.connect(osc.frequency);
+        g.gain.setValueAtTime(0.001, startTime);
+        g.gain.linearRampToValueAtTime(gainVal || 0.12, startTime + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.005, startTime + dur);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(startTime);
+        vib.start(startTime);
+        osc.stop(startTime + dur + 0.01);
+        vib.stop(startTime + dur + 0.01);
+      }
+
+      function triggerBrassNote(ctx, startTime, dur, freq, gainVal) {
+        const o1 = ctx.createOscillator();
+        const o2 = ctx.createOscillator();
+        const lp = ctx.createBiquadFilter();
+        const g = ctx.createGain();
+        o1.type = 'sawtooth';
+        o2.type = 'triangle';
+        o1.frequency.setValueAtTime(freq, startTime);
+        o2.frequency.setValueAtTime(freq * 1.004, startTime);
+        lp.type = 'lowpass';
+        lp.frequency.setValueAtTime(freq * 1.8, startTime);
+        lp.frequency.exponentialRampToValueAtTime(freq * 5.2, startTime + Math.min(0.06, dur * 0.35));
+        lp.frequency.exponentialRampToValueAtTime(freq * 2.4, startTime + dur);
+        g.gain.setValueAtTime(0.001, startTime);
+        g.gain.linearRampToValueAtTime(gainVal || 0.15, startTime + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.006, startTime + dur);
+        o1.connect(lp);
+        o2.connect(lp);
+        lp.connect(g);
+        g.connect(ctx.destination);
+        o1.start(startTime);
+        o2.start(startTime);
+        o1.stop(startTime + dur + 0.01);
+        o2.stop(startTime + dur + 0.01);
+      }
+
+      function playHypeSound(condition, meta) {
+        const ctx = ensureHypeAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (condition === 'double_six') {
+          // Explosive Double-Six (6+6): Dhol Dhamaka + Human "WOOO-SHABASH!" + Hujra Claps + Brass Power Chord
+          triggerDholBeat(ctx, now, true, 0.34);
+          triggerDholBeat(ctx, now + 0.11, false, 0.26);
+          triggerDholBeat(ctx, now + 0.22, true, 0.34);
+          triggerBrassNote(ctx, now + 0.04, 0.14, 523.25, 0.14);
+          triggerBrassNote(ctx, now + 0.16, 0.14, 659.25, 0.15);
+          triggerBrassNote(ctx, now + 0.28, 0.38, 783.99, 0.18);
+          triggerBrassNote(ctx, now + 0.28, 0.38, 1046.50, 0.14);
+          triggerHumanVocalCheer(ctx, now + 0.06, 0.22, 195, 290, 'u', 0.24);
+          triggerHumanVocalCheer(ctx, now + 0.26, 0.42, 275, 395, 'a', 0.28);
+          triggerCrowdClapAndRoar(ctx, now + 0.10, 4, 0.095, 0.55, 0.24);
+          triggerHumanWhistle(ctx, now + 0.30, 0.34, 1550, 2450, 0.10);
+        } else if (condition === 'first_six_gift') {
+          // First-Six Free Gift: Sparkling Gift Chimes + Human "AAH-YEAH!" + Double Clap
+          [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach(function (f, i) {
+            triggerBrassNote(ctx, now + i * 0.065, 0.24, f, 0.13);
+          });
+          triggerDholBeat(ctx, now, true, 0.26);
+          triggerHumanVocalCheer(ctx, now + 0.12, 0.38, 230, 350, 'a', 0.24);
+          triggerCrowdClapAndRoar(ctx, now + 0.14, 3, 0.11, 0.42, 0.22);
+        } else if (condition === 'bead_spawn') {
+          // Energetic First Bead Spawn: Dhol Tap + Rising Human "HAA!" + Bright Chord
+          triggerDholBeat(ctx, now, true, 0.24);
+          triggerDholBeat(ctx, now + 0.09, false, 0.20);
+          triggerBrassNote(ctx, now + 0.02, 0.12, 440, 0.11);
+          triggerBrassNote(ctx, now + 0.11, 0.20, 659.25, 0.13);
+          triggerHumanVocalCheer(ctx, now + 0.05, 0.22, 210, 285, 'a', 0.18);
+        } else if (condition === 'kill_enemy') {
+          // Fierce Shikari Enemy Capture: Sword Impact + Dhol Boom + Human Battle Cry "SHIKAR!" + Claps
+          triggerDholBeat(ctx, now, true, 0.36);
+          triggerDholBeat(ctx, now + 0.14, true, 0.32);
+          triggerBrassNote(ctx, now + 0.02, 0.12, 392.00, 0.16);
+          triggerBrassNote(ctx, now + 0.12, 0.12, 493.88, 0.16);
+          triggerBrassNote(ctx, now + 0.22, 0.34, 587.33, 0.20);
+          triggerHumanVocalCheer(ctx, now + 0.04, 0.16, 260, 215, 'e', 0.24);
+          triggerHumanVocalCheer(ctx, now + 0.18, 0.36, 235, 365, 'a', 0.28);
+          triggerCrowdClapAndRoar(ctx, now + 0.08, 3, 0.10, 0.48, 0.24);
+        } else if (condition === 'back_to_back_kill') {
+          // Back-to-Back Kill Streak (2x, 3x, 4x+): Escalating Stadium Fanfare + Whistle + Multi-Clap Ovation
+          const streak = Math.min(5, (meta && meta.streak) || 2);
+          const pitchMult = 1 + (streak - 2) * 0.08;
+          triggerDholBeat(ctx, now, true, 0.38);
+          triggerDholBeat(ctx, now + 0.10, false, 0.28);
+          triggerDholBeat(ctx, now + 0.20, true, 0.38);
+          triggerDholBeat(ctx, now + 0.32, false, 0.30);
+          [440, 554.37, 659.25, 880].forEach(function (f, idx) {
+            triggerBrassNote(ctx, now + idx * 0.085, 0.28, f * pitchMult, 0.17);
+          });
+          triggerHumanVocalCheer(ctx, now + 0.05, 0.20, 240 * pitchMult, 340 * pitchMult, 'o', 0.26);
+          triggerHumanVocalCheer(ctx, now + 0.24, 0.48, 290 * pitchMult, 440 * pitchMult, 'a', 0.30);
+          triggerHumanWhistle(ctx, now + 0.22, 0.42, 1600, 2650, 0.13);
+          triggerCrowdClapAndRoar(ctx, now + 0.06, 6, 0.085, 0.75, 0.28);
+        } else if (condition === 'mid_path_kill') {
+          // Mid-Move Auto-Kill (+3 eat then +5 hop): Double-Strike Kinetic Punch + Crowd Gasp-into-Cheer
+          triggerDholBeat(ctx, now, false, 0.28);
+          triggerDholBeat(ctx, now + 0.09, true, 0.35);
+          triggerBrassNote(ctx, now, 0.10, 587.33, 0.15);
+          triggerBrassNote(ctx, now + 0.10, 0.26, 880.00, 0.18);
+          triggerHumanVocalCheer(ctx, now + 0.04, 0.32, 260, 410, 'i', 0.25);
+          triggerCrowdClapAndRoar(ctx, now + 0.06, 3, 0.08, 0.38, 0.22);
+        } else if (condition === 'pair_kill' || condition === 'ground_wipeout') {
+          // Stacked Pair Kill / Ground Wipeout: Heavy Shockwave + Crowd "OOOOOH-YEAH!" Roar
+          triggerDholBeat(ctx, now, true, 0.40);
+          triggerDholBeat(ctx, now + 0.15, true, 0.38);
+          triggerBrassNote(ctx, now + 0.04, 0.18, 329.63, 0.18);
+          triggerBrassNote(ctx, now + 0.18, 0.40, 659.25, 0.20);
+          triggerHumanVocalCheer(ctx, now + 0.03, 0.24, 185, 295, 'o', 0.28);
+          triggerHumanVocalCheer(ctx, now + 0.25, 0.45, 280, 390, 'a', 0.28);
+          triggerCrowdClapAndRoar(ctx, now + 0.10, 5, 0.09, 0.65, 0.26);
+        } else if (condition === 'victim_killed' || condition === 'three_sixes_bust') {
+          // Own Bead Killed / Snake Eyes / Phook / 3-Sixes Bust: Empathetic Human Crowd "AAWW / OHHH!" Sigh
+          triggerDholBeat(ctx, now, true, 0.25);
+          triggerBrassNote(ctx, now + 0.02, 0.18, 349.23, 0.12);
+          triggerBrassNote(ctx, now + 0.18, 0.32, 261.63, 0.12);
+          triggerHumanVocalCheer(ctx, now + 0.04, 0.46, 265, 145, 'o', 0.24);
+        } else if (condition === 'close_lock' || condition === 'jora_formed') {
+          // Close Game Lock / Jora Wall Formed: Tactical Metallic Lock & Deep Shield Chord
+          triggerDholBeat(ctx, now, false, 0.24);
+          triggerBrassNote(ctx, now, 0.12, 440, 0.12);
+          triggerBrassNote(ctx, now + 0.09, 0.20, 554.37, 0.13);
+        } else if (condition === 'safe_star_land') {
+          // Safe Star Stop Landing: Shimmering Harmonic + Warm Breath Chime
+          triggerBrassNote(ctx, now, 0.14, 659.25, 0.10);
+          triggerBrassNote(ctx, now + 0.08, 0.22, 987.77, 0.11);
+        } else if (condition === 'home_stretch_entry') {
+          // Entering Colored Home Stretch: Heartbeat Dhol Roll + Uplifting Riser
+          triggerDholBeat(ctx, now, true, 0.25);
+          triggerDholBeat(ctx, now + 0.10, false, 0.22);
+          [523.25, 659.25, 783.99].forEach(function (f, i) {
+            triggerBrassNote(ctx, now + i * 0.07, 0.22, f, 0.12);
+          });
+          triggerHumanVocalCheer(ctx, now + 0.08, 0.28, 220, 320, 'e', 0.20);
+        } else if (condition === 'outer_blood_loop') {
+          // Forced 0-Kill Outer Blood Loop: Swirling Whoosh + Dramatic "WHOA!" Cadence
+          triggerHumanVocalCheer(ctx, now + 0.02, 0.36, 310, 185, 'u', 0.22);
+          triggerBrassNote(ctx, now, 0.16, 493.88, 0.11);
+          triggerBrassNote(ctx, now + 0.14, 0.24, 392.00, 0.11);
+        } else if (condition === 'bead_home_complete' || condition === 'partner_assist_unlock' || condition === 'qisas_vengeance') {
+          // Bead Completed into Home / Partner Assist / Qisas: Royal Fanfare + Crowd "YEAAAH!" + Applause
+          triggerDholBeat(ctx, now, true, 0.34);
+          triggerDholBeat(ctx, now + 0.12, false, 0.26);
+          triggerDholBeat(ctx, now + 0.24, true, 0.34);
+          [523.25, 659.25, 783.99, 1046.50].forEach(function (f, i) {
+            triggerBrassNote(ctx, now + i * 0.08, 0.30, f, 0.16);
+          });
+          triggerHumanVocalCheer(ctx, now + 0.10, 0.44, 245, 385, 'a', 0.27);
+          triggerCrowdClapAndRoar(ctx, now + 0.12, 4, 0.09, 0.55, 0.24);
+        } else if (condition === 'rank_up') {
+          // Live Mid-Game Level-Up / Rank-Up Promotion Fanfare
+          triggerDholBeat(ctx, now, true, 0.36);
+          triggerDholBeat(ctx, now + 0.14, false, 0.28);
+          triggerDholBeat(ctx, now + 0.28, true, 0.36);
+          [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98].forEach(function (f, i) {
+            triggerBrassNote(ctx, now + i * 0.075, 0.34, f, 0.15);
+          });
+          triggerHumanVocalCheer(ctx, now + 0.14, 0.50, 250, 420, 'a', 0.28);
+          triggerHumanWhistle(ctx, now + 0.32, 0.40, 1650, 2600, 0.12);
+          triggerCrowdClapAndRoar(ctx, now + 0.10, 6, 0.09, 0.80, 0.26);
+        } else if (condition === 'victory_normal') {
+          // Match Victory Anthem: Full Pashtun Dhol Rhythm + Brass Victory Melody + Stadium Applause
+          [0, 0.16, 0.32, 0.48, 0.68].forEach(function (t, i) {
+            triggerDholBeat(ctx, now + t, i % 2 === 0, 0.35);
+          });
+          const notes = [
+            { t: 0.00, d: 0.15, f: 523.25 },
+            { t: 0.16, d: 0.15, f: 659.25 },
+            { t: 0.32, d: 0.15, f: 783.99 },
+            { t: 0.48, d: 0.45, f: 1046.50 }
+          ];
+          notes.forEach(function (n) {
+            triggerBrassNote(ctx, now + n.t, n.d, n.f, 0.18);
+            triggerBrassNote(ctx, now + n.t, n.d, n.f * 0.5, 0.12);
+          });
+          triggerHumanVocalCheer(ctx, now + 0.12, 0.30, 220, 330, 'o', 0.25);
+          triggerHumanVocalCheer(ctx, now + 0.42, 0.58, 280, 430, 'a', 0.30);
+          triggerCrowdClapAndRoar(ctx, now + 0.10, 7, 0.10, 1.05, 0.28);
+        } else if (condition === 'flawless_clean_sweep') {
+          // ULTIMATE FLAWLESS CLEAN SWEEP VICTORY: Multi-Stage Royal Symphony + Dhol + Whistles + Hujra Ovation
+          [0, 0.14, 0.28, 0.42, 0.56, 0.70, 0.88, 1.06].forEach(function (t, i) {
+            triggerDholBeat(ctx, now + t, i % 2 === 0, 0.38);
+          });
+          const sweepNotes = [
+            { t: 0.00, d: 0.14, f: 523.25 },
+            { t: 0.14, d: 0.14, f: 659.25 },
+            { t: 0.28, d: 0.14, f: 783.99 },
+            { t: 0.42, d: 0.22, f: 1046.50 },
+            { t: 0.66, d: 0.18, f: 987.77 },
+            { t: 0.86, d: 0.65, f: 1318.51 }
+          ];
+          sweepNotes.forEach(function (n) {
+            triggerBrassNote(ctx, now + n.t, n.d, n.f, 0.19);
+            triggerBrassNote(ctx, now + n.t, n.d, n.f * 0.5, 0.14);
+          });
+          triggerHumanVocalCheer(ctx, now + 0.08, 0.28, 230, 350, 'u', 0.26);
+          triggerHumanVocalCheer(ctx, now + 0.38, 0.40, 270, 410, 'o', 0.28);
+          triggerHumanVocalCheer(ctx, now + 0.80, 0.70, 310, 480, 'a', 0.32);
+          triggerHumanWhistle(ctx, now + 0.40, 0.38, 1600, 2550, 0.13);
+          triggerHumanWhistle(ctx, now + 0.88, 0.50, 1750, 2800, 0.14);
+          triggerCrowdClapAndRoar(ctx, now + 0.08, 11, 0.095, 1.45, 0.32);
+        }
+      }
+
+      function updateSoundButtonsUI() {
+        const basicBtn = document.getElementById('soundToggleBtn');
+        if (basicBtn) {
+          basicBtn.textContent = soundEnabled ? '🔊' : '🔇';
+          basicBtn.classList.toggle('opacity-60', !soundEnabled);
+        }
+        const hypeBtn = document.getElementById('hypeSoundToggleBtn');
+        if (hypeBtn) {
+          hypeBtn.textContent = hypeSoundEnabled ? '🎤' : '🔕';
+          hypeBtn.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-xl border text-white flex items-center justify-center text-xs sm:text-sm transition shadow-sm ' +
+            (hypeSoundEnabled ? 'bg-amber-600 hover:bg-amber-500 border-amber-300' : 'bg-slate-800 hover:bg-slate-700 border-slate-600 opacity-60');
+        }
+        const inGameHypeBtn = document.getElementById('inGameHypeSoundBtn');
+        if (inGameHypeBtn) {
+          inGameHypeBtn.textContent = hypeSoundEnabled ? '🎤' : '🔕';
+          inGameHypeBtn.className = 'px-2 py-1 rounded-xl font-bold text-[10px] border shadow-sm ' +
+            (hypeSoundEnabled ? 'bg-amber-600 hover:bg-amber-500 text-white border-amber-300' : 'bg-slate-800 hover:bg-slate-700 text-slate-400 border-slate-600');
+        }
+        const pHype = document.getElementById('pauseHypeSoundChk');
+        if (pHype) pHype.checked = Boolean(hypeSoundEnabled);
+        const pBasic = document.getElementById('pauseBasicSoundChk');
+        if (pBasic) pBasic.checked = Boolean(soundEnabled);
+        const rHype = document.getElementById('chkHypeSounds');
+        if (rHype) rHype.checked = Boolean(hypeSoundEnabled);
+        const rBasic = document.getElementById('chkBasicSounds');
+        if (rBasic) rBasic.checked = Boolean(soundEnabled);
+      }
+
+      function setBasicSoundPreference(enabled, showMsg) {
+        soundEnabled = Boolean(enabled);
+        try { localStorage.setItem('bannu_ludo_sound_v1', soundEnabled ? 'true' : 'false'); } catch (e) {}
+        updateSoundButtonsUI();
+        if (showMsg) showToast(soundEnabled ? '🔊 Basic Board Sounds (Dice & Steps): ON' : '🔇 Basic Board Sounds: OFF', true);
+      }
+
+      function setHypeSoundPreference(enabled, showMsg) {
+        hypeSoundEnabled = Boolean(enabled);
+        try { localStorage.setItem('bannu_ludo_hype_sound_v1', hypeSoundEnabled ? 'true' : 'false'); } catch (e) {}
+        updateSoundButtonsUI();
+        if (hypeSoundEnabled && showMsg) {
+          playHypeSound('double_six');
+        }
+        if (showMsg) showToast(hypeSoundEnabled ? '🎤🔥 Energetic Mid-Game Hype & Human Sounds: ON' : '🔕 Mid-Game Hype Sounds: OFF', true);
       }
 
       function playSound(type) {
@@ -3594,6 +4052,21 @@
         totalCloseLocks: 0,
         totalPartnerAssists: 0,
         fastMovesUnder1500ms: 0,
+        bonusLiveXp: 0,
+        rankPoints: 1000,
+        peakRankPoints: 1000,
+        backToBackKillsTotal: 0,
+        bestKillStreakInMatch: 0,
+        xpBreakdown: {
+          winsXp: 0,
+          cleanSweepXp: 0,
+          killsXp: 0,
+          streaksXp: 0,
+          doubleSixXp: 0,
+          spawnsXp: 0,
+          homeXp: 0,
+          tacticalXp: 0
+        },
         diceFaceCounts: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
         seatStats: [
           { seat: 0, color: 'Red', matches: 0, wins: 0, kills: 0, deaths: 0, spawns: 0, homeCompleted: 0, outerLoops: 0, closeLocks: 0, turns: 0, totalTurnMs: 0, moves: 0, totalDecisionMs: 0, totalAnimMs: 0, totalGameTimeMs: 0, stepsMoved: 0 },
@@ -4257,6 +4730,7 @@
           localStorage.setItem('bannu_ludo_auto_roll_v1', rulesConfig.autoRollOnTurn ? 'true' : 'false');
           localStorage.setItem('bannu_ludo_show_tooltips_v1', rulesConfig.showTooltips ? 'true' : 'false');
           localStorage.setItem('bannu_ludo_sound_v1', soundEnabled ? 'true' : 'false');
+          localStorage.setItem('bannu_ludo_hype_sound_v1', hypeSoundEnabled ? 'true' : 'false');
           localStorage.setItem('bannu_ludo_lang_v1', currentLang || 'en');
         } catch (e) {}
         if (broadcastToPeers) {
@@ -5184,6 +5658,7 @@
           team: PLAYER_META[idx].team,
           partner: PLAYER_META[idx].partner,
           kills: 0,
+          killStreakThisMatch: 0,
           finishRank: 0,
           assistUnlocked: false,
           lastRolledDice: [],
@@ -6071,6 +6546,7 @@
           groundTokens.length === 1 &&
           groundTokens[0].state === 'board'
         );
+        const overshootLoopMode = rulesConfig.overshootHomeLoopMode || 'choice_loop_or_stay';
 
         if (
           (rulesConfig.strictHomeRemainder || isSoleRemainingBeadOutside) &&
@@ -6084,10 +6560,7 @@
           const addedMidKillsSole = rulesConfig.killAllStackedEnemies ? midCandsForSole.length : (midCandsForSole.length > 0 ? 1 : 0);
           const effEligibleSole = canOwnerEnterHomeStretch(targetOwnerIdx) || ((owner.kills + addedMidKillsSole) >= getRequiredKillsForHome());
           const combinedSim = simulateTokenAdvance(soleToken, sumVal, effEligibleSole, tokens, false);
-          const solePosInLap = soleToken.steps % 52;
-          const soleStepsToGate = 50 - solePosInLap;
-          const soleOvershootsHomeOnTwoDice = Boolean(effEligibleSole && soleStepsToGate >= 0 && sumVal > (soleStepsToGate + 6));
-          const combinedLoopSim = (!isSoleRemainingBeadOutside && !soleOvershootsHomeOnTwoDice && effEligibleSole && isOptionalLoopAfterKillAllowed())
+          const combinedLoopSim = (soleToken.state === 'board' && effEligibleSole && isOptionalLoopAfterKillAllowed() && overshootLoopMode !== 'stay_only')
             ? simulateTokenAdvance(soleToken, sumVal, true, tokens, true)
             : { valid: false };
           if (!combinedSim.valid && !combinedLoopSim.valid) {
@@ -6661,6 +7134,10 @@
               });
               const midDieUsed = midKillPlan.midStepIndex;
               const remDelta = move.delta - midDieUsed;
+              playHypeSound('mid_path_kill');
+              if (move.ownerIdx === 0 || (rulesConfig.teamMode && owner.team === 0)) {
+                awardLiveGameXp(95, 'Mid-Move Auto-Kill (+' + midDieUsed + ' then +' + remDelta + ')', '⚡⚔️', 'killsXp');
+              }
               addGameLog('⚡⚔️ Mid-Path Auto-Kill! ' + owner.name + ' ate ' + midKillPlan.bestMidVictim.playerName + ' at +' + midDieUsed + ' and then moved +' + remDelta + ' (Total +' + move.delta + ')!', 'kill');
               showToast('⚡⚔️ Ate ' + midKillPlan.bestMidVictim.playerName + ' on +' + midDieUsed + '! Moving +' + remDelta + '...');
               drawBoard();
@@ -6703,7 +7180,16 @@
         if (token.state === 'completed') {
           token.spawnShielded = false;
           playSound('home');
+          playHypeSound('bead_home_complete');
           gameState.earnedHomeBonusThisTurn = true;
+          if (owner.id === 0 || (rulesConfig.teamMode && owner.team === 0)) {
+            awardLiveGameXp(85, 'Bead #' + (token.id + 1) + ' Completed into Home!', '🏠', 'homeXp');
+          }
+        } else if (prevTokenState === 'board' && token.state === 'home_stretch') {
+          playHypeSound('home_stretch_entry');
+          if (owner.id === 0 || (rulesConfig.teamMode && owner.team === 0)) {
+            awardLiveGameXp(30, 'Entered Colored Home Stretch!', '🏃‍♂️', 'homeXp');
+          }
         }
         if (token.state === 'completed' || token.state === 'home_stretch') {
           learnFromHomeArrival(owner.id, token);
@@ -6791,13 +7277,30 @@
 
         if (move.sim.isSpawn) {
           gameState.spawnedBeadsThisRoll = (gameState.spawnedBeadsThisRoll || 0) + 1;
+          playHypeSound('bead_spawn');
+          if (owner.id === 0 || (rulesConfig.teamMode && owner.team === 0)) {
+            awardLiveGameXp(15, 'Bead #' + (token.id + 1) + ' Spawned onto Board', '🚀', 'spawnsXp');
+          }
           addGameLog(owner.name + ' spawned Bead #' + (token.id + 1) + ' onto start (+' + move.delta + ') [' + (fullMoveMs / 1000).toFixed(2) + 's].', 'info');
         } else if (move.sim.loopedPastHome) {
+          playHypeSound('outer_blood_loop');
           addGameLog(owner.name + ' has 0 kills! Bead #' + (token.id + 1) + ' looped past Home Entry for another full lap.', 'warn');
           showToast('⚠️ No kill yet! Bead loops past Home Gate for another lap.');
         } else if (token.state === 'completed') {
           addGameLog('🎉 ' + owner.name + ' completed Bead #' + (token.id + 1) + ' into Home! (+Bonus Re-Roll Earned!)', 'gold');
         } else {
+          if (token.state === 'board') {
+            const landedIdxCheck = getOuterTrackIndex(token);
+            const hasEnemiesHere = getCaptureCandidatesAtTrackIndex(move.ownerIdx, landedIdxCheck).length > 0;
+            if (!hasEnemiesHere) {
+              const sameTeamHere = owner.tokens.filter(function (t) { return t.id !== token.id && t.state === 'board' && getOuterTrackIndex(t) === landedIdxCheck; }).length;
+              if (rulesConfig.pairBlockadeRule && sameTeamHere >= 1) {
+                playHypeSound('jora_formed');
+              } else if (SAFE_TRACK_INDICES.has(landedIdxCheck)) {
+                playHypeSound('safe_star_land');
+              }
+            }
+          }
           addGameLog(owner.name + ' moved Bead #' + (token.id + 1) + ' forward by ' + move.delta + ' [' + (fullMoveMs / 1000).toFixed(2) + 's].', 'info');
         }
 
@@ -6927,10 +7430,15 @@
         if (wasWantedByCapturer) {
           const nextDieId = gameState.dicePool.length;
           gameState.dicePool.push({ id: nextDieId, value: 10, used: false, isQisasJump: true });
+          playHypeSound('qisas_vengeance');
+          if (capturerOwnerIdx === 0 || (rulesConfig.teamMode && PLAYER_META[capturerOwnerIdx].team === 0)) {
+            awardLiveGameXp(140, 'Qisas Blood Vengeance (+10 Jump)!', '⚖️', 'tacticalXp');
+          }
           addGameLog('⚖️ QISAS BLOOD VENGEANCE! ' + gameState.players[capturerOwnerIdx].name + ' hunted down the Wanted killer bead and earned an instant +10-Step Bonus Jump!', 'gold');
           showToast('⚖️ QISAS VENGEANCE! +10-Step Jump added to your dice pool!', true);
         }
 
+        let triggeredWipeoutNow = false;
         if (rulesConfig.wipeoutResetsHomeEligibility !== false && (victimPlayer.kills || 0) > 0) {
           const hasBeadInsideHome = victimPlayer.tokens.some(function (t) {
             return t.state === 'home_stretch' || t.state === 'completed';
@@ -6941,6 +7449,11 @@
           if (!hasBeadInsideHome && !hasBeadOnBoard) {
             victimPlayer.kills = 0;
             if (victimPlayer.assistUnlocked) victimPlayer.assistUnlocked = false;
+            triggeredWipeoutNow = true;
+            playHypeSound('ground_wipeout');
+            if (capturerOwnerIdx === 0 || (rulesConfig.teamMode && PLAYER_META[capturerOwnerIdx].team === 0)) {
+              awardLiveGameXp(160, 'Ground Wipeout Inflicted on ' + victimPlayer.name + '!', '🧹🩸', 'tacticalXp');
+            }
             addGameLog('⚠️ Ground Wipeout: All on-ground beads of ' + victimPlayer.name + ' were eliminated before reaching Home! Home Gate locked (🔒) and clean sweep vulnerability restored until a new kill is made.', 'warn');
             showToast('⚠️ Ground Wipeout! ' + victimPlayer.name + '\'s Home eligibility reset!');
             pushActivityEvent('🧹', 'Ground Wipeout on ' + victimPlayer.name, 'All field beads eaten before entering Home — Home eligibility and clean sweep protection reset to 0', 'combat');
@@ -6949,6 +7462,10 @@
 
         const capturerPlayer = gameState.players[capturerOwnerIdx];
         capturerPlayer.kills += 1;
+        capturerPlayer.killStreakThisMatch = (capturerPlayer.killStreakThisMatch || 0) + 1;
+        victimPlayer.killStreakThisMatch = 0;
+        gameState.killsThisTurnCount = (gameState.killsThisTurnCount || 0) + 1;
+        const currentKillStreak = Math.max(gameState.killsThisTurnCount, capturerPlayer.killStreakThisMatch);
 
         if (!gameState.matchTelemetry) gameState.matchTelemetry = createFreshMatchTelemetry();
         if (gameState.matchTelemetry.players[capturerOwnerIdx]) {
@@ -6961,7 +7478,6 @@
           gameState.matchTelemetry.moveLogs[0].outcome = '⚔️ Kill ' + victimPlayer.name + ' (+' + gameState.matchTelemetry.moveLogs[0].delta + ')';
         }
 
-        // Earn Kill Bonus Roll if enabled by rules!
         if (rulesConfig.bonusRollOnKill) {
           gameState.earnedKillBonusThisTurn = true;
         }
@@ -6971,14 +7487,44 @@
         if (careerStats.seatStats[victimInfo.ownerIdx]) careerStats.seatStats[victimInfo.ownerIdx].deaths += 1;
         if (victimInfo.ownerIdx === 0) careerStats.deaths += 1;
 
+        const isHumanOrPartnerKill = (capturerOwnerIdx === 0 || gameState.currentTurn === 0 || (rulesConfig.teamMode && PLAYER_META[capturerOwnerIdx].team === 0));
         if (capturerOwnerIdx === 0 || gameState.currentTurn === 0) {
           careerStats.kills += 1;
+          if (currentKillStreak >= 2) {
+            careerStats.backToBackKillsTotal = (careerStats.backToBackKillsTotal || 0) + 1;
+          }
+          if (currentKillStreak > (careerStats.bestKillStreakInMatch || 0)) {
+            careerStats.bestKillStreakInMatch = currentKillStreak;
+          }
         }
 
         playSound('kill');
-        triggerPlayerEmote(gameState.currentTurn, '⚔️ شکار! (Killed!)');
-        addGameLog('⚔️ ' + capturerPlayer.name + ' captured ' + victimPlayer.name + '\'s Bead #' + (victimToken.id + 1) + '!' + (rulesConfig.bonusRollOnKill ? ' (+Bonus Re-Roll Earned!)' : ''), 'kill');
-        pushActivityEvent('⚔️', capturerPlayer.name + ' hunted ' + victimPlayer.name, 'Captured Bead #' + (victimToken.id + 1) + ' under ' + (rulesConfig.closeGameMode ? 'Close Game' : 'Open Game'), 'combat');
+        if (!triggeredWipeoutNow && !wasWantedByCapturer) {
+          if (victimInfo.ownerIdx === 0 && !isHumanOrPartnerKill) {
+            playHypeSound('victim_killed');
+          } else if (currentKillStreak >= 2) {
+            playHypeSound('back_to_back_kill', { streak: currentKillStreak });
+          } else {
+            playHypeSound('kill_enemy');
+          }
+        }
+
+        if (isHumanOrPartnerKill) {
+          if (currentKillStreak >= 2) {
+            awardLiveGameXp(100 + Math.min(4, currentKillStreak) * 25, 'Back-to-Back Kill Streak (x' + currentKillStreak + ')!', '🔥⚔️', 'streaksXp');
+          } else {
+            awardLiveGameXp(65, 'Captured ' + victimPlayer.name + ' Bead!', '⚔️', 'killsXp');
+          }
+        }
+
+        if (currentKillStreak >= 2) {
+          triggerPlayerEmote(gameState.currentTurn, '🔥⚔️ لگاتار شکار x' + currentKillStreak + '!');
+          addGameLog('🔥⚔️ BACK-TO-BACK KILL (x' + currentKillStreak + ')! ' + capturerPlayer.name + ' captured ' + victimPlayer.name + '\'s Bead #' + (victimToken.id + 1) + '!' + (rulesConfig.bonusRollOnKill ? ' (+Bonus Re-Roll Earned!)' : ''), 'kill');
+        } else {
+          triggerPlayerEmote(gameState.currentTurn, '⚔️ شکار! (Killed!)');
+          addGameLog('⚔️ ' + capturerPlayer.name + ' captured ' + victimPlayer.name + '\'s Bead #' + (victimToken.id + 1) + '!' + (rulesConfig.bonusRollOnKill ? ' (+Bonus Re-Roll Earned!)' : ''), 'kill');
+        }
+        pushActivityEvent('⚔️', capturerPlayer.name + ' hunted ' + victimPlayer.name, 'Captured Bead #' + (victimToken.id + 1) + (currentKillStreak >= 2 ? (' (Back-to-Back Streak x' + currentKillStreak + ')') : '') + ' under ' + (rulesConfig.closeGameMode ? 'Close Game' : 'Open Game'), 'combat');
 
         if (rulesConfig.closeGameMode) {
           const ground = capturerPlayer.tokens.filter(function (t) { return t.state === 'board' || t.state === 'home_stretch'; });
@@ -7928,6 +8474,7 @@
           ensureCareerStatsSchema();
           careerStats.matches += 1;
           const humanWon = (vic.isTeamWin && vic.winningTeam === 0) || (!vic.isTeamWin && vic.winnerIdx === 0);
+          let rpDelta = 0;
           if (humanWon) {
             careerStats.wins += 1;
             careerStats.streak += 1;
@@ -7936,8 +8483,25 @@
             }
             if (vic.isTeamWin) careerStats.teamWins += 1;
             if (rulesConfig.aiDifficulty === 'hard' || rulesConfig.aiDifficulty === 'hardest') careerStats.hardAiWins += 1;
+            const streakBonusRp = Math.min(25, (careerStats.streak - 1) * 5);
+            rpDelta = (vic.isCleanSweep ? 65 : 35) + streakBonusRp;
+            careerStats.rankPoints = Math.max(100, (careerStats.rankPoints || 1000) + rpDelta);
+            if (careerStats.rankPoints > (careerStats.peakRankPoints || 1000)) {
+              careerStats.peakRankPoints = careerStats.rankPoints;
+            }
+            if (vic.isCleanSweep) {
+              playHypeSound('flawless_clean_sweep');
+              awardLiveGameXp(600, 'FLAWLESS CLEAN SWEEP VICTORY!', '🧹👑', 'cleanSweepXp', true);
+            } else {
+              playHypeSound('victory_normal');
+              awardLiveGameXp(280, 'Match Victory!', '🏆', 'winsXp', true);
+            }
           } else {
             careerStats.streak = 0;
+            rpDelta = -18;
+            careerStats.rankPoints = Math.max(100, (careerStats.rankPoints || 1000) + rpDelta);
+            playHypeSound('victim_killed');
+            awardLiveGameXp(65, 'Match Completed XP', '🎲', 'winsXp', true);
           }
           recordCompletedMatchTelemetry(vic, humanWon);
           saveCareerStats();
@@ -7949,6 +8513,7 @@
           if (crownIcon) crownIcon.textContent = vic.isCleanSweep ? '🧹👑' : (humanWon ? '👑' : '🏁');
           document.getElementById('victoryTitle').textContent = vic.title;
           document.getElementById('victorySubtitle').textContent = vic.subtitle;
+          renderVictoryRankProgressBox(vic, humanWon, rpDelta);
           pickAndRenderUniqueVictoryRoast(vic);
           document.getElementById('victoryModal').classList.remove('hidden');
           updateAllUI();
@@ -8283,6 +8848,10 @@
                   isGiftSix: true
                 });
               }
+              playHypeSound('first_six_gift');
+              if (actor.id === 0 || (rulesConfig.teamMode && actor.team === 0)) {
+                awardLiveGameXp(45, 'First-Six Free Gift (+' + giftCount + '×6)!', '🎁', 'doubleSixXp');
+              }
               triggerPlayerEmote(actor.id, '🎁 پہلا گفٹ چھکا! (+' + giftCount + '×6)');
               const scopeNote = (rulesConfig.firstSixGiftScope === 'first_player_only' || gState.eligibleSeatsThisRound.length === 0)
                 ? ' (Only very first player mode — gift closed for match!)'
@@ -8310,6 +8879,10 @@
                   isGiftSix: true
                 });
               }
+              playHypeSound('first_six_gift');
+              if (actor.id === 0 || (rulesConfig.teamMode && actor.team === 0)) {
+                awardLiveGameXp(45, 'First-Six Free Gift (+' + giftCount + '×6)!', '🎁', 'doubleSixXp');
+              }
               triggerPlayerEmote(actor.id, '🎁 پہلا گفٹ چھکا! (+' + giftCount + '×6)');
               addGameLog('🎁 First-Six Free Gift! ' + actor.name + ' rolled ' + triggerRollLabel + ' to lay their first bead and claimed +' + giftCount + ' Free Six(es)!', 'gold');
               showToast('🎁 First-Six Gift Claimed! ' + actor.name + ' rolled a 6 and got +' + giftCount + ' Free 6!', true);
@@ -8322,9 +8895,11 @@
           }
 
           if (effectiveDiceCount === 2 && v1 === 6 && v2 === 6) {
+            playHypeSound('double_six');
             triggerPlayerEmote(actor.id, '🔥 ڈبل سکس! (6+6)');
-            if (actor.id === 0) {
-              careerStats.doubleSixes += 1;
+            if (actor.id === 0 || (rulesConfig.teamMode && actor.team === 0)) {
+              if (actor.id === 0) careerStats.doubleSixes += 1;
+              awardLiveGameXp(40, 'Rolled Double Six (6+6)!', '🔥', 'doubleSixXp');
               saveCareerStats();
             }
           }
@@ -8387,6 +8962,7 @@
               doomedTk.spawnShielded = false;
               if (rulesConfig.heavyJailRule) doomedTk.inHeavyJail = true;
               playSound('kill');
+              playHypeSound('victim_killed');
               triggerPlayerEmote(actor.id, '🐍 ڈبل ون عذاب! (1+1)');
               addGameLog('🐍 Snake Eyes Penalty (1+1)! ' + targetPl.name + '\'s most advanced Bead #' + (doomedTk.id + 1) + ' was killed and sent back to the Yard!', 'kill');
               showToast('🐍 Snake Eyes Trap (1+1)! Most advanced bead sent to Yard!', true);
@@ -8430,6 +9006,7 @@
               } catch (e) {}
             }
             gameState.dicePool.forEach(function (d) { d.used = true; });
+            playHypeSound('three_sixes_bust');
             addGameLog('🚫 Three Consecutive Sixes Penalty! ' + actor.name + ' rolled 3 consecutive sixes — entire turn canceled!', 'warn');
             showToast('🚫 3 Consecutive Sixes Penalty! Entire turn canceled.', true);
             triggerPlayerEmote(actor.id, '🚫 3 چھکے باری ضائع!');
@@ -8441,6 +9018,10 @@
           if (needsAssistSixRoll) {
             if (v1 === 6) {
               actor.assistUnlocked = true;
+              playHypeSound('partner_assist_unlock');
+              if (actor.id === 0 || (rulesConfig.teamMode && actor.team === 0)) {
+                awardLiveGameXp(75, '2v2 Partner Assist Unlocked!', '🤝', 'tacticalXp');
+              }
               const partner = gameState.players[actor.partner];
               addGameLog('🤝 ' + actor.name + ' rolled a 6! Partner Assist UNLOCKED—now controlling ' + partner.name + '\'s beads with 2 Dice!', 'gold');
               showToast('🤝 Rolled 6! Partner Assist Unlocked! Roll 2 Dice now.');
@@ -11709,7 +12290,19 @@
       function updateAllUI() {
         document.getElementById('headerPresetBadge').textContent = rulesConfig.presetName;
         document.getElementById('homePlayerName').textContent = careerStats.playerName;
-        document.getElementById('homeQuickStats').textContent = '🏆 ' + careerStats.wins + ' Wins • ⚔️ ' + careerStats.kills + ' Kills';
+        const xpInfoHome = computeCareerXpAndRank();
+        document.getElementById('homeQuickStats').textContent = '🏆 ' + careerStats.wins + ' Wins • ⚔️ ' + careerStats.kills + ' Kills • ⭐ ' + xpInfoHome.xp + ' XP';
+        const hCrest = document.getElementById('homeRankCrestIcon');
+        if (hCrest) hCrest.textContent = xpInfoHome.currentRank.icon;
+        const hLvl = document.getElementById('homeLevelMiniBadge');
+        if (hLvl) hLvl.textContent = 'LV.' + xpInfoHome.level;
+        const hRankPill = document.getElementById('homeRankTitlePill');
+        if (hRankPill) hRankPill.textContent = '#' + xpInfoHome.currentRank.tier + ' ' + xpInfoHome.currentRank.titleEn + ' (' + xpInfoHome.currentRank.division + ')';
+        const hXpBar = document.getElementById('homeTopXpBar');
+        if (hXpBar) hXpBar.style.width = xpInfoHome.levelProgressPct + '%';
+        const hRpBadge = document.getElementById('homeTopRpBadge');
+        if (hRpBadge) hRpBadge.textContent = (careerStats.rankPoints || 1000) + ' RP';
+        updateSoundButtonsUI();
 
         for (let i = 0; i < 4; i++) {
           const p = gameState.players[i];
@@ -13371,28 +13964,33 @@
         }
       }, 1000);
 
-      // --- 14. COMPREHENSIVE COMMAND DASHBOARD, 20 RANKS, 64 ACHIEVEMENTS, 8 CHARTS, REPORTS & EXPORT ENGINE ---
+      // --- 14. COMPREHENSIVE COMMAND DASHBOARD, 25 RANKS & 7 LEAGUES, LIVE XP ENGINE, 64 ACHIEVEMENTS, 8 CHARTS, REPORTS & EXPORT ENGINE ---
       const OFFICIAL_RANKS_LADDER = [
-        { tier: 1, minXp: 0, icon: '🌱', titleEn: 'Bannu Novice', titleUr: 'نیا لڈو کھلاڑی', perk: 'Starter Board Access' },
-        { tier: 2, minXp: 250, icon: '🎲', titleEn: 'Dice Apprentice', titleUr: 'ڈائس شاگرد', perk: '2-Dice Split Preview' },
-        { tier: 3, minXp: 600, icon: '🛡️', titleEn: 'Stop Guardian', titleUr: 'سٹاپ محافظ', perk: 'Safe Star Mastery' },
-        { tier: 4, minXp: 1100, icon: '⚔️', titleEn: 'First Blood Shikari', titleUr: 'پہلا شکاری', perk: 'Blood Gate Unlocker' },
-        { tier: 5, minXp: 1800, icon: '🔒', titleEn: 'Close Game Sentinel', titleUr: 'کلوز گیم ماہر', perk: 'Bari Lock Tactician' },
-        { tier: 6, minXp: 2700, icon: '🤝', titleEn: 'Wazir Partner', titleUr: 'وزیر پارٹنر', perk: '2v2 Assist Specialist' },
-        { tier: 7, minXp: 3800, icon: '🔥', titleEn: 'Double-Six Striker', titleUr: 'ڈبل سکس ماہر', perk: 'High Roll Streak' },
-        { tier: 8, minXp: 5200, icon: '🧱', titleEn: 'Jora Wall Builder', titleUr: 'جوڑا دیوار معمار', perk: 'Blockade Architect' },
-        { tier: 9, minXp: 6800, icon: '⚡', titleEn: 'Kurram Blitz Runner', titleUr: 'کرم تیز رفتار', perk: 'Sub-1.5s Move Reflex' },
-        { tier: 10, minXp: 8800, icon: '🧹', titleEn: 'Clean Sweep Master', titleUr: 'کلین سویپ ماسٹر', perk: '0-Kill Opponent Crusher' },
-        { tier: 11, minXp: 11200, icon: '🏔️', titleEn: 'Marwat Tactician', titleUr: 'مروت حکمت کار', perk: 'Remainder Math Pro' },
-        { tier: 12, minXp: 14000, icon: '🦅', titleEn: 'Khyber Falcon', titleUr: 'خیبر شاہین', perk: 'Multi-Kill Hunter' },
-        { tier: 13, minXp: 17500, icon: '💎', titleEn: 'Royale Commander', titleUr: 'رائل کمانڈر', perk: 'Hard AI Conqueror' },
-        { tier: 14, minXp: 21500, icon: '🌟', titleEn: 'Hujra Champion', titleUr: 'حجرہ چیمپئن', perk: 'LAN & QR Room Host' },
-        { tier: 15, minXp: 26000, icon: '🦁', titleEn: 'Sher Khan Warlord', titleUr: 'شیر خان سالار', perk: 'Dominant 2v2 Captain' },
-        { tier: 16, minXp: 31500, icon: '🏆', titleEn: 'Pashtun Grandmaster', titleUr: 'پشتون گرینڈ ماسٹر', perk: 'Elite Cultural Referee' },
-        { tier: 17, minXp: 38000, icon: '🔱', titleEn: 'Bannu Overlord', titleUr: 'بنوں سرکردہ', perk: 'Flawless Streak Holder' },
-        { tier: 18, minXp: 46000, icon: '🌌', titleEn: 'Mythic Shikari', titleUr: 'افسانوی شکاری', perk: '100+ Career Hunts' },
-        { tier: 19, minXp: 56000, icon: '👑', titleEn: 'Imperial Ludo Khan', titleUr: 'شاہی لڈو خان', perk: 'All-Mode Virtuoso' },
-        { tier: 20, minXp: 70000, icon: '🧹👑', titleEn: 'Supreme Bannu Sovereign', titleUr: 'اعلیٰ بنوں سلطان', perk: 'Ultimate Royale Legend' }
+        { tier: 1, league: 'Bronze League', division: 'Bronze IV', minXp: 0, minRp: 1000, icon: '🌱', titleEn: 'Bannu Novice', titleUr: 'نیا لڈو کھلاڑی', perk: 'Starter Hujra Board Access' },
+        { tier: 2, league: 'Bronze League', division: 'Bronze III', minXp: 250, minRp: 1040, icon: '🎲', titleEn: 'Dice Apprentice', titleUr: 'ڈائس شاگرد', perk: '2-Dice Split Outcome Preview' },
+        { tier: 3, league: 'Bronze League', division: 'Bronze II', minXp: 600, minRp: 1090, icon: '🛡️', titleEn: 'Stop Guardian', titleUr: 'سٹاپ محافظ', perk: 'Safe Star Tactical Badge' },
+        { tier: 4, league: 'Bronze League', division: 'Bronze I', minXp: 1100, minRp: 1150, icon: '⚔️', titleEn: 'First Blood Shikari', titleUr: 'پہلا شکاری', perk: 'Blood Gate Unlocker Crest' },
+        { tier: 5, league: 'Silver League', division: 'Silver IV', minXp: 1800, minRp: 1220, icon: '🔒', titleEn: 'Close Game Sentinel', titleUr: 'کلوز گیم ماہر', perk: 'Bari Lock Tactician Emblem' },
+        { tier: 6, league: 'Silver League', division: 'Silver III', minXp: 2650, minRp: 1300, icon: '🤝', titleEn: 'Wazir Partner', titleUr: 'وزیر پارٹنر', perk: '2v2 Assist Specialist Crest' },
+        { tier: 7, league: 'Silver League', division: 'Silver II', minXp: 3700, minRp: 1390, icon: '🔥', titleEn: 'Double-Six Striker', titleUr: 'ڈبل سکس ماہر', perk: 'High Roll Streak Aura' },
+        { tier: 8, league: 'Silver League', division: 'Silver I', minXp: 5000, minRp: 1490, icon: '🧱', titleEn: 'Jora Wall Builder', titleUr: 'جوڑا دیوار معمار', perk: 'Blockade Architect Title' },
+        { tier: 9, league: 'Gold League', division: 'Gold IV', minXp: 6500, minRp: 1600, icon: '⚡', titleEn: 'Kurram Blitz Runner', titleUr: 'کرم تیز رفتار', perk: 'Sub-1.5s Move Reflex Crest' },
+        { tier: 10, league: 'Gold League', division: 'Gold III', minXp: 8300, minRp: 1720, icon: '🧹', titleEn: 'Clean Sweep Master', titleUr: 'کلین سویپ ماسٹر', perk: '0-Kill Opponent Crusher Banner' },
+        { tier: 11, league: 'Gold League', division: 'Gold II', minXp: 10500, minRp: 1850, icon: '🏔️', titleEn: 'Marwat Tactician', titleUr: 'مروت حکمت کار', perk: 'Remainder Math Pro Crest' },
+        { tier: 12, league: 'Gold League', division: 'Gold I', minXp: 13000, minRp: 1990, icon: '🦅', titleEn: 'Khyber Falcon', titleUr: 'خیبر شاہین', perk: 'Back-to-Back Hunter Wings' },
+        { tier: 13, league: 'Platinum League', division: 'Platinum III', minXp: 16000, minRp: 2140, icon: '💠', titleEn: 'Tochi Vanguard', titleUr: 'ٹوچی سالار', perk: 'Mid-Move Combo Kill Seal' },
+        { tier: 14, league: 'Platinum League', division: 'Platinum II', minXp: 19500, minRp: 2300, icon: '💎', titleEn: 'Royale Commander', titleUr: 'رائل کمانڈر', perk: 'Grandmaster AI Conqueror' },
+        { tier: 15, league: 'Platinum League', division: 'Platinum I', minXp: 23500, minRp: 2470, icon: '🌟', titleEn: 'Hujra Champion', titleUr: 'حجرہ چیمپئن', perk: 'LAN & QR Room Host Crown' },
+        { tier: 16, league: 'Diamond League', division: 'Diamond III', minXp: 28000, minRp: 2650, icon: '🦁', titleEn: 'Sher Khan Warlord', titleUr: 'شیر خان سالار', perk: 'Dominant 2v2 Captain Crest' },
+        { tier: 17, league: 'Diamond League', division: 'Diamond II', minXp: 33500, minRp: 2850, icon: '⚖️', titleEn: 'Qisas Avenger', titleUr: 'قصاص منتقم', perk: 'Blood Vengeance Master Seal' },
+        { tier: 18, league: 'Diamond League', division: 'Diamond I', minXp: 39500, minRp: 3060, icon: '🏆', titleEn: 'Pashtun Grandmaster', titleUr: 'پشتون گرینڈ ماسٹر', perk: 'Elite Cultural Referee Badge' },
+        { tier: 19, league: 'Master Hujra League', division: 'Master III', minXp: 46500, minRp: 3290, icon: '🔱', titleEn: 'Bannu Overlord', titleUr: 'بنوں سرکردہ', perk: 'Flawless Streak Holder' },
+        { tier: 20, league: 'Master Hujra League', division: 'Master II', minXp: 54500, minRp: 3540, icon: '🌋', titleEn: 'Waziristan Titan', titleUr: 'وزیرستان ٹائٹن', perk: 'Wipeout Destroyer Emblem' },
+        { tier: 21, league: 'Master Hujra League', division: 'Master I', minXp: 63500, minRp: 3800, icon: '🌌', titleEn: 'Mythic Shikari', titleUr: 'افسانوی شکاری', perk: '100+ Career Hunts Halo' },
+        { tier: 22, league: 'Sovereign League', division: 'Sovereign IV', minXp: 73500, minRp: 4100, icon: '⚜️', titleEn: 'Durrani Conqueror', titleUr: 'درانی فاتح', perk: 'Royal Gold Board Frame' },
+        { tier: 23, league: 'Sovereign League', division: 'Sovereign III', minXp: 85000, minRp: 4450, icon: '👑', titleEn: 'Imperial Ludo Khan', titleUr: 'شاہی لڈو خان', perk: 'All-Mode Virtuoso Crown' },
+        { tier: 24, league: 'Sovereign League', division: 'Sovereign II', minXp: 98000, minRp: 4850, icon: '🐉', titleEn: 'Eternal Hujra Legend', titleUr: 'ابدی حجرہ لیجنڈ', perk: 'Immortal Grandmaster Crest' },
+        { tier: 25, league: 'Sovereign League', division: 'Sovereign I (Apex)', minXp: 115000, minRp: 5300, icon: '🧹👑', titleEn: 'Supreme Bannu Sovereign', titleUr: 'اعلیٰ بنوں سلطان', perk: 'Ultimate Royale Sovereign' }
       ];
 
       function formatDurationMs(ms) {
@@ -13409,10 +14007,11 @@
 
       function computeCareerXpAndRank() {
         ensureCareerStatsSchema();
-        const xp = Math.max(0,
+        const baseXp = Math.max(0,
           (careerStats.wins || 0) * 260 +
           (careerStats.cleanSweeps || 0) * 520 +
           (careerStats.kills || 0) * 48 +
+          (careerStats.backToBackKillsTotal || 0) * 85 +
           (careerStats.doubleSixes || 0) * 35 +
           (careerStats.teamWins || 0) * 160 +
           (careerStats.hardAiWins || 0) * 210 +
@@ -13422,11 +14021,13 @@
           (careerStats.fastMovesUnder1500ms || 0) * 10 +
           (careerStats.totalPartnerAssists || 0) * 75
         );
-        const level = Math.max(1, Math.floor(Math.sqrt(xp / 95)) + 1);
-        const prevLevelXp = Math.pow(level - 1, 2) * 95;
-        const nextLevelXp = Math.pow(level, 2) * 95;
+        const xp = baseXp + Math.max(0, Number(careerStats.bonusLiveXp) || 0);
+        const level = Math.max(1, Math.floor(Math.sqrt(xp / 90)) + 1);
+        const prevLevelXp = Math.pow(level - 1, 2) * 90;
+        const nextLevelXp = Math.pow(level, 2) * 90;
         const levelProgressPct = Math.min(100, Math.max(4, Math.round(((xp - prevLevelXp) / Math.max(1, nextLevelXp - prevLevelXp)) * 100)));
         const prestige = Math.floor((level - 1) / 20);
+        const streakMult = Number((1 + Math.min(1.5, (careerStats.streak || 0) * 0.15)).toFixed(2));
 
         let currentRank = OFFICIAL_RANKS_LADDER[0];
         let nextRank = OFFICIAL_RANKS_LADDER[1] || currentRank;
@@ -13436,15 +14037,107 @@
             nextRank = OFFICIAL_RANKS_LADDER[i + 1] || OFFICIAL_RANKS_LADDER[i];
           }
         }
+        const rankSpan = Math.max(1, (nextRank.minXp || currentRank.minXp + 1000) - currentRank.minXp);
+        const rankProgressPct = currentRank.tier === OFFICIAL_RANKS_LADDER.length
+          ? 100
+          : Math.min(100, Math.max(3, Math.round(((xp - currentRank.minXp) / rankSpan) * 100)));
+
         return {
           xp: xp,
           level: level,
           prestige: prestige,
+          prevLevelXp: prevLevelXp,
           nextLevelXp: nextLevelXp,
           levelProgressPct: levelProgressPct,
+          rankProgressPct: rankProgressPct,
+          streakMult: streakMult,
+          rankPoints: careerStats.rankPoints || 1000,
+          peakRankPoints: careerStats.peakRankPoints || 1000,
           currentRank: currentRank,
           nextRank: nextRank
         };
+      }
+
+      function awardLiveGameXp(rawAmount, reasonLabel, icon, category, suppressMidToast) {
+        ensureCareerStatsSchema();
+        const before = computeCareerXpAndRank();
+        const mult = before.streakMult || 1;
+        const finalXp = Math.max(5, Math.round((Number(rawAmount) || 10) * mult));
+        careerStats.bonusLiveXp = (Number(careerStats.bonusLiveXp) || 0) + finalXp;
+        if (!careerStats.xpBreakdown || typeof careerStats.xpBreakdown !== 'object') {
+          careerStats.xpBreakdown = { winsXp: 0, cleanSweepXp: 0, killsXp: 0, streaksXp: 0, doubleSixXp: 0, spawnsXp: 0, homeXp: 0, tacticalXp: 0 };
+        }
+        const catKey = (category && careerStats.xpBreakdown[category] !== undefined) ? category : 'tacticalXp';
+        careerStats.xpBreakdown[catKey] = (careerStats.xpBreakdown[catKey] || 0) + finalXp;
+
+        gameState.matchXpEarned = (gameState.matchXpEarned || 0) + finalXp;
+        if (!Array.isArray(gameState.matchXpEvents)) gameState.matchXpEvents = [];
+        gameState.matchXpEvents.unshift({ xp: finalXp, reason: reasonLabel || 'Tactical Play', icon: icon || '⭐' });
+        if (gameState.matchXpEvents.length > 15) gameState.matchXpEvents.length = 15;
+
+        const after = computeCareerXpAndRank();
+        const rankedUp = after.currentRank.tier > before.currentRank.tier;
+        const leveledUp = after.level > before.level;
+
+        if (rankedUp) {
+          playHypeSound('rank_up');
+          triggerPlayerEmote(0, '👑 RANK UP! ' + after.currentRank.division);
+          addGameLog('🎖️👑 RANK PROMOTION! You advanced to Rank #' + after.currentRank.tier + ': ' + after.currentRank.titleEn + ' (' + after.currentRank.division + ' — ' + after.currentRank.titleUr + ')! [+' + finalXp + ' XP]', 'gold');
+          showToast('🎖️👑 PROMOTED TO ' + after.currentRank.titleEn.toUpperCase() + ' (' + after.currentRank.division + ')! [+' + finalXp + ' XP]', true);
+        } else if (leveledUp) {
+          playHypeSound('rank_up');
+          triggerPlayerEmote(0, '⭐ LEVEL ' + after.level + '!');
+          addGameLog('⭐🎉 LEVEL UP! You reached Career Level ' + after.level + '! (' + (reasonLabel || '') + ' +' + finalXp + ' XP)', 'gold');
+          showToast('⭐🎉 LEVEL UP! Reached Level ' + after.level + ' (+' + finalXp + ' XP)!', true);
+        } else if (!suppressMidToast) {
+          addGameLog((icon || '⭐') + ' +' + finalXp + ' XP' + (mult > 1 ? ' (' + mult + 'x Streak)' : '') + ' — ' + (reasonLabel || 'Action'), 'info');
+        }
+        return { earned: finalXp, leveledUp: leveledUp, rankedUp: rankedUp, after: after };
+      }
+
+      function renderVictoryRankProgressBox(vic, humanWon, rpDelta) {
+        const box = document.getElementById('victoryRankProgressBox');
+        if (!box) return;
+        const prog = computeCareerXpAndRank();
+        const matchXp = gameState.matchXpEarned || (humanWon ? 320 : 65);
+        const startLvl = gameState.matchStartLevel || prog.level;
+        const startTier = gameState.matchStartRankTier || prog.currentRank.tier;
+        const didRankUp = prog.currentRank.tier > startTier;
+        const didLevelUp = prog.level > startLvl;
+        const rpStr = (rpDelta >= 0 ? ('+' + rpDelta) : String(rpDelta)) + ' RP';
+        const recentChips = (gameState.matchXpEvents || []).slice(0, 4).map(function (ev) {
+          return '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-amber-200 border border-amber-400/40 text-[10px] font-bold">' + ev.icon + ' +' + ev.xp + ' XP ' + ev.reason + '</span>';
+        }).join('');
+
+        box.innerHTML =
+          '<div class="flex flex-wrap items-center justify-between gap-2">' +
+            '<div class="flex items-center gap-2.5 min-w-0">' +
+              '<div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex flex-col items-center justify-center border-2 border-white shadow flex-shrink-0">' +
+                '<span class="text-xl leading-none">' + prog.currentRank.icon + '</span>' +
+                '<span class="text-[8px] font-black bg-slate-950 text-amber-300 px-1 rounded">LV.' + prog.level + '</span>' +
+              '</div>' +
+              '<div class="min-w-0">' +
+                '<div class="flex flex-wrap items-center gap-1.5">' +
+                  '<span class="font-black text-xs sm:text-sm text-amber-300">#' + prog.currentRank.tier + ' ' + prog.currentRank.titleEn + '</span>' +
+                  '<span class="px-2 py-0.2 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/40 text-[10px] font-black">' + prog.currentRank.division + '</span>' +
+                  (didRankUp ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-black text-[10px] animate-bounce">👑 RANK UP!</span>' : (didLevelUp ? '<span class="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[10px] animate-bounce">⭐ LEVEL UP!</span>' : '')) +
+                '</div>' +
+                '<div class="text-[10px] text-slate-300 mt-0.5">' + prog.currentRank.league + ' • <span dir="rtl" class="text-emerald-300 font-bold">' + prog.currentRank.titleUr + '</span> • Perk: ' + prog.currentRank.perk + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="text-right flex-shrink-0">' +
+              '<div class="text-xs sm:text-sm font-black text-emerald-400 font-mono">+' + matchXp + ' Match XP</div>' +
+              '<div class="text-[10px] font-mono font-bold ' + (rpDelta >= 0 ? 'text-amber-300' : 'text-rose-300') + '">Rating: ' + prog.rankPoints + ' RP (' + rpStr + ')</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden border border-amber-400/40 mt-1">' +
+            '<div class="h-full bg-gradient-to-r from-amber-400 via-yellow-300 to-emerald-400 transition-all duration-700" style="width:' + prog.levelProgressPct + '%"></div>' +
+          '</div>' +
+          '<div class="flex items-center justify-between text-[10px] font-bold text-slate-300">' +
+            '<span>Total: ' + prog.xp + ' XP (' + prog.levelProgressPct + '% to LV.' + (prog.level + 1) + ')</span>' +
+            '<span>Streak Mult: <b class="text-amber-300">' + prog.streakMult + 'x</b> • Next Rank: <b class="text-emerald-300">' + prog.nextRank.titleEn + ' (' + prog.nextRank.minXp + ' XP)</b></span>' +
+          '</div>' +
+          (recentChips ? ('<div class="flex flex-wrap gap-1 pt-1 border-t border-slate-800">' + recentChips + '</div>') : '');
       }
 
       function evaluateAll64Achievements() {
@@ -14090,7 +14783,55 @@
         if (heroBadgesEl) heroBadgesEl.textContent = unlockedCount + ' / ' + allBadges.length;
 
         const rankBadgeEl = document.getElementById('rankLadderProgressBadge');
-        if (rankBadgeEl) rankBadgeEl.textContent = 'Rank ' + xpInfo.currentRank.tier + ' / ' + OFFICIAL_RANKS_LADDER.length;
+        if (rankBadgeEl) rankBadgeEl.textContent = 'Rank ' + xpInfo.currentRank.tier + ' / ' + OFFICIAL_RANKS_LADDER.length + ' • ' + xpInfo.currentRank.division;
+
+        const proCard = document.getElementById('proRankSystemOverviewCard');
+        if (proCard) {
+          const xb = careerStats.xpBreakdown || {};
+          const xpSources = [
+            { icon: '🏆', label: 'Match Victories', val: (careerStats.wins || 0) * 260 + (xb.winsXp || 0), rule: '+280 XP / Win' },
+            { icon: '🧹', label: 'Flawless Clean Sweeps', val: (careerStats.cleanSweeps || 0) * 520 + (xb.cleanSweepXp || 0), rule: '+600 XP / Sweep' },
+            { icon: '⚔️', label: 'Enemy Kills (شکار)', val: (careerStats.kills || 0) * 48 + (xb.killsXp || 0), rule: '+65–95 XP / Kill' },
+            { icon: '🔥⚔️', label: 'Back-to-Back Kill Streaks', val: (careerStats.backToBackKillsTotal || 0) * 85 + (xb.streaksXp || 0), rule: '+150–200 XP / Streak' },
+            { icon: '🎲', label: 'Double 6s & First-6 Gifts', val: (careerStats.doubleSixes || 0) * 35 + (xb.doubleSixXp || 0), rule: '+40–45 XP / Bonus' },
+            { icon: '🏠', label: 'Home Stretch & Completions', val: (careerStats.totalHomeCompleted || 0) * 28 + (xb.homeXp || 0), rule: '+30–85 XP / Bead' },
+            { icon: '🚀', label: 'Yard Spawns & Blitz Moves', val: (careerStats.totalSpawns || 0) * 12 + (careerStats.fastMovesUnder1500ms || 0) * 10 + (xb.spawnsXp || 0), rule: '+15 XP / Spawn' },
+            { icon: '🤝', label: '2v2 Assists, Wipeouts & Qisas', val: (careerStats.teamWins || 0) * 160 + (careerStats.totalPartnerAssists || 0) * 75 + (xb.tacticalXp || 0), rule: '+75–160 XP / Play' }
+          ];
+          proCard.innerHTML =
+            '<div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-amber-200">' +
+              '<div>' +
+                '<h3 class="text-sm sm:text-base font-black text-slate-900">👑 Official 7-League &amp; 25-Tier Rank Progression Studio</h3>' +
+                '<p class="text-[11px] text-slate-600">Live Mid-Game XP Engine, Rank Points (RP / MMR), Win-Streak Multiplier &amp; League Division Perks</p>' +
+              '</div>' +
+              '<div class="flex flex-wrap items-center gap-1.5">' +
+                '<span class="px-2.5 py-1 rounded-xl bg-slate-900 text-amber-300 font-black text-xs border border-amber-400">' + xpInfo.currentRank.icon + ' ' + xpInfo.currentRank.league + ' (' + xpInfo.currentRank.division + ')</span>' +
+                '<span class="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-900 font-black text-xs border border-emerald-300">⚡ ' + xpInfo.streakMult + 'x Streak XP Multiplier</span>' +
+                '<span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-950 font-mono font-black text-xs border border-amber-300">🏅 ' + xpInfo.rankPoints + ' RP (Peak: ' + xpInfo.peakRankPoints + ')</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">' +
+              '<div class="p-3 rounded-2xl bg-slate-900 text-white border border-amber-400/60 space-y-1.5">' +
+                '<div class="flex items-center justify-between text-xs font-bold"><span class="text-amber-300">⭐ Career Level ' + xpInfo.level + ' (Prestige ' + xpInfo.prestige + ')</span><span class="font-mono">' + xpInfo.xp + ' / ' + xpInfo.nextLevelXp + ' XP (' + xpInfo.levelProgressPct + '%)</span></div>' +
+                '<div class="w-full h-2.5 bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width:' + xpInfo.levelProgressPct + '%"></div></div>' +
+                '<div class="text-[10px] text-slate-300">Active Rank Perk: <b class="text-emerald-300">' + xpInfo.currentRank.perk + '</b> • Best Kill Streak: <b class="text-amber-300">x' + (careerStats.bestKillStreakInMatch || 0) + '</b></div>' +
+              '</div>' +
+              '<div class="p-3 rounded-2xl bg-amber-50 border border-amber-300 space-y-1.5">' +
+                '<div class="flex items-center justify-between text-xs font-bold"><span class="text-amber-950">👑 Next Rank: #' + xpInfo.nextRank.tier + ' ' + xpInfo.nextRank.titleEn + ' (' + xpInfo.nextRank.division + ')</span><span class="font-mono text-amber-900">' + xpInfo.rankProgressPct + '%</span></div>' +
+                '<div class="w-full h-2.5 bg-amber-200 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-amber-600 to-rose-600" style="width:' + xpInfo.rankProgressPct + '%"></div></div>' +
+                '<div class="text-[10px] text-slate-600 flex justify-between"><span dir="rtl" class="font-bold text-amber-900">' + xpInfo.nextRank.titleUr + '</span><span>Requires ' + xpInfo.nextRank.minXp + ' XP (' + Math.max(0, xpInfo.nextRank.minXp - xpInfo.xp) + ' XP needed)</span></div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-1">' +
+              xpSources.map(function (src) {
+                return '<div class="p-2 rounded-xl bg-amber-50/70 border border-amber-200 text-center">' +
+                  '<div class="text-[10px] font-bold text-slate-600 truncate">' + src.icon + ' ' + src.label + '</div>' +
+                  '<div class="text-xs sm:text-sm font-black text-slate-900 font-mono mt-0.5">+' + src.val + ' XP</div>' +
+                  '<div class="text-[9px] font-semibold text-amber-800">' + src.rule + '</div>' +
+                '</div>';
+              }).join('') +
+            '</div>';
+        }
 
         // Mode Masteries
         const masteryContainer = document.getElementById('modeMasteryListContainer');
@@ -14124,9 +14865,9 @@
               '<div class="flex items-center gap-2 min-w-0">' +
                 '<div class="w-9 h-9 rounded-xl bg-white border border-amber-300 flex items-center justify-center text-lg flex-shrink-0">' + rk.icon + '</div>' +
                 '<div class="min-w-0">' +
-                  '<div class="font-black text-xs text-slate-900 truncate">#' + rk.tier + ' ' + rk.titleEn + (isCurrent ? ' (CURRENT)' : '') + '</div>' +
-                  '<div class="text-[10px] font-bold text-amber-900" dir="rtl">' + rk.titleUr + '</div>' +
-                  '<div class="text-[9px] text-slate-500">' + rk.perk + '</div>' +
+                  '<div class="font-black text-xs text-slate-900 truncate">#' + rk.tier + ' ' + rk.titleEn + ' <span class="text-[10px] text-amber-800">[' + (rk.division || ('Tier ' + rk.tier)) + ']</span>' + (isCurrent ? ' (CURRENT)' : '') + '</div>' +
+                  '<div class="text-[10px] font-bold text-amber-900" dir="rtl">' + rk.titleUr + ' • <span class="text-slate-500 font-sans">' + (rk.league || 'Royale League') + '</span></div>' +
+                  '<div class="text-[9px] text-slate-500">🎁 ' + rk.perk + '</div>' +
                 '</div>' +
               '</div>' +
               '<div class="text-right flex-shrink-0">' +
@@ -18282,11 +19023,69 @@
       });
 
       document.getElementById('soundToggleBtn').addEventListener('click', function () {
-        soundEnabled = !soundEnabled;
-        this.textContent = soundEnabled ? '🔊' : '🔇';
+        setBasicSoundPreference(!soundEnabled, true);
         saveRulesPreferences(false);
-        showToast(soundEnabled ? '🔊 Sound Effects Enabled' : '🔇 Sound Muted');
       });
+      const hypeTopBtn = document.getElementById('hypeSoundToggleBtn');
+      if (hypeTopBtn) {
+        hypeTopBtn.addEventListener('click', function () {
+          setHypeSoundPreference(!hypeSoundEnabled, true);
+          saveRulesPreferences(false);
+        });
+      }
+      const inGameHypeBtn = document.getElementById('inGameHypeSoundBtn');
+      if (inGameHypeBtn) {
+        inGameHypeBtn.addEventListener('click', function () {
+          setHypeSoundPreference(!hypeSoundEnabled, true);
+          saveRulesPreferences(false);
+        });
+      }
+      const pauseHypeChk = document.getElementById('pauseHypeSoundChk');
+      if (pauseHypeChk) {
+        pauseHypeChk.addEventListener('change', function () {
+          setHypeSoundPreference(this.checked, true);
+          saveRulesPreferences(false);
+        });
+      }
+      const pauseBasicChk = document.getElementById('pauseBasicSoundChk');
+      if (pauseBasicChk) {
+        pauseBasicChk.addEventListener('change', function () {
+          setBasicSoundPreference(this.checked, true);
+          saveRulesPreferences(false);
+        });
+      }
+      const rulesHypeChk = document.getElementById('chkHypeSounds');
+      if (rulesHypeChk) {
+        rulesHypeChk.addEventListener('change', function () {
+          setHypeSoundPreference(this.checked, true);
+          saveRulesPreferences(false);
+        });
+      }
+      const rulesBasicChk = document.getElementById('chkBasicSounds');
+      if (rulesBasicChk) {
+        rulesBasicChk.addEventListener('change', function () {
+          setBasicSoundPreference(this.checked, true);
+          saveRulesPreferences(false);
+        });
+      }
+      document.querySelectorAll('.hype-sound-preview-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const prevEnabled = hypeSoundEnabled;
+          hypeSoundEnabled = true;
+          playHypeSound(btn.dataset.hype || 'double_six', { streak: 3 });
+          hypeSoundEnabled = prevEnabled;
+          showToast('🎵 Previewing Hype Sound: ' + btn.textContent.trim(), true);
+        });
+      });
+      const homeProfileRankBtn = document.getElementById('homeProfileRankBtn');
+      if (homeProfileRankBtn) {
+        homeProfileRankBtn.addEventListener('click', function () {
+          switchNavigationTab('viewStats');
+          switchDashboardSubTab('progression');
+        });
+      }
 
       document.getElementById('fullscreenToggleBtn').addEventListener('click', function () {
         if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
@@ -20230,8 +21029,7 @@
         if (!localStorage.getItem('bannu_ludo_seats_v2') && rulesConfig.matchFormat && rulesConfig.matchFormat !== 'custom') {
           applySeatPresetForFormat(rulesConfig.matchFormat);
         }
-        const sndBtn = document.getElementById('soundToggleBtn');
-        if (sndBtn) sndBtn.textContent = soundEnabled ? '🔊' : '🔇';
+        updateSoundButtonsUI();
         applyLanguageSelection(currentLang, true);
         syncRulesStudioControls();
         initNewMatch('Ready on Home Lobby.', true);
