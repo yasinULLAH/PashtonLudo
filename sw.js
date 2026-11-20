@@ -120,15 +120,11 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "d5ccaf5ad920af600010b8fe801160d1"
+        "revision": "2fdc291872d36c36ba84828d983a0b56"
     },
     {
         "url": "transcript of the vioces.txt",
         "revision": "8bd96f13e5de583e3c112c864c9cf82d"
-    },
-    {
-        "url": "UBA-School-Demo (1).html",
-        "revision": "47e6032683e4c5bca8496262c657010d"
     }
 ]);
 
