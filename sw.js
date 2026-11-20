@@ -80,7 +80,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "60c9fa56b6cd88698f47f5b9b937153c"
+        "revision": "691ab8aa504ea428fec08c2cce4d0b69"
     },
     {
         "url": "index.html.bak",
@@ -120,7 +120,7 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "2fdc291872d36c36ba84828d983a0b56"
+        "revision": "fca547b43f10ad729a4ed9943b2d94b5"
     },
     {
         "url": "transcript of the vioces.txt",

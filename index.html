@@ -355,7 +355,8 @@
     /* DESKTOP SIDE-BY-SIDE FULL-BLEED LAYOUT: Left Wing + Giant Full-Screen Center Board + Right Wing (Zero Empty Space!) */
     @media (min-width: 820px) {
       #viewHome {
-        overflow-y: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
       }
       #viewPlay:not(.hidden) {
         display: grid !important;
@@ -551,29 +552,43 @@
 
       /* Balanced Mobile Typography, Buttons, Selects & Inputs (< 820px) */
       #homeTopBar {
-        padding: 8px 12px !important;
-        border-radius: 16px !important;
+        padding: 6px 10px !important;
+        border-radius: 14px !important;
       }
       #homeTopBar .w-9 {
-        width: 34px !important;
-        height: 34px !important;
-        font-size: 16px !important;
-        border-radius: 10px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 15px !important;
+        border-radius: 9px !important;
       }
       #homePlayerName {
-        font-size: 13px !important;
+        font-size: 12.5px !important;
+        max-width: 105px !important;
       }
       #homeQuickStats {
-        font-size: 10.5px !important;
+        font-size: 10px !important;
       }
-      #langSelect, #soundToggleBtn, #fullscreenToggleBtn {
-        height: 34px !important;
-        min-height: 34px !important;
-        font-size: 11.5px !important;
-        border-radius: 10px !important;
+      #langSelect, #soundToggleBtn, #hypeSoundToggleBtn, #fullscreenToggleBtn {
+        height: 32px !important;
+        min-height: 32px !important;
+        max-height: 32px !important;
+        font-size: 11px !important;
+        border-radius: 9px !important;
+        flex-shrink: 0 !important;
       }
-      #soundToggleBtn, #fullscreenToggleBtn {
-        width: 34px !important;
+      #soundToggleBtn, #hypeSoundToggleBtn, #fullscreenToggleBtn {
+        width: 32px !important;
+        min-width: 32px !important;
+        max-width: 32px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      #langSelect {
+        max-width: 68px !important;
+        padding: 0 3px !important;
+        font-size: 9.5px !important;
       }
       #appMainTitle {
         font-size: 1.35rem !important;
@@ -732,24 +747,43 @@
         padding: 3px 6px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 5px;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 4px !important;
         box-shadow: 0 3px 10px rgba(15, 23, 42, 0.24);
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x !important;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+        position: relative !important;
+        z-index: 20 !important;
+      }
+      #playActionToolbar::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
       }
       #playActionToolbar button {
         height: 28px !important;
-        min-width: 30px;
-        padding: 0 8px !important;
+        min-height: 28px !important;
+        max-height: 28px !important;
+        min-width: 28px !important;
+        padding: 0 6px !important;
         border-radius: 8px !important;
         font-size: 11px !important;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+        position: relative !important;
+        z-index: 1 !important;
+        margin: 0 !important;
       }
       #playActionToolbar #toggleImmersivePlayBtn {
-        margin-left: auto;
+        margin-left: 0 !important;
       }
 
       #playerCard0, #playerCard1, #playerCard2, #playerCard3 {
@@ -1005,6 +1039,47 @@
       overflow: hidden !important;
     }
 
+    @media (orientation: landscape), (max-height: 650px) {
+      #viewHome {
+        height: 100% !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        overscroll-behavior-y: contain !important;
+        padding: 6px 12px 36px 12px !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+      }
+      #viewHome > .my-auto {
+        margin-top: 4px !important;
+        margin-bottom: 6px !important;
+      }
+    }
+
+    body.app-landscape #viewHome,
+    body.force-landscape-rotation #viewHome {
+      height: 100% !important;
+      max-height: 100% !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+      overscroll-behavior-y: contain !important;
+      padding: 6px 12px 36px 12px !important;
+      justify-content: flex-start !important;
+      gap: 8px !important;
+    }
+
+    body.force-landscape-rotation #viewHome {
+      height: 100vw !important;
+      max-height: 100vw !important;
+      width: 100vh !important;
+    }
+
     /* ==================== FULL-SCREEN CINEMA REPLAY STUDIO (MOBILE + DESKTOP + IMMERSIVE) ==================== */
     #playActionToolbar {
       overflow-x: auto !important;
@@ -1172,15 +1247,15 @@
 <section class="w-full h-dvh overflow-y-auto flex flex-col justify-between p-3 sm:py-3 sm:px-6 max-w-5xl mx-auto" id="viewHome">
 <div class="w-full flex flex-nowrap items-center justify-between gap-2 bg-slate-900/95 backdrop-blur-md border-2 border-amber-400/70 rounded-2xl px-2.5 py-2 sm:px-4 sm:py-2.5 shadow-lg" id="homeTopBar">
 <div class="flex items-center gap-2 min-w-0 flex-1 cursor-pointer group" id="homeProfileRankBtn" title="Tap to view Full Ranks, Levels &amp; Career Progression">
-<div class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex flex-col items-center justify-center shadow-md text-white flex-shrink-0 border border-amber-200 group-hover:scale-105 transition">
-<span class="text-base sm:text-lg leading-none" id="homeRankCrestIcon">👑</span>
-<span class="text-[8px] font-black bg-slate-950 text-amber-300 px-1 rounded -mt-0.5 border border-amber-400/60" id="homeLevelMiniBadge">LV.1</span>
+<div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-md text-white flex-shrink-0 border border-amber-200 group-hover:scale-105 transition">
+<span class="text-base sm:text-lg leading-none select-none" id="homeRankCrestIcon">👑</span>
+<span class="absolute -bottom-1 -right-1 text-[7.5px] font-black bg-slate-950 text-amber-300 px-1 py-0.2 rounded border border-amber-400/70 shadow-sm leading-none" id="homeLevelMiniBadge">LV.1</span>
 </div>
 <div class="min-w-0 flex-1">
-<div class="flex items-center gap-1.5 min-w-0">
-<span class="font-black text-xs sm:text-base text-amber-300 truncate" id="homePlayerName">Bannu Champion</span>
-<span class="px-1.5 py-0.5 text-[8px] sm:text-[10px] font-black rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/50 truncate flex-shrink-0" id="homeRankTitlePill">#1 Novice</span>
-<span class="px-1.5 py-0.5 text-[8px] sm:text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 truncate flex-shrink-0" id="networkResilienceBadge">
+<div class="flex items-center gap-1 min-w-0">
+<span class="font-black text-xs sm:text-sm text-amber-300 truncate" id="homePlayerName">Bannu Champion</span>
+<span class="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/50 truncate flex-shrink-0" id="homeRankTitlePill">#1 Novice</span>
+<span class="hidden xs:inline-flex px-1.5 py-0.5 text-[8px] sm:text-[9px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 truncate flex-shrink-0" id="networkResilienceBadge">
               🟢 Ready
             </span>
 </div>
@@ -1376,15 +1451,15 @@
 <div class="h-full bg-rose-500 transition-all duration-300" id="turnTimerBar0" style="width: 100%"></div>
 </div>
 </div>
-<div class="col-span-4 flex flex-wrap items-center justify-center gap-1" id="playActionToolbar">
-<button class="px-2.5 py-1 rounded-xl gold-gradient-btn font-black text-[10px] sm:text-[11px] border border-amber-300 shadow-sm flex items-center gap-1" id="openPauseMenuBtn" title="Game Menu &amp; Setup" type="button">
-<span>⏸️</span><span>Menu</span>
+<div class="col-span-4 flex flex-nowrap items-center justify-start gap-1" id="playActionToolbar">
+<button class="px-2 py-1 rounded-xl gold-gradient-btn font-black text-[10px] sm:text-[11px] border border-amber-300 shadow-sm flex items-center gap-1" id="openPauseMenuBtn" title="Game Menu &amp; Setup" type="button">
+<span>⏸️</span><span class="hidden sm:inline">Menu</span>
 </button>
 <button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-extrabold text-[10px] sm:text-[11px] border border-amber-400/50 shadow-sm flex items-center gap-1" id="quickAiSpeedBtn" title="Cycle AI Match Pace" type="button">
-<span>⏱️</span><span id="quickAiSpeedLabel">Fast</span>
+<span>⏱️</span><span class="hidden sm:inline" id="quickAiSpeedLabel">Fast</span>
 </button>
 <button class="px-2 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-extrabold text-[10px] sm:text-[11px] border border-amber-400/50 shadow-sm flex items-center gap-1" id="quickTimerBtn" title="Change Turn Timer (Cycle or Off)" type="button">
-<span>⏳</span><span id="quickTimerLabel">30s</span>
+<span>⏳</span><span class="hidden sm:inline" id="quickTimerLabel">30s</span>
 </button>
 <button class="hidden px-2 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[10px] border border-emerald-400 shadow-sm" id="exitScenarioDrillBtn" title="Exit Drill &amp; Return to Match" type="button">
           🔙 Match
