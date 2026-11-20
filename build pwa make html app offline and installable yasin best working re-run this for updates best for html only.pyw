@@ -125,7 +125,7 @@ def create_manifest(output_dir, icon_metadata, html_files):
         "display": "standalone",
         "background_color": BACKGROUND_COLOR,
         "theme_color": THEME_COLOR,
-        "orientation": "portrait-primary",
+        "orientation": "any",
         "icons": icon_metadata
     }
     with open(os.path.join(output_dir, "manifest.json"), 'w', encoding='utf-8') as f:

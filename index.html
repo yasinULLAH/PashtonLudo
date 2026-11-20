@@ -868,8 +868,7 @@
       }
     }
 
-    /* MOBILE LANDSCAPE MODE (e.g. rotated Android phone < 920px wide & <= 540px tall) */
-    @media (max-width: 920px) and (orientation: landscape) and (max-height: 540px) {
+    @media (max-width: 920px) and (orientation: landscape) {
       #viewPlay {
         display: grid !important;
         grid-template-columns: 148px minmax(0, 1fr) 158px !important;
@@ -895,16 +894,102 @@
         height: 100% !important;
         max-height: none !important;
       }
+      #playerCard0 { grid-area: p0 !important; align-self: start !important; }
+      #playerCard1 { grid-area: p1 !important; align-self: start !important; }
+      #playerCard3 { grid-area: p3 !important; align-self: end !important; }
+      #playerCard2 { grid-area: p2 !important; align-self: end !important; }
+      #playActionToolbar { grid-area: topbar !important; align-self: center !important; }
+      #playBoardRow {
+        grid-area: board !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+      }
       #centerDiceDock {
+        grid-area: dice !important;
         height: 100% !important;
         max-height: none !important;
         padding: 4px 6px !important;
+        flex-direction: column !important;
+        align-self: center !important;
       }
       #centerDiceDock #dieSlot0,
       #centerDiceDock #dieSlot1 {
         width: 36px !important;
         height: 36px !important;
       }
+    }
+
+    body.app-landscape #viewPlay,
+    body.force-landscape-rotation #viewPlay {
+      display: grid !important;
+      grid-template-columns: 148px minmax(0, 1fr) 158px !important;
+      grid-template-rows: 1fr auto 1fr !important;
+      grid-template-areas:
+        "p0     board p1"
+        "topbar board dice"
+        "p3     board p2" !important;
+      gap: 4px 6px !important;
+      padding: 3px 5px !important;
+    }
+    body.app-landscape #playTopRow,
+    body.app-landscape #playBottomRow,
+    body.force-landscape-rotation #playTopRow,
+    body.force-landscape-rotation #playBottomRow {
+      display: contents !important;
+    }
+    body.app-landscape #boardContainer,
+    body.force-landscape-rotation #boardContainer {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+    }
+    body.app-landscape #playerCard0, body.app-landscape #playerCard1,
+    body.app-landscape #playerCard2, body.app-landscape #playerCard3,
+    body.force-landscape-rotation #playerCard0, body.force-landscape-rotation #playerCard1,
+    body.force-landscape-rotation #playerCard2, body.force-landscape-rotation #playerCard3 {
+      height: 100% !important;
+      max-height: none !important;
+    }
+    body.app-landscape #playerCard0, body.force-landscape-rotation #playerCard0 { grid-area: p0 !important; align-self: start !important; }
+    body.app-landscape #playerCard1, body.force-landscape-rotation #playerCard1 { grid-area: p1 !important; align-self: start !important; }
+    body.app-landscape #playerCard3, body.force-landscape-rotation #playerCard3 { grid-area: p3 !important; align-self: end !important; }
+    body.app-landscape #playerCard2, body.force-landscape-rotation #playerCard2 { grid-area: p2 !important; align-self: end !important; }
+    body.app-landscape #playActionToolbar, body.force-landscape-rotation #playActionToolbar { grid-area: topbar !important; align-self: center !important; }
+    body.app-landscape #playBoardRow, body.force-landscape-rotation #playBoardRow {
+      grid-area: board !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 !important;
+    }
+    body.app-landscape #centerDiceDock,
+    body.force-landscape-rotation #centerDiceDock {
+      grid-area: dice !important;
+      height: 100% !important;
+      max-height: none !important;
+      padding: 4px 6px !important;
+      flex-direction: column !important;
+      align-self: center !important;
+    }
+    body.app-landscape #centerDiceDock #dieSlot0,
+    body.app-landscape #centerDiceDock #dieSlot1,
+    body.force-landscape-rotation #centerDiceDock #dieSlot0,
+    body.force-landscape-rotation #centerDiceDock #dieSlot1 {
+      width: 36px !important;
+      height: 36px !important;
+    }
+
+    html.force-landscape-rotation,
+    body.force-landscape-rotation {
+      width: 100vh !important;
+      height: 100vw !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      transform: rotate(90deg) translateY(-100%) !important;
+      transform-origin: top left !important;
+      overflow: hidden !important;
     }
 
     /* ==================== FULL-SCREEN CINEMA REPLAY STUDIO (MOBILE + DESKTOP + IMMERSIVE) ==================== */
@@ -18515,14 +18600,162 @@
         }
       });
 
-      document.getElementById('inGameFullscreenBtn').addEventListener('click', function () {
-        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen().catch(function () {});
-          showToast('⛶ Fullscreen Activated');
-        } else if (document.exitFullscreen) {
-          document.exitFullscreen().catch(function () {});
+      function isRunningInPwaOrApk() {
+        const isStandalone = (window.matchMedia && (
+          window.matchMedia('(display-mode: standalone)').matches ||
+          window.matchMedia('(display-mode: fullscreen)').matches ||
+          window.matchMedia('(display-mode: minimal-ui)').matches
+        )) ||
+        (window.navigator && window.navigator.standalone === true) ||
+        (document.referrer && document.referrer.indexOf('android-app://') !== -1);
+        const ua = (navigator.userAgent || navigator.vendor || window.opera || '').toLowerCase();
+        const isWebView = ua.includes('; wv') ||
+          (ua.includes('android') && ua.includes('version/') && ua.includes('chrome/')) ||
+          (!ua.includes('safari') && ua.includes('applewebkit') && (ua.includes('iphone') || ua.includes('ipad'))) ||
+          Boolean(window.Android || window.AndroidInterface || window.JSBridge);
+        const urlParam = /[?&](mode=standalone|pwa=1|apk=1|webview=1|app=1)/i.test(window.location.search);
+        return Boolean(isStandalone || isWebView || urlParam);
+      }
+
+      function getActiveOrientation() {
+        if (document.body.classList.contains('force-landscape-rotation') || document.body.classList.contains('app-forced-landscape')) {
+          return 'landscape';
         }
-      });
+        if (document.body.classList.contains('app-forced-portrait')) {
+          return 'portrait';
+        }
+        if (screen.orientation && screen.orientation.type) {
+          return screen.orientation.type.startsWith('landscape') ? 'landscape' : 'portrait';
+        }
+        if (window.matchMedia && window.matchMedia('(orientation: landscape)').matches) {
+          return 'landscape';
+        }
+        return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+      }
+
+      const ORIENTATION_ICONS = {
+        toLandscape: '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 pointer-events-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2.5"></rect><circle cx="18" cy="12.5" r="0.8" fill="currentColor"></circle><path d="M7 2.5l-3 3 3 3"></path><path d="M4 5.5h10a4 4 0 0 1 4 4"></path></svg>',
+        toPortrait: '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 pointer-events-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="2" width="13" height="20" rx="2.5"></rect><circle cx="12" cy="18.5" r="0.8" fill="currentColor"></circle><path d="M2.5 7l3-3 3 3"></path><path d="M5.5 4v10a4 4 0 0 0 4 4"></path></svg>',
+        fullscreen: '⛶'
+      };
+
+      function syncOrientationControlUI() {
+        const isPwa = isRunningInPwaOrApk();
+        const current = getActiveOrientation();
+        const isLandscape = current === 'landscape';
+
+        if (isLandscape) {
+          document.body.classList.add('app-landscape');
+          document.body.classList.remove('app-portrait');
+        } else {
+          document.body.classList.remove('app-landscape');
+          document.body.classList.add('app-portrait');
+        }
+
+        const lobbyBtn = document.getElementById('fullscreenToggleBtn');
+        const inGameBtn = document.getElementById('inGameFullscreenBtn');
+
+        if (isPwa) {
+          const iconSvg = isLandscape ? ORIENTATION_ICONS.toPortrait : ORIENTATION_ICONS.toLandscape;
+          const titleText = isLandscape ? 'Switch to Portrait Mode' : 'Switch to Landscape Mode';
+
+          if (lobbyBtn) {
+            lobbyBtn.innerHTML = iconSvg;
+            lobbyBtn.setAttribute('title', titleText);
+            lobbyBtn.setAttribute('aria-label', titleText);
+          }
+          if (inGameBtn) {
+            inGameBtn.innerHTML = iconSvg;
+            inGameBtn.setAttribute('title', titleText);
+            inGameBtn.setAttribute('aria-label', titleText);
+          }
+        } else {
+          if (lobbyBtn) {
+            lobbyBtn.innerHTML = ORIENTATION_ICONS.fullscreen;
+            lobbyBtn.setAttribute('title', 'Toggle Fullscreen');
+            lobbyBtn.setAttribute('aria-label', 'Toggle Fullscreen');
+          }
+          if (inGameBtn) {
+            inGameBtn.innerHTML = ORIENTATION_ICONS.fullscreen;
+            inGameBtn.setAttribute('title', 'Toggle Fullscreen');
+            inGameBtn.setAttribute('aria-label', 'Toggle Fullscreen');
+          }
+        }
+      }
+
+      async function handleFullscreenOrOrientationToggle() {
+        if (isRunningInPwaOrApk()) {
+          const current = getActiveOrientation();
+          const target = current === 'landscape' ? 'portrait' : 'landscape';
+
+          if (window.Android && typeof window.Android.setOrientation === 'function') {
+            try { window.Android.setOrientation(target); } catch (e) {}
+          }
+          if (window.Android && typeof window.Android.toggleOrientation === 'function') {
+            try { window.Android.toggleOrientation(); } catch (e) {}
+          }
+          if (window.AndroidInterface && typeof window.AndroidInterface.setOrientation === 'function') {
+            try { window.AndroidInterface.setOrientation(target); } catch (e) {}
+          }
+          if (window.JSBridge && typeof window.JSBridge.setOrientation === 'function') {
+            try { window.JSBridge.setOrientation(target); } catch (e) {}
+          }
+
+          let screenLocked = false;
+          if (screen.orientation && typeof screen.orientation.lock === 'function') {
+            try {
+              await screen.orientation.lock(target);
+              screenLocked = true;
+            } catch (err) {
+              if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+                try {
+                  await document.documentElement.requestFullscreen();
+                  await screen.orientation.lock(target);
+                  screenLocked = true;
+                } catch (e2) {}
+              }
+            }
+          }
+
+          if (!screenLocked && screen.orientation && typeof screen.orientation.unlock === 'function' && target === 'portrait') {
+            try { screen.orientation.unlock(); } catch (e3) {}
+          }
+
+          if (target === 'landscape') {
+            if (!screenLocked && window.innerWidth <= window.innerHeight) {
+              document.body.classList.add('force-landscape-rotation');
+            }
+            document.body.classList.add('app-forced-landscape');
+            document.body.classList.remove('app-forced-portrait');
+            showToast('🔄 Switched to Landscape View', true);
+          } else {
+            document.body.classList.remove('force-landscape-rotation');
+            document.body.classList.remove('app-forced-landscape');
+            document.body.classList.add('app-forced-portrait');
+            showToast('📱 Switched to Portrait View', true);
+          }
+
+          syncOrientationControlUI();
+          setTimeout(function () {
+            if (typeof drawBoard === 'function' && gameState.players && gameState.players.length === 4) {
+              drawBoard();
+            }
+            if (typeof drawReplayBoardCanvas === 'function' && replayState.isOpen) {
+              drawReplayBoardCanvas();
+            }
+            window.dispatchEvent(new Event('resize'));
+          }, 80);
+        } else {
+          if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(function () {});
+            showToast('⛶ Fullscreen Activated', true);
+          } else if (document.exitFullscreen) {
+            document.exitFullscreen().catch(function () {});
+          }
+        }
+      }
+
+      document.getElementById('inGameFullscreenBtn').addEventListener('click', handleFullscreenOrOrientationToggle);
 
       document.getElementById('resumeSavedMatchBtn').addEventListener('click', function () {
         if (gameState.isMatchActive) {
@@ -18943,12 +19176,45 @@
       });
 
       window.addEventListener('resize', function () {
+        if (window.innerWidth > window.innerHeight) {
+          document.body.classList.remove('force-landscape-rotation');
+          document.body.classList.remove('app-forced-portrait');
+        } else if (window.innerWidth < window.innerHeight && !document.body.classList.contains('force-landscape-rotation')) {
+          document.body.classList.remove('app-forced-landscape');
+        }
+        syncOrientationControlUI();
         if (gameState.players && gameState.players.length === 4) {
           drawBoard();
         }
         if (replayState.isOpen) {
           drawReplayBoardCanvas();
         }
+      });
+
+      window.addEventListener('orientationchange', function () {
+        setTimeout(function () {
+          if (window.innerWidth > window.innerHeight) {
+            document.body.classList.remove('force-landscape-rotation');
+            document.body.classList.remove('app-forced-portrait');
+          }
+          syncOrientationControlUI();
+          if (gameState.players && gameState.players.length === 4) {
+            drawBoard();
+          }
+          if (replayState.isOpen) {
+            drawReplayBoardCanvas();
+          }
+        }, 120);
+      });
+
+      if (screen.orientation && screen.orientation.addEventListener) {
+        screen.orientation.addEventListener('change', function () {
+          syncOrientationControlUI();
+        });
+      }
+
+      document.addEventListener('fullscreenchange', function () {
+        syncOrientationControlUI();
       });
 
       document.getElementById('openPauseMenuBtn').addEventListener('click', function () {
@@ -19094,13 +19360,7 @@
         });
       }
 
-      document.getElementById('fullscreenToggleBtn').addEventListener('click', function () {
-        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen().catch(function () {});
-        } else if (document.exitFullscreen) {
-          document.exitFullscreen().catch(function () {});
-        }
-      });
+      document.getElementById('fullscreenToggleBtn').addEventListener('click', handleFullscreenOrOrientationToggle);
 
       document.getElementById('toggleEmoteTrayBtn').addEventListener('click', function () {
         document.getElementById('quickEmoteDrawer').classList.toggle('hidden');
@@ -21039,6 +21299,7 @@
         updateSoundButtonsUI();
         applyLanguageSelection(currentLang, true);
         syncRulesStudioControls();
+        syncOrientationControlUI();
         initNewMatch('Ready on Home Lobby.', true);
         initLanRadarAndWebRtc();
         checkSavedMatchBanner();
