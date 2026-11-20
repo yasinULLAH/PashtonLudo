@@ -357,7 +357,7 @@
       #viewHome {
         overflow-y: hidden !important;
       }
-      #viewPlay {
+      #viewPlay:not(.hidden) {
         display: grid !important;
         grid-template-columns: 196px minmax(0, 1fr) 196px !important;
         grid-template-rows: auto 1fr auto !important;
@@ -410,7 +410,7 @@
     body.immersive-board-only #playBottomRow {
       display: none !important;
     }
-    body.immersive-board-only #viewPlay {
+    body.immersive-board-only #viewPlay:not(.hidden) {
       display: flex !important;
       flex-direction: column !important;
       padding: 2px !important;
@@ -694,7 +694,7 @@
         transform: translateY(-1px);
       }
 
-      #viewPlay {
+      #viewPlay:not(.hidden) {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: 36px 42px minmax(0, 1fr) 42px 50px;
@@ -869,7 +869,7 @@
     }
 
     @media (max-width: 920px) and (orientation: landscape) {
-      #viewPlay {
+      #viewPlay:not(.hidden) {
         display: grid !important;
         grid-template-columns: 148px minmax(0, 1fr) 158px !important;
         grid-template-rows: 1fr auto 1fr !important;
@@ -920,8 +920,21 @@
       }
     }
 
-    body.app-landscape #viewPlay,
-    body.force-landscape-rotation #viewPlay {
+    #viewHome.hidden,
+    #viewPlay.hidden,
+    #viewRules.hidden,
+    #viewNetwork.hidden,
+    #viewStats.hidden,
+    #viewGuide.hidden,
+    body #viewPlay.hidden,
+    body.app-landscape #viewPlay.hidden,
+    body.force-landscape-rotation #viewPlay.hidden,
+    body.immersive-board-only #viewPlay.hidden {
+      display: none !important;
+    }
+
+    body.app-landscape #viewPlay:not(.hidden),
+    body.force-landscape-rotation #viewPlay:not(.hidden) {
       display: grid !important;
       grid-template-columns: 148px minmax(0, 1fr) 158px !important;
       grid-template-rows: 1fr auto 1fr !important;

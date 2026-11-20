@@ -533,6 +533,17 @@ table.dataTable tbody tr {
     padding: 16px !important;
   }
 }
+html.force-landscape-rotation,
+body.force-landscape-rotation {
+  width: 100vh !important;
+  height: 100vw !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: rotate(90deg) translateY(-100%) !important;
+  transform-origin: top left !important;
+  overflow: hidden !important;
+}
 </style>
 <link href="manifest.json" rel="manifest"/><link href="favicon.ico" rel="icon" type="image/x-icon"/></head>
 <body class="h-dvh w-screen overflow-hidden flex flex-col selection:bg-emerald-600 selection:text-white">
@@ -647,7 +658,7 @@ table.dataTable tbody tr {
 <i class="fa-solid fa-volume-high text-emerald-600" id="audioToggleIcon"></i>
 </button>
 <!-- Fullscreen Toggle -->
-<button class="hidden sm:flex w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 items-center justify-center text-xs text-slate-700 transition" onclick="AppUI.toggleBrowserFullscreen()" title="Toggle Fullscreen" type="button">
+<button class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-xs text-slate-700 transition" id="fullscreenToggleBtn" onclick="AppUI.toggleBrowserFullscreen()" title="Toggle Fullscreen" type="button">
 <i class="fa-solid fa-expand" id="fullscreenIcon"></i>
 </button>
 <!-- Player Profile Pill -->
@@ -1505,6 +1516,9 @@ table.dataTable tbody tr {
 <button class="hidden xl:flex h-8 px-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-[11px] font-bold items-center gap-1 transition" id="hudImmersiveBtn" onclick="GameEngine.toggleImmersiveMode(true)" title="Immersive Fullscreen" type="button">
 <i class="fa-solid fa-eye-slash"></i>
 <span>Focus</span>
+</button>
+<button class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 flex items-center justify-center text-xs transition" id="arenaFullscreenBtn" onclick="AppUI.toggleBrowserFullscreen()" title="Toggle Fullscreen" type="button">
+<i class="fa-solid fa-expand" id="arenaFullscreenIcon"></i>
 </button>
 <button class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 flex items-center justify-center text-xs transition" id="collapseTopBarBtn" onclick="GameEngine.toggleTopBar(true)" title="Collapse Top Bar" type="button">
 <i class="fa-solid fa-chevron-up text-[10px]"></i>
@@ -6262,15 +6276,159 @@ const AppUI = {
     }
   },
 
-  toggleBrowserFullscreen() {
-    try {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else if (document.exitFullscreen) {
-        document.exitFullscreen();
+  isRunningInPwaOrApk() {
+    const isStandalone = (window.matchMedia && (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.matchMedia('(display-mode: fullscreen)').matches ||
+      window.matchMedia('(display-mode: minimal-ui)').matches
+    )) ||
+    (window.navigator && window.navigator.standalone === true) ||
+    (document.referrer && document.referrer.indexOf('android-app://') !== -1);
+    const ua = (navigator.userAgent || navigator.vendor || window.opera || '').toLowerCase();
+    const isWebView = ua.includes('; wv') ||
+      (ua.includes('android') && ua.includes('version/') && ua.includes('chrome/')) ||
+      (!ua.includes('safari') && ua.includes('applewebkit') && (ua.includes('iphone') || ua.includes('ipad'))) ||
+      Boolean(window.Android || window.AndroidInterface || window.JSBridge);
+    const urlParam = /[?&](mode=standalone|pwa=1|apk=1|webview=1|app=1)/i.test(window.location.search);
+    return Boolean(isStandalone || isWebView || urlParam);
+  },
+
+  getActiveOrientation() {
+    if (document.body.classList.contains('force-landscape-rotation') || document.body.classList.contains('app-forced-landscape')) {
+      return 'landscape';
+    }
+    if (document.body.classList.contains('app-forced-portrait')) {
+      return 'portrait';
+    }
+    if (screen.orientation && screen.orientation.type) {
+      return screen.orientation.type.startsWith('landscape') ? 'landscape' : 'portrait';
+    }
+    if (window.matchMedia && window.matchMedia('(orientation: landscape)').matches) {
+      return 'landscape';
+    }
+    return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+  },
+
+  syncOrientationUI() {
+    const isPwa = this.isRunningInPwaOrApk();
+    const current = this.getActiveOrientation();
+    const isLandscape = current === 'landscape';
+
+    if (isLandscape) {
+      document.body.classList.add('app-landscape');
+      document.body.classList.remove('app-portrait');
+    } else {
+      document.body.classList.remove('app-landscape');
+      document.body.classList.add('app-portrait');
+    }
+
+    const headerIcon = document.getElementById('fullscreenIcon');
+    const arenaIcon = document.getElementById('arenaFullscreenIcon');
+    const headerBtn = headerIcon ? headerIcon.closest('button') : null;
+    const arenaBtn = arenaIcon ? arenaIcon.closest('button') : null;
+
+    const landscapeSvg = '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 pointer-events-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2.5"></rect><circle cx="18" cy="12.5" r="0.8" fill="currentColor"></circle><path d="M7 2.5l-3 3 3 3"></path><path d="M4 5.5h10a4 4 0 0 1 4 4"></path></svg>';
+    const portraitSvg = '<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 pointer-events-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="2" width="13" height="20" rx="2.5"></rect><circle cx="12" cy="18.5" r="0.8" fill="currentColor"></circle><path d="M2.5 7l3-3 3 3"></path><path d="M5.5 4v10a4 4 0 0 0 4 4"></path></svg>';
+
+    if (isPwa) {
+      const iconSvg = isLandscape ? portraitSvg : landscapeSvg;
+      const titleText = isLandscape ? 'Switch to Portrait Mode' : 'Switch to Landscape Mode';
+
+      if (headerBtn) {
+        headerBtn.innerHTML = iconSvg;
+        headerBtn.setAttribute('title', titleText);
+        headerBtn.setAttribute('aria-label', titleText);
       }
-    } catch (e) {
-      this.toast('Fullscreen mode toggled', 'info');
+      if (arenaBtn) {
+        arenaBtn.innerHTML = iconSvg;
+        arenaBtn.setAttribute('title', titleText);
+        arenaBtn.setAttribute('aria-label', titleText);
+      }
+    } else {
+      if (headerBtn) {
+        headerBtn.innerHTML = '<i class="fa-solid fa-expand" id="fullscreenIcon"></i>';
+        headerBtn.setAttribute('title', 'Toggle Fullscreen');
+        headerBtn.setAttribute('aria-label', 'Toggle Fullscreen');
+      }
+      if (arenaBtn) {
+        arenaBtn.innerHTML = '<i class="fa-solid fa-expand" id="arenaFullscreenIcon"></i>';
+        arenaBtn.setAttribute('title', 'Toggle Fullscreen');
+        arenaBtn.setAttribute('aria-label', 'Toggle Fullscreen');
+      }
+    }
+  },
+
+  async toggleBrowserFullscreen() {
+    if (this.isRunningInPwaOrApk()) {
+      const current = this.getActiveOrientation();
+      const target = current === 'landscape' ? 'portrait' : 'landscape';
+
+      if (window.Android && typeof window.Android.setOrientation === 'function') {
+        try { window.Android.setOrientation(target); } catch (e) {}
+      }
+      if (window.Android && typeof window.Android.toggleOrientation === 'function') {
+        try { window.Android.toggleOrientation(); } catch (e) {}
+      }
+      if (window.AndroidInterface && typeof window.AndroidInterface.setOrientation === 'function') {
+        try { window.AndroidInterface.setOrientation(target); } catch (e) {}
+      }
+      if (window.JSBridge && typeof window.JSBridge.setOrientation === 'function') {
+        try { window.JSBridge.setOrientation(target); } catch (e) {}
+      }
+
+      let screenLocked = false;
+      if (screen.orientation && typeof screen.orientation.lock === 'function') {
+        try {
+          await screen.orientation.lock(target);
+          screenLocked = true;
+        } catch (err) {
+          if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            try {
+              await document.documentElement.requestFullscreen();
+              await screen.orientation.lock(target);
+              screenLocked = true;
+            } catch (e2) {}
+          }
+        }
+      }
+
+      if (!screenLocked && screen.orientation && typeof screen.orientation.unlock === 'function' && target === 'portrait') {
+        try { screen.orientation.unlock(); } catch (e3) {}
+      }
+
+      if (target === 'landscape') {
+        if (!screenLocked && window.innerWidth <= window.innerHeight) {
+          document.body.classList.add('force-landscape-rotation');
+        }
+        document.body.classList.add('app-forced-landscape');
+        document.body.classList.remove('app-forced-portrait');
+        this.toast('🔄 Switched to Landscape View', 'info');
+      } else {
+        document.body.classList.remove('force-landscape-rotation');
+        document.body.classList.remove('app-forced-landscape');
+        document.body.classList.add('app-forced-portrait');
+        this.toast('📱 Switched to Portrait View', 'info');
+      }
+
+      this.syncOrientationUI();
+      setTimeout(() => {
+        if (typeof GameEngine !== 'undefined' && GameEngine.applyCollapsibleBarsState) {
+          GameEngine.applyCollapsibleBarsState();
+        }
+        window.dispatchEvent(new Event('resize'));
+      }, 80);
+    } else {
+      try {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+          this.toast('Fullscreen mode activated', 'info');
+        } else if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        }
+      } catch (e) {
+        this.toast('Fullscreen mode toggled', 'info');
+      }
+      this.syncOrientationUI();
     }
   },
 
@@ -6396,9 +6554,35 @@ window.addEventListener('DOMContentLoaded', async () => {
   BackupVault.checkAutoBackupDue();
   AppRouter.navigate('/home');
   GameEngine.launchArena();
+  AppUI.syncOrientationUI();
   window.addEventListener('resize', () => {
+    if (window.innerWidth > window.innerHeight) {
+      document.body.classList.remove('force-landscape-rotation');
+      document.body.classList.remove('app-forced-portrait');
+    } else if (window.innerWidth < window.innerHeight && !document.body.classList.contains('force-landscape-rotation')) {
+      document.body.classList.remove('app-forced-landscape');
+    }
+    AppUI.syncOrientationUI();
     GameEngine.applyCollapsibleBarsState();
   }, { passive: true });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      if (window.innerWidth > window.innerHeight) {
+        document.body.classList.remove('force-landscape-rotation');
+        document.body.classList.remove('app-forced-portrait');
+      }
+      AppUI.syncOrientationUI();
+      GameEngine.applyCollapsibleBarsState();
+    }, 120);
+  });
+  if (screen.orientation && screen.orientation.addEventListener) {
+    screen.orientation.addEventListener('change', () => {
+      AppUI.syncOrientationUI();
+    });
+  }
+  document.addEventListener('fullscreenchange', () => {
+    AppUI.syncOrientationUI();
+  });
 });
 </script>
 <script src="./pwa-register.js" type="module"></script></body>

@@ -64,7 +64,7 @@ if (workbox) {
     },
     {
         "url": "build pwa make html app offline and installable yasin best working re-run this for updates best for html only.pyw",
-        "revision": "0418c6919be5ef1c4645856db1627b63"
+        "revision": "a52638f8590f5fbe7f0621301cfd6cd2"
     },
     {
         "url": "client_readme.md",
@@ -80,7 +80,7 @@ if (workbox) {
     },
     {
         "url": "index.html",
-        "revision": "2b8a5d2a86ff2e80ddd654bf050cf881"
+        "revision": "60c9fa56b6cd88698f47f5b9b937153c"
     },
     {
         "url": "index.html.bak",
@@ -92,7 +92,7 @@ if (workbox) {
     },
     {
         "url": "manifest.json",
-        "revision": "3ae204f9bb82413ce7429817aff3ad17"
+        "revision": "06db85fc07b2b78d068bbe9695cd1449"
     },
     {
         "url": "offline.html",
@@ -112,7 +112,7 @@ if (workbox) {
     },
     {
         "url": "snakes.html",
-        "revision": "decf5c85c5635829bc3d5ce43c5f8365"
+        "revision": "74012d8f4cbbab4636765259d5dd5226"
     },
     {
         "url": "snakes.html.bak",
@@ -120,11 +120,15 @@ if (workbox) {
     },
     {
         "url": "sw.js",
-        "revision": "b3d556885a066bdb608b8c2bb192e479"
+        "revision": "d5ccaf5ad920af600010b8fe801160d1"
     },
     {
         "url": "transcript of the vioces.txt",
         "revision": "8bd96f13e5de583e3c112c864c9cf82d"
+    },
+    {
+        "url": "UBA-School-Demo (1).html",
+        "revision": "47e6032683e4c5bca8496262c657010d"
     }
 ]);
 
